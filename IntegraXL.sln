@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30711.63
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegraXL", "IntegraXL\IntegraXL.csproj", "{635847A1-1EF1-495E-BB24-0872FEC2813E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{635847A1-1EF1-495E-BB24-0872FEC2813E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{635847A1-1EF1-495E-BB24-0872FEC2813E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{635847A1-1EF1-495E-BB24-0872FEC2813E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{635847A1-1EF1-495E-BB24-0872FEC2813E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FCA29E40-7E55-47E8-A54D-F6D661E6C04E}
+	EndGlobalSection
+EndGlobal
