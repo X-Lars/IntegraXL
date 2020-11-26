@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegraXL", "IntegraXL\IntegraXL.csproj", "{635847A1-1EF1-495E-BB24-0872FEC2813E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegraConsole", "IntegraConsole\IntegraConsole.csproj", "{3B146D05-1B9B-47DB-8230-C84394AC22C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integra", "Integra\Integra.csproj", "{EE0EFD63-DF59-4FD8-8BFE-97DFF5588E4C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegraControls", "IntegraControls\IntegraControls.csproj", "{BAF962CA-BC68-41E0-90BF-A6AF3AAF3E4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegraXL", "IntegraXL\IntegraXL.csproj", "{91E7A888-6253-4ABC-BDC9-505A2F37498E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{635847A1-1EF1-495E-BB24-0872FEC2813E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{635847A1-1EF1-495E-BB24-0872FEC2813E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{635847A1-1EF1-495E-BB24-0872FEC2813E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{635847A1-1EF1-495E-BB24-0872FEC2813E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3B146D05-1B9B-47DB-8230-C84394AC22C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3B146D05-1B9B-47DB-8230-C84394AC22C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B146D05-1B9B-47DB-8230-C84394AC22C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +29,10 @@ Global
 		{BAF962CA-BC68-41E0-90BF-A6AF3AAF3E4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAF962CA-BC68-41E0-90BF-A6AF3AAF3E4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAF962CA-BC68-41E0-90BF-A6AF3AAF3E4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91E7A888-6253-4ABC-BDC9-505A2F37498E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91E7A888-6253-4ABC-BDC9-505A2F37498E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91E7A888-6253-4ABC-BDC9-505A2F37498E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91E7A888-6253-4ABC-BDC9-505A2F37498E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
