@@ -4,23 +4,88 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IntegraXL"
+        xmlns:xl="clr-namespace:ControlsXL;assembly=ControlsXL"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
-        >
+        Title="MainWindow" Height="450" Width="800">
+    
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+        <DockPanel>
+            
+            <xl:Sidebar DockPanel.Dock="Left" 
+                        DockPosition="Left"
+                        Header="Faforites"
+                        VisibleSections="3"
+                        Width="150">
+                
+                <xl:Sidebar.CommonContent>
+                    <StackPanel>
+                        
+                        
+                            <TreeViewItem Header="Presets" IsExpanded="True">
+                                <TreeViewItem Header="SuperNATURAL Tones" IsExpanded="True">
+                                    <xl:LinkButton>SuperNATURAL Acoustic Tones</xl:LinkButton>
+                                    <xl:LinkButton>SuperNATURAL Synth Tones</xl:LinkButton>
+                                </TreeViewItem>
+                                <TreeViewItem Header="PCM Tones" IsExpanded="True">
 
-        <ListBox Grid.Column="0" 
+                                </TreeViewItem>
+
+                            </TreeViewItem>
+                            <TreeViewItem Header="User" IsExpanded="True">
+                                <TreeViewItem>
+                                    <xl:LinkButton>SuperNATURAL Acoustic Tones</xl:LinkButton>
+                                </TreeViewItem>
+                            </TreeViewItem>
+                            <TreeViewItem Header="Expansions" IsExpanded="False">
+                                <xl:LinkButton>Exp01</xl:LinkButton>
+                            </TreeViewItem>
+                        
+                        
+                    </StackPanel>
+                </xl:Sidebar.CommonContent>
+                
+                <xl:Sidebar.Sections>
+                    <xl:SidebarSection Header="Sound Library">
+                        <StackPanel>
+                            <xl:MarkerButton>Marker Button</xl:MarkerButton>
+                            
+                        </StackPanel>
+                    </xl:SidebarSection>
+                    <xl:SidebarSection Header="Settings">
+                        <StackPanel>
+
+                        </StackPanel>
+                    </xl:SidebarSection>
+                </xl:Sidebar.Sections>
+            </xl:Sidebar>
+            
+            <xl:Sidebar DockPanel.Dock="Right" 
+                        DockPosition="Right"
+                        Header="Context Menu"
+                        ShowSections="False"
+                        ShowCommonArea="False"
+                        Width="150">
+
+                <xl:Sidebar.Sections>
+                    <xl:SidebarSection Header="Context Menu">
+                        <StackPanel>
+                            <Expander Header="Expander">
+                            </Expander>
+                        </StackPanel>
+                    </xl:SidebarSection>
+                </xl:Sidebar.Sections>
+            </xl:Sidebar>
+            <ListBox Grid.Column="0" 
                  ItemsSource="{Binding Integra.MidiOutputDevices}"
                  DisplayMemberPath="Name"
                  SelectedValuePath="ID"/>
-        
-        <ListBox Grid.Column="1"
+
+            <ListBox Grid.Column="1"
                  ItemsSource="{Binding Integra.MidiInputDevices}"
                  DisplayMemberPath="Name"
                  SelectedValuePath="ID"/>
+
+        </DockPanel>
+
     </Grid>
 </Window>

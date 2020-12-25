@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\IntegraEventArgs.cs" />
+    <Compile Include="Core\IntegraException.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

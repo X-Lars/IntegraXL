@@ -17,6 +17,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ControlsXL;
+using Integra.Core;
 
 namespace IntegraXL
 {
@@ -24,7 +26,7 @@ namespace IntegraXL
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow : Window//, INotifyPropertyChanged
     {
         #region Constructor
         
@@ -35,11 +37,16 @@ namespace IntegraXL
         {
             InitializeComponent();
 
-            Device.OnInitialize += DeviceOnInitialize;
+            StyleManager.Style = ControlStyle.Default;
 
+            // [REQUIRED]
+            Device.Initialized += DeviceOnInitialize;
+            Device.Error += DeviceOnError;
             DataContext = this;
+
         }
 
+       
         #endregion
 
         #region Properties
@@ -57,7 +64,7 @@ namespace IntegraXL
         #region Event Handlers
 
         /// <summary>
-        /// Handles the <see cref="Device.OnInitialize"/> event.
+        /// Handles the <see cref="Device.Initialized"/> event.
         /// </summary>
         /// <param name="sender">An <see cref="object"/> representing the class that raised the event.</param>
         /// <param name="e">An <see cref="EventArgs"/> containing event data.</param>
@@ -66,25 +73,41 @@ namespace IntegraXL
             //NotifyPropertyChanged(nameof(Integra));
         }
 
-        #endregion
-
-        #region INotifyPropertyChanged
-
         /// <summary>
-        /// Event raised when a property value is changed.
+        /// Handles the <see cref="Device.Error"/> event.
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Raises the <see cref="PropertyChanged"/> event for the specified property.
-        /// </summary>
-        /// <param name="propertyName">A <see cref="string"/> containing the name of the property that is changed.</param>
-        /// <remarks><i>If no property name is specified, the actual name of the property in code is used.</i></remarks>
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        /// <param name="sender">An <see cref="object"/> representing the class that raised the event.</param>
+        /// <param name="e">An <see cref="EventArgs"/> containing event data.</param>
+        private void DeviceOnError(object sender, IntegraErrorEventArgs e)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            switch(e.StatusFlags)
+            {
+                case DeviceStatusFlags.DEVICE_NO_MIDI_DEVICE:
+                    // TODO: Show devices window
+                    break;
+            }
         }
 
+
         #endregion
+
+        //#region INotifyPropertyChanged
+
+        ///// <summary>
+        ///// Event raised when a property value is changed.
+        ///// </summary>
+        //public event PropertyChangedEventHandler PropertyChanged;
+
+        ///// <summary>
+        ///// Raises the <see cref="PropertyChanged"/> event for the specified property.
+        ///// </summary>
+        ///// <param name="propertyName">A <see cref="string"/> containing the name of the property that is changed.</param>
+        ///// <remarks><i>If no property name is specified, the actual name of the property in code is used.</i></remarks>
+        //private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        //{
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //}
+
+        //#endregion
     }
 }
