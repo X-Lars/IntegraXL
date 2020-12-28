@@ -9,14 +9,14 @@ namespace Integra.Core
     /// <summary>
     /// Extends the <see cref="EventArgs"/> class with <see cref="StatusFlags"/> and <see cref="Message"/> properties.
     /// </summary>
-    public class IntegraErrorEventArgs : EventArgs
+    public class IntegraEventArgs : EventArgs
     {
         /// <summary>
-        /// Creates and initializes a <see cref="IntegraErrorEventArgs"/> with the specified values.
+        /// Creates and initializes a <see cref="IntegraEventArgs"/> with the specified values.
         /// </summary>
         /// <param name="flags"></param>
         /// <param name="message"></param>
-        public IntegraErrorEventArgs(DeviceStatusFlags flags, string message)
+        public IntegraEventArgs(DeviceStatusFlags flags, string message)
         {
             this.StatusFlags = flags;
             this.Message = message;
@@ -28,7 +28,7 @@ namespace Integra.Core
         public DeviceStatusFlags StatusFlags { get; }
 
         /// <summary>
-        /// Gets the error message if provided.
+        /// Gets the message if provided.
         /// </summary>
         public string Message { get; }
     }

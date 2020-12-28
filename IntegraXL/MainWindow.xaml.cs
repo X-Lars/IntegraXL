@@ -40,7 +40,7 @@ namespace IntegraXL
             StyleManager.Style = ControlStyle.Default;
 
             // [REQUIRED]
-            Device.Initialized += DeviceOnInitialize;
+            Device.StatusChanged += DeviceStatusChanged;
             Device.Error += DeviceOnError;
             DataContext = this;
 
@@ -64,13 +64,18 @@ namespace IntegraXL
         #region Event Handlers
 
         /// <summary>
-        /// Handles the <see cref="Device.Initialized"/> event.
+        /// Handles the <see cref="Device.StatusChanged"/> event.
         /// </summary>
         /// <param name="sender">An <see cref="object"/> representing the class that raised the event.</param>
         /// <param name="e">An <see cref="EventArgs"/> containing event data.</param>
-        private void DeviceOnInitialize(object sender, EventArgs e)
+        private void DeviceStatusChanged(object sender, IntegraEventArgs e)
         {
-            //NotifyPropertyChanged(nameof(Integra));
+            switch (e.StatusFlags)
+            {
+                case DeviceStatusFlags.DEVICE_NO_MIDI_OUTPUT_DEVICES:
+                    // TODO: Show devices window
+                    break;
+            }
         }
 
         /// <summary>
@@ -78,14 +83,9 @@ namespace IntegraXL
         /// </summary>
         /// <param name="sender">An <see cref="object"/> representing the class that raised the event.</param>
         /// <param name="e">An <see cref="EventArgs"/> containing event data.</param>
-        private void DeviceOnError(object sender, IntegraErrorEventArgs e)
+        private void DeviceOnError(object sender, IntegraEventArgs e)
         {
-            switch(e.StatusFlags)
-            {
-                case DeviceStatusFlags.DEVICE_NO_MIDI_DEVICE:
-                    // TODO: Show devices window
-                    break;
-            }
+            throw new NotImplementedException();
         }
 
 

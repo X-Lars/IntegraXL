@@ -8,7 +8,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     
-    <Grid>
+    
+    <Grid DataContext="{Binding Integra}">
         <DockPanel>
             
             <xl:Sidebar DockPanel.Dock="Left" 
@@ -75,15 +76,23 @@
                     </xl:SidebarSection>
                 </xl:Sidebar.Sections>
             </xl:Sidebar>
-            <ListBox Grid.Column="0" 
-                 ItemsSource="{Binding Integra.MidiOutputDevices}"
-                 DisplayMemberPath="Name"
-                 SelectedValuePath="ID"/>
+            
+            <xl:MDIHost ShowMenu="False">
+                <xl:MDIChild Title="MIDI Device Stup">
+                    <StackPanel Orientation="Horizontal">
+                        <ListBox DisplayMemberPath="Name"
+                                 Grid.Column="0"
+                                 ItemsSource="{Binding MidiOutputDevices}"
+                                 SelectedItem="{Binding MidiOutputDevice}"/>
 
-            <ListBox Grid.Column="1"
-                 ItemsSource="{Binding Integra.MidiInputDevices}"
-                 DisplayMemberPath="Name"
-                 SelectedValuePath="ID"/>
+                        <ListBox DisplayMemberPath="Name"
+                                 Grid.Column="1"
+                                 ItemsSource="{Binding MidiInputDevices}"
+                                 SelectedItem="{Binding MidiInputDevice}"/>
+
+                    </StackPanel>
+                </xl:MDIChild>
+            </xl:MDIHost>
 
         </DockPanel>
 
