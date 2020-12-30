@@ -9,7 +9,7 @@
         Title="MainWindow" Height="450" Width="800">
     
     
-    <Grid DataContext="{Binding Integra}">
+    <Grid >
         <DockPanel>
             
             <xl:Sidebar DockPanel.Dock="Left" 
@@ -76,10 +76,30 @@
                     </xl:SidebarSection>
                 </xl:Sidebar.Sections>
             </xl:Sidebar>
-            
-            <xl:MDIHost ShowMenu="False">
+
+            <StatusBar DataContext="{Binding Integra}" 
+                       DockPanel.Dock="Bottom" 
+                       MinHeight="20">
+                
+                <StatusBarItem>
+                    <ProgressBar Maximum="100"
+                                 MinHeight="20" 
+                                 Minimum="0" 
+                                 MinWidth="200"
+                                 Value="{Binding Status.Progress, Mode=OneWay}"/>
+                </StatusBarItem>
+                <StatusBarItem>
+                    <TextBlock Text="{Binding Status.Progress, Mode=OneWay}"/>
+                </StatusBarItem>
+                <StatusBarItem>
+                    <TextBlock Text="{Binding Status.Text, Mode=OneWay}"/>
+                </StatusBarItem>
+                
+            </StatusBar>
+
+            <xl:MDIHost DataContext="{Binding Integra}" ShowMenu="False">
                 <xl:MDIChild Title="MIDI Device Stup">
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel  Orientation="Horizontal">
                         <ListBox DisplayMemberPath="Name"
                                  Grid.Column="0"
                                  ItemsSource="{Binding MidiOutputDevices}"
@@ -92,9 +112,9 @@
 
                     </StackPanel>
                 </xl:MDIChild>
+                
             </xl:MDIHost>
-
         </DockPanel>
-
+        <xl:Dialog/>
     </Grid>
 </Window>

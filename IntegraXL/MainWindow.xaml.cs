@@ -28,6 +28,9 @@ namespace IntegraXL
     /// </summary>
     public partial class MainWindow : Window//, INotifyPropertyChanged
     {
+
+        private ProgressDialog _ProgressDialog;
+
         #region Constructor
         
         /// <summary>
@@ -42,11 +45,20 @@ namespace IntegraXL
             // [REQUIRED]
             Device.StatusChanged += DeviceStatusChanged;
             Device.Error += DeviceOnError;
+
+
+
+            Integra.OperationStart += IntegraOperationStart;
+            Integra.OperationProgress += IntegraOperationProgress;
+            Integra.OperationComplete += IntegraOperationComplete;
+
             DataContext = this;
 
+            Loaded += MainWindowLoaded;
         }
 
-       
+
+
         #endregion
 
         #region Properties
@@ -62,6 +74,36 @@ namespace IntegraXL
         #endregion
 
         #region Event Handlers
+
+        private void MainWindowLoaded(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void IntegraOperationStart(object sender, IntegraEventArgs e)
+        {
+            _ProgressDialog = DialogManager.ProgressDialog(e.Action, e.Message, e.StatusText);
+            _ProgressDialog.Progress = e.Progress;
+            _ProgressDialog.Message = e.Message;
+            _ProgressDialog.Status = e.StatusText;
+            _ProgressDialog.Title = e.Action;
+        }
+
+
+        private void IntegraOperationProgress(object sender, IntegraEventArgs e)
+        {
+            _ProgressDialog.Progress = e.Progress;
+            _ProgressDialog.Message = e.Message;
+            _ProgressDialog.Status = e.StatusText;
+            _ProgressDialog.Title = e.Action;
+        }
+
+        private void IntegraOperationComplete(object sender, IntegraEventArgs e)
+        {
+            _ProgressDialog.Close();
+        }
+
+
 
         /// <summary>
         /// Handles the <see cref="Device.StatusChanged"/> event.

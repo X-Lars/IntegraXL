@@ -35,6 +35,11 @@ namespace Integra
         /// </summary>
         private static int DEVICE_CONNECTION_TIMEOUT = 2000;
 
+        /// <summary>
+        /// Defines the aproximate device latency in milliseconds.
+        /// </summary>
+        private static int DEVICE_LATENCY = 20;
+
         #endregion
 
         #region Fields
@@ -74,6 +79,34 @@ namespace Integra
         /// </summary>
         private static DeviceStatus _Status;
 
+        private static DeviceMessage _Message;
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// Provides the signature for device events.
+        /// </summary>
+        /// <param name="sender">An <see cref="object"/> representing the class that raised the event.</param>
+        /// <param name="e">An <see cref="IntegraEventArgs"/> containing event data.</param>
+        public delegate void DeviceEventHandler(object sender, IntegraEventArgs e);
+
+        public event DeviceEventHandler OperationStart;
+        public event DeviceEventHandler OperationProgress;
+        public event DeviceEventHandler OperationComplete;
+
+        /// <summary>
+        /// Raised when the <see cref="Status"/> is changed. <b>Must be subscribed to before any call to <see cref="Instance"/>!</b>
+        /// </summary>
+        /// <remarks><i>Event is static to be able to subscribe to the event before the Singleton instance is created and auto initialized.</i></remarks>
+        public static event DeviceEventHandler StatusChanged;
+
+        /// <summary>
+        /// Raised when an error occurs with the <see cref="Device"/>. <b>Must be subscribed to before any call to <see cref="Instance"/>!</b>
+        /// </summary>
+        /// <remarks><i>Event is static to be able to subscribe to the event before the Singleton instance is created and auto initialized.</i></remarks>
+        public static event DeviceEventHandler Error;
+
         #endregion
 
         #region Constructor
@@ -88,31 +121,7 @@ namespace Integra
 
         #endregion
 
-        #region Events
-
-        /// <summary>
-        /// Provides the signature for device error events.
-        /// </summary>
-        /// <param name="sender">An <see cref="object"/> representing the class that raised the event.</param>
-        /// <param name="e">An <see cref="IntegraEventArgs"/> containing event data.</param>
-        public delegate void DeviceErrorEventHandler(object sender, IntegraEventArgs e);
-
-
-        public delegate void DeviceStatusChangedEventHandler(object sender, IntegraEventArgs e);
-
-        /// <summary>
-        /// Raised when the <see cref="Status"/> is changed. <b>Must be subscribed to before any call to <see cref="Instance"/>!</b>
-        /// </summary>
-        /// <remarks><i>Event is static to be able to subscribe to the event before the Singleton instance is created and auto initialized.</i></remarks>
-        public static event DeviceStatusChangedEventHandler StatusChanged;
-
-        /// <summary>
-        /// Raised when an error occurs with the <see cref="Device"/>. <b>Must be subscribed to before any call to <see cref="Instance"/>!</b>
-        /// </summary>
-        /// <remarks><i>Event is static to be able to subscribe to the event before the Singleton instance is created and auto initialized.</i></remarks>
-        public static event DeviceErrorEventHandler Error;
-
-        #endregion
+        
 
         #region Properties
 
@@ -165,7 +174,11 @@ namespace Integra
                 if (_Status == value)
                     return;
 
-                StatusChanged?.Invoke(this, new IntegraEventArgs(value, string.Empty));
+                _Status = value;
+
+                NotifyPropertyChanged();
+
+                StatusChanged?.Invoke(this, new IntegraEventArgs(value));
             }
         }
 
@@ -344,27 +357,40 @@ namespace Integra
             Console.WriteLine($"[{this.GetType().Name}.{nameof(InvalidateDeviceStatus)}] {_Status.Flags}");
         }
 
+        private CancellationTokenSource _ConnectionValidation = new CancellationTokenSource();
+        private CancellationTokenSource _ConnectionCancelled = new CancellationTokenSource();
+        
+        private IProgress<DeviceMessage> _Progress;
+
         /// <summary>
         /// Invalidates the device connection.
         /// </summary>
-        private void InvalidateConnection()
+        private async void InvalidateConnection()
         {
-            Console.WriteLine($"[{this.GetType().Name}.{nameof(InvalidateConnection)}]");
+            Console.WriteLine($"[{GetType().Name}.{nameof(InvalidateConnection)}]");
 
-            IsConnected = false;
+            // Initialize the operation
+            Status.Init("Validating Connection", "Please wait...", 0, "Connecting");
+            OperationStart?.Invoke(this, new IntegraEventArgs(Status));
 
-            if (MidiOutputDevice == null || MidiInputDevice == null)
-                return;
+            // Ensure any running connection validation task is cancelled
+            _ConnectionValidation.Cancel();
 
-            CancellationTokenSource connectionTimeout = new CancellationTokenSource(DEVICE_CONNECTION_TIMEOUT);
+            // Reset the cancellation token
+            _ConnectionValidation = new CancellationTokenSource(DEVICE_CONNECTION_TIMEOUT);
 
-            Task<bool> connectionValidation = Task.Factory.StartNew(() => ValidateConnection(connectionTimeout.Token), connectionTimeout.Token);
+            _Progress = new Progress<DeviceMessage>(OnDeviceOperationProgress);
+            
+            Task<bool> connectionValidation = await Task.Factory.StartNew(() => ValidateConnection(_Progress, _ConnectionValidation.Token), _ConnectionValidation.Token);
 
-            if (connectionValidation.Result == true)
-                _Status -= DeviceStatusFlags.DEVICE_NOT_CONNECTED;
-            else
-                _Status += DeviceStatusFlags.DEVICE_NOT_CONNECTED;
+        }
 
+        private void OnDeviceOperationProgress(DeviceMessage progress)
+        {
+            Status.Update(progress);
+            OperationProgress?.Invoke(this, new IntegraEventArgs(Status));
+
+            NotifyPropertyChanged(nameof(Status));
         }
 
         /// <summary>
@@ -372,16 +398,42 @@ namespace Integra
         /// </summary>
         /// <param name="token">A <see cref="CancellationToken"/> to cancel the connection validation.</param>
         /// <returns>A <see cref="bool"/> containing true if the device is connected, false otherwise.</returns>
-        private bool ValidateConnection(CancellationToken token)
+        private async Task<bool> ValidateConnection(IProgress<DeviceMessage> progress, CancellationToken token)
         {
+            double progressPercentage = 0; 
+            double progressFactor = 100 / (DEVICE_CONNECTION_TIMEOUT / DEVICE_LATENCY);
+
+            IsConnected = false;
             MidiOutputDevice.Send(new UniversalNonRealTimeMessage(new byte[] { 0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7 }));
 
             while (!IsConnected)
             {
                 if (token.IsCancellationRequested)
+                {
+                    progress.Report(new DeviceMessage(100, "Conenction failed"));
+                    await Task.Delay(1000);
+                    progress.Report(new DeviceMessage(100, "Connection error"));
+
+                    _Status += DeviceStatusFlags.DEVICE_NOT_CONNECTED;
+                    OperationComplete?.Invoke(this, new IntegraEventArgs(Status));
+                    
                     return false;
+                }
+
+                Thread.Sleep(DEVICE_LATENCY);
+
+                progress.Report(new DeviceMessage(progressPercentage));
+                progressPercentage += progressFactor;
+                
+                
             }
 
+            progress.Report(new DeviceMessage(100, "Connected"));
+            await Task.Delay(1000);
+            progress.Report(new DeviceMessage(100, "Ready"));
+
+            _Status -= DeviceStatusFlags.DEVICE_NOT_CONNECTED;
+            OperationComplete?.Invoke(this, new IntegraEventArgs(Status));
             return true;
         }
 
@@ -466,10 +518,29 @@ namespace Integra
         #endregion
     }
 
+    public class DeviceMessage
+    {
+        public DeviceMessage(string action, string message, double progress, string status)
+        {
+            Action = action;
+            Message = message;
+            Progress = progress;
+            Status = status;
+        }
+
+        public DeviceMessage(double progress) : this(null, null, progress, null) { }
+        public DeviceMessage(double progress, string status) : this(null, null, progress, status) { }
+
+        public string Action { get; }
+        public string Message { get;}
+        public double Progress { get; }
+        public string Status { get; }
+    }
+
     /// <summary>
     /// Extends a <see cref="DeviceStatusFlags"/> enumeration with additional operator functionality for addition, removal and comparison.
     /// </summary>
-    public class DeviceStatus
+    public class DeviceStatus : INotifyPropertyChanged
     {
         #region Fields
 
@@ -477,6 +548,11 @@ namespace Integra
         /// Stores the device status flags.
         /// </summary>
         private static DeviceStatusFlags _Flags;
+
+        private string _Action = string.Empty;
+        private string _Message = string.Empty;
+        private double _Progress = 0;
+        private string _Text = string.Empty;
 
         #endregion
 
@@ -489,6 +565,11 @@ namespace Integra
         private DeviceStatus(DeviceStatusFlags flags = DeviceStatusFlags.DEVICE_NOT_INITIALIZED)
         {
             this.Flags = flags;
+
+            this.Action = string.Empty;
+            this.Message = string.Empty;
+            this.Progress = 0;
+            this.Text = string.Empty;
         }
 
         #endregion
@@ -507,8 +588,76 @@ namespace Integra
             }
         }
 
-        #endregion
+        public string Action
+        {
+            get { return _Action; }
+            internal set 
+            { 
+                _Action = value; 
+                NotifyPropertyChanged(); 
+            }
+        }
+
+        public string Message
+        {
+            get { return _Message; }
+            internal set 
+            { 
+                _Message = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public double Progress 
+        { 
+            get { return _Progress; }
+            internal set
+            {
+                _Progress = value;
+                NotifyPropertyChanged();
+            }
+        }
         
+        public string Text
+        {
+            get { return _Text; }
+            internal set
+            {
+                _Text = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #region Methods
+
+        internal void Update() { Init(string.Empty, string.Empty, 0, string.Empty); }
+
+        internal void Update(DeviceMessage deviceMessage)
+        {
+            if (deviceMessage.Action != null)
+                Action = deviceMessage.Action;
+
+            if (deviceMessage.Message != null)
+                Message = deviceMessage.Message;
+
+            Progress = deviceMessage.Progress;
+
+            if (deviceMessage.Status != null)
+                Text = deviceMessage.Status;
+        }
+
+        internal void Init(string action, string message, double progress, string text)
+        {
+            Action = action;
+            Message = message;
+            Progress = progress;
+            Text = text;
+        }
+
+        #endregion
+
         #region Operator Overloading
 
         /// <summary>
@@ -564,7 +713,9 @@ namespace Integra
         public static bool operator ==(DeviceStatus status, DeviceStatusFlags flags)
         {
             if (status.Flags == DeviceStatusFlags.DEVICE_READY)
+            {
                 return status.Flags == DeviceStatusFlags.DEVICE_READY;
+            }
 
             return status.Flags.HasFlag(flags);
         }
@@ -606,6 +757,25 @@ namespace Integra
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        #endregion
+
+        #region INotifyPropertyChanged
+
+        /// <summary>
+        /// Event raised when a property value is changed.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Raises the <see cref="PropertyChanged"/> event for the specified property.
+        /// </summary>
+        /// <param name="propertyName">A <see cref="string"/> containing the name of the property that is changed.</param>
+        /// <remarks><i>If no property name is specified, the actual name of the property in code is used.</i></remarks>
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         #endregion

@@ -7,29 +7,30 @@ using System.Threading.Tasks;
 namespace Integra.Core
 {
     /// <summary>
-    /// Extends the <see cref="EventArgs"/> class with <see cref="StatusFlags"/> and <see cref="Message"/> properties.
+    /// Extends the <see cref="EventArgs"/> class with <see cref="Status"/> and <see cref="StatusFlags"/> properties.
     /// </summary>
     public class IntegraEventArgs : EventArgs
     {
         /// <summary>
         /// Creates and initializes a <see cref="IntegraEventArgs"/> with the specified values.
         /// </summary>
-        /// <param name="flags"></param>
-        /// <param name="message"></param>
-        public IntegraEventArgs(DeviceStatusFlags flags, string message)
+        /// <param name="status"></param>
+        public IntegraEventArgs(DeviceStatus status)
         {
-            this.StatusFlags = flags;
-            this.Message = message;
+            Action = status.Action;
+            Message = status.Message;
+            Progress = status.Progress == null ? 0 : (int)status.Progress;
+            StatusFlags = status.Flags;
+            StatusText = status.Text;
         }
 
         /// <summary>
         /// Gets the event's associated status flags.
         /// </summary>
         public DeviceStatusFlags StatusFlags { get; }
-
-        /// <summary>
-        /// Gets the message if provided.
-        /// </summary>
+        public string Action { get; }
+        public int Progress { get; }
         public string Message { get; }
+        public string StatusText { get; }
     }
 }
