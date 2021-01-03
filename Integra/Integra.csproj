@@ -35,6 +35,7 @@
       <HintPath>..\..\..\MidiXL\MidiXL\MidiXL\bin\Debug\MidiXL.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config.cs" />
     <Compile Include="Core\IntegraEventArgs.cs" />
     <Compile Include="Core\IntegraException.cs" />
     <Compile Include="Device.cs" />
