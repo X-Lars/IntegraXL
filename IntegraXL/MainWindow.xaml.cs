@@ -19,6 +19,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ControlsXL;
 using Integra.Core;
+using System.Configuration;
 
 namespace IntegraXL
 {
@@ -40,6 +41,8 @@ namespace IntegraXL
         {
             InitializeComponent();
 
+            Config config = new Config();
+
             StyleManager.Style = ControlStyle.Default;
 
             // [REQUIRED]
@@ -55,6 +58,13 @@ namespace IntegraXL
             DataContext = this;
 
             Loaded += MainWindowLoaded;
+
+            var section = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var s = (ConfigSection)section.GetSection("Integra");
+            Console.WriteLine($"Read from settings: {((ConfigElement)s.Settings["MidiOutputDeviceID"]).Value}");
+
+            var s2 = (ConfigSection)section.GetSection("Integra");
+            //s2.Device["MidiOutputDeviceID"];
         }
 
 

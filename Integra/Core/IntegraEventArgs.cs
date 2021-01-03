@@ -19,7 +19,7 @@ namespace Integra.Core
         {
             Action = status.Action;
             Message = status.Message;
-            Progress = status.Progress == null ? 0 : (int)status.Progress;
+            Progress = status.Progress;
             StatusFlags = status.Flags;
             StatusText = status.Text;
         }
@@ -29,7 +29,7 @@ namespace Integra.Core
         /// </summary>
         public DeviceStatusFlags StatusFlags { get; }
         public string Action { get; }
-        public int Progress { get; }
+        public double Progress { get; }
         public string Message { get; }
         public string StatusText { get; }
     }
