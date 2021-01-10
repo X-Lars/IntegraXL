@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegraControls", "IntegraC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegraXL", "IntegraXL\IntegraXL.csproj", "{91E7A888-6253-4ABC-BDC9-505A2F37498E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{AA5BB53D-398C-4423-BC23-DB91502848EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{91E7A888-6253-4ABC-BDC9-505A2F37498E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91E7A888-6253-4ABC-BDC9-505A2F37498E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91E7A888-6253-4ABC-BDC9-505A2F37498E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA5BB53D-398C-4423-BC23-DB91502848EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA5BB53D-398C-4423-BC23-DB91502848EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA5BB53D-398C-4423-BC23-DB91502848EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA5BB53D-398C-4423-BC23-DB91502848EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

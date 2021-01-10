@@ -5,16 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IntegraXL"
         xmlns:xl="clr-namespace:ControlsXL;assembly=ControlsXL"
+        xmlns:win="clr-namespace:IntegraXL.Windows"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     
     
-    <Grid >
-        <DockPanel>
+    <Grid>
+        <DockPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
             
             <xl:Sidebar DockPanel.Dock="Left" 
                         DockPosition="Left"
-                        Header="Faforites"
+                        Header="Favorites"
                         VisibleSections="3"
                         Width="150">
                 
@@ -49,17 +50,22 @@
                     <xl:SidebarSection Header="Sound Library">
                         <StackPanel>
                             <xl:MarkerButton>Marker Button</xl:MarkerButton>
-                            
                         </StackPanel>
                     </xl:SidebarSection>
                     <xl:SidebarSection Header="Settings">
                         <StackPanel>
-
+                            <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type win:MidiDevicesWindow}">MIDI Device Setup</xl:LinkButton>
+                        </StackPanel>
+                    </xl:SidebarSection>
+                    <xl:SidebarSection Header="Utilities">
+                        <StackPanel>
+                            <xl:LinkButton>System Exclusives</xl:LinkButton>
                         </StackPanel>
                     </xl:SidebarSection>
                 </xl:Sidebar.Sections>
             </xl:Sidebar>
             
+            <!-- CONTEXT MENU -->
             <xl:Sidebar DockPanel.Dock="Right" 
                         DockPosition="Right"
                         Header="Context Menu"
@@ -70,8 +76,7 @@
                 <xl:Sidebar.Sections>
                     <xl:SidebarSection Header="Context Menu">
                         <StackPanel>
-                            <Expander Header="Expander">
-                            </Expander>
+                            <ItemsControl ItemsSource="{Binding Widgets, RelativeSource={RelativeSource AncestorType=Window}}"/>
                         </StackPanel>
                     </xl:SidebarSection>
                 </xl:Sidebar.Sections>
@@ -79,26 +84,28 @@
 
             <StatusBar DataContext="{Binding Integra}" 
                        DockPanel.Dock="Bottom" 
+                       HorizontalAlignment="Right"
                        MinHeight="20">
                 
                 <StatusBarItem>
-                    <ProgressBar Maximum="100"
-                                 MinHeight="20" 
-                                 Minimum="0" 
-                                 MinWidth="200"
-                                 Value="{Binding Status.Progress, Mode=OneWay}"/>
+                    <Grid>
+                        <ProgressBar Maximum="100"
+                                     MinHeight="20" 
+                                     Minimum="0" 
+                                     MinWidth="200"
+                                     Value="{Binding Status.Progress, Mode=OneWay}"/>
+
+                        <TextBlock Text="{Binding Status.Progress, Mode=OneWay}" HorizontalAlignment="Center"/>
+                    </Grid>
                 </StatusBarItem>
                 <StatusBarItem>
-                    <TextBlock Text="{Binding Status.Progress, Mode=OneWay}"/>
-                </StatusBarItem>
-                <StatusBarItem>
-                    <TextBlock Text="{Binding Status.Text, Mode=OneWay}"/>
+                    <TextBlock Text="{Binding Status.Text}"/>
                 </StatusBarItem>
                 
             </StatusBar>
 
-            <xl:MDIHost DataContext="{Binding Integra}" ShowMenu="False">
-                <xl:MDIChild Title="MIDI Device Stup">
+            <xl:MDIHost x:Name="Host" DataContext="{Binding Integra}" ShowMenu="False">
+                <!--<xl:MDIChild Title="MIDI Device Stup">
                     <StackPanel  Orientation="Horizontal">
                         <ListBox DisplayMemberPath="Name"
                                  Grid.Column="0"
@@ -111,7 +118,7 @@
                                  SelectedItem="{Binding MidiInputDevice}"/>
 
                     </StackPanel>
-                </xl:MDIChild>
+                </xl:MDIChild>-->
                 
             </xl:MDIHost>
         </DockPanel>

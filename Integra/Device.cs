@@ -11,6 +11,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Integra.Core;
 using MidiXL;
+using System.Windows;
+using ToolsXL;
 
 namespace Integra
 {
@@ -18,12 +20,14 @@ namespace Integra
     public enum DeviceStatusFlags : int
     {
         DEVICE_READY                   = 0,
-        DEVICE_NOT_INITIALIZED         = 1,
+        DEVICE_NO_MIDI_SETUP           = 1,
         DEVICE_NO_MIDI_OUTPUT_DEVICES  = 2,
         DEVICE_NO_MIDI_INPUT_DEVICES   = 4,
         DEVICE_NO_MIDI_OUTPUT_SELECTED = 8,
         DEVICE_NO_MIDI_INPUT_SELECTED  = 16,
-        DEVICE_NOT_CONNECTED           = 32
+        DEVICE_NOT_CONNECTED           = 32,
+        DEVICE_CONNECTION_LOST         = 64
+        // TODO: number of devices changed (device disconnected or new device id)
     }
 
     public sealed class Device : INotifyPropertyChanged
@@ -36,7 +40,7 @@ namespace Integra
         private static int DEVICE_CONNECTION_TIMEOUT = 2000;
 
         /// <summary>
-        /// Defines the aproximate device latency in milliseconds.
+        /// Defines the aproximate MIDI latency in milliseconds.
         /// </summary>
         private static int DEVICE_LATENCY = 20;
 
@@ -50,21 +54,6 @@ namespace Integra
         private static Device _Instance = null;
 
         /// <summary>
-        /// Lock for thread safety.
-        /// </summary>
-        private static readonly object _Lock = new object();
-        
-        /// <summary>
-        /// Stores a list of <see cref="MidiOutputDevice"/>s installed in the system.
-        /// </summary>
-        private ObservableCollection<MidiOutputDevice> _MidiOutputDevices = new ObservableCollection<MidiOutputDevice>();
-
-        /// <summary>
-        /// Stores a list of <see cref="MidiInputDevice"/>s installed in the system.
-        /// </summary>
-        private ObservableCollection<MidiInputDevice> _MidiInputDevices = new ObservableCollection<MidiInputDevice>();
-
-        /// <summary>
         /// Stores a reference to the selected <see cref="MidiOutputDevice"/>.
         /// </summary>
         private MidiOutputDevice _MidiOutputDevice;
@@ -75,37 +64,74 @@ namespace Integra
         private MidiInputDevice _MidiInputDevice;
 
         /// <summary>
+        /// Stores the connection state of the <see cref="Device"/>.
+        /// </summary>
+        private bool _IsConnected = false;
+
+        /// <summary>
+        /// Stores whether <see cref="Initialize"/> has been called.
+        /// </summary>
+        private bool _IsInitialized = false;
+
+        /// <summary>
         /// Stores the device status.
         /// </summary>
-        private static DeviceStatus _Status;
+        /// <remarks><i>The device status is initiated with <see cref="DeviceStatusFlags.DEVICE_NO_MIDI_SETUP"/>.</i></remarks>
+        private static DeviceStatus _Status = new DeviceStatus(DeviceStatusFlags.DEVICE_NO_MIDI_SETUP);
 
-        private static DeviceMessage _Message;
+        private static StatusMessage _Message;
+
+        private int _MidiOutputDeviceCount = 0;
+        private int _MidiInputDeviceCount = 0;
+        /// <summary>
+        /// Lock for thread safety.
+        /// </summary>
+        private static readonly object _Lock = new object();
+
         #endregion
 
         #region Events
 
         /// <summary>
-        /// Provides the signature for device events.
+        /// Provides the signature for device operation events.
         /// </summary>
         /// <param name="sender">An <see cref="object"/> representing the class that raised the event.</param>
-        /// <param name="e">An <see cref="IntegraEventArgs"/> containing event data.</param>
-        public delegate void DeviceEventHandler(object sender, IntegraEventArgs e);
+        /// <param name="e">An <see cref="IntegraOperationEventArgs"/> containing event data.</param>
+        public delegate void DeviceOperationEventHandler(object sender, IntegraOperationEventArgs e);
 
-        public event DeviceEventHandler OperationStart;
-        public event DeviceEventHandler OperationProgress;
-        public event DeviceEventHandler OperationComplete;
+        /// <summary>
+        /// Provides the signature for device status events.
+        /// </summary>
+        /// <param name="sender">An <see cref="object"/> representing the class that raised the event.</param>
+        /// <param name="e">An <see cref="IntegraStatusEventArgs"/> containing event data.</param>
+        public delegate void DeviceStatusEventHandler(object sender, IntegraStatusEventArgs e);
+
+        /// <summary>
+        /// Raised when the <see cref="Device"/> starts an operation.
+        /// </summary>
+        public event DeviceOperationEventHandler OperationStart;
+
+        /// <summary>
+        /// Raised when the <see cref="Device"/> operation progresses.
+        /// </summary>
+        public event DeviceOperationEventHandler OperationProgress;
+
+        /// <summary>
+        /// Raised when the <see cref="Device"/> finished an operation.
+        /// </summary>
+        public event DeviceOperationEventHandler OperationComplete;
 
         /// <summary>
         /// Raised when the <see cref="Status"/> is changed. <b>Must be subscribed to before any call to <see cref="Instance"/>!</b>
         /// </summary>
         /// <remarks><i>Event is static to be able to subscribe to the event before the Singleton instance is created and auto initialized.</i></remarks>
-        public static event DeviceEventHandler StatusChanged;
+        public static event DeviceStatusEventHandler StatusChanged;
 
         /// <summary>
         /// Raised when an error occurs with the <see cref="Device"/>. <b>Must be subscribed to before any call to <see cref="Instance"/>!</b>
         /// </summary>
         /// <remarks><i>Event is static to be able to subscribe to the event before the Singleton instance is created and auto initialized.</i></remarks>
-        public static event DeviceEventHandler Error;
+        public static event DeviceOperationEventHandler Error;
 
         #endregion
 
@@ -116,12 +142,10 @@ namespace Integra
         /// </summary>
         private Device() 
         {
-            Debug.Print($"[{nameof(Device)}.Constructor]");
+            Debug.Print($"[{nameof(Device)}]");
         }
 
         #endregion
-
-        
 
         #region Properties
 
@@ -149,10 +173,6 @@ namespace Integra
                             if (Error == null)
                                 throw new ApplicationException($"[{nameof(Device)}] Error handler not hooked up to the application!\nUse Device.OnError += <...Event Handler...>");
 
-                            // Sets the startup device status
-                            _Instance.InvalidateDeviceStatus();
-                            //_Status = DeviceStatusFlags.DEVICE_NOT_INITIALIZED;
-                            
                             _Instance.Initialize();
                         }
                     }
@@ -165,33 +185,48 @@ namespace Integra
         /// <summary>
         /// Gets the device status.
         /// </summary>
-        /// <remarks><i>Use the == and != operators in combination with the <see cref="DeviceStatusFlags"/> enumeration to check the device status.</i></remarks>
         public DeviceStatus Status
         {
             get { return _Status; }
             private set
             {
-                if (_Status == value)
-                    return;
-
                 _Status = value;
-
                 NotifyPropertyChanged();
-
-                StatusChanged?.Invoke(this, new IntegraEventArgs(value));
             }
         }
 
         /// <summary>
-        /// Gets whether the <see cref="Device"/> is initialized.
+        /// Gets the device status flags.
         /// </summary>
-        public bool IsInitialized { get; private set; } = false;
+        public DeviceStatusFlags Flags
+        {
+            get { return _Status.Flags; }
+            private set
+            {
+                if(_Status.Flags != value)
+                {
+                    _Status.Flags = value;
+                    NotifyPropertyChanged();
+
+                    Debug.Print($"[{nameof(Device)}.{nameof(Status)}] {_Status.Flags}");
+                }
+            }
+        }
 
         /// <summary>
         /// Gets wheter the <see cref="Device"/> is connected.
         /// </summary>
-        public bool IsConnected { get; private set; } = false;
+        public bool IsConnected
+        {
+            get { return _IsConnected; }
+            private set
+            {
+                _IsConnected = value;
+                NotifyPropertyChanged();
+            }
+        }
 
+        
         /// <summary>
         /// Gets the available <see cref="MidiOutputDevice"/>s.
         /// </summary>
@@ -223,7 +258,7 @@ namespace Integra
                 // No device selected
                 if (value == null)
                 {
-                    Status += DeviceStatusFlags.DEVICE_NO_MIDI_OUTPUT_SELECTED;
+                    Status.Flags |= DeviceStatusFlags.DEVICE_NO_MIDI_OUTPUT_SELECTED;
 
                     return;
                 }
@@ -239,7 +274,11 @@ namespace Integra
                     throw new IntegraException("An error occured while selecting the MIDI output device.", exception);
                 }
 
-                InvalidateDeviceStatus();
+                NotifyPropertyChanged();
+
+                // Only invalidate the device status if connection is possible
+                if(MidiInputDevice != null)
+                    InvalidateDeviceStatus();
             }
         }
 
@@ -263,7 +302,7 @@ namespace Integra
                         _MidiInputDevice = null;
                     }
 
-                    Status += DeviceStatusFlags.DEVICE_NO_MIDI_INPUT_SELECTED;
+                    Status.Flags |= DeviceStatusFlags.DEVICE_NO_MIDI_INPUT_SELECTED;
 
                     return;
                 }
@@ -290,9 +329,17 @@ namespace Integra
                 _MidiInputDevice.SystemExclusiveReceived += SystemExclusiveReceived;
                 _MidiInputDevice.UniversalNonRealTimeReceived += UniversalNonRealTimeReceived;
 
-                InvalidateDeviceStatus();
+                NotifyPropertyChanged();
+
+                // Only invalidate the device status if connection is possible
+                if (MidiOutputDevice != null)
+                    InvalidateDeviceStatus();
             }
         }
+
+        #endregion
+
+        #region Event Handlers
 
         /// <summary>
         /// Handles the <see cref="MidiInputDevice.UniversalNonRealTimeReceived"/> event.
@@ -301,7 +348,8 @@ namespace Integra
         /// <param name="e">An <see cref="UniversalNonRealTimeMessageEventArgs"/> containing event data.</param>
         private void UniversalNonRealTimeReceived(object sender, UniversalNonRealTimeMessageEventArgs e)
         {
-            Console.WriteLine($"[{this.GetType().Name}.{nameof(UniversalNonRealTimeReceived)}]");
+            Debug.Print($"[{nameof(Device)}.{nameof(UniversalNonRealTimeReceived)}]");
+
             IsConnected = true;
         }
 
@@ -312,6 +360,8 @@ namespace Integra
         /// <param name="e">An <see cref="SystemExclusiveMessageEventArgs"/> containing event data.</param>
         private void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
+            Debug.Print($"[{nameof(Device)}.{nameof(SystemExclusiveReceived)}]");
+
             throw new NotImplementedException();
         }
 
@@ -320,181 +370,206 @@ namespace Integra
         #region Methods
 
         /// <summary>
-        /// Invalidates the device status flags.
+        /// Initializes the <see cref="Device"/>.
         /// </summary>
-        private void InvalidateDeviceStatus()
+        public void Initialize()
         {
-            _Status = DeviceStatusFlags.DEVICE_READY;
+            Debug.Print($"[{nameof(Device)}.{nameof(Initialize)}]");
 
-            if (_MidiOutputDevices.Count == 0)
-                _Status += DeviceStatusFlags.DEVICE_NO_MIDI_OUTPUT_DEVICES;
-
-            if (_MidiInputDevices.Count == 0)
-                _Status += DeviceStatusFlags.DEVICE_NO_MIDI_INPUT_DEVICES;
-
-            if (MidiOutputDevice == null)
-                _Status += DeviceStatusFlags.DEVICE_NO_MIDI_OUTPUT_SELECTED;
-
-            if (MidiInputDevice == null)
-                _Status += DeviceStatusFlags.DEVICE_NO_MIDI_INPUT_SELECTED;
-
-            if (_Status != DeviceStatusFlags.DEVICE_READY)
+            // Check for initial status to load devices from the configuration
+            if (!_IsInitialized)
             {
-                _Status += DeviceStatusFlags.DEVICE_NOT_INITIALIZED;
-                IsInitialized = false;
+                DeviceStatusFlags flags = DeviceStatusFlags.DEVICE_READY;
+
+                // Load MIDI configuration from App.config
+                int midiOutputDeviceID = Config<IntegraConfiguration>.Get.MidiOutputDeviceID;
+                int midiInputDeviceID = Config<IntegraConfiguration>.Get.MidiInputDeviceID;
+
+                // Set device count to track device changes
+                _MidiOutputDeviceCount = MidiOutputDevices.Count;
+                _MidiInputDeviceCount = MidiInputDevices.Count;
+
+                // Invalidate device count
+                if (_MidiOutputDeviceCount == 0)
+                    flags |= DeviceStatusFlags.DEVICE_NO_MIDI_OUTPUT_DEVICES;
+
+                if (_MidiInputDeviceCount == 0)
+                    flags |= DeviceStatusFlags.DEVICE_NO_MIDI_INPUT_DEVICES;
+
+                // Try set the MIDI output device
+                if (_MidiOutputDeviceCount - 1 >= midiOutputDeviceID)
+                {
+                    MidiOutputDevice = DeviceManager.GetMidiOutputDevice(midiOutputDeviceID);
+                }
+                else
+                {
+                    flags |= DeviceStatusFlags.DEVICE_NO_MIDI_OUTPUT_SELECTED;
+                }
+
+                // Try set the MIDI input device
+                if (_MidiInputDeviceCount - 1 >= midiInputDeviceID)
+                {
+                    MidiInputDevice = DeviceManager.GetMidiInputDevice(midiInputDeviceID);
+                }
+                else
+                {
+                    flags |= DeviceStatusFlags.DEVICE_NO_MIDI_INPUT_SELECTED;
+                }
+
+                if(flags != DeviceStatusFlags.DEVICE_READY)
+                {
+                    flags |= DeviceStatusFlags.DEVICE_NO_MIDI_SETUP;
+                }
+
+                _IsInitialized = true;
             }
 
-            if(_Status != DeviceStatusFlags.DEVICE_READY)
+            InvalidateDeviceStatus();
+        }
+
+        /// <summary>
+        /// Invalidates the device status flags.
+        /// </summary>
+        private async void InvalidateDeviceStatus()
+        {
+            Debug.Print($"[{nameof(Device)}.{nameof(InvalidateDeviceStatus)}]");
+
+            DeviceStatusFlags flags = DeviceStatusFlags.DEVICE_READY;
+
+            // TODO: Check device count changes
+
+            // Invalidate device count
+            if (MidiOutputDevices.Count == 0)
+                flags |= DeviceStatusFlags.DEVICE_NO_MIDI_OUTPUT_DEVICES;
+
+            if (MidiInputDevices.Count == 0)
+                flags |= DeviceStatusFlags.DEVICE_NO_MIDI_INPUT_DEVICES;
+
+            // Invalidate device selection
+            if (MidiOutputDevice == null)
+                flags |= DeviceStatusFlags.DEVICE_NO_MIDI_OUTPUT_SELECTED;
+
+            if (MidiInputDevice == null)
+                flags |= DeviceStatusFlags.DEVICE_NO_MIDI_INPUT_SELECTED;
+
+            // Invalidate initialization
+            if (flags != DeviceStatusFlags.DEVICE_READY)
+                flags |= DeviceStatusFlags.DEVICE_NO_MIDI_SETUP;
+
+            // Invalidate connection
+            if(flags != DeviceStatusFlags.DEVICE_READY)
             {
-                _Status += DeviceStatusFlags.DEVICE_NOT_CONNECTED;
+                if (IsConnected)
+                    flags |= DeviceStatusFlags.DEVICE_CONNECTION_LOST;
+
+                flags |= DeviceStatusFlags.DEVICE_NOT_CONNECTED;
+
                 IsConnected = false;
             }
             else
             {
-                InvalidateConnection();
+                bool connectionLost = IsConnected;
+
+                IProgress<StatusMessage> progress = new Progress<StatusMessage>(p => OnDeviceOperationProgress(p));
+
+                await ConnectionValidation(progress);
+
+                if (IsConnected)
+                {
+                    flags = DeviceStatusFlags.DEVICE_READY;
+
+                    // Connection is valid, store the configuration
+                    Config<IntegraConfiguration>.Set.MidiOutputDeviceID = MidiOutputDevice.ID;
+                    Config<IntegraConfiguration>.Set.MidiInputDeviceID = MidiInputDevice.ID;
+                }
+                else
+                {
+                    if (connectionLost)
+                        flags |= DeviceStatusFlags.DEVICE_CONNECTION_LOST;
+
+                    flags |= DeviceStatusFlags.DEVICE_NOT_CONNECTED;
+
+                    // Connection is invalid, reset the configuration
+                    Config<IntegraConfiguration>.Set.MidiOutputDeviceID = -1;
+                    Config<IntegraConfiguration>.Set.MidiInputDeviceID = -1;
+                }
             }
 
-            Console.WriteLine($"[{this.GetType().Name}.{nameof(InvalidateDeviceStatus)}] {_Status.Flags}");
+            if (Flags != flags)
+            {
+                Flags = flags;
+                StatusChanged?.Invoke(this, new IntegraStatusEventArgs(Flags));
+            }
         }
 
-        private CancellationTokenSource _ConnectionValidation = new CancellationTokenSource();
-        private CancellationTokenSource _ConnectionCancelled = new CancellationTokenSource();
-        
-        private IProgress<DeviceMessage> _Progress;
+      
+        /// <summary>
+        /// Validates the device connection by sending an identity request.
+        /// </summary>
+        /// <param name="progress">A <see cref="IProgress{T}"/> to report progress operation.</param>
+        /// <returns>A <see cref="Task{TResult}"/> containing true if the device is connected, false otherwise.</returns>
+        private async Task<bool> ConnectionValidation(IProgress<StatusMessage> progress)
+        {
+            IsConnected = false;
+
+            int connectionTimeout = 0;
+
+
+            Status.Init("Validating Connection", "Please wait...", 0, "Connecting");
+
+            OperationStart?.Invoke(this, new IntegraOperationEventArgs(Status));
+
+            MidiOutputDevice.Send(new UniversalNonRealTimeMessage(new byte[] { 0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7 }));
+
+            await Task.Factory.StartNew(() =>
+            {
+                while (!IsConnected)
+                {
+                    Thread.Sleep(DEVICE_LATENCY);
+                    connectionTimeout += DEVICE_LATENCY;
+                    
+                    progress.Report(new StatusMessage(100d / DEVICE_CONNECTION_TIMEOUT * connectionTimeout));
+
+                    if (connectionTimeout > DEVICE_CONNECTION_TIMEOUT)
+                        break;
+                }
+            });
+
+            Status.Progress = 100;
+
+            if (IsConnected)
+                Status.Text = "Connected";
+            else
+                Status.Text = "Connection error";
+            
+            OperationProgress?.Invoke(this, new IntegraOperationEventArgs(Status));
+
+            await Task.Delay(1000);
+
+            Status.Message = "";
+            Status.Text = "Ready";
+
+            OperationComplete?.Invoke(this, new IntegraOperationEventArgs(Status));
+
+            if (IsConnected)
+                return true;
+            else
+                return false;
+        }
 
         /// <summary>
-        /// Invalidates the device connection.
+        /// 
         /// </summary>
-        private async void InvalidateConnection()
-        {
-            Console.WriteLine($"[{GetType().Name}.{nameof(InvalidateConnection)}]");
-
-            // Initialize the operation
-            Status.Init("Validating Connection", "Please wait...", 0, "Connecting");
-            OperationStart?.Invoke(this, new IntegraEventArgs(Status));
-
-            // Ensure any running connection validation task is cancelled
-            _ConnectionValidation.Cancel();
-
-            // Reset the cancellation token
-            _ConnectionValidation = new CancellationTokenSource(DEVICE_CONNECTION_TIMEOUT);
-
-            _Progress = new Progress<DeviceMessage>(OnDeviceOperationProgress);
-            
-            Task<bool> connectionValidation = await Task.Factory.StartNew(() => ValidateConnection(_Progress, _ConnectionValidation.Token), _ConnectionValidation.Token);
-
-        }
-
-        private void OnDeviceOperationProgress(DeviceMessage progress)
+        /// <param name="progress"></param>
+        private void OnDeviceOperationProgress(StatusMessage progress)
         {
             Status.Update(progress);
-            OperationProgress?.Invoke(this, new IntegraEventArgs(Status));
+
+            OperationProgress?.Invoke(this, new IntegraOperationEventArgs(Status));
 
             NotifyPropertyChanged(nameof(Status));
         }
 
-        /// <summary>
-        /// Validates the device connection by sending an identity request.
-        /// </summary>
-        /// <param name="token">A <see cref="CancellationToken"/> to cancel the connection validation.</param>
-        /// <returns>A <see cref="bool"/> containing true if the device is connected, false otherwise.</returns>
-        private async Task<bool> ValidateConnection(IProgress<DeviceMessage> progress, CancellationToken token)
-        {
-            double progressPercentage = 0; 
-            double progressFactor = 100 / (DEVICE_CONNECTION_TIMEOUT / DEVICE_LATENCY);
-
-            IsConnected = false;
-            MidiOutputDevice.Send(new UniversalNonRealTimeMessage(new byte[] { 0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7 }));
-
-            while (!IsConnected)
-            {
-                if (token.IsCancellationRequested)
-                {
-                    progress.Report(new DeviceMessage(100, "Conenction failed"));
-                    await Task.Delay(1000);
-                    progress.Report(new DeviceMessage(100, "Connection error"));
-
-                    _Status += DeviceStatusFlags.DEVICE_NOT_CONNECTED;
-                    OperationComplete?.Invoke(this, new IntegraEventArgs(Status));
-                    
-                    return false;
-                }
-
-                Thread.Sleep(DEVICE_LATENCY);
-
-                progress.Report(new DeviceMessage(progressPercentage));
-                progressPercentage += progressFactor;
-                
-                
-            }
-
-            progress.Report(new DeviceMessage(100, "Connected"));
-            await Task.Delay(1000);
-            progress.Report(new DeviceMessage(100, "Ready"));
-
-            _Status -= DeviceStatusFlags.DEVICE_NOT_CONNECTED;
-            OperationComplete?.Invoke(this, new IntegraEventArgs(Status));
-            return true;
-        }
-
-        /// <summary>
-        /// Initializes the <see cref="Device"/>'s MIDI functionality.
-        /// </summary>
-        public void Initialize()
-        {
-            Console.WriteLine($"[{nameof(Device)}.{nameof(Initialize)}]");
-
-            InitializeMidiOutputDeviceList();
-            InitializeMidiInputDeviceList();
-        }
-
-        /// <summary>
-        /// Initializes the <see cref="MidiOutputDevices"/> property with values.
-        /// </summary>
-        private void InitializeMidiOutputDeviceList()
-        {
-            Debug.Print($"[{nameof(Device)}.{nameof(InitializeMidiOutputDeviceList)}]");
-
-            if (DeviceManager.MidiOutputDevices.Count == 0)
-            {
-                Status += DeviceStatusFlags.DEVICE_NO_MIDI_OUTPUT_DEVICES;
-
-                return;
-            }
-
-            _MidiOutputDevices.Clear();
-
-            foreach (MidiOutputDevice device in DeviceManager.MidiOutputDevices)
-            {
-                _MidiOutputDevices.Add(device);
-            }
-
-            _Status -= DeviceStatusFlags.DEVICE_NO_MIDI_OUTPUT_DEVICES;
-        }
-
-        /// <summary>
-        /// Initializes the <see cref="MidiInputDevices"/> property with values.
-        /// </summary>
-        private void InitializeMidiInputDeviceList()
-        {
-            Debug.Print($"[{nameof(Device)}.{nameof(InitializeMidiInputDeviceList)}]");
-
-            if (DeviceManager.MidiInputDevices.Count == 0)
-            {
-                Status += DeviceStatusFlags.DEVICE_NO_MIDI_INPUT_DEVICES;
-
-                return;
-            }
-
-            _MidiInputDevices.Clear();
-
-            foreach(MidiInputDevice device in DeviceManager.MidiInputDevices)
-            {
-                _MidiInputDevices.Add(device);
-            }
-
-            _Status -= DeviceStatusFlags.DEVICE_NO_MIDI_INPUT_DEVICES;
-        }
 
         #endregion
 
@@ -518,25 +593,26 @@ namespace Integra
         #endregion
     }
 
-    public class DeviceMessage
+    public class StatusMessage
     {
-        public DeviceMessage(string action, string message, double progress, string status)
+        public StatusMessage(string action, string message, double progress, string status)
         {
             Action = action;
             Message = message;
             Progress = progress;
-            Status = status;
+            Text = status;
         }
 
-        public DeviceMessage(double progress) : this(null, null, progress, null) { }
-        public DeviceMessage(double progress, string status) : this(null, null, progress, status) { }
+        public StatusMessage(double progress) : this(null, null, progress, null) { }
+        public StatusMessage(double progress, string status) : this(null, null, progress, status) { }
 
-        public string Action { get; }
-        public string Message { get;}
-        public double Progress { get; }
-        public string Status { get; }
+        public string Action { get; internal set; }
+        public string Message { get; internal set; }
+        public double Progress { get; internal set; }
+        public string Text { get; internal set; }
     }
 
+   
     /// <summary>
     /// Extends a <see cref="DeviceStatusFlags"/> enumeration with additional operator functionality for addition, removal and comparison.
     /// </summary>
@@ -549,10 +625,7 @@ namespace Integra
         /// </summary>
         private static DeviceStatusFlags _Flags;
 
-        private string _Action = string.Empty;
-        private string _Message = string.Empty;
-        private double _Progress = 0;
-        private string _Text = string.Empty;
+        private StatusMessage _StatusMessage;
 
         #endregion
 
@@ -561,15 +634,10 @@ namespace Integra
         /// <summary>
         /// Private constructor used for operator overloading.
         /// </summary>
-        /// <param name="flags">A <see cref="DeviceStatusFlags"/> to initialize the device status.</param>
-        private DeviceStatus(DeviceStatusFlags flags = DeviceStatusFlags.DEVICE_NOT_INITIALIZED)
+        internal DeviceStatus(DeviceStatusFlags flags)
         {
-            this.Flags = flags;
-
-            this.Action = string.Empty;
-            this.Message = string.Empty;
-            this.Progress = 0;
-            this.Text = string.Empty;
+            _StatusMessage = new StatusMessage(string.Empty, string.Empty, 0, "Ready");
+            Flags = flags;
         }
 
         #endregion
@@ -582,49 +650,65 @@ namespace Integra
         public DeviceStatusFlags Flags
         {
             get { return _Flags; }
-            private set 
+            internal set 
             {
-                _Flags = value; 
+                if (_Flags != value)
+                {
+                    _Flags = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         public string Action
         {
-            get { return _Action; }
+            get { return _StatusMessage.Action; }
             internal set 
-            { 
-                _Action = value; 
-                NotifyPropertyChanged(); 
+            {
+                if (_StatusMessage.Action != value)
+                {
+                    _StatusMessage.Action = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         public string Message
         {
-            get { return _Message; }
+            get { return _StatusMessage.Message; }
             internal set 
-            { 
-                _Message = value;
-                NotifyPropertyChanged();
+            {
+                if (_StatusMessage.Message != value)
+                {
+                    _StatusMessage.Message = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         public double Progress 
         { 
-            get { return _Progress; }
+            get { return _StatusMessage.Progress; }
             internal set
             {
-                _Progress = value;
-                NotifyPropertyChanged();
+                if (_StatusMessage.Progress != value)
+                {
+                    _StatusMessage.Progress = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
         
         public string Text
         {
-            get { return _Text; }
+            get { return _StatusMessage.Text; }
             internal set
             {
-                _Text = value;
-                NotifyPropertyChanged();
+                if (_StatusMessage.Text != value)
+                {
+                    _StatusMessage.Text = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -634,7 +718,7 @@ namespace Integra
 
         internal void Update() { Init(string.Empty, string.Empty, 0, string.Empty); }
 
-        internal void Update(DeviceMessage deviceMessage)
+        internal void Update(StatusMessage deviceMessage)
         {
             if (deviceMessage.Action != null)
                 Action = deviceMessage.Action;
@@ -644,8 +728,8 @@ namespace Integra
 
             Progress = deviceMessage.Progress;
 
-            if (deviceMessage.Status != null)
-                Text = deviceMessage.Status;
+            if (deviceMessage.Text != null)
+                Text = deviceMessage.Text;
         }
 
         internal void Init(string action, string message, double progress, string text)
@@ -654,109 +738,6 @@ namespace Integra
             Message = message;
             Progress = progress;
             Text = text;
-        }
-
-        #endregion
-
-        #region Operator Overloading
-
-        /// <summary>
-        /// Overloads the assignment operator to create a new <see cref="DeviceStatus"/> initialized with the provided <see cref="DeviceStatusFlags"/>.
-        /// </summary>
-        /// <param name="flags">A <see cref="DeviceStatusFlags"/> to initialize the <see cref="DeviceStatus"/>.</param>
-        public static implicit operator DeviceStatus(DeviceStatusFlags flags)
-        {
-            return new DeviceStatus(flags);
-        }
-
-        /// <summary>
-        /// Overloads the assignment operator to convert a <see cref="DeviceStatus"/> to a <see cref="DeviceStatusFlags"/>.
-        /// </summary>
-        /// <param name="status">A <see cref="DeviceStatus"/> to conver to a <see cref="DeviceStatusFlags"/></param>.
-        public static implicit operator DeviceStatusFlags(DeviceStatus status)
-        {
-            return status.Flags;
-        }
-
-        /// <summary>
-        /// Overloads the addition operator to add a <see cref="DeviceStatusFlags"/> value to the <see cref="DeviceStatus"/>.
-        /// </summary>
-        /// <param name="status">The LHS <see cref="DeviceStatus"/> to add the specified flag to.</param>
-        /// <param name="flags">The RHS <see cref="DeviceStatusFlags"/> to add.</param>
-        /// <returns>The <see cref="DeviceStatus"/> with the specified flag set.</returns>
-        public static DeviceStatus operator +(DeviceStatus status, DeviceStatusFlags flags)
-        {
-            status.Flags |= flags;
-
-            return status;
-        }
-
-        /// <summary>
-        /// Overloads the substraction operator to remove a <see cref="DeviceStatusFlags"/> value from the <see cref="DeviceStatus"/>.
-        /// </summary>
-        /// <param name="status">The LHS <see cref="DeviceStatus"/> to remove the specified flag from.</param>
-        /// <param name="flags">The RHS <see cref="DeviceStatusFlags"/> to remove.</param>
-        /// <returns>The <see cref="DeviceStatus"/> with the specified flag cleared.</returns>
-        public static DeviceStatus operator -(DeviceStatus status, DeviceStatusFlags flags)
-        {
-            status.Flags &= ~flags;
-
-            return status;
-        }
-
-        /// <summary>
-        /// Overloads the equals operator to compare the <see cref="DeviceStatus"/> with a <see cref="DeviceStatusFlags"/>.
-        /// </summary>
-        /// <param name="status">The LHS <see cref="DeviceStatus"/> to compare.</param>
-        /// <param name="flags">The RHS <see cref="DeviceStatusFlags"/> to compare to.</param>
-        /// <returns>A <see cref="bool"/> containing true if the specified status flag is set, false otherwise.</returns>
-        public static bool operator ==(DeviceStatus status, DeviceStatusFlags flags)
-        {
-            if (status.Flags == DeviceStatusFlags.DEVICE_READY)
-            {
-                return status.Flags == DeviceStatusFlags.DEVICE_READY;
-            }
-
-            return status.Flags.HasFlag(flags);
-        }
-
-        /// <summary>
-        /// Overloads the not equals operator to compare the <see cref="DeviceStatus"/> with a <see cref="DeviceStatusFlags"/>.
-        /// </summary>
-        /// <param name="status">The LHS <see cref="DeviceStatus"/> to compare.</param>
-        /// <param name="flags">The RHS <see cref="DeviceStatusFlags"/> to compare to.</param>
-        /// <returns>A <see cref="bool"/> containing false if the specified status flag is set, false otherwise.</returns>
-        public static bool operator !=(DeviceStatus status, DeviceStatusFlags flags)
-        {
-            if (flags == DeviceStatusFlags.DEVICE_READY)
-                return status.Flags != DeviceStatusFlags.DEVICE_READY;
-
-            return !status.Flags.HasFlag(flags);
-        }
-
-        #endregion
-
-        #region Overrides
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the <see cref="DeviceStatus"/> object.
-        /// </summary>
-        /// <param name="obj">The <see cref="object"/> to compare the <see cref="DeviceStatus"/> object to.</param>
-        /// <returns>A <see cref="bool"/> containing true if the specified object is equal to the <see cref="DeviceStatus"/> object, false otherwise.</returns>
-        /// <remarks><i>Not overridden, used to suppress operator overloading warning.</i></remarks>
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
-
-        /// <summary>
-        /// Creates a hash code for the <see cref="DeviceStatus"/> object.
-        /// </summary>
-        /// <returns>An <see cref="int"/> containing the hash code for the <see cref="DeviceStatus"/> object.</returns>
-        /// <remarks><i>Not overridden, used to suppress operator overloading warning.</i></remarks>
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
         }
 
         #endregion
