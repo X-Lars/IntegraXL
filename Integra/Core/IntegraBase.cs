@@ -1,31 +1,465 @@
-﻿using System;
+﻿using MidiXL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Integra.Core
 {
     /// <summary>
-    /// Base class for all INTEGRA-7 data structures
+    /// Base class for all INTEGRA-7 data structures.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">A class <typeparamref name="T"/> defining the INTEGRA-7 data structure.</typeparam>
     public abstract class IntegraBase<T> : INotifyPropertyChanged where T : IntegraBase<T>
     {
+        #region Fields
+
+        /// <summary>
+        /// Cache for storing fields decorated with the <see cref="Offset"/> attribute.
+        /// </summary>
+        private static Dictionary<ushort, FieldInfo> _FieldCache = new Dictionary<ushort, FieldInfo>();
+
+        /// <summary>
+        /// Cache for storing properties decorated with the <see cref="Offset"/> attribute.
+        /// </summary>
+        private static Dictionary<ushort, PropertyInfo> _PropertyCache = new Dictionary<ushort, PropertyInfo>();
+
+        /// <summary>
+        /// Tracks whether the data structure is initialized.
+        /// </summary>
+        private bool _IsInitialized = false;
+
+        /// <summary>
+        /// Tracks whether the cache has been initialized.
+        /// </summary>
+        private static bool _IsCached = false;
+
+        #endregion
+
+
         #region Constructor
 
-        public IntegraBase()
+        public IntegraBase(IntegraAddress address)
         {
             Name = GetType().Name;
+            Address = address;
+        }
+
+        public IntegraBase(IntegraAddress address, IntegraRequest request) : this(address, new IntegraRequest[] { request }) { }
+
+        public IntegraBase(IntegraAddress address, IntegraRequest[] requests)
+        {
+            Debug.Print($"[{GetType().Name}]");
+
+            Name = GetType().Name;
+            Address = address;
+
+            Requests.AddRange(requests);
+
+            Initialize();
         }
 
         #endregion
 
         #region Properties
 
-        public string Name { get; }
+        /// <summary>
+        /// Gets the name of the data structure.
+        /// </summary>
+        public string Name { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the base address of the data structure in the INTEGRA-7.
+        /// </summary>
+        internal protected IntegraAddress Address { get; private set; }
+
+        /// <summary>
+        /// Gets the list of request addresses required to initialize the data structure.
+        /// </summary>
+        internal protected List<IntegraRequest> Requests { get; private set; } = new List<IntegraRequest>();
+
+        public virtual bool IsInitialized
+        {
+            get { return _IsInitialized; }
+            set
+            {
+                if (_IsInitialized == value)
+                    return;
+
+                _IsInitialized = value;
+
+                NotifyPropertyChanged();
+            }
+        }
+
+
+        #endregion
+
+        #region Methods
+
+        public void Initialize()
+        {
+            InitializeCache();
+
+            // [NON BLOCKING]
+            //if (Device._IsConnected)
+                Task.Factory.StartNew(() => Device.Instance.Initialize(this), TaskCreationOptions.LongRunning);
+            //else
+            //    Device.Connected += (s, e) => { Task.Factory.StartNew(() => Device.Instance.Initialize(this), TaskCreationOptions.LongRunning); };
+
+        }
+
+        /// <summary>
+        /// Initalizes the fields of the <see cref="IntegraBase{T}"/> inherited class.
+        /// </summary>
+        /// <param name="data">The <see cref="IntegraSystemExclusive.Data"/> part to initialize the class.</param>
+        /// <returns>A <see cref="bool"/> containing true if the class is initialized.</returns>
+        protected virtual bool Initialize(byte[] data)
+        {
+            if (!IsInitialized)
+            {
+                int count = _FieldCache.Count;
+
+                foreach(KeyValuePair<ushort, FieldInfo> field in _FieldCache)
+                {
+                    if(field.Value.FieldType.IsArray)
+                    {
+                        // Create an array from the field to be able to loop through the field elements
+                        Array array = (Array)field.Value.GetValue(this);
+
+                        // Get the type of elements in the array
+                        Type arrayType = array.GetType().GetElementType();
+
+                        if(arrayType == typeof(byte))
+                        {
+                            for (int i = 0; i < array.Length; i++)
+                            {
+                                // Set the value of the selected index from the data
+                                array.SetValue(data[field.Key + i], i);
+                            }
+                        }
+                        else if (arrayType == typeof(int))
+                        {
+                            for (int i = 0; i < array.Length; i++)
+                            {
+                                byte[] values = new byte[4];
+
+                                int offset = field.Key + (i * 4);
+
+                                values[0] = (byte)((data[offset] >> 12) & 0x0F);
+                                values[1] = (byte)((data[offset + 1] >> 8) & 0x0F);
+                                values[2] = (byte)((data[offset + 2] >> 4) & 0x0F);
+                                values[3] = (byte)((data[offset + 3]) & 0x0F);
+
+                                if (BitConverter.IsLittleEndian)
+                                    Array.Reverse(values);
+
+                                array.SetValue(BitConverter.ToInt32(values, 0), i);
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception($"[{GetType().Name}.{nameof(Initialize)}] Unsupported array type {field.Value.Name}");
+                        }
+                    }
+                    else if (field.Value.FieldType == typeof(bool))
+                    {
+                        field.Value.SetValue(this, Convert.ToBoolean(data[field.Key]));
+                    }
+                    else if (field.Value.FieldType == typeof(int))
+                    {
+                        byte[] values = new byte[4];
+
+                        for (int i = 0; i < values.Length; i++)
+                        {
+                            values[i] = data[field.Key + i];
+                        }
+
+                        if (BitConverter.IsLittleEndian)
+                            Array.Reverse(values);
+
+                        field.Value.SetValue(this, BitConverter.ToInt32(values, 0));
+                    }
+                    else if(field.Value.FieldType == typeof(byte))
+                    {
+                        field.Value.SetValue(this, data[field.Key]);
+                    }
+                    else
+                    {
+                        throw new Exception($"[{GetType().Name}.{nameof(Initialize)}] Unsupported type {field.Value.Name}");
+                    }
+                }
+
+                NotifyPropertyChanged(string.Empty, false);
+            }
+
+            return IsInitialized = true;
+        }
+
+        #region Methods: Private
+
+        /// <summary>
+        /// Initalizes the field and property cache.
+        /// </summary>
+        private void InitializeCache()
+        {
+            if (_IsCached)
+                return;
+
+            // Get all private instance fields
+            FieldInfo[] fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+
+            // If the field has an offset attribute, add it to the field cache
+            foreach (FieldInfo field in fields)
+            {
+                Offset attribute = field.GetCustomAttribute<Offset>(false);
+
+                if (attribute != null)
+                {
+                    if (_FieldCache.ContainsKey(attribute.Value))
+                        throw new Exception($"[{GetType().Name}.{nameof(InitializeCache)}] Duplicate field offset attribute 0x{attribute.Value.ToString("X4")}!");
+
+                    _FieldCache.Add(attribute.Value, field);
+                }
+            }
+
+            // Get all public instance properties
+            PropertyInfo[] properties = this.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
+
+            // If the property has an offset attribute, add it to the property cache
+            foreach (PropertyInfo property in properties)
+            {
+                Offset attribute = property.GetCustomAttribute<Offset>(false);
+
+                if (attribute != null)
+                {
+                    if (_PropertyCache.ContainsKey(attribute.Value))
+                        throw new Exception($"[{GetType().Name}.{nameof(InitializeCache)}] Duplicate property offset attribute 0x{attribute.Value.ToString("X4")}!");
+
+                    _PropertyCache.Add(attribute.Value, property);
+                }
+            }
+
+            _IsCached = true;
+        }
+
+        private FieldInfo GetCachedField(ushort offset)
+        {
+            if (!_FieldCache.ContainsKey(offset))
+                return null;
+
+            return _FieldCache[offset];
+        }
+
+        private PropertyInfo GetCachedProperty(ushort offset)
+        {
+            if (!_PropertyCache.ContainsKey(offset))
+                return null;
+
+            return _PropertyCache[offset];
+        }
+
+        private Offset GetPropertyOffset(string propertyName)
+        {
+            foreach(var property in _PropertyCache)
+            {
+                if(property.Value.Name == propertyName)
+                {
+                    return new Offset(property.Key);
+                }
+            }
+
+            return null;
+        }
+
+        private void InitializeField(IntegraSystemExclusive syx)
+        {
+            // The offset of the property to set
+            uint offset = syx.Address - Address;
+
+            // 0x10, 0x20, 0x30, 0x12 [systemExclusive.Address]
+            // 0x10, 0x20, 0x30, 0x10 [this.Address]
+            // ______________________ -
+            // 0x00, 0x00, 0x00, 0x02 [offset]
+
+            for (int fieldOffset = 0, propertyOffset = 0; fieldOffset < syx.Data.Length; fieldOffset++, propertyOffset++)
+            {
+                FieldInfo field = GetCachedField((ushort)(offset + fieldOffset));
+
+                // The field is not found, skip current iteration
+                if (field == null)
+                    continue;
+
+                // The field is an array of bytes
+                if (field.FieldType.IsArray)
+                {
+                    // Create an array from the field to be able to loop through the field values
+                    Array array = (Array)field.GetValue(this);
+
+                    // Get the type of elements in the array
+                    Type arrayType = array.GetType().GetElementType();
+
+                    if (arrayType == typeof(byte))
+                    {
+                        for (int i = 0; i < array.Length; i++)
+                        {
+                            // Set the value of the selected index
+                            array.SetValue(syx.Data[fieldOffset], i);
+
+                            // Increment the field offset to the next system exclusive byte
+                            fieldOffset++;
+                        }
+                    }
+                    else if (arrayType == typeof(int))
+                    {
+                        byte[] values = new byte[4];
+
+                        int p = syx.Data.Length / 4;
+
+                        Array.Copy(syx.Data, syx.Data.Length - 4, values, 0, 4);
+
+                        if (BitConverter.IsLittleEndian)
+                            Array.Reverse(values);
+
+                        array.SetValue(BitConverter.ToInt32(values, 0), p - 1);
+                        fieldOffset += p * 4;
+                        propertyOffset += 4;
+                    }
+                    else
+                    {
+                        throw new Exception($"[{GetType().Name}.{nameof(Initialize)}] Unsupported array type {field.Name}");
+                    }
+                }
+                else if (field.FieldType == typeof(bool))
+                {
+                    field.SetValue(this, Convert.ToBoolean(syx.Data[fieldOffset]));
+                }
+                else if (field.FieldType == typeof(int))
+                {
+                    byte[] values = syx.Data;
+
+
+                    if (BitConverter.IsLittleEndian)
+                        Array.Reverse(values);
+
+                    field.SetValue(this, BitConverter.ToInt32(values, 0));
+                    fieldOffset += 4;
+                }
+                else if(field.FieldType == typeof(byte))
+                {
+                    field.SetValue(this, syx.Data[fieldOffset]);
+                }
+                else
+                {
+                    throw new Exception($"[{GetType().Name}.{nameof(Initialize)}] Unsupported type {field.Name}");
+                }
+
+                // Retrieve the accompanied property with the same offset to raise the NotifyPropertyChanged event
+                PropertyInfo property = GetCachedProperty((ushort)(offset + propertyOffset));
+
+                if(property != null)
+                {
+                    NotifyPropertyChanged(property.Name, false);
+                }
+
+                // Property offset has to be realligned in case the field is an array
+                propertyOffset = fieldOffset;
+            }
+        }
+
+        private void TransmitProperty(ushort offset, byte[] value)
+        {
+            if (IsInitialized)
+            {
+                IntegraSystemExclusive systemExclusive = new IntegraSystemExclusive(this.Address, offset, value);
+
+                Device.Instance.SendSystemExclusive(systemExclusive);
+                
+            }
+        }
+
+        private void TransmitProperty(string propertyName)
+        {
+            Offset offset = GetPropertyOffset(propertyName);
+
+            if(offset != null)
+            {
+                if (_FieldCache.ContainsKey(offset.Value))
+                {
+                    FieldInfo field = _FieldCache[offset.Value];
+
+                    if (field.FieldType.IsArray)
+                    {
+                        byte[] array = (byte[])field.GetValue(this);
+
+                        TransmitProperty(offset.Value, array);
+                    }
+                    else if (field.FieldType == typeof(bool))
+                    {
+                        TransmitProperty(offset.Value, new byte[] { (bool)field.GetValue(this) ? (byte)1 : (byte)0 });
+                    }
+                    else if (field.FieldType.IsEnum)
+                    {
+                        object enumValue = Convert.ChangeType(field.GetValue(this), Enum.GetUnderlyingType(field.FieldType));
+
+                        TransmitProperty(offset.Value, new byte[] { (byte)Convert.ChangeType(enumValue, TypeCode.Byte) });
+                    }
+                    else if (field.FieldType == typeof(int))
+                    {
+                        byte[] values = BitConverter.GetBytes((int)field.GetValue(this));
+
+                        if (BitConverter.IsLittleEndian)
+                            Array.Reverse(values);
+
+                        TransmitProperty(offset.Value, new byte[] { values[0], values[1], values[2], values[3] });
+                    }
+                    else
+                    {
+                        TransmitProperty(offset.Value, new byte[] { (byte)field.GetValue(this) });
+                    }
+                }
+            }
+        }
+
+       
+        #endregion
+
+        #endregion
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Eventhandler that handles the <see cref="Device.SystemExclusiveReceived"/>.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
+        /// <param name="e">A <see cref="SystemExclusiveMessageEventArgs"/> containing event data.</param>
+        /// <remarks><i>The event handler is attached inside the <see cref="Device.Initialize{T}(IntegraBase{T})"/> method invoked by <see cref="Initialize"/>.</i></remarks>
+        internal virtual void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
+        {
+            IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
+
+            if(syx.Address == Address)
+            {
+                // Exact match
+                if (syx.Data.Length == Requests[0].Size)
+                {
+                    if (Initialize(syx.Data))
+                        DebugPrint();
+                }
+                else
+                {
+                    InitializeField(syx);
+                }
+            }
+            else if ((syx.Address & 0xFFFFFF00) == (Address & 0xFFFFFF00))
+            {
+                InitializeField(syx);
+            }
+        }
 
         #endregion
 
@@ -41,9 +475,62 @@ namespace Integra.Core
         /// </summary>
         /// <param name="propertyName">A <see cref="string"/> containing the name of the property that is changed.</param>
         /// <remarks><i>If no property name is specified, the actual name of the property in code is used.</i></remarks>
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "", bool transmit = true)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+            if(transmit)
+            {
+                if(IsInitialized)
+                {
+                    if(!string.IsNullOrEmpty(propertyName))
+                        TransmitProperty(propertyName);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Debug
+
+        /// <summary>
+        /// Prints the property values of the <see cref="IntegraBase{T}"/> derived class.
+        /// </summary>
+        [Conditional("DEBUG")]
+        public void DebugPrint()
+        {
+            string caption = $"{GetType().Name.ToUpper()} PROPERTY VALUES";
+
+            Debug.WriteLine(new string('-', caption.Length));
+            Debug.WriteLine(caption);
+            Debug.WriteLine(new string('-', caption.Length));
+
+            PropertyInfo[] propertyInfo = GetType().GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
+
+            foreach (var propertyName in propertyInfo)
+            {
+                // TODO: Raises exception on indexer property
+                var propertyValue = propertyName.GetValue(this);
+
+                if (propertyValue != null)
+                {
+                    if (propertyName.PropertyType.IsEnum)
+                    {
+                        Debug.WriteLine($"- {propertyName.Name} = {propertyValue.GetType().GetMember(propertyValue.ToString()).FirstOrDefault()?.GetCustomAttribute<DescriptionAttribute>()?.Description ?? propertyValue.ToString()}");
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"- {propertyName.Name} = {propertyValue.ToString()}");
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine($"- {propertyName.Name} = NULL");
+                }
+            }
+
+            Debug.WriteLine(new string('-', caption.Length));
+            Debug.WriteLine("");
         }
 
         #endregion

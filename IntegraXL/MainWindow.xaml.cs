@@ -1,33 +1,19 @@
-﻿using Integra;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ControlsXL;
+﻿using ControlsXL;
+using Integra;
 using Integra.Core;
-using System.Configuration;
-using System.Collections.ObjectModel;
-using IntegraXL.Windows;
-using ToolsXL;
 using IntegraXL.Widgets;
+using IntegraXL.Windows;
+using Integra.Models;
+using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Input;
 
 namespace IntegraXL
 {
-    
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -46,7 +32,6 @@ namespace IntegraXL
         {
             // [REQUIRED]
             Device.StatusChanged += DeviceStatusChanged;
-            Device.Error += DeviceOnError;
 
             StyleManager.Style = ControlStyle.Default;
 
@@ -54,9 +39,9 @@ namespace IntegraXL
 
             InitializeComponent();
 
-            Integra.OperationStart += IntegraOperationStart;
-            Integra.OperationProgress += IntegraOperationProgress;
-            Integra.OperationComplete += IntegraOperationComplete;
+            //Integra.OperationStart += IntegraOperationStart;
+            //Integra.OperationProgress += IntegraOperationProgress;
+            //Integra.OperationComplete += IntegraOperationComplete;
 
 
             CommandBindings.Add(new CommandBinding(_ShowWindowCommand, OnShowWindow));
@@ -72,6 +57,11 @@ namespace IntegraXL
 
         private void MainWindowLoaded(object sender, RoutedEventArgs e)
         {
+            Integra.OperationStart += IntegraOperationStart;
+            Integra.OperationProgress += IntegraOperationProgress;
+            Integra.OperationComplete += IntegraOperationComplete;
+
+            //Integra.Initialize();
             if (!Integra.IsConnected)
                 DeviceStatusChanged(this, new IntegraStatusEventArgs(Integra.Flags));
         }
@@ -146,7 +136,7 @@ namespace IntegraXL
 
             Type type = (Type)e.Parameter;
 
-            if (!type.IsSubclassOf(typeof(CommonWindow)))
+            if (!type.IsSubclassOf(typeof(CommonWindow)) && !type.IsSubclassOf(typeof(IntegraBaseToneBank)))
                 return;
 
             AddWindow(type);
@@ -212,51 +202,59 @@ namespace IntegraXL
             }
         }
 
+        /// <summary>
+        /// Handles the <see cref="Device.OperationStart"/> event to initialize progress reporting.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
+        /// <param name="e">An <see cref="IntegraOperationEventArgs"/> containing event data.</param>
         private void IntegraOperationStart(object sender, IntegraOperationEventArgs e)
         {
-            if (!IsLoaded)
-                return;
 
-            
+            //if (!IsLoaded)
+            //    return;
+
+
+            //if (_Dialog != null)
+            //    return;
             _Dialog = DialogManager.ProgressDialog(e.Action, e.Message, e.Text);
-            
-            //_Dialog.Title = e.Action;
-            //_Dialog.Message = e.Message;
-            //_Dialog.Status = e.StatusText;
-            //_Dialog.ShowStatus = true;
-            //_Dialog.ShowProgress = true;
-            //_Dialog.ShowConfirmation = false;
-            //DialogManager.Show(_Dialog);
-            //_ProgressDialog = DialogManager.ProgressDialog(e.Action, e.Message, e.StatusText);
-            //_ProgressDialog.Progress = e.Progress;
-            //_ProgressDialog.Message = e.Message;
-            //_ProgressDialog.Status = e.StatusText;
-            //_ProgressDialog.Title = e.Action;
+
+               
         }
 
-
+        /// <summary>
+        /// Handles the <see cref="Device.OperationProgress"/> event to report progress.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
+        /// <param name="e">An <see cref="IntegraOperationEventArgs"/> containing event data.</param>
         private void IntegraOperationProgress(object sender, IntegraOperationEventArgs e)
         {
             if (!IsLoaded || _Dialog == null)
                 return;
+            _Dialog.Title = e.Action;
+            _Dialog.Message = e.Message;
             _Dialog.Progress = e.Progress;
             _Dialog.Status = e.Text;
-            //_ProgressDialog.Progress = e.Progress;
-            //_ProgressDialog.Message = e.Message;
-            //_ProgressDialog.Status = e.StatusText;
-            //_ProgressDialog.Title = e.Action;
         }
 
+        /// <summary>
+        /// Handles the <see cref="Device.OperationComplete"/> event to finalize progress reporting.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
+        /// <param name="e">An <see cref="IntegraOperationEventArgs"/> containing event data.</param>
         private void IntegraOperationComplete(object sender, IntegraOperationEventArgs e)
         {
+
             if (!IsLoaded || _Dialog == null)
                 return;
 
-            _Dialog.ShowConfirmation = true;
+            _Dialog.Title = e.Action;
+            _Dialog.Message = e.Message;
+            _Dialog.Progress = e.Progress;
+            _Dialog.Status = e.Text;
+            
             _Dialog.Close();
+
         }
-
-
 
         /// <summary>
         /// Handles the <see cref="Device.StatusChanged"/> event.
@@ -290,33 +288,30 @@ namespace IntegraXL
                 return;
             }
 
+            if(e.DeviceFlags.HasFlag(DeviceStatusFlags.DEVICE_CONNECTION_LOST))
+            {
+                // TODO: Close or disable Integra dependent windows
+            }
+
             if(e.DeviceFlags.HasFlag(DeviceStatusFlags.DEVICE_NOT_CONNECTED))
             {
-                if(IsLoaded)
-                    AddWindow(typeof(MidiDevicesWindow));
-                
-                DialogManager.MessageDialog("MIDI DEVICE ERROR", "The currently selected MIDI configuration failed to connect to the INTEGRA-7.");
+                if (IsLoaded)
+                {
+                    //AddWindow(typeof(MidiDevicesWindow));
+
+                    //DialogManager.MessageDialog("MIDI DEVICE ERROR", "The currently selected MIDI configuration failed to connect to the INTEGRA-7.");
+                }
 
                 return;
             }
 
-            if (e.DeviceFlags.HasFlag(DeviceStatusFlags.DEVICE_READY))
+
+            if (e.DeviceFlags == DeviceStatusFlags.DEVICE_READY)
             {
                 return;
                 // TODO: Ready for use
             }
         }
-
-        /// <summary>
-        /// Handles the <see cref="Device.Error"/> event.
-        /// </summary>
-        /// <param name="sender">An <see cref="object"/> representing the class that raised the event.</param>
-        /// <param name="e">An <see cref="EventArgs"/> containing event data.</param>
-        private void DeviceOnError(object sender, IntegraOperationEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
 
         #endregion
 
@@ -328,21 +323,46 @@ namespace IntegraXL
         /// <param name="type">The window <see cref="Type"/> derived from <see cref="MDIChild"/> to add.</param>
         private void AddWindow(Type type)
         {
-            if (!type.IsSubclassOf(typeof(MDIChild)))
-                return;
-
-            foreach (MDIChild child in Host.Items)
+            if(type.IsSubclassOf(typeof(IntegraBaseToneBank)))
             {
-                // Prevent opening a duplicate window
-                if (child.GetType() == typeof(MidiDevicesWindow))
+                foreach (MDIChild child in Host.Items)
                 {
-                    Host.SelectChild(child);
+                    if (child.GetType() == typeof(ToneBankWindow))
+                    {
+                        if (((ToneBankWindow)child).ToneBank.GetType() == type)
+                        {
+                            Host.SelectChild(child);
 
-                    return;
+                            return;
+                        }
+                    }
                 }
+
+                ToneBankWindow mdiChild = (ToneBankWindow)Activator.CreateInstance(typeof(ToneBankWindow), new object[] { type });
+
+                mdiChild.Title = type.Name;
+                Host.Items.Add(mdiChild);
+
+                return;
             }
 
-            Host.Items.Add((MDIChild)Activator.CreateInstance(type));
+            if (type.IsSubclassOf(typeof(MDIChild)))
+            {
+
+                foreach (MDIChild child in Host.Items)
+                {
+                    // Prevent opening a duplicate window
+                    if (child.GetType() == type)
+                    {
+                        Host.SelectChild(child);
+
+                        return;
+                    }
+                }
+
+                Host.Items.Add((MDIChild)Activator.CreateInstance(type));
+            }
+
         }
 
         #endregion

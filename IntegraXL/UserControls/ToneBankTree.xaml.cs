@@ -1,9 +1,6 @@
-﻿using IntegraXL.Widgets;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,19 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IntegraXL.Windows
+namespace IntegraXL.UserControls
 {
     /// <summary>
-    /// Interaction logic for MidiDevicesWindow.xaml
+    /// Interaction logic for ToneBankTree.xaml
     /// </summary>
-    public partial class MidiDevicesWindow : CommonWindow
+    public partial class ToneBankTree : UserControl
     {
-        public MidiDevicesWindow() : base()
+        public ToneBankTree()
         {
             InitializeComponent();
-
-            Widget = new MidiDevicesWidget();
         }
-       
     }
 }

@@ -1,30 +1,17 @@
-﻿using Integra;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Controls;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace IntegraXL.Widgets
+namespace Integra.Core
 {
-    /// <summary>
-    /// Represents the base class for all widgets.
-    /// </summary>
-    public abstract class Widget : UserControl, INotifyPropertyChanged
+    public abstract class IntegraBaseItem : INotifyPropertyChanged
     {
-        public Widget() : base()
-        {
-            DataContext = this;
-        }
-
-        public MainWindow ApplicationContext
-        {
-            get { return (MainWindow)Application.Current.MainWindow; }
-        }
-
-        public Device DeviceContext
-        {
-            get { return ApplicationContext.Integra; }
-        }
+        public IntegraBaseItem() { }
+        protected IntegraBaseItem(uint id, byte[] data) { }
 
         #region INotifyPropertyChanged
 
@@ -33,8 +20,9 @@ namespace IntegraXL.Widgets
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+
         /// <summary>
-        /// Method to call on a property of an <see cref="INotifyPropertyChanged"/> implementing class when it's value is changed.
+        /// Method to call on a property of an <see cref="INotifyPropertyChanged"/> implementing class when it's value is changed to raise the <see cref="PropertyChanged"/> event.
         /// </summary>
         /// <param name="propertyName">A <see cref="string"/> equal to the name of the property that is changed.</param>
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")

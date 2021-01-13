@@ -1,18 +1,16 @@
-﻿using System;
+﻿using Integra.Core;
+using Integra.Models;
+using MidiXL;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Integra.Core;
-using MidiXL;
-using System.Windows;
-using ToolsXL;
+using ToolsXL.Config;
 
 namespace Integra
 {
@@ -37,7 +35,7 @@ namespace Integra
         /// <summary>
         /// Defines the time in milliseconds to wait for a response before the connection is considered lost.
         /// </summary>
-        private static int DEVICE_CONNECTION_TIMEOUT = 2000;
+        private static int DEVICE_CONNECTION_TIMEOUT = 1000;
 
         /// <summary>
         /// Defines the aproximate MIDI latency in milliseconds.
@@ -66,7 +64,7 @@ namespace Integra
         /// <summary>
         /// Stores the connection state of the <see cref="Device"/>.
         /// </summary>
-        private bool _IsConnected = false;
+        internal static bool _IsConnected = false;
 
         /// <summary>
         /// Stores whether <see cref="Initialize"/> has been called.
@@ -79,14 +77,38 @@ namespace Integra
         /// <remarks><i>The device status is initiated with <see cref="DeviceStatusFlags.DEVICE_NO_MIDI_SETUP"/>.</i></remarks>
         private static DeviceStatus _Status = new DeviceStatus(DeviceStatusFlags.DEVICE_NO_MIDI_SETUP);
 
-        private static StatusMessage _Message;
 
+        // TODO: Device count changes
         private int _MidiOutputDeviceCount = 0;
+        // TODO: Device count changes
         private int _MidiInputDeviceCount = 0;
+
         /// <summary>
         /// Lock for thread safety.
         /// </summary>
         private static readonly object _Lock = new object();
+
+        private static List<Task> _Tasks = new List<Task>();
+        private bool _IsRunning = false;
+
+        #region Fields: INTEGRA-7
+
+        /// <summary>
+        /// Stores a reference to the INTEGRA-7 setup data structure.
+        /// </summary>
+        private Setup _Setup = new Setup();
+
+        /// <summary>
+        /// Stores a reference to the INTEGRA-7 studio set collection.
+        /// </summary>
+        private StudioSets _StudioSets = new StudioSets();
+
+        /// <summary>
+        /// Stores a reference to the currently selected INTEGRA-7 tone.
+        /// </summary>
+        private IntegraTone _SelectedTone = new IntegraTone();
+
+        #endregion
 
         #endregion
 
@@ -128,11 +150,10 @@ namespace Integra
         public static event DeviceStatusEventHandler StatusChanged;
 
         /// <summary>
-        /// Raised when an error occurs with the <see cref="Device"/>. <b>Must be subscribed to before any call to <see cref="Instance"/>!</b>
+        /// Stores the synchronization context of instantiating class.
         /// </summary>
-        /// <remarks><i>Event is static to be able to subscribe to the event before the Singleton instance is created and auto initialized.</i></remarks>
-        public static event DeviceOperationEventHandler Error;
-
+        private readonly SynchronizationContext _Context;
+        
         #endregion
 
         #region Constructor
@@ -143,6 +164,8 @@ namespace Integra
         private Device() 
         {
             Debug.Print($"[{nameof(Device)}]");
+
+            _Context = SynchronizationContext.Current;
         }
 
         #endregion
@@ -169,10 +192,7 @@ namespace Integra
                             // Enforces the application to hook up the device listener before before calling the device
                             if (StatusChanged == null)
                                 throw new ApplicationException($"[{nameof(Device)}] Initialization handler not hooked up to the application!\nUse Device.OnInitialization += <...Event Handler...>");
-
-                            if (Error == null)
-                                throw new ApplicationException($"[{nameof(Device)}] Error handler not hooked up to the application!\nUse Device.OnError += <...Event Handler...>");
-
+                            
                             _Instance.Initialize();
                         }
                     }
@@ -180,6 +200,24 @@ namespace Integra
 
                 return _Instance;
             }
+        }
+        private static  SynchronizationContext _UIContext = SynchronizationContext.Current;
+
+        internal static SynchronizationContext UIContext
+        {
+            get { return _UIContext; }
+        }
+        /// <summary>
+        /// Gets the synchronization context of the <see cref="Device"/>.
+        /// </summary>
+        internal SynchronizationContext Context
+        {
+            get { return _Context; }
+        }
+
+        public StudioSets StudioSets
+        {
+            get { return _StudioSets; }
         }
 
         /// <summary>
@@ -221,11 +259,13 @@ namespace Integra
             get { return _IsConnected; }
             private set
             {
-                _IsConnected = value;
-                NotifyPropertyChanged();
+                if (IsConnected != value)
+                {
+                    _IsConnected = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
-
         
         /// <summary>
         /// Gets the available <see cref="MidiOutputDevice"/>s.
@@ -252,14 +292,14 @@ namespace Integra
                 // Delete the current device
                 if (_MidiOutputDevice != null)
                 {
+                    // TODO: _MidiOutputDevice.Close() causes problems
                     _MidiOutputDevice = null;
                 }
 
                 // No device selected
                 if (value == null)
                 {
-                    Status.Flags |= DeviceStatusFlags.DEVICE_NO_MIDI_OUTPUT_SELECTED;
-
+                    InvalidateDeviceStatus();
                     return;
                 }
 
@@ -277,7 +317,7 @@ namespace Integra
                 NotifyPropertyChanged();
 
                 // Only invalidate the device status if connection is possible
-                if(MidiInputDevice != null)
+                if(MidiInputDevice != null && _IsInitialized)
                     InvalidateDeviceStatus();
             }
         }
@@ -293,26 +333,19 @@ namespace Integra
                 if (_MidiInputDevice == value)
                     return;
 
-                if(value == null)
-                {
-                    if (_MidiInputDevice != null)
-                    {
-                        _MidiInputDevice.SystemExclusiveReceived -= SystemExclusiveReceived;
-                        _MidiInputDevice.UniversalNonRealTimeReceived -= UniversalNonRealTimeReceived;
-                        _MidiInputDevice = null;
-                    }
-
-                    Status.Flags |= DeviceStatusFlags.DEVICE_NO_MIDI_INPUT_SELECTED;
-
-                    return;
-                }
-
                 // Delete the current device
                 if (_MidiInputDevice != null)
                 {
                     _MidiInputDevice.SystemExclusiveReceived -= SystemExclusiveReceived;
                     _MidiInputDevice.UniversalNonRealTimeReceived -= UniversalNonRealTimeReceived;
+                    // TODO: _MidiInputDevice.Close() causes problems
                     _MidiInputDevice = null;
+                }
+
+                if(value == null)
+                {
+                    InvalidateDeviceStatus();
+                    return;
                 }
 
                 try
@@ -332,8 +365,25 @@ namespace Integra
                 NotifyPropertyChanged();
 
                 // Only invalidate the device status if connection is possible
-                if (MidiOutputDevice != null)
+                if (MidiOutputDevice != null && _IsInitialized)
                     InvalidateDeviceStatus();
+            }
+        }
+
+        [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
+        public Setup Setup
+        {
+            get { return _Setup; }
+
+        }
+
+        public IntegraTone SelectedTone
+        {
+            get { return _SelectedTone; }
+            set
+            {
+                _SelectedTone = value;
+                NotifyPropertyChanged();
             }
         }
 
@@ -348,7 +398,7 @@ namespace Integra
         /// <param name="e">An <see cref="UniversalNonRealTimeMessageEventArgs"/> containing event data.</param>
         private void UniversalNonRealTimeReceived(object sender, UniversalNonRealTimeMessageEventArgs e)
         {
-            Debug.Print($"[{nameof(Device)}.{nameof(UniversalNonRealTimeReceived)}]");
+            Debug.Print($"[{nameof(Device)}.{nameof(UniversalNonRealTimeReceived)}] {string.Join(" ", e.Message.Data.Select(x => string.Format("{0:X2}", x)))}");
 
             IsConnected = true;
         }
@@ -360,14 +410,18 @@ namespace Integra
         /// <param name="e">An <see cref="SystemExclusiveMessageEventArgs"/> containing event data.</param>
         private void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
-            Debug.Print($"[{nameof(Device)}.{nameof(SystemExclusiveReceived)}]");
-
-            throw new NotImplementedException();
+            Debug.Print($"[{nameof(Device)}.{nameof(SystemExclusiveReceived)}] {string.Join(" ", e.Message.Data.Select(x => string.Format("{0:X2}", x)))}");
         }
 
         #endregion
 
         #region Methods
+
+        internal void SendSystemExclusive(IntegraSystemExclusive syx)
+        {
+            MidiOutputDevice.Send(new SystemExclusiveMessage(syx));
+            Console.WriteLine($"[{nameof(Device)}.{nameof(SendSystemExclusive)}]{syx}");
+        }
 
         /// <summary>
         /// Initializes the <see cref="Device"/>.
@@ -470,9 +524,10 @@ namespace Integra
             {
                 bool connectionLost = IsConnected;
 
-                IProgress<StatusMessage> progress = new Progress<StatusMessage>(p => OnDeviceOperationProgress(p));
+               
 
-                await ConnectionValidation(progress);
+                //ConnectionValidation(progress);
+                await ConnectionValidation();
 
                 if (IsConnected)
                 {
@@ -502,74 +557,161 @@ namespace Integra
             }
         }
 
-      
-        /// <summary>
-        /// Validates the device connection by sending an identity request.
-        /// </summary>
-        /// <param name="progress">A <see cref="IProgress{T}"/> to report progress operation.</param>
-        /// <returns>A <see cref="Task{TResult}"/> containing true if the device is connected, false otherwise.</returns>
-        private async Task<bool> ConnectionValidation(IProgress<StatusMessage> progress)
+        private async Task<bool> ConnectionValidation()
         {
+            IProgress<StatusMessage> progress = new Progress<StatusMessage>(p => OnOperationProgress(p));
             IsConnected = false;
-
-            int connectionTimeout = 0;
-
-
-            Status.Init("Validating Connection", "Please wait...", 0, "Connecting");
-
-            OperationStart?.Invoke(this, new IntegraOperationEventArgs(Status));
-
-            MidiOutputDevice.Send(new UniversalNonRealTimeMessage(new byte[] { 0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7 }));
-
-            await Task.Factory.StartNew(() =>
+            
+            Task task = new Task(() =>
             {
+                int timeout = 0;
+
+                MidiOutputDevice.Send(new UniversalNonRealTimeMessage(new byte[] { 0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7 }));
+                progress.Report(new StatusMessage("Validating Connection", "Please wait...", 0, "Connecting"));
+
                 while (!IsConnected)
                 {
-                    Thread.Sleep(DEVICE_LATENCY);
-                    connectionTimeout += DEVICE_LATENCY;
-                    
-                    progress.Report(new StatusMessage(100d / DEVICE_CONNECTION_TIMEOUT * connectionTimeout));
 
-                    if (connectionTimeout > DEVICE_CONNECTION_TIMEOUT)
+                    Thread.Sleep(DEVICE_LATENCY);
+                    timeout += DEVICE_LATENCY;
+                    
+                    progress.Report(new StatusMessage("Validating Connection", "Please wait...", 100d / DEVICE_CONNECTION_TIMEOUT * timeout, "Connecting"));
+
+                    if (timeout > DEVICE_CONNECTION_TIMEOUT)
+                    {
                         break;
+                    }
                 }
             });
 
-            Status.Progress = 100;
+            RunTask(task);
+            await task;
 
             if (IsConnected)
-                Status.Text = "Connected";
+            {
+                progress.Report(new StatusMessage("Validating Connection", "Connection successful", 100, "Done"));
+            }
             else
-                Status.Text = "Connection error";
+            {
+                progress.Report(new StatusMessage("Validating Connection", "Connection timeout", 100d, "Connection Error"));
+            }
+
+            return IsConnected;
+        }
+
+        private async Task<bool> TaskManager()
+        {
+            while(_Tasks.Any())
+            {
+                _IsRunning = true;
+
+                Task task = await Task.WhenAny(_Tasks);
+
+                lock (_Tasks)
+                    _Tasks.Remove(task);
+
+                Debug.Print($"[{nameof(Device)}.{nameof(TaskManager)}] Task Count: {_Tasks.Count}");
+
+                //await task;
+                
+            }
+
+            _IsRunning = false;
+            // Create small delay to be able to update the UI
+            await Task.Delay(DEVICE_LATENCY);
+
+            return true;
+        }
+
+        private async void RunTask(Task task)
+        {
+            lock (_Tasks)
+                _Tasks.Add(task);
+
+            Debug.Print($"[{nameof(Device)}.{nameof(RunTask)}] Task Count: {_Tasks.Count}");
+                
+            if (!_IsRunning)
+            {
+                _IsRunning = true;
+                // Send operation start event to the UI
+                _Context.Post(o => OperationStart?.Invoke(this, new IntegraOperationEventArgs(Status)), null);
+
+                task.Start();
+            }
+            else
+            {
+                task.Start();
+                //return;
+            }
+
+            // Wait for all operations to finish
+            await Task.Factory.StartNew(() => TaskManager());
+
+            // Create small delay to be able to update the UI
+            await Task.Delay(DEVICE_LATENCY);
             
-            OperationProgress?.Invoke(this, new IntegraOperationEventArgs(Status));
+          
+            // Send operation complete event to the UI
+            _Context.Post(o => OperationComplete?.Invoke(this, new IntegraOperationEventArgs(Status)), null);
 
-            await Task.Delay(1000);
+            if (Status.Flags == DeviceStatusFlags.DEVICE_READY)
+                Status.Text = "Ready";
 
-            Status.Message = "";
-            Status.Text = "Ready";
+            else if (Status.Flags.HasFlag(DeviceStatusFlags.DEVICE_NOT_CONNECTED))
+                Status.Text = "Not connected";
 
-            OperationComplete?.Invoke(this, new IntegraOperationEventArgs(Status));
-
-            if (IsConnected)
-                return true;
             else
-                return false;
+                Status.Text = "Error";
+
+            Debug.Print($"[{nameof(Device)}.{nameof(TaskManager)}] Completed");
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="progress"></param>
-        private void OnDeviceOperationProgress(StatusMessage progress)
+        internal void OnOperationProgress(StatusMessage progress)
         {
             Status.Update(progress);
 
-            OperationProgress?.Invoke(this, new IntegraOperationEventArgs(Status));
-
-            NotifyPropertyChanged(nameof(Status));
+            _Context.Send(o => OperationProgress?.Invoke(this, new IntegraOperationEventArgs(Status)), null);
+            //NotifyPropertyChanged(nameof(Status));
         }
 
+        internal async Task<bool> Initialize<T>(IntegraBase<T> dataStructure) where T : IntegraBase<T>
+        {
+            while (!_IsConnected)
+            {
+                await Task.Delay(DEVICE_LATENCY);
+            }
+
+            IProgress<StatusMessage> progress = new Progress<StatusMessage>(p => OnOperationProgress(p));
+
+            Task task = new Task(async() =>
+            {
+
+                //Status.Init($"Initializing {dataStructure.Name}", "Please wait...", 0, "Receiving");
+                progress.Report(new StatusMessage($"Initializing {dataStructure.Name}", "Please wait...", 0, "Receiving"));
+                MidiInputDevice.SystemExclusiveReceived += dataStructure.SystemExclusiveReceived;
+
+                for (int i = 0; i < dataStructure.Requests.Count; i++)
+                {
+                    MidiOutputDevice.Send(new SystemExclusiveMessage(new IntegraSystemExclusive(dataStructure.Address, dataStructure.Requests[i])));
+                }
+
+                while(!dataStructure.IsInitialized)
+                {
+                    //progress.Report(new StatusMessage("Validating Connection", "Please wait...", 100d / DEVICE_CONNECTION_TIMEOUT * timeout, "Connecting"));
+                    await Task.Delay(DEVICE_LATENCY);
+                }
+            });
+
+            RunTask(task);
+            await task;
+            progress.Report(new StatusMessage($"Initializing {dataStructure.Name}", "Initialized", 100, "Done"));
+            //TaskComplete(task);
+            return dataStructure.IsInitialized;
+        }
 
         #endregion
 

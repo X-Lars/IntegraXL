@@ -83,6 +83,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UserControls\ToneBankTree.xaml.cs">
+      <DependentUpon>ToneBankTree.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Widgets\CommonWidget.xaml.cs">
       <DependentUpon>CommonWidget.xaml</DependentUpon>
     </Compile>
@@ -94,6 +97,9 @@
     <Compile Include="Windows\IntegraWindow.cs" />
     <Compile Include="Windows\MidiDevicesWindow.xaml.cs">
       <DependentUpon>MidiDevicesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ToneBankWindow.xaml.cs">
+      <DependentUpon>ToneBankWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -107,6 +113,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UserControls\ToneBankTree.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Widgets\CommonWidget.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -116,6 +126,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\MidiDevicesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ToneBankWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -164,6 +178,8 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Common\Converters\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,4 +1,6 @@
 ﻿using MidiXL;
+using System;
+using System.Linq;
 
 namespace Integra.Core
 {
@@ -26,7 +28,7 @@ namespace Integra.Core
         private readonly byte[]        _DeviceID             = { 0x10 };
         private static readonly byte[] _ModelID              = { 0x00, 0x00, 0x64 };
         private readonly byte[]        _Mode                 = { (byte)SystemExclusiveModes.Transmit };
-        private readonly byte[]        _Address              = { };
+        private readonly byte[]        _Address              = { 0x00, 0x00, 0x00, 0x00};
         private readonly byte[]        _Data                 = { };
         private byte[]                 _Checksum             = { };
         private static readonly byte[] _SystemExclusiveEnd   = { (byte)SystemExclusiveMessageTypes.SystemExclusiveEnd };
@@ -36,25 +38,25 @@ namespace Integra.Core
         #region Constructor
 
         /// <summary>
-        /// Creates and initializes a new <see cref="IntegraSystemExclusive"/> instance initialized from the provided <paramref name="systemExclusiveMessage"/>.
+        /// Creates and initializes a new <see cref="IntegraSystemExclusive"/> instance initialized from the provided <paramref name="syx"/>.
         /// </summary>
-        /// <param name="systemExclusiveMessage">A <see cref="SystemExclusiveMessage"/> to initialize the <see cref="IntegraSystemExclusive"/>.</param>
+        /// <param name="syx">A <see cref="SystemExclusiveMessage"/> to initialize the <see cref="IntegraSystemExclusive"/>.</param>
         /// <remarks><i>Use for conversion of received system exclusive messages.</i></remarks>
-        public IntegraSystemExclusive(SystemExclusiveMessage systemExclusiveMessage)
+        public IntegraSystemExclusive(SystemExclusiveMessage syx)
         {
             // Read variable bytes from the system exclusive message
-            _DeviceID               = new byte[] { systemExclusiveMessage.Data[2] };
-            _Address                = new byte[] { systemExclusiveMessage.Data[7], systemExclusiveMessage.Data[8], systemExclusiveMessage.Data[9], systemExclusiveMessage.Data[10] };
+            _DeviceID = new byte[] { syx.Data[2] };
+            _Address  = new byte[] { syx.Data[7], syx.Data[8], syx.Data[9], syx.Data[10] };
 
             // Set the size of the data array
-            _Data                   = new byte[systemExclusiveMessage.Data.Length - IntegraConstants.SYSTEM_EXCLUSIVE_HEADER_SIZE - IntegraConstants.ADDRESS_SIZE - 2];
+            _Data     = new byte[syx.Data.Length - IntegraConstants.SYSTEM_EXCLUSIVE_HEADER_SIZE - IntegraConstants.ADDRESS_SIZE - 2];
 
             int offset = IntegraConstants.SYSTEM_EXCLUSIVE_HEADER_SIZE + IntegraConstants.ADDRESS_SIZE;
 
             // Initialize the data array
-            for (int i = offset; i < _Data.Length; i++)
+            for (int i = offset; i < syx.Data.Length - 2; i++)
             {
-                _Data[i - offset] = systemExclusiveMessage.Data[i];
+                _Data[i - offset] = syx.Data[i];
             }
         }
 
@@ -108,6 +110,14 @@ namespace Integra.Core
             get { return _Data; }
         }
 
+        /// <summary>
+        /// Gets the most significant byte of the <see cref="Data"/> part.
+        /// </summary>
+        public byte MSB
+        {
+            get { return Data[0]; }
+        }
+
         #endregion
 
         #region Methods
@@ -139,6 +149,58 @@ namespace Integra.Core
             _Checksum = new byte[] { (byte)checkSum };
 
             return (byte)checkSum;
+        }
+
+        #endregion
+
+        #region Overloads
+
+        /// <summary>
+        /// Overloads the assignment operator to be able to assign a <see cref="IntegraSystemExclusive"/> to a <see cref="byte"/> array.
+        /// </summary>
+        /// <param name="instance">The <see cref="IntegraSystemExclusive"/> to assign to a <see cref="byte"/> array.</param>
+        public static implicit operator byte[](IntegraSystemExclusive instance)
+        {
+            if (instance == null)
+                return null;
+
+            // Combine all system exclusive fields into one array
+            byte[][] fields = { _SystemExclusiveBegin,
+                                _ManufacturerID,
+                                instance._DeviceID,
+                                _ModelID,
+                                instance._Mode,
+                                instance._Address,
+                                instance._Data,
+                                instance._Checksum,
+                                _SystemExclusiveEnd };
+
+            // Create the byte array with the total size of all dimensions of the fields array
+            byte[] byteArray = new byte[fields.Sum(b => b.Length)];
+
+            int offset = 0;
+
+            // Copy all bytes from the fields array into the data array
+            foreach (byte[] value in fields)
+            {
+                Buffer.BlockCopy(value, 0, byteArray, offset, value.Length);
+                offset += value.Length;
+            }
+
+            return byteArray;
+        }
+
+        #endregion
+
+        #region Overrides
+
+        /// <summary>
+        /// Overrides the <see cref="ToString"/> method to represent the <see cref="IntegraSystemExclusive"/> message as a hexadecimal <see cref="string"/>. 
+        /// </summary>
+        /// <returns>A <see cref="string"/> containing a hexadecimal representation of the system exclusive message.</returns>
+        public override string ToString()
+        {
+            return string.Join(" ", ((byte[])this).Select(x => string.Format("{0:X2}", x)));
         }
 
         #endregion

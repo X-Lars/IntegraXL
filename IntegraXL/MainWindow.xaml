@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:IntegraXL"
         xmlns:xl="clr-namespace:ControlsXL;assembly=ControlsXL"
         xmlns:win="clr-namespace:IntegraXL.Windows"
+        xmlns:models="clr-namespace:Integra.Models;assembly=Integra"
+        xmlns:uc="clr-namespace:IntegraXL.UserControls"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     
@@ -48,9 +50,7 @@
                 
                 <xl:Sidebar.Sections>
                     <xl:SidebarSection Header="Sound Library">
-                        <StackPanel>
-                            <xl:MarkerButton>Marker Button</xl:MarkerButton>
-                        </StackPanel>
+                        <uc:ToneBankTree/>
                     </xl:SidebarSection>
                     <xl:SidebarSection Header="Settings">
                         <StackPanel>
