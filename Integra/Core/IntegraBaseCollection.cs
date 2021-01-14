@@ -91,7 +91,7 @@ namespace Integra.Core
         /// </summary>
         public double Progress 
         { 
-            get { return (100f / DataSize * IDCounter); } 
+            get { return (100d / DataSize * IDCounter); } 
         }
 
         public override bool IsInitialized
@@ -139,7 +139,7 @@ namespace Integra.Core
 
                 if(Initialize(syx.Data))
                 {
-                    Device.Instance.OnOperationProgress(new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
+                    Device.Instance.ReportProgress(new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
                 }
                 else
                 {
