@@ -40,7 +40,7 @@ namespace Integra
         /// <summary>
         /// Defines the aproximate MIDI latency in milliseconds.
         /// </summary>
-        private const int DEVICE_LATENCY = 20;
+        private const int DEVICE_LATENCY = 50;
 
         #endregion
 
@@ -119,6 +119,7 @@ namespace Integra
         /// </summary>
         private IntegraTone _SelectedTone = new IntegraTone();
 
+        
         #endregion
 
         #endregion
@@ -379,9 +380,13 @@ namespace Integra
         {
             get { return _Setup; }
 
-        } 
+        }
 
-
+        [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
+        public StudioSet StudioSet
+        {
+            get { return _StudioSet; }
+        }
 
         /// <summary>
         /// Gets the collection of INTEGRA-7 studio sets.
@@ -399,11 +404,41 @@ namespace Integra
             set
             {
                 _SelectedTone = value;
-
+                Tone = new Tone(_SelectedTone);
                 // TODO: Set actual tone
                 NotifyPropertyChanged();
             }
         }
+
+        public Tone _Tone;
+        public Tone Tone
+        {
+            get
+            {
+                if(_Tone == null)
+                {
+                    _Tone = new Tone(StudioSet.Part[(int)SelectedPart].ToneBankSelectMSB, StudioSet.Part[(int)SelectedPart].ToneBankSelectLSB, StudioSet.Part[(int)SelectedPart].ToneProgramNumber);
+                }
+
+                return _Tone;
+            }
+
+            set
+            {
+                if(_Tone != value)
+                {
+                    _Tone = value;
+
+                    MidiOutputDevice.Send(new ControlChangeMessage((MidiChannels)(int)StudioSet.Part[(int)SelectedPart].ReceiveChannel, 0, _Tone.MSB));
+                    MidiOutputDevice.Send(new ControlChangeMessage((MidiChannels)(int)StudioSet.Part[(int)SelectedPart].ReceiveChannel, 32, _Tone.LSB));
+                    MidiOutputDevice.Send(new ProgramChangeMessage((MidiChannels)(int)StudioSet.Part[(int)SelectedPart].ReceiveChannel, _Tone.PC));
+
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public IntegraParts SelectedPart { get; set; } = IntegraParts.Part01;
 
         #endregion
 
@@ -640,7 +675,8 @@ namespace Integra
             // Ensure the INTEGRA-7 is connected before starting initialization
             while (!_IsConnected)
             {
-                await Task.Delay(DEVICE_LATENCY);
+                //await Task.Delay(DEVICE_LATENCY);
+                Thread.Sleep(DEVICE_CONNECTION_TIMEOUT);
             }
 
             Task<bool> initialization = new Task<bool>(() =>

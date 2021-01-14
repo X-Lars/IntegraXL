@@ -83,6 +83,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\Converters\ComparisonConverter.cs" />
+    <Compile Include="Common\Converters\ByteToHexConverter.cs" />
     <Compile Include="UserControls\ToneBankTree.xaml.cs">
       <DependentUpon>ToneBankTree.xaml</DependentUpon>
     </Compile>
@@ -178,8 +180,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Common\Converters\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

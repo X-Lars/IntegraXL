@@ -9,7 +9,7 @@
         xmlns:models="clr-namespace:Integra.Models;assembly=Integra"
         xmlns:uc="clr-namespace:IntegraXL.UserControls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="768" Width="1024">
     
     
     <Grid>
@@ -19,7 +19,7 @@
                         DockPosition="Left"
                         Header="Favorites"
                         VisibleSections="3"
-                        Width="150">
+                        Width="250">
                 
                 <xl:Sidebar.CommonContent>
                     <StackPanel>
@@ -71,7 +71,7 @@
                         Header="Context Menu"
                         ShowSections="False"
                         ShowCommonArea="False"
-                        Width="150">
+                        Width="250">
 
                 <xl:Sidebar.Sections>
                     <xl:SidebarSection Header="Context Menu">

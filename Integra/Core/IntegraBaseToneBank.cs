@@ -50,6 +50,9 @@ namespace Integra.Core
 
         internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
+            if (IsInitialized)
+                return;
+
             IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
 
             if(syx.Address == Address)

@@ -66,12 +66,15 @@
     <Compile Include="Core\IntegraStudioSet.cs" />
     <Compile Include="Core\IntegraSystemExclusive.cs" />
     <Compile Include="Core\IntegraTone.cs" />
+    <Compile Include="Core\IntegraToneExtensions.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="Models\Setup.cs" />
     <Compile Include="Models\SNAPresetToneBank.cs" />
     <Compile Include="Models\StudioSet.cs" />
     <Compile Include="Models\StudioSetMidi.cs" />
+    <Compile Include="Models\StudioSetPart.cs" />
     <Compile Include="Models\StudioSets.cs" />
+    <Compile Include="Models\Tone.cs" />
     <Compile Include="Models\ToneBank.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

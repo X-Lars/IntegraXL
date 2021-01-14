@@ -39,9 +39,9 @@ namespace IntegraXL
 
             InitializeComponent();
 
-            //Integra.OperationStart += IntegraOperationStart;
-            //Integra.OperationProgress += IntegraOperationProgress;
-            //Integra.OperationComplete += IntegraOperationComplete;
+            Integra.OperationStart += IntegraOperationStart;
+            Integra.OperationProgress += IntegraOperationProgress;
+            Integra.OperationComplete += IntegraOperationComplete;
 
 
             CommandBindings.Add(new CommandBinding(_ShowWindowCommand, OnShowWindow));
@@ -57,11 +57,11 @@ namespace IntegraXL
 
         private void MainWindowLoaded(object sender, RoutedEventArgs e)
         {
-            Integra.OperationStart += IntegraOperationStart;
-            Integra.OperationProgress += IntegraOperationProgress;
-            Integra.OperationComplete += IntegraOperationComplete;
+            //Integra.OperationStart += IntegraOperationStart;
+            //Integra.OperationProgress += IntegraOperationProgress;
+            //Integra.OperationComplete += IntegraOperationComplete;
 
-            //Integra.Initialize();
+            ////Integra.Initialize();
             if (!Integra.IsConnected)
                 DeviceStatusChanged(this, new IntegraStatusEventArgs(Integra.Flags));
         }
@@ -210,8 +210,8 @@ namespace IntegraXL
         private void IntegraOperationStart(object sender, IntegraOperationEventArgs e)
         {
 
-            //if (!IsLoaded)
-            //    return;
+            if (!IsLoaded)
+                return;
 
 
             //if (_Dialog != null)
@@ -228,8 +228,12 @@ namespace IntegraXL
         /// <param name="e">An <see cref="IntegraOperationEventArgs"/> containing event data.</param>
         private void IntegraOperationProgress(object sender, IntegraOperationEventArgs e)
         {
-            if (!IsLoaded || _Dialog == null)
+            if (!IsLoaded)
                 return;
+
+            if(_Dialog == null)
+                _Dialog = DialogManager.ProgressDialog(e.Action, e.Message, e.Text);
+
             _Dialog.Title = e.Action;
             _Dialog.Message = e.Message;
             _Dialog.Progress = e.Progress;

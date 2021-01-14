@@ -96,7 +96,6 @@ namespace Integra.Core
             }
         }
 
-
         #endregion
 
         #region Methods
@@ -448,7 +447,7 @@ namespace Integra.Core
                 if (syx.Data.Length == Requests[0].Size)
                 {
                     if (Initialize(syx.Data))
-                        DebugPrint();
+                        Device.Instance.ReportProgress(new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
                 }
                 else
                 {
