@@ -40,7 +40,7 @@ namespace Integra
         /// <summary>
         /// Defines the aproximate MIDI latency in milliseconds.
         /// </summary>
-        private const int DEVICE_LATENCY = 40;
+        private const int DEVICE_LATENCY = 20;
 
         #endregion
 
@@ -106,6 +106,8 @@ namespace Integra
         /// Stores a reference to the INTEGRA-7 setup data structure.
         /// </summary>
         private Setup _Setup = new Setup();
+
+        private StudioSet _StudioSet = new StudioSet();
 
         /// <summary>
         /// Stores a reference to the INTEGRA-7 studio set collection.
@@ -377,7 +379,9 @@ namespace Integra
         {
             get { return _Setup; }
 
-        }
+        } 
+
+
 
         /// <summary>
         /// Gets the collection of INTEGRA-7 studio sets.
@@ -436,7 +440,11 @@ namespace Integra
         internal void SendSystemExclusive(IntegraSystemExclusive syx)
         {
             Debug.Print($"[{nameof(Device)}.{nameof(SendSystemExclusive)}] {syx}");
-            MidiOutputDevice.Send(new SystemExclusiveMessage(syx));
+            lock (MidiOutputDevice)
+            {
+                MidiOutputDevice.Send(new SystemExclusiveMessage(syx));
+                Thread.Sleep(DEVICE_LATENCY);
+            }
         }
 
         /// <summary>
@@ -643,7 +651,11 @@ namespace Integra
                 // Send all requests contained inside the data structure
                 for (int i = 0; i < dataStructure.Requests.Count; i++)
                 {
-                    MidiOutputDevice.Send(new SystemExclusiveMessage(new IntegraSystemExclusive(dataStructure.Address, dataStructure.Requests[i])));
+                    lock (MidiOutputDevice)
+                    {
+                        MidiOutputDevice.Send(new SystemExclusiveMessage(new IntegraSystemExclusive(dataStructure.Address, dataStructure.Requests[i])));
+                        Thread.Sleep(DEVICE_LATENCY);
+                    }
                 }
 
                 while (!dataStructure.IsInitialized)
@@ -699,7 +711,7 @@ namespace Integra
                 await Task.Delay(DEVICE_LATENCY);
             }
 
-            lock(_Tasks)
+            lock (_Tasks)
                 _IsTaskRunning = false;
 
             // Report the finalization message

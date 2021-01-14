@@ -276,7 +276,7 @@ namespace Integra.Core
             return null;
         }
 
-        private void InitializeField(IntegraSystemExclusive syx)
+        protected void InitializeField(IntegraSystemExclusive syx)
         {
             // The offset of the property to set
             uint offset = syx.Address - Address;

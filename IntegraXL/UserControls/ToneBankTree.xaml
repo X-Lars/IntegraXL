@@ -9,17 +9,52 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
-        <Label>Presets</Label>
-        <TreeView>
-            <TreeViewItem Header="SuperNATURAL" IsExpanded="True">
-                <TreeViewItem Header="Preset" IsExpanded="True">
-                    <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SNAPresetToneBank}">Acoustic Tones</xl:LinkButton>
-                    <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SNSPresetToneBank}">Synth Tones</xl:LinkButton>
-                    <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SNDPresetToneBank}">Drum Kits</xl:LinkButton>
-                </TreeViewItem>
+
+        <Label>INTEGRA-7 Library</Label>
+
+        <TreeViewItem Header="SuperNATURAL" IsExpanded="True">
+
+            <TreeViewItem Header="Presets" IsExpanded="True">
+                <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SNAPresetToneBank}">Acoustic Tones</xl:LinkButton>
+                <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SNSPresetToneBank}">Synth Tones</xl:LinkButton>
+                <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SNDPresetToneBank}">Drum Kits</xl:LinkButton>
+            </TreeViewItem>
+
+            <TreeViewItem Header="User" IsExpanded="True">
+                <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SNAUserToneBank}">Acoustic Tones</xl:LinkButton>
+                <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SNSUserToneBank}">Synth Tones</xl:LinkButton>
+                <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SNDUserToneBank}">Drum Kits</xl:LinkButton>
+            </TreeViewItem>
+
+            <TreeViewItem Header="Expansions" IsExpanded="False">
+                
             </TreeViewItem>
             
-            <!--<TreeViewItem Header="User" IsExpanded="True">
+        </TreeViewItem>
+
+        <TreeViewItem Header="PCM" IsExpanded="True">
+
+            <TreeViewItem Header="Presets" IsExpanded="True">
+                <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:PCMPresetToneBank}">Tones</xl:LinkButton>
+                <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:PCMPresetDrumKits}">Drum Kits</xl:LinkButton>
+            </TreeViewItem>
+            
+            <TreeViewItem Header="User" IsExpanded="True">
+                <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:PCMUserToneBank}">Tones</xl:LinkButton>
+                <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:PCMUserDrumKits}">Drum Kits</xl:LinkButton>
+            </TreeViewItem>
+
+            <TreeViewItem Header="Expansions" IsExpanded="False">
+                
+            </TreeViewItem>
+            
+        </TreeViewItem>
+
+        <TreeViewItem Header="GM2" IsExpanded="True">
+            <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:GM2ToneBank}">Tones</xl:LinkButton>
+            <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:GM2DrumKits}">Drum Kits</xl:LinkButton>
+        </TreeViewItem>
+        <!--<TreeViewItem Header="User" IsExpanded="True">
                     <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SNAUserToneBank}">Acoustic Tones</xl:LinkButton>
                     <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SNSUserToneBank}">Synth Tones</xl:LinkButton>
                     <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SNDUserToneBank}">Drum Kits</xl:LinkButton>
@@ -367,8 +402,6 @@
                 <xl:LinkButton Content="Tones" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:GM2ToneBank}"/>
                 <xl:LinkButton Content="Drum Kits" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:GM2DrumKits}"/>
             </TreeViewItem>-->
-        </TreeView>
-        <Label>User Library</Label>
         <Label>Database Library</Label>
     </StackPanel>
 </UserControl>

@@ -7,6 +7,27 @@ using System.Threading.Tasks;
 
 namespace Integra.Core
 {
+    //[TypeConverter(typeof(EnumerationDescriptionConverter))]
+    public enum IntegraParts : byte
+    {
+        [Description("Part 01")] Part01 = 0x00,
+        [Description("Part 02")] Part02 = 0x01,
+        [Description("Part 03")] Part03 = 0x02,
+        [Description("Part 04")] Part04 = 0x03,
+        [Description("Part 05")] Part05 = 0x04,
+        [Description("Part 06")] Part06 = 0x05,
+        [Description("Part 07")] Part07 = 0x06,
+        [Description("Part 08")] Part08 = 0x07,
+        [Description("Part 09")] Part09 = 0x08,
+        [Description("Part 10")] Part10 = 0x09,
+        [Description("Part 11")] Part11 = 0x0A,
+        [Description("Part 12")] Part12 = 0x0B,
+        [Description("Part 13")] Part13 = 0x0C,
+        [Description("Part 14")] Part14 = 0x0D,
+        [Description("Part 15")] Part15 = 0x0E,
+        [Description("Part 16")] Part16 = 0x0F
+    }
+
     public enum IntegraSoundModes : byte
     {
         Studio  = 0x01,
