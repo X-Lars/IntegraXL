@@ -45,8 +45,10 @@ namespace IntegraXL
 
 
             CommandBindings.Add(new CommandBinding(_ShowWindowCommand, OnShowWindow));
-            CommandBindings.Add(new CommandBinding(_ShowIntegraWindowCommand, OnShowIntegraWindow, CanExecuteShowIntegraWindow));
-            
+            CommandBindings.Add(new CommandBinding(_ShowIntegraWindowCommand, OnShowIntegraWindow, CanExecuteOnConnection));
+            CommandBindings.Add(new CommandBinding(_ShowIntegraMFXWindowCommand, OnShowIntegraMFXWindow));
+            CommandBindings.Add(new CommandBinding(_ShowIntegraToneWindowCommand, OnShowIntegraToneWindow, CanExecuteOnToneType));
+
 
 
             Host.SelectionChanged += HostSelectionChanged;
@@ -55,6 +57,7 @@ namespace IntegraXL
             //Config<IntegraConfiguration>.Print();
         }
 
+        
         private void MainWindowLoaded(object sender, RoutedEventArgs e)
         {
             //Integra.OperationStart += IntegraOperationStart;
@@ -76,7 +79,13 @@ namespace IntegraXL
         /// Registers the command to show a <see cref="MDIChild"/> window.
         /// </summary>
         private static RoutedUICommand _ShowWindowCommand = new RoutedUICommand(nameof(ShowWindow), nameof(ShowWindow), typeof(MainWindow));
-        
+
+        /// <summary>
+        /// Registers the commant to show a <see cref="MDIChild"/> window with INTEGRA-7 tone type dependencies.
+        /// </summary>
+        private static RoutedUICommand _ShowIntegraToneWindowCommand = new RoutedUICommand(nameof(ShowIntegraToneWindow), nameof(ShowIntegraToneWindow), typeof(MainWindow));
+
+        private static RoutedUICommand _ShowIntegraMFXWindowCommand = new RoutedUICommand(nameof(ShowIntegraMFXWindow), nameof(ShowIntegraMFXWindow), typeof(MainWindow));
         /// <summary>
         /// Registers the command to show a <see cref="MDIChild"/> window with INTEGRA-7 dependencies.
         /// </summary>
@@ -92,6 +101,18 @@ namespace IntegraXL
         public static ICommand ShowIntegraWindow
         {
             get { return _ShowIntegraWindowCommand; }
+        }
+
+        public static ICommand ShowIntegraMFXWindow
+        {
+            get { return _ShowIntegraMFXWindowCommand; }
+        }
+        /// <summary>
+        /// Gets the command to show a <see cref="MDIChild"/> window with INTEGRA-7 tone type dependencies.
+        /// </summary>
+        public static ICommand ShowIntegraToneWindow
+        {
+            get { return _ShowIntegraToneWindowCommand; }
         }
 
         /// <summary>
@@ -118,7 +139,39 @@ namespace IntegraXL
 
             Type type = (Type)e.Parameter;
 
-            if (!type.IsSubclassOf(typeof(IntegraWindow)))
+            if (!type.IsSubclassOf(typeof(IntegraWindow)) && !type.IsSubclassOf(typeof(IntegraBaseToneBank)))
+                return;
+
+            AddWindow(type);
+        }
+
+        private void OnShowIntegraMFXWindow(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (e.Parameter == null)
+                return;
+
+            Type type = e.Parameter.GetType();
+
+            if (type != typeof(IntegraMFXTypes))
+                return;
+
+            AddMFXWindow((IntegraMFXTypes)e.Parameter);
+        }
+
+
+        /// <summary>
+        /// Handles the <see cref="ShowIntegraToneWindow"/> command.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
+        /// <param name="e">An <see cref="ExecutedRoutedEventArgs"/> containing event data.</param>
+        private void OnShowIntegraToneWindow(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (e.Parameter == null)
+                return;
+
+            Type type = (Type)e.Parameter;
+
+            if (type != typeof(IntegraToneTypes))
                 return;
 
             AddWindow(type);
@@ -136,7 +189,7 @@ namespace IntegraXL
 
             Type type = (Type)e.Parameter;
 
-            if (!type.IsSubclassOf(typeof(CommonWindow)) && !type.IsSubclassOf(typeof(IntegraBaseToneBank)))
+            if (!type.IsSubclassOf(typeof(CommonWindow)))
                 return;
 
             AddWindow(type);
@@ -148,9 +201,23 @@ namespace IntegraXL
         /// <param name="sender">The <see cref="object"/> that raised the event.</param>
         /// <param name="e">A <see cref="CanExecuteRoutedEventArgs"/> containing event data.</param>
         /// <remarks><i>Depends on the connection state of the INTEGRA-7.</i></remarks>
-        private void CanExecuteShowIntegraWindow(object sender, CanExecuteRoutedEventArgs e)
+        private void CanExecuteOnConnection(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = Integra.IsConnected;
+        }
+
+        private void CanExecuteOnToneType(object sender, CanExecuteRoutedEventArgs e)
+        {
+            Type type = e.Parameter.GetType();
+
+            if (type != typeof(IntegraToneTypes))
+                e.CanExecute = false;
+            if (Integra.StudioSet.Parts[(int)Integra.SelectedPart].TemporaryTone == null)
+            {
+                e.CanExecute = false;
+                return;
+            }
+            e.CanExecute = Integra.StudioSet.Parts[(int)Integra.SelectedPart].TemporaryTone.Type == (IntegraToneTypes)e.Parameter;
         }
 
         #endregion
@@ -367,6 +434,12 @@ namespace IntegraXL
                 Host.Items.Add((MDIChild)Activator.CreateInstance(type));
             }
 
+        }
+
+        private void AddMFXWindow(IntegraMFXTypes type)
+        {
+            MFXWindow mdiChild = (MFXWindow)Activator.CreateInstance(typeof(MFXWindow), new object[] { type });
+            Host.Items.Add(mdiChild);
         }
 
         #endregion

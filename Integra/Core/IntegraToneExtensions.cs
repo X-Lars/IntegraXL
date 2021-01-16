@@ -104,5 +104,35 @@ namespace Integra.Core
                     throw new ArgumentOutOfRangeException(nameof(value.MSB));
             }
         }
+
+        public static IntegraToneTypes Type(byte msb)
+        {
+            switch (msb)
+            {
+                case 0x56:
+                case 0x5C: // SRX
+                case 0x60:
+                case 0x78:
+                    return IntegraToneTypes.PCMDrumkit;
+
+                case 0x57:
+                case 0x5D: // SRX
+                case 0x61:
+                case 0x79:
+                    return IntegraToneTypes.PCMSynthTone;
+
+                case 0x58:
+                    return IntegraToneTypes.SuperNATURALDrumkit;
+
+                case 0x59:
+                    return IntegraToneTypes.SuperNATURALAcousticTone;
+
+                case 0x5F:
+                    return IntegraToneTypes.SuperNATURALSynthTone;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(msb));
+            }
+        }
     }
 }

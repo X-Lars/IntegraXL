@@ -56,6 +56,7 @@
     <Compile Include="Core\IntegraBase.cs" />
     <Compile Include="Core\IntegraBaseCollection.cs" />
     <Compile Include="Core\IntegraBaseItem.cs" />
+    <Compile Include="Core\IntegraBaseTone.cs" />
     <Compile Include="Core\IntegraBaseToneBank.cs" />
     <Compile Include="Core\IntegraConfiguration.cs" />
     <Compile Include="Core\IntegraConstants.cs" />
@@ -68,14 +69,23 @@
     <Compile Include="Core\IntegraTone.cs" />
     <Compile Include="Core\IntegraToneExtensions.cs" />
     <Compile Include="Device.cs" />
+    <Compile Include="Models\MFX\Equalizer.cs" />
+    <Compile Include="Models\PCMDrumKit.cs" />
+    <Compile Include="Models\PCMSynthTone.cs" />
     <Compile Include="Models\Setup.cs" />
-    <Compile Include="Models\SNAPresetToneBank.cs" />
     <Compile Include="Models\StudioSet.cs" />
     <Compile Include="Models\StudioSetMidi.cs" />
     <Compile Include="Models\StudioSetPart.cs" />
     <Compile Include="Models\StudioSets.cs" />
+    <Compile Include="Models\SuperNATURALAcousticTone.cs" />
+    <Compile Include="Models\SuperNATURALAcousticToneCommon.cs" />
+    <Compile Include="Models\SuperNATURALAcousticToneMFX.cs" />
+    <Compile Include="Models\SuperNATURALDrumKit.cs" />
+    <Compile Include="Models\SuperNATURALSynthTone.cs" />
+    <Compile Include="Models\TemporaryTone.cs" />
     <Compile Include="Models\Tone.cs" />
     <Compile Include="Models\ToneBank.cs" />
+    <Compile Include="Models\ToneMFX.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

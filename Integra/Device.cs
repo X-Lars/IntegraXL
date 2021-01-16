@@ -2,6 +2,7 @@
 using Integra.Models;
 using MidiXL;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -40,7 +41,7 @@ namespace Integra
         /// <summary>
         /// Defines the aproximate MIDI latency in milliseconds.
         /// </summary>
-        private const int DEVICE_LATENCY = 50;
+        private const int DEVICE_LATENCY = 20;
 
         #endregion
 
@@ -81,6 +82,7 @@ namespace Integra
         /// Stores all executing tasks.
         /// </summary>
         private static List<Task> _Tasks = new List<Task>();
+        //private static ConcurrentQueue<Task> _Tasks = new ConcurrentQueue<Task>();
 
         /// <summary>
         /// Tracks the state of the <see cref="TaskManager"/>.
@@ -98,7 +100,7 @@ namespace Integra
         /// </summary>
         private static readonly object _Lock = new object();
 
-        
+
 
         #region Fields: INTEGRA-7
 
@@ -107,6 +109,9 @@ namespace Integra
         /// </summary>
         private Setup _Setup = new Setup();
 
+        /// <summary>
+        /// Stores a reference to the current INTEGRA-7 studio set.
+        /// </summary>
         private StudioSet _StudioSet = new StudioSet();
 
         /// <summary>
@@ -119,7 +124,16 @@ namespace Integra
         /// </summary>
         private IntegraTone _SelectedTone = new IntegraTone();
 
-        
+        /// <summary>
+        /// Tracks the currently selected INTEGRA-7 part.
+        /// </summary>
+        private IntegraParts _SelectedPart;
+
+        /// <summary>
+        /// Tracks the state of the INTEGRA-7 tone preview.
+        /// </summary>
+        private bool _IsPreviewRunning = false;
+
         #endregion
 
         #endregion
@@ -404,20 +418,110 @@ namespace Integra
             set
             {
                 _SelectedTone = value;
-                Tone = new Tone(_SelectedTone);
-                // TODO: Set actual tone
+                Tone = new Tone(value);
                 NotifyPropertyChanged();
             }
         }
+        private IntegraToneTypes _ToneType = IntegraToneTypes.SuperNATURALAcousticTone;
 
-        public Tone _Tone;
+        public IntegraToneTypes ToneType
+        {
+            get { return _ToneType; }
+            set
+            {
+                if (_ToneType != value)
+                {
+                    _ToneType = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public IToneMFX MFX
+        {
+            get
+            {
+                switch (ToneType)
+                {
+                    case IntegraToneTypes.SuperNATURALAcousticTone:
+                        return StudioSet.Parts[(int)SelectedPart].SuperNATURALAcousticTone;
+
+                    case IntegraToneTypes.SuperNATURALSynthTone:
+                        return StudioSet.Parts[(int)SelectedPart].SuperNATURALSynthTone;
+
+                    case IntegraToneTypes.SuperNATURALDrumkit:
+                        return StudioSet.Parts[(int)SelectedPart].SuperNATURALDrumKit;
+
+                    case IntegraToneTypes.PCMSynthTone:
+                        return StudioSet.Parts[(int)SelectedPart].PCMSynthTone;
+
+                    case IntegraToneTypes.PCMDrumkit:
+                        return StudioSet.Parts[(int)SelectedPart].PCMDrumKit;
+
+                    default:
+                        return null;
+                }
+            }
+        }
+            
+
+
+        public IntegraMFXTypes MFXType
+        {
+            get
+            {
+                try
+                {
+                    switch (ToneType)
+                    {
+                        case IntegraToneTypes.SuperNATURALAcousticTone:
+                            if (StudioSet.Parts[(int)SelectedPart].SuperNATURALAcousticTone == null)
+                                return IntegraMFXTypes.Thru;
+                            return StudioSet.Parts[(int)SelectedPart].SuperNATURALAcousticTone.MFX.Type;
+
+                        case IntegraToneTypes.SuperNATURALSynthTone:
+                            return StudioSet.Parts[(int)SelectedPart].SuperNATURALSynthTone.MFX.Type;
+
+                        case IntegraToneTypes.SuperNATURALDrumkit:
+                            return StudioSet.Parts[(int)SelectedPart].SuperNATURALDrumKit.MFX.Type;
+
+                        case IntegraToneTypes.PCMSynthTone:
+                            return StudioSet.Parts[(int)SelectedPart].PCMSynthTone.MFX.Type;
+
+                        case IntegraToneTypes.PCMDrumkit:
+                            return StudioSet.Parts[(int)SelectedPart].PCMDrumKit.MFX.Type;
+
+                        default:
+                            return IntegraMFXTypes.Thru;
+                    }
+                }
+                catch(Exception)
+                {
+                    return IntegraMFXTypes.Thru;
+                }
+            }
+        }
+        private TemporaryTone _TemporaryTone;
+
+        public TemporaryTone TemporaryTone
+        {
+            get { return StudioSet.Parts[(int)SelectedPart].TemporaryTone; }
+        }
+
+        public Tone _Tone;// = new Tone(0x00, 0x00, 0x00);
+
         public Tone Tone
         {
             get
             {
-                if(_Tone == null)
+                if (_Tone == null)
                 {
-                    _Tone = new Tone(StudioSet.Part[(int)SelectedPart].ToneBankSelectMSB, StudioSet.Part[(int)SelectedPart].ToneBankSelectLSB, StudioSet.Part[(int)SelectedPart].ToneProgramNumber);
+                    //_Tone = new Tone(StudioSet.Parts[(int)SelectedPart].ToneBankSelectMSB, StudioSet.Parts[(int)SelectedPart].ToneBankSelectLSB, StudioSet.Parts[(int)SelectedPart].ToneProgramNumber);
+                    
+                    _Tone = new Tone(StudioSet.Parts[(int)SelectedPart].Tone);
+
+
+                    //_Tone = new Tone(StudioSet.Part.ToneBankSelectMSB, StudioSet.Part.ToneBankSelectLSB, StudioSet.Part.ToneProgramNumber);
                 }
 
                 return _Tone;
@@ -429,16 +533,75 @@ namespace Integra
                 {
                     _Tone = value;
 
-                    MidiOutputDevice.Send(new ControlChangeMessage((MidiChannels)(int)StudioSet.Part[(int)SelectedPart].ReceiveChannel, 0, _Tone.MSB));
-                    MidiOutputDevice.Send(new ControlChangeMessage((MidiChannels)(int)StudioSet.Part[(int)SelectedPart].ReceiveChannel, 32, _Tone.LSB));
-                    MidiOutputDevice.Send(new ProgramChangeMessage((MidiChannels)(int)StudioSet.Part[(int)SelectedPart].ReceiveChannel, _Tone.PC));
+                    StudioSet.Parts[(int)SelectedPart].Tone = new IntegraTone(value.MSB, value.LSB, value.PC);
+                    ToneType = StudioSet.Parts[(int)SelectedPart].TemporaryTone.Type;
+                    //StudioSet.Parts[(int)SelectedPart].ToneBankSelectMSB = _Tone.MSB;
+                    //StudioSet.Parts[(int)SelectedPart].ToneBankSelectLSB = _Tone.LSB;
+                    //StudioSet.Parts[(int)SelectedPart].ToneProgramNumber = _Tone.PC;
+
+                    //StudioSet.Part.ToneBankSelectMSB = _Tone.MSB;
+                    //StudioSet.Part.ToneBankSelectLSB = _Tone.LSB;
+                    //StudioSet.Part.ToneProgramNumber = _Tone.PC;
+
+
+
+
+                    //MidiOutputDevice.Send(new ControlChangeMessage((MidiChannels)(int)StudioSet.Part[(int)SelectedPart].ReceiveChannel, 0, _Tone.MSB));
+                    //MidiOutputDevice.Send(new ControlChangeMessage((MidiChannels)(int)StudioSet.Part[(int)SelectedPart].ReceiveChannel, 32, _Tone.LSB));
+                    //MidiOutputDevice.Send(new ProgramChangeMessage((MidiChannels)(int)StudioSet.Part[(int)SelectedPart].ReceiveChannel, _Tone.PC));
 
                     NotifyPropertyChanged();
                 }
             }
         }
 
-        public IntegraParts SelectedPart { get; set; } = IntegraParts.Part01;
+        [Bindable(BindableSupport.Yes, BindingDirection.TwoWay)]
+        public IntegraParts SelectedPart
+        {
+            get { return _SelectedPart; }
+            set
+            {
+                if (_SelectedPart != value)
+                {
+                    _SelectedPart = value;
+                    NotifyPropertyChanged();
+
+                    Tone = new Tone(StudioSet.Parts[(int)SelectedPart].ToneBankSelectMSB, StudioSet.Parts[(int)SelectedPart].ToneBankSelectLSB, StudioSet.Parts[(int)SelectedPart].ToneProgramNumber);
+
+
+                    
+
+
+                    //Tone = new Tone(StudioSet.Part.ToneBankSelectMSB, StudioSet.Part.ToneBankSelectLSB, StudioSet.Part.ToneProgramNumber);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or toggles the tone preview.
+        /// </summary>
+        public bool Preview
+        {
+            get { return _IsPreviewRunning; }
+            set
+            {
+                if(_IsPreviewRunning != value)
+                {
+                    _IsPreviewRunning = value;
+
+                    if(_IsPreviewRunning)
+                    {
+                        SystemExclusiveMessage syx = new SystemExclusiveMessage(new byte[] { 0xF0, 0x41, 0x10, 0x00, 0x00, 0x64, 0x12, 0x0F, 0x00, 0x20, 0x00, (byte)(SelectedPart + 1), 0x00, 0xF7 });
+                        SendSystemExclusive(new IntegraSystemExclusive(syx));
+                    }
+                    else
+                    {
+                        SystemExclusiveMessage syx = new SystemExclusiveMessage(new byte[] { 0xF0, 0x41, 0x10, 0x00, 0x00, 0x64, 0x12, 0x0F, 0x00, 0x20, 0x00, 0x00, 0x00, 0xF7 });
+                        SendSystemExclusive(new IntegraSystemExclusive(syx));
+                    }
+                }
+            }
+        }
 
         #endregion
 
@@ -689,7 +852,7 @@ namespace Integra
                 {
                     lock (MidiOutputDevice)
                     {
-                        MidiOutputDevice.Send(new SystemExclusiveMessage(new IntegraSystemExclusive(dataStructure.Address, dataStructure.Requests[i])));
+                        SendSystemExclusive(new IntegraSystemExclusive(dataStructure.Address, dataStructure.Requests[i]));
                         Thread.Sleep(DEVICE_LATENCY);
                     }
                 }
@@ -716,12 +879,19 @@ namespace Integra
         private async void StartTask(Task task)
         {
             lock (_Tasks)
+            { 
                 _Tasks.Add(task);
-
-            task.Start();
+            }
 
             if (!_IsTaskRunning)
+            {
+                task.Start();
                 await TaskManager();
+            }
+            else
+            {
+                task.Start();
+            }
         }
 
         /// <summary>
@@ -731,27 +901,38 @@ namespace Integra
         private async Task TaskManager()
         {
             lock (_Tasks)
+            {
                 _IsTaskRunning = true;
+            }
 
             // Report the initialization message
-            _UIContext.Send(o => OperationStart?.Invoke(this, new IntegraOperationEventArgs(Status)), null);
+            _UIContext.Post(o => OperationStart?.Invoke(this, new IntegraOperationEventArgs(Status)), null);
 
             while (_Tasks.Any())
             {
                 Task task = await Task.WhenAny(_Tasks.ToArray());
 
+
                 lock (_Tasks)
                     _Tasks.Remove(task);
 
                 // Let UI update
-                await Task.Delay(DEVICE_LATENCY);
+                //await Task.Delay(DEVICE_LATENCY);
+                //Thread.Sleep(DEVICE_LATENCY);
             }
 
             lock (_Tasks)
                 _IsTaskRunning = false;
 
-            // Report the finalization message
-            _UIContext.Send(o => OperationComplete?.Invoke(this, new IntegraOperationEventArgs(Status)), null);
+            // Let UI update
+            //Thread.Sleep(DEVICE_LATENCY);
+
+            lock (_Tasks)
+            {
+                Thread.Sleep(DEVICE_LATENCY);
+                // Report the finalization message
+                _UIContext.Post(o => OperationComplete?.Invoke(this, new IntegraOperationEventArgs(Status)), null);
+            }
         }
  
         /// <summary>

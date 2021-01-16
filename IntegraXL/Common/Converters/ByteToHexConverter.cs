@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace IntegraXL.Common.Converters
-{
+namespace IntegraXL.Common
+{ 
     public class ByteToHexConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

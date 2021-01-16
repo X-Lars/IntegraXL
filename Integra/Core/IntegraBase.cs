@@ -75,7 +75,7 @@ namespace Integra.Core
         /// <summary>
         /// Gets or sets the base address of the data structure in the INTEGRA-7.
         /// </summary>
-        internal protected IntegraAddress Address { get; private set; }
+        internal protected IntegraAddress Address { get; set; }
 
         /// <summary>
         /// Gets the list of request addresses required to initialize the data structure.
@@ -105,11 +105,7 @@ namespace Integra.Core
             InitializeCache();
 
             // [NON BLOCKING]
-            //if (Device._IsConnected)
-                Task.Factory.StartNew(() => Device.Instance.Initialize(this), TaskCreationOptions.LongRunning);
-            //else
-            //    Device.Connected += (s, e) => { Task.Factory.StartNew(() => Device.Instance.Initialize(this), TaskCreationOptions.LongRunning); };
-
+            Task.Factory.StartNew(() => Device.Instance.Initialize(this), TaskCreationOptions.LongRunning);
         }
 
         /// <summary>
@@ -173,9 +169,27 @@ namespace Integra.Core
                     {
                         byte[] values = new byte[4];
 
+                        int key = field.Key;
+
+                        //key = (((key & 0x00000F00) >> 16) * 128) + (key & 0x000000FF);
+                        //key = (key & 0x00000FF);
+                        // Ensure MIDI range 0x7F
+                        key = (((key & 0xFF00) >> 8) * 128) + (key & 0x00FF);
+                        //Console.WriteLine(key);
+                        //Console.WriteLine(key);
+                        //if (key > 128)
+                        //{
+                        //    key %= 128;
+                        //    key += 128;
+                        //}
+
                         for (int i = 0; i < values.Length; i++)
                         {
-                            values[i] = data[field.Key + i];
+                            
+                            
+                            // data 145 key 257
+                            //values[i] = data[field.Key + i];
+                            values[i] = data[key + i];
                         }
 
                         if (BitConverter.IsLittleEndian)
@@ -183,20 +197,27 @@ namespace Integra.Core
 
                         field.Value.SetValue(this, BitConverter.ToInt32(values, 0));
                     }
-                    else if(field.Value.FieldType == typeof(byte))
-                    {
-                        field.Value.SetValue(this, data[field.Key]);
-                    }
                     else
                     {
-                        throw new Exception($"[{GetType().Name}.{nameof(Initialize)}] Unsupported type {field.Value.Name}");
+                        field.Value.SetValue(this, data[field.Key]);
                     }
                 }
 
                 NotifyPropertyChanged(string.Empty, false);
+                //DebugPrint();
             }
 
             return IsInitialized = true;
+        }
+
+        /// <summary>
+        /// Reinitializes the fields of the <see cref="IntegraBase{T}"/> derived class.
+        /// </summary>
+        protected virtual void Reinitialize()
+        {
+            Console.WriteLine($"[{GetType().Name}.{nameof(Reinitialize)}]");
+            IsInitialized = false;
+            Initialize();
         }
 
         #region Methods: Private
@@ -326,7 +347,7 @@ namespace Integra.Core
 
                         array.SetValue(BitConverter.ToInt32(values, 0), p - 1);
                         fieldOffset += p * 4;
-                        propertyOffset += 4;
+                        //propertyOffset += 4;
                     }
                     else
                     {
@@ -348,13 +369,9 @@ namespace Integra.Core
                     field.SetValue(this, BitConverter.ToInt32(values, 0));
                     fieldOffset += 4;
                 }
-                else if(field.FieldType == typeof(byte))
-                {
-                    field.SetValue(this, syx.Data[fieldOffset]);
-                }
                 else
                 {
-                    throw new Exception($"[{GetType().Name}.{nameof(Initialize)}] Unsupported type {field.Name}");
+                    field.SetValue(this, syx.Data[fieldOffset]);
                 }
 
                 // Retrieve the accompanied property with the same offset to raise the NotifyPropertyChanged event
@@ -363,6 +380,7 @@ namespace Integra.Core
                 if(property != null)
                 {
                     NotifyPropertyChanged(property.Name, false);
+                    Debug.Print($"[{Name}] {property.Name}: {property.GetValue(this)}");
                 }
 
                 // Property offset has to be realligned in case the field is an array
@@ -457,6 +475,15 @@ namespace Integra.Core
             else if ((syx.Address & 0xFFFFFF00) == (Address & 0xFFFFFF00))
             {
                 InitializeField(syx);
+            }
+            //else if ((syx.Address & 0xF000FF00) == (Address &0xF000FF00))
+            //{
+            //    if(syx.Data.Length == 4)
+            //    InitializeField(syx);
+            //}
+            else
+            {
+                //Debug.Print($"[{GetType().Name}.{nameof(SystemExclusiveReceived)}] Unhandled addres: [{syx.Address}]");
             }
         }
 

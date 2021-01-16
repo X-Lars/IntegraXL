@@ -8,19 +8,13 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid MaxHeight="600">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="0.5*"/>
-        </Grid.ColumnDefinitions>
-
-        <DataGrid Grid.Column="0"
-                             Margin="10"
-                             ItemsSource="{Binding ToneBank}"
-                             SelectedItem="{Binding DeviceContext.SelectedTone}"
-                             AutoGenerateColumns="False"
-                             IsReadOnly="True"
-                             VirtualizingPanel.VirtualizationMode="Recycling"
-                             VirtualizingPanel.IsVirtualizing="True">
+        <DataGrid ItemsSource="{Binding ToneBank}"
+                  SelectedItem="{Binding DeviceContext.SelectedTone}"
+                  AutoGenerateColumns="False"
+                  VerticalAlignment="Stretch"
+                  IsReadOnly="True"
+                  VirtualizingPanel.VirtualizationMode="Recycling"
+                  VirtualizingPanel.IsVirtualizing="True">
 
             <DataGrid.Columns>
 

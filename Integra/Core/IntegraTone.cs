@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Integra.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,13 @@ namespace Integra.Core
             PC = data[2];
             Category = (IntegraToneCategories)data[3];
             Name = Encoding.ASCII.GetString(data, 5, 16);
+        }
+
+        internal IntegraTone(byte msb, byte lsb, byte pc)
+        {
+            MSB = msb;
+            LSB = lsb;
+            PC = pc;
         }
 
         public uint ID { get; set; }

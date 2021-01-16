@@ -58,6 +58,8 @@ namespace Integra.Core
             {
                 _Data[i - offset] = syx.Data[i];
             }
+
+            InvalidateChecksum();
         }
 
         /// <summary>
@@ -117,7 +119,7 @@ namespace Integra.Core
         {
             get { return Data[0]; }
         }
-
+       
         #endregion
 
         #region Methods
@@ -145,6 +147,8 @@ namespace Integra.Core
 
             checkSum %= 128;
             checkSum = 128 - checkSum;
+
+            checkSum = checkSum == 128 ? 0 : checkSum;
 
             _Checksum = new byte[] { (byte)checkSum };
 

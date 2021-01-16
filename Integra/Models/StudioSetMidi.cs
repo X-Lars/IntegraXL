@@ -63,7 +63,6 @@ namespace Integra.Models
                 _PhaseLock = data[0x00];
 
                 IsInitialized = true;
-                DebugPrint();
             }
 
             return IsInitialized;

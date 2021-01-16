@@ -92,6 +92,35 @@ namespace Integra.Core
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Checks if an <see cref="IntegraAddress"/> is within a specific address range.
+        /// </summary>
+        /// <param name="min">An <see cref="IntegraAddress"/> specifying the range's lowest value.</param>
+        /// <param name="max">An <see cref="IntegraAddress"/> specifying the range's highest value.</param>
+        /// <returns>A <see cref="bool"/> containing true if the <see cref="IntegraAddress"/> is within the specified range.</returns>
+        public bool IsInRange(IntegraAddress min, IntegraAddress max)
+        {
+            bool reversed = min > max;
+
+            if (reversed == true)
+            {
+                if (this > min || this < max)
+                    return false;
+            }
+            else
+            {
+                if (this < min || this > max)
+                    return false;
+
+            }
+
+            return true;
+        }
+
+        #endregion
+
         #region Overloads
 
         #region Overloads: Conversion
@@ -166,6 +195,28 @@ namespace Integra.Core
                 return rhs.Address != null;
 
             return !lhs.Address.SequenceEqual(rhs.Address);
+        }
+
+        /// <summary>
+        /// Overloads the &lt; operator to provide comparison of two <see cref="IntegraAddress"/>es for the smaller value.
+        /// </summary>
+        /// <param name="lhs">The <see cref="IntegraAddress"/> to compare.</param>
+        /// <param name="rhs">An <see cref="IntegraAddress"/> to compare to.</param>
+        /// <returns>A <see cref="bool"/> containing true if <paramref name="lhs"/>'s <see cref="Address"/> is smaller than <paramref name="rhs"/>'s <see cref="Address"/>, false otherwise.</returns>
+        public static bool operator <(IntegraAddress lhs, IntegraAddress rhs)
+        {
+            return (uint)lhs < (uint)rhs;
+        }
+
+        /// <summary>
+        /// Overloads the &gt; operator to provide the comparison of two <see cref="IntegraAddress"/>es for the greater value.
+        /// </summary>
+        /// <param name="lhs">The <see cref="IntegraAddress"/> to compare.</param>
+        /// <param name="rhs">An <see cref="IntegraAddress"/> to compare to.</param>
+        /// <returns>A <see cref="bool"/> containing true if <paramref name="lhs"/>'s <see cref="Address"/> is greater than <paramref name="rhs"/>'s <see cref="Address"/>, false otherwise.</returns>
+        public static bool operator >(IntegraAddress lhs, IntegraAddress rhs)
+        {
+            return (uint)lhs > (uint)rhs;
         }
 
         /// <summary>
@@ -256,7 +307,7 @@ namespace Integra.Core
         /// <param name="lhs">The <see cref="IntegraAddress"/> to apply the mask.</param>
         /// <param name="rhs">An <see cref="uint"/> specifying the bitmask.</param>
         /// <returns>A new <see cref="IntegraAddress"/> with the bitmask applied.</returns>
-        public static uint operator &(IntegraAddress lhs, uint rhs)
+        public static IntegraAddress operator &(IntegraAddress lhs, uint rhs)
         {
             IntegraAddress address = new IntegraAddress(lhs.Address);
 
