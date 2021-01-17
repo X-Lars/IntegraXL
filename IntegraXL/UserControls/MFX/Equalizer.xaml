@@ -17,6 +17,7 @@
             <ComboBox ItemsSource="{Binding Source={common:EnumerationBindingSource {x:Type core:IntegraLowFrequencies}}}"
                       SelectedIndex="{Binding MFXContext.MFX[0]}"/>
             <TextBox Text="{Binding MFXContext.MFX[1]}"/>
+            <TextBox Text="{Binding MFXContext.MFX[0]}"/>
             
         </StackPanel>
     </Grid>

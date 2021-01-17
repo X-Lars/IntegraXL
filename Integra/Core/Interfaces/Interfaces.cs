@@ -9,6 +9,9 @@ namespace Integra.Core.Interfaces
     /// <see cref="PCMSynthTone"/> and <see cref="PCMDrumKit"/>.</i></remarks>
     public interface IToneMFX
     {
+        /// <summary>
+        /// Gets a reference to the MFX data structure of the tone.
+        /// </summary>
         ToneMFX MFX { get; }
     }
 
@@ -18,7 +21,20 @@ namespace Integra.Core.Interfaces
     /// <remarks><i>Bound to all classes in the <see cref="Integra.Models.MFX"/> namespace.</i></remarks>
     public interface IToneMFXModel
     {
-        int GetValue(int index, int value);
-        int SetValue(int index, int value);
+        /// <summary>
+        /// Converts an INTEGRA-7 parameter value to an <see cref="int"/> value.
+        /// </summary>
+        /// <param name="index">The index of the value in the <see cref="ToneMFX._Parameters"/> array.</param>
+        /// <param name="value">The value to convert.</param>
+        /// <returns>The converted <paramref name="value"/>.</returns>
+        int Get(int index, int value);
+
+        /// <summary>
+        /// Converts an <see cref="int"/> value to an INTEGRA-7 parameter value.
+        /// </summary>
+        /// <param name="index">The index of the value in the <see cref="ToneMFX._Parameters"/> array.</param>
+        /// <param name="value">The value to convert.</param>
+        /// <returns>The converted <paramref name="value"/>.</returns>
+        int Set(int index, int value);
     }
 }

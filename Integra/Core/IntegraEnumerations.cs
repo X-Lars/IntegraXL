@@ -180,97 +180,57 @@ namespace Integra.Core
         [Description("Infinite Phaser")]                    InfinitePhaser      = 0x0E,
         [Description("Ring Modulator")]                     RingModulator       = 0x0F,
         [Description("Tremolo")]                            Tremolo             = 0x10,
-        [Description("Auto Pan")]
-        AutoPan = 17,
-        [Description("")] Slicer = 18,
-        [Description("Rotary 1")]
-        Rotary1 = 19,
-        [Description("Rotary 2")]
-        Rotary2 = 20,
-        [Description("Rotary 3")]
-        Rotary3 = 21,
-        [Description("")] Chorus = 22,
-        [Description("")] Flanger = 23,
-        [Description("Step Flanger")]
-        StepFlanger = 24,
-        [Description("Hexa-Chorus")]
-        HexaChorus = 25,
-        [Description("Tremolo Chorus")]
-        TremoloChorus = 26,
-        [Description("Space-D")]
-        SpaceD = 27,
-        [Description("")] Overdrive = 28,
-        [Description("")] Distortion = 29,
-        [Description("Guitar Amp Simulator")]
-        GuitarAmpSimulator = 30,
-        [Description("")] Compressor = 31,
-        [Description("")] Limiter = 32,
-        [Description("")] Gate = 33,
-        [Description("")] Delay = 34,
-        [Description("Modulation Delay")]
-        ModulationDelay = 35,
-        [Description("3 Tap Pan Delay")]
-        TapPanDelay3 = 36,
-        [Description("4 Tap Pan Delay")]
-        TapPanDelay4 = 37,
-        [Description("Multi Tap Delay")]
-        MultiTapDelay = 38,
-        [Description("Reverse Delay")]
-        ReverseDelay = 39,
-        [Description("Time Control Delay")]
-        TimeControlDelay = 40,
-        [Description("LOFI Compressor")]
-        LoFiCompressor = 41,
-        [Description("Bit Crasher")]
-        BitCrasher = 42,
-        [Description("Pitch Shifter")]
-        PitchShifter = 43,
-        [Description("2 Voice Pitch Shifter")]
-        VoicePitchShifter = 44,
-        [Description("Overdrive -> Chorus")]
-        OverdriveChorus = 45,
-        [Description("Overdrive -> Flanger")]
-        OverdriveFlanger = 46,
-        [Description("Overdrive -> Delay")]
-        OverdriveDelay = 47,
-        [Description("Distortion -> Chorus")]
-        DistortionChorus = 48,
-        [Description("Distortion -> Flanger")]
-        DistortionFlanger = 49,
-        [Description("Distortion -> Delay")]
-        DistortionDelay = 50,
+        [Description("Auto Pan")]                           AutoPan             = 0x11,
+        [Description("Slicer")]                             Slicer              = 0x12,
+        [Description("Rotary 1")]                           Rotary1             = 0x13,
+        [Description("Rotary 2")]                           Rotary2             = 0x14,
+        [Description("Rotary 3")]                           Rotary3             = 0x15,
+        [Description("Chorus")]                             Chorus              = 0x16,
+        [Description("Flanger")]                            Flanger             = 0x17,
+        [Description("Step Flanger")]                       StepFlanger         = 0x18,
+        [Description("Hexa-Chorus")]                        HexaChorus          = 0x19,
+        [Description("Tremolo Chorus")]                     TremoloChorus       = 0x1A,
+        [Description("Space-D")]                            SpaceD = 27,
+        [Description("Overdrive")]                          Overdrive = 28,
+        [Description("Distortion")]                         Distortion = 29,
+        [Description("Guitar Amp Simulator")]               GuitarAmpSimulator = 30,
+        [Description("Compressor")]                         Compressor = 31,
+        [Description("Limiter")]                            Limiter = 32,
+        [Description("Gate")]                               Gate = 33,
+        [Description("Delay")]                              Delay = 34,
+        [Description("Modulation Delay")]                   ModulationDelay = 35,
+        [Description("3 Tap Pan Delay")]                    TapPanDelay3 = 36,
+        [Description("4 Tap Pan Delay")]                    TapPanDelay4 = 37,
+        [Description("Multi Tap Delay")]                    MultiTapDelay = 38,
+        [Description("Reverse Delay")]                      ReverseDelay = 39,
+        [Description("Time Control Delay")]                 TimeControlDelay = 40,
+        [Description("LOFI Compressor")]                    LoFiCompressor = 41,
+        [Description("Bit Crasher")]                        BitCrasher = 42,
+        [Description("Pitch Shifter")]                      PitchShifter = 43,
+        [Description("2 Voice Pitch Shifter")]              VoicePitchShifter = 44,
+        [Description("Overdrive -> Chorus")]                OverdriveChorus = 45,
+        [Description("Overdrive -> Flanger")]               OverdriveFlanger = 46,
+        [Description("Overdrive -> Delay")]                 OverdriveDelay = 47,
+        [Description("Distortion -> Chorus")]               DistortionChorus = 48,
+        [Description("Distortion -> Flanger")]              DistortionFlanger = 49,
+        [Description("Distortion -> Delay")]                DistortionDelay = 50,
         [Description("Overdrive / Distortion Touch Wah")]   ODDSTouchWah        = 51,
-        [Description("Overdrive / Distortion Auto Wah")]
-        ODDSAutoWah = 52,
-        [Description("Guitar Amp Simulator -> Chorus")]
-        GuitarAmpSimChorus = 53,
+        [Description("Overdrive / Distortion Auto Wah")]    ODDSAutoWah = 52,
+        [Description("Guitar Amp Simulator -> Chorus")]     GuitarAmpSimChorus = 53,
         [Description("Guitar Amp Simulator -> Flanger")]    GuitarAmpSimFlanger = 54,
-        [Description("Guitar Amp Simulator -> Phaser")]
-        GuitarAmpSimPhaser = 55,
-        [Description("Guitar Amp Simulator -> Delay")]
-        GuitarAmpSimDelay = 56,
-        [Description("EP Amp Simulator -> Tremolo")]
-        EPAmpSimTremolo = 57,
-        [Description("EP Amp Simulator -> Chorus")]
-        EPAmpSimChorus = 58,
-        [Description("EP Amp Simulator -> Flanger")]
-        EPAmpSimFlanger = 59,
-        [Description("EP Amp Simulator -> Phaser")]
-        EPAmpSimPhaser = 60,
-        [Description("EP Amp Simulator -> Delay")]
-        EPAmpSimDelay = 61,
-        [Description("Enhancer -> Chorus")]
-        EnhancerChorus = 62,
-        [Description("Enhancer -> Flanger")]
-        EnhancerFlanger = 63,
-        [Description("Enhancer -> Delay")]
-        EnhancerDelay = 64,
-        [Description("Chorus -> Delay")]
-        ChorusDelay = 65,
-        [Description("Flanger -> Delay")]
-        FlangerDelay = 66,
-        [Description("Chorus -> Flanger")]
-        ChorusFlanger = 67
+        [Description("Guitar Amp Simulator -> Phaser")]     GuitarAmpSimPhaser = 55,
+        [Description("Guitar Amp Simulator -> Delay")]      GuitarAmpSimDelay = 56,
+        [Description("EP Amp Simulator -> Tremolo")]        EPAmpSimTremolo = 57,
+        [Description("EP Amp Simulator -> Chorus")]         EPAmpSimChorus = 58,
+        [Description("EP Amp Simulator -> Flanger")]        EPAmpSimFlanger = 59,
+        [Description("EP Amp Simulator -> Phaser")]         EPAmpSimPhaser = 60,
+        [Description("EP Amp Simulator -> Delay")]          EPAmpSimDelay = 61,
+        [Description("Enhancer -> Chorus")]                 EnhancerChorus = 62,
+        [Description("Enhancer -> Flanger")]                EnhancerFlanger = 63,
+        [Description("Enhancer -> Delay")]                  EnhancerDelay = 64,
+        [Description("Chorus -> Delay")]                    ChorusDelay = 65,
+        [Description("Flanger -> Delay")]                   FlangerDelay = 66,
+        [Description("Chorus -> Flanger")]                  ChorusFlanger = 67
     }
 
     [TypeConverter(typeof(DescriptionConverter))]
@@ -430,28 +390,68 @@ namespace Integra.Core
     public enum IntegraMFXControlAssigns
     {
         [Description("Off")] Off,
-        [Description("01")] Channel1,
-        [Description("02")] Channel2,
-        [Description("03")] Channel3,
-        [Description("04")] Channel4,
-        [Description("05")] Channel5,
-        [Description("06")] Channel6,
-        [Description("07")] Channel7,
-        [Description("08")] Channel8,
-        [Description("09")] Channel9,
-        [Description("10")] Channel10,
-        [Description("11")] Channel11,
-        [Description("12")] Channel12,
-        [Description("13")] Channel13,
-        [Description("14")] Channel14,
-        [Description("15")] Channel15,
-        [Description("16")] Channel16,
+        [Description("01")]  Channel1,
+        [Description("02")]  Channel2,
+        [Description("03")]  Channel3,
+        [Description("04")]  Channel4,
+        [Description("05")]  Channel5,
+        [Description("06")]  Channel6,
+        [Description("07")]  Channel7,
+        [Description("08")]  Channel8,
+        [Description("09")]  Channel9,
+        [Description("10")]  Channel10,
+        [Description("11")]  Channel11,
+        [Description("12")]  Channel12,
+        [Description("13")]  Channel13,
+        [Description("14")]  Channel14,
+        [Description("15")]  Channel15,
+        [Description("16")]  Channel16,
     }
 
     [TypeConverter(typeof(DescriptionConverter))]
-    public enum IntegraLowFrequencies : int
+    public enum IntegraLowFrequencies : byte
     {
-        [Description("200 [Hz]")] Hz200 = 0,
-        [Description("400 [Hz]")] Hz400 = 1
+        [Description("200 [Hz]")] Hz200 = 0x00,
+        [Description("400 [Hz]")] Hz400 = 0x01
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraMidFrequencies : byte
+    {
+        [Description("200 [Hz]")]  Hz200  = 0x00,
+        [Description("250 [Hz]")]  Hz250  = 0x01,
+        [Description("315 [Hz]")]  Hz315  = 0x02,
+        [Description("400 [Hz]")]  Hz400  = 0x03,
+        [Description("500 [Hz]")]  Hz500  = 0x04,
+        [Description("630 [Hz]")]  Hz630  = 0x05,
+        [Description("800 [Hz]")]  Hz800  = 0x06,
+        [Description("1000 [Hz]")] Hz1000 = 0x07,
+        [Description("1250 [Hz]")] Hz1250 = 0x08,
+        [Description("1600 [Hz]")] Hz1600 = 0x09,
+        [Description("2000 [Hz]")] hz2000 = 0x0A,
+        [Description("2500 [Hz]")] Hz2500 = 0x0B,
+        [Description("3150 [Hz]")] Hz3150 = 0x0C,
+        [Description("4000 [Hz]")] Hz4000 = 0x0D,
+        [Description("5000 [Hz]")] Hz5000 = 0x0E,
+        [Description("6300 [Hz]")] Hz6300 = 0x0F,
+        [Description("8000 [Hz]")] Hz8000 = 0x10
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraMidQs : byte
+    {
+        [Description("0.5")] Q05,
+        [Description("1.0")] Q10,
+        [Description("2.0")] Q20,
+        [Description("4.0")] Q40,
+        [Description("8.0")] Q80
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraHighFrequencies : byte
+    {
+        [Description("2000 [Hz]")] hz2000,
+        [Description("4000 [Hz]")] Hz4000,
+        [Description("8000 [Hz]")] Hz8000
     }
 }

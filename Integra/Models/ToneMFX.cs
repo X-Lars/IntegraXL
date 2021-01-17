@@ -1,22 +1,17 @@
 ﻿using Integra.Core;
+using Integra.Common;
 using Integra.Core.Interfaces;
 using Integra.Models.MFX;
 using MidiXL;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Integra.Models
 {
-    
-
     /// <summary>
     /// Defines the tone MFX structure for all INTEGRA-7 tone types.
     /// </summary>
-    public class ToneMFX : IntegraBase<ToneMFX>
+    public sealed class ToneMFX : IntegraBase<ToneMFX>
     {
         #region Fields
 
@@ -46,17 +41,20 @@ namespace Integra.Models
 
         #region Constructor
 
+        /// <summary>
+        /// Creates and initializes a new <see cref="ToneMFX"/> instance.
+        /// </summary>
+        /// <param name="address">The <see cref="IntegraAddress"/> of the parent INTEGRA-7 tone structure.</param>
         public ToneMFX(IntegraAddress address) : base(address + 0x00000200, 0x00000111)
         {
-            Console.WriteLine($"[{nameof(ToneMFX)}] {Address}");
+            Debug.Print($"[{nameof(ToneMFX)}] {Address}");
 
             Name = "Tone MFX";
         }
 
         #endregion
 
-        #region Properties
-
+        #region Properties : INTEGRA-7
 
         [Offset(0x0000)]
         public IntegraMFXTypes Type
@@ -225,82 +223,85 @@ namespace Integra.Models
         }
 
         [Offset(0x0011)]
-        //[IndexerName("Item[]")]
         public int this[int index]
         {
             get
             {
-                return _Model.GetValue(index, GetData(_Parameters[index]));
+                //return _Model.GetParameter(index, GetData(_Parameters[index]));
+                return _Model.Get(index, _Parameters[index].ConvertFromIntegraParameter());
             }
 
             set
             {
-                _Parameters[index] = SetData(_Model.SetValue(index, value));
+                //_Parameters[index] = SetData(_Model.SetParameter(index, value));
+                _Parameters[index] = _Model.Set(index, value).ConvertToIntegraParameter();
                 NotifyIndexerPropertyChanged(index);
             }
         }
 
-        //[Offset(0x0011)] public int Parameter01 { get { return GetData(_Parameter01); } set { _Parameter01 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0015)] public int Parameter02 { get { return GetData(_Parameter02); } set { _Parameter02 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0019)] public int Parameter03 { get { return GetData(_Parameter03); } set { _Parameter03 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x001D)] public int Parameter04 { get { return GetData(_Parameter04); } set { _Parameter04 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0021)] public int Parameter05 { get { return GetData(_Parameter05); } set { _Parameter05 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0025)] public int Parameter06 { get { return GetData(_Parameter06); } set { _Parameter06 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0029)] public int Parameter07 { get { return GetData(_Parameter07); } set { _Parameter07 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x002D)] public int Parameter08 { get { return GetData(_Parameter08); } set { _Parameter08 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0031)] public int Parameter09 { get { return GetData(_Parameter09); } set { _Parameter09 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0035)] public int Parameter10 { get { return GetData(_Parameter10); } set { _Parameter10 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0039)] public int Parameter11 { get { return GetData(_Parameter11); } set { _Parameter11 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x003D)] public int Parameter12 { get { return GetData(_Parameter12); } set { _Parameter12 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0041)] public int Parameter13 { get { return GetData(_Parameter13); } set { _Parameter13 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0045)] public int Parameter14 { get { return GetData(_Parameter14); } set { _Parameter14 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0049)] public int Parameter15 { get { return GetData(_Parameter15); } set { _Parameter15 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x004D)] public int Parameter16 { get { return GetData(_Parameter16); } set { _Parameter16 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0051)] public int Parameter17 { get { return GetData(_Parameter17); } set { _Parameter17 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0055)] public int Parameter18 { get { return GetData(_Parameter18); } set { _Parameter18 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0059)] public int Parameter19 { get { return GetData(_Parameter19); } set { _Parameter19 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x005D)] public int Parameter20 { get { return GetData(_Parameter20); } set { _Parameter20 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0061)] public int Parameter21 { get { return GetData(_Parameter21); } set { _Parameter21 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0065)] public int Parameter22 { get { return GetData(_Parameter22); } set { _Parameter22 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0069)] public int Parameter23 { get { return GetData(_Parameter23); } set { _Parameter23 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x006D)] public int Parameter24 { get { return GetData(_Parameter24); } set { _Parameter24 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0071)] public int Parameter25 { get { return GetData(_Parameter25); } set { _Parameter25 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0075)] public int Parameter26 { get { return GetData(_Parameter26); } set { _Parameter26 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0079)] public int Parameter27 { get { return GetData(_Parameter27); } set { _Parameter27 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x007D)] public int Parameter28 { get { return GetData(_Parameter28); } set { _Parameter28 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0101)] public int Parameter29 { get { return GetData(_Parameter29); } set { _Parameter29 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0105)] public int Parameter30 { get { return GetData(_Parameter30); } set { _Parameter30 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x0109)] public int Parameter31 { get { return GetData(_Parameter31); } set { _Parameter31 = SetData(value); NotifyPropertyChanged(); } }
-        //[Offset(0x010D)] public int Parameter32 { get { return GetData(_Parameter32); } set { _Parameter32 = SetData(value); NotifyPropertyChanged(); } }
+        #endregion
 
+        #region Methods
+
+        ///// <summary>
+        ///// Gets the parameter data without the leading INTEGRA-7 parameter prefix.
+        ///// </summary>
+        ///// <param name="value">The <see cref="int"/> prefixed parameter.</param>
+        ///// <returns>An <see cref="int"/> without the parameter prefix.</returns>
+        //private int GetData(int value)
+        //{
+        //    byte[] values = BitConverter.GetBytes(value);
+
+        //    if (BitConverter.IsLittleEndian)
+        //        Array.Reverse(values);
+
+        //    return ((values[1] & 0x0F) << 8 | (values[2] & 0x0F) << 4 | (values[3] & 0x0F));
+        //}
+
+        ///// <summary>
+        ///// Prefixes the data with the INTEGRA-7 parameter prefix of 0x08.
+        ///// </summary>
+        ///// <param name="value">The <see cref="int"/> to prefix.</param>
+        ///// <returns>An <see cref="int"/> with the parameter prefix.</returns>
+        //private int SetData(int value)
+        //{
+        //    byte[] result = new byte[4];
+
+        //    result[0] = 0x08;
+        //    result[1] = (byte)((value >> 8) & 0x0F);
+        //    result[2] = (byte)((value >> 4) & 0x0F);
+        //    result[3] = (byte)((value & 0x0F));
+
+        //    if (BitConverter.IsLittleEndian)
+        //        Array.Reverse(result);
+
+        //    return BitConverter.ToInt32(result, 0);
+        //}
+
+        /// <summary>
+        /// Sets the MFX model to use for parameter conversion and validation.
+        /// </summary>
+        /// <param name="type">An <see cref="IntegraMFXTypes"/> specifying the model to bind.</param>
+        private void SetModel(IntegraMFXTypes type)
+        {
+            switch (type)
+            {
+                case IntegraMFXTypes.Equalizer: _Model = new Equalizer(); break;
+                default:
+                    _Model = new Thru();
+                    break;
+            }
+        }
 
         #endregion
 
-        protected int GetData(int value)
-        {
-            byte[] values = BitConverter.GetBytes(value);
+        #region Overrides
 
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(values);
-
-            return ((values[1] & 0x0F) << 8 | (values[2] & 0x0F) << 4 | (values[3] & 0x0F));
-        }
-
-        protected int SetData(int value)
-        {
-            byte[] result = new byte[4];
-
-            result[0] = 0x08;
-            result[1] = (byte)((value >> 8) & 0x0F);
-            result[2] = (byte)((value >> 4) & 0x0F);
-            result[3] = (byte)((value & 0x0F));
-
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(result);
-
-            return BitConverter.ToInt32(result, 0); ;
-        }
-
+        /// <summary>
+        /// Overrides the base for MFX specific system exclusive filtering.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
+        /// <param name="e">A <see cref="SystemExclusiveMessageEventArgs"/> containing event data.</param>
         internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
             IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
@@ -321,16 +322,17 @@ namespace Integra.Models
                 {
                     if((syx.Address & 0x00000F00).IsInRange(0x00000200, 0x00000300))
                     {
-                        //byte[] bytes = new byte[4];
-                        //Array.Copy(syx.Data, (syx.Data.Length - 5), bytes, 0, 4);
-                        // TODO: data length is based on parameter index of array
-                        
-                            InitializeField(syx);
+                        InitializeField(syx);
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Overrides the base to include binding of the MFX model on initialization.
+        /// </summary>
+        /// <param name="data">A <see cref="byte"/>[] containing the <see cref="IntegraSystemExclusive.Data"/> to initialize the data structure.</param>
+        /// <returns>A <see cref="bool"/> containing true if the data structure is initialized.</returns>
         protected override bool Initialize(byte[] data)
         {
             if (!IsInitialized)
@@ -343,18 +345,6 @@ namespace Integra.Models
             return IsInitialized;
         }
 
-        private void SetModel(IntegraMFXTypes type)
-        {
-            switch(type)
-            {
-                case IntegraMFXTypes.Thru:
-                    return;
-                case IntegraMFXTypes.Equalizer:
-                    _Model = new Equalizer();
-                    return;
-            }
-
-            //NotifyPropertyChanged("Item[]", false);
-        }
+        #endregion;
     }
 }
