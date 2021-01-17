@@ -1,4 +1,5 @@
 ﻿using Integra.Core;
+using Integra.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

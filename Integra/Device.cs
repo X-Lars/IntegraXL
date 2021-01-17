@@ -1,4 +1,5 @@
 ﻿using Integra.Core;
+using Integra.Core.Interfaces;
 using Integra.Models;
 using MidiXL;
 using System;
@@ -437,7 +438,10 @@ namespace Integra
             }
         }
 
-        public IToneMFX MFX
+        /// <summary>
+        /// Gets the data context of the MFX structure of the current tone type.
+        /// </summary>
+        public IToneMFX MFXDataContext
         {
             get
             {

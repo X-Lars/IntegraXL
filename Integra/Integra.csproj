@@ -60,6 +60,7 @@
     <Compile Include="Core\IntegraBaseToneBank.cs" />
     <Compile Include="Core\IntegraConfiguration.cs" />
     <Compile Include="Core\IntegraConstants.cs" />
+    <Compile Include="Core\IntegraDataTypes.cs" />
     <Compile Include="Core\IntegraEnumerations.cs" />
     <Compile Include="Core\IntegraEventArgs.cs" />
     <Compile Include="Core\IntegraExceptions.cs" />
@@ -68,8 +69,10 @@
     <Compile Include="Core\IntegraSystemExclusive.cs" />
     <Compile Include="Core\IntegraTone.cs" />
     <Compile Include="Core\IntegraToneExtensions.cs" />
+    <Compile Include="Core\Interfaces\Interfaces.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="Models\MFX\Equalizer.cs" />
+    <Compile Include="Models\MFX\Thru.cs" />
     <Compile Include="Models\PCMDrumKit.cs" />
     <Compile Include="Models\PCMSynthTone.cs" />
     <Compile Include="Models\Setup.cs" />

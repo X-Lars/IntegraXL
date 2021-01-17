@@ -1,17 +1,36 @@
-﻿using Integra.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Integra.Core.Interfaces;
 
 namespace Integra.Models.MFX
 {
-    public class Equalizer
+    public class Equalizer : IToneMFXModel
     {
-        public Equalizer(IntegraAddress address)
-        {
 
+        public int GetValue(int index, int value)
+        {
+            switch (index)
+            {
+                case 0:
+                    return value;
+                case 1:
+                    return value - 15;
+                    
+                default:
+                    return value;
+            }
         }
+
+        public int SetValue(int index, int value)
+        {
+            switch (index)
+            {
+                case 0:
+                    return value;
+                case 1:
+                    return value + 15;
+                default:
+                    return value;
+            }
+        }
+
     }
 }

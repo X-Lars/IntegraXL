@@ -6,12 +6,19 @@
              xmlns:local="clr-namespace:IntegraXL.UserControls.MFX"
              xmlns:core="clr-namespace:Integra.Core;assembly=Integra"
              xmlns:common="clr-namespace:IntegraXL.Common"
+             xmlns:xl="clr-namespace:ControlsXL;assembly=ControlsXL"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="Red" >
-        <TextBlock Foreground="White">Equalizer</TextBlock>
-        <Label>Low Freqency</Label>
-        <ComboBox ItemsSource="{Binding Source={common:EnumerationBindingSource {x:Type core:IntegraLowFrequencies}}}"
-                  SelectedIndex="{Binding MFXContext.MFX.Parameter01}"/>
+    
+    <Grid>
+        <StackPanel>
+            <TextBlock Foreground="White">Equalizer</TextBlock>
+            <Label>Low Freqency</Label>
+            <ComboBox ItemsSource="{Binding Source={common:EnumerationBindingSource {x:Type core:IntegraLowFrequencies}}}"
+                      SelectedIndex="{Binding MFXContext.MFX[0]}"/>
+            <TextBox Text="{Binding MFXContext.MFX[1]}"/>
+            
+        </StackPanel>
     </Grid>
+    
 </UserControl>

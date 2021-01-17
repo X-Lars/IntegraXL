@@ -113,7 +113,8 @@
                 
                 <StatusBarItem>
                     <Grid>
-                        <ProgressBar Maximum="100"
+                        <ProgressBar Foreground="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}" 
+                                     Maximum="100"
                                      MinHeight="20" 
                                      Minimum="0" 
                                      MinWidth="200"

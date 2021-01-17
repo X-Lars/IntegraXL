@@ -338,16 +338,33 @@ namespace Integra.Core
                     {
                         byte[] values = new byte[4];
 
-                        int p = syx.Data.Length / 4;
+                        int p = (syx.Data.Length - fieldOffset) / 4;
 
-                        Array.Copy(syx.Data, syx.Data.Length - 4, values, 0, 4);
+                        // Working on
+                        int l = syx.Data.Length - fieldOffset;
 
-                        if (BitConverter.IsLittleEndian)
-                            Array.Reverse(values);
+                        for (int i = 0; i < p; i++)
+                        {
+                            Array.Copy(syx.Data, fieldOffset, values, 0, 4);
 
-                        array.SetValue(BitConverter.ToInt32(values, 0), p - 1);
-                        fieldOffset += p * 4;
-                        //propertyOffset += 4;
+                            if (BitConverter.IsLittleEndian)
+                                Array.Reverse(values);
+
+                            array.SetValue(BitConverter.ToInt32(values, 0), i);
+                            fieldOffset += 4;
+                        }
+                        //Array.Copy(syx.Data, fieldOffset, array, 0, l);
+                        //fieldOffset += p * 4;
+
+
+                        //Array.Copy(syx.Data, syx.Data.Length - 4, values, 0, 4);
+
+                        //if (BitConverter.IsLittleEndian)
+                        //    Array.Reverse(values);
+                        
+                        //array.SetValue(BitConverter.ToInt32(values, 0), p - 1);
+                        //fieldOffset += p * 4;
+                        ////propertyOffset += 4;
                     }
                     else
                     {
@@ -379,8 +396,17 @@ namespace Integra.Core
 
                 if(property != null)
                 {
-                    NotifyPropertyChanged(property.Name, false);
-                    Debug.Print($"[{Name}] {property.Name}: {property.GetValue(this)}");
+                    // Check for indexer property
+                    if (property.GetIndexParameters() == null)
+                    {
+                        NotifyPropertyChanged(property.Name, false);
+                        Debug.Print($"[{Name}] {property.Name}: {property.GetValue(this)}");
+                    }
+                    else
+                    {
+                        NotifyPropertyChanged("Item[]", false);
+                        Debug.Print($"[{Name}] {property.Name}");
+                    }
                 }
 
                 // Property offset has to be realligned in case the field is an array
@@ -399,7 +425,7 @@ namespace Integra.Core
             }
         }
 
-        private void TransmitProperty(string propertyName)
+        private void TransmitProperty(string propertyName, int? index)
         {
             Offset offset = GetPropertyOffset(propertyName);
 
@@ -411,9 +437,34 @@ namespace Integra.Core
 
                     if (field.FieldType.IsArray)
                     {
-                        byte[] array = (byte[])field.GetValue(this);
+                        // Create an array from the field to be able to loop through the field values
+                        Array fieldArray = (Array)field.GetValue(this);
 
-                        TransmitProperty(offset.Value, array);
+                        // Get the type of elements in the array
+                        Type fieldArrayType = fieldArray.GetType().GetElementType();
+
+                        if(fieldArrayType == typeof(byte))
+                        {
+                            byte[] array = (byte[])field.GetValue(this);
+
+                            TransmitProperty(offset.Value, array);
+                        }
+                        else if (fieldArrayType == typeof(int))
+                        {
+                            if (index == null)
+                                throw new ArgumentNullException(nameof(index));
+
+                            int[] array = (int[])field.GetValue(this);
+
+                            byte[] values = new byte[4];
+
+                            values = BitConverter.GetBytes(array[(int)index]);
+
+                            if (BitConverter.IsLittleEndian)
+                                Array.Reverse(values);
+
+                            TransmitProperty((ushort)(offset.Value + (index * 4)), values);
+                        }
                     }
                     else if (field.FieldType == typeof(bool))
                     {
@@ -500,6 +551,7 @@ namespace Integra.Core
         /// Raises the <see cref="PropertyChanged"/> event for the specified property.
         /// </summary>
         /// <param name="propertyName">A <see cref="string"/> containing the name of the property that is changed.</param>
+        /// <param name="transmit">A <see cref="bool"/> to determin if the property has to be transmitted.</param>
         /// <remarks><i>If no property name is specified, the actual name of the property in code is used.</i></remarks>
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "", bool transmit = true)
         {
@@ -510,7 +562,26 @@ namespace Integra.Core
                 if(IsInitialized)
                 {
                     if(!string.IsNullOrEmpty(propertyName))
-                        TransmitProperty(propertyName);
+                        TransmitProperty(propertyName, null);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Raises the <see cref="PropertyChanged"/> event for the specified indexer property.
+        /// </summary>
+        /// <param name="index">An <see cref="int"/> specifying the index of the indexer property that is changed.</param>
+        /// <param name="transmit">A <see cref="bool"/> to determin if the property has to be transmitted.</param>
+        /// <remarks><i>If no property name is specified, the actual name of the property in code is used.</i></remarks>
+        protected void NotifyIndexerPropertyChanged(int index, bool transmit = true)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
+
+            if (transmit)
+            {
+                if (IsInitialized)
+                {
+                    TransmitProperty("Item", index);
                 }
             }
         }

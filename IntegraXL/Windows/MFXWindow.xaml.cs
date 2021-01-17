@@ -1,65 +1,77 @@
 ﻿using Integra.Core;
-using Integra.Models;
+using Integra.Core.Interfaces;
 using IntegraXL.UserControls.MFX;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace IntegraXL.Windows
 {
     /// <summary>
-    /// Interaction logic for MFXWindow.xaml
+    /// Base window for all MFX controls, provides a data context for the MFX based on the tone type and attaches the MFX associated user control.
     /// </summary>
     public partial class MFXWindow : IntegraWindow
     {
-        //public static DependencyProperty MFXControlProperty = DependencyProperty.Register("ToneBank", typeof(IntegraBaseToneBank), typeof(ToneBankWindow), new PropertyMetadata(null));
+        #region Constructor
 
-
-        public UserControl MFXControl
-        {
-            get { return (UserControl)GetValue(MFXControlProperty); }
-            set { SetValue(MFXControlProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for MFXControl.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty MFXControlProperty =
-            DependencyProperty.Register(nameof(MFXControl), typeof(UserControl), typeof(MFXWindow), new PropertyMetadata(null));
-
-
+        /// <summary>
+        /// Creates and initialize a new <see cref="MFXWindow"/> instance for the specified <see cref="IntegraMFXTypes"/>.
+        /// </summary>
+        /// <param name="type">The <see cref="IntegraMFXTypes"/> to create the window for.</param>
         public MFXWindow(IntegraMFXTypes type)
         {
             InitializeComponent();
 
             DataContext = this;
 
+            Type mfxType = typeof(Thru);
+
             switch(type)
             {
-                case IntegraMFXTypes.Thru:
-                    break;
-                case IntegraMFXTypes.Equalizer:
-                    MFXControl = (UserControl)Activator.CreateInstance(typeof(Equalizer));
-                    break;
+                case IntegraMFXTypes.Equalizer: mfxType = typeof(Equalizer); break;
             }
 
-            
+            MFXControl = (UserControl)Activator.CreateInstance(mfxType);
         }
 
+        #endregion
+
+        #region Dependency Properties
+
+        #region Dependency Properties : Registration
+
+        /// <summary>
+        /// Registers the property to get the MFX control for the <see cref="MFXWindow"/>.
+        /// </summary>
+        public static readonly DependencyProperty MFXControlProperty = DependencyProperty.Register(nameof(MFXControl), typeof(UserControl), typeof(MFXWindow), new PropertyMetadata(null));
+
+        #endregion
+
+        #region Dependency Properties : Implementation
+
+        /// <summary>
+        /// Gets or sets the MFX control for the <see cref="MFXWindow"/>.
+        /// </summary>
+        public UserControl MFXControl
+        {
+            get { return (UserControl)GetValue(MFXControlProperty); }
+            set { SetValue(MFXControlProperty, value); }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the MFX data context for the MFX control.
+        /// </summary>
         public IToneMFX MFXContext
         {
-            get { return DeviceContext.MFX; }
+            get { return DeviceContext.MFXDataContext; }
         }
 
-
+        #endregion
     }
 }

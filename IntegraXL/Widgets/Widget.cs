@@ -7,24 +7,37 @@ using System.Windows.Controls;
 namespace IntegraXL.Widgets
 {
     /// <summary>
-    /// Represents the base class for all widgets.
+    /// Represents the base class for all widgets, provides application and device context properties and implements the <see cref="INotifyPropertyChanged"/> interface.
     /// </summary>
     public abstract class Widget : UserControl, INotifyPropertyChanged
     {
+        /// <summary>
+        /// Creates and initalizes a new <see cref="Widget"/> instance.
+        /// </summary>
         public Widget() : base()
         {
             DataContext = this;
         }
 
+        #region Properties
+
+        /// <summary>
+        /// Gets the application context.
+        /// </summary>
         public MainWindow ApplicationContext
         {
             get { return (MainWindow)Application.Current.MainWindow; }
         }
 
+        /// <summary>
+        /// Gets the device context.
+        /// </summary>
         public Device DeviceContext
         {
             get { return ApplicationContext.Integra; }
         }
+
+        #endregion
 
         #region INotifyPropertyChanged
 
