@@ -20,7 +20,7 @@
 
     <StackPanel DataContext="{Binding DeviceContext}">
 
-        <Expander Header="Studio Set Select"
+        <xl:Expander Header="Studio Set Select"
                   IsExpanded="True">
             
             <ComboBox ItemsSource="{Binding StudioSets}"
@@ -38,9 +38,9 @@
                 </ComboBox.ItemTemplate>
                 
             </ComboBox>
-        </Expander>
+        </xl:Expander>
 
-        <Expander Header="Selected Part"
+        <xl:Expander Header="Selected Part"
                   IsExpanded="True">
 
             <Grid HorizontalAlignment="Center">
@@ -81,10 +81,10 @@
 
             </Grid>
 
-        </Expander>
+        </xl:Expander>
 
-        <Expander Header="Selected Tone"
-                  IsExpanded="True">
+        <xl:Expander Header="Selected Tone"
+                     IsExpanded="True">
 
             <Grid>
 
@@ -175,9 +175,12 @@
                               Content="Preview" 
                               IsChecked="{Binding Preview}"/>
             </Grid>
-        </Expander>
+        </xl:Expander>
         <!-- VIRTUAL SLOTS -->
-        <Expander Header="Virtual Slots" IsExpanded="True">
+
+        <xl:Expander Header="Virtual Slots" 
+                     HeaderAlignment="Left"
+                     IsExpanded="True">
 
             <Grid>
 
@@ -243,7 +246,7 @@
                 </Grid>
 
             </Grid>
-        </Expander>
+        </xl:Expander>
 
     </StackPanel>
 </local:Widget>

@@ -42,7 +42,9 @@ namespace Integra
         /// <summary>
         /// Defines the aproximate MIDI latency in milliseconds.
         /// </summary>
-        private const int DEVICE_LATENCY = 20;
+        /// <remarks><b><i>Important! Lower values can cause application locking.</i></b></remarks>
+        private const int DEVICE_LATENCY = 100;
+        // TODO: Request larger (complete) structures cq complete parts.
 
         #endregion
 
@@ -79,29 +81,25 @@ namespace Integra
         /// <remarks><i>The device status is initiated with <see cref="DeviceStatusFlags.DEVICE_NO_MIDI_SETUP"/>.</i></remarks>
         private static DeviceStatus _Status = new DeviceStatus(DeviceStatusFlags.DEVICE_NO_MIDI_SETUP);
 
-        /// <summary>
-        /// Stores all executing tasks.
-        /// </summary>
-        private static List<Task> _Tasks = new List<Task>();
-        //private static ConcurrentQueue<Task> _Tasks = new ConcurrentQueue<Task>();
-
-        /// <summary>
-        /// Tracks the state of the <see cref="TaskManager"/>.
-        /// </summary>
-        private bool _IsTaskRunning = false;
-
-
         // TODO: Device count changes
         private int _MidiOutputDeviceCount = 0;
         // TODO: Device count changes
         private int _MidiInputDeviceCount = 0;
 
         /// <summary>
-        /// Lock for thread safety.
+        /// Thread lock for the <see cref="Device"/> instance.
         /// </summary>
-        private static readonly object _Lock = new object();
+        private static readonly object _InstanceLock = new object();
 
-        private static int _TaskCount = 0;
+        /// <summary>
+        /// Thread lock for the <see cref="Device"/> operations.
+        /// </summary>
+        private static readonly object _OperationLock = new object();
+
+        /// <summary>
+        /// Stores the number of operations running.
+        /// </summary>
+        private static int _OperationStack = 0;
 
         #region Fields: INTEGRA-7
 
@@ -144,8 +142,6 @@ namespace Integra
         /// Stores the synchronization context of instantiating class.
         /// </summary>
         private static readonly SynchronizationContext _UIContext = SynchronizationContext.Current;
-
-        private static int _OperationQueue = 0;
 
         #endregion
 
@@ -216,7 +212,7 @@ namespace Integra
                 // Double checked locking for increased performance because locking is more expensive than null checking
                 if (_Instance == null)
                 {
-                    lock(_Lock)
+                    lock(_InstanceLock)
                     {
                         if(_Instance == null)
                         {
@@ -289,7 +285,20 @@ namespace Integra
                 }
             }
         }
-        
+
+        /// <summary>
+        /// Gets the number of running operations.
+        /// </summary>
+        public int OperationStack
+        {
+            get { return _OperationStack; }
+            private set 
+            { 
+                _OperationStack = value; 
+                NotifyPropertyChanged(); }
+        }
+
+
         /// <summary>
         /// Gets the available <see cref="MidiOutputDevice"/>s.
         /// </summary>
@@ -523,7 +532,6 @@ namespace Integra
                 }
             }
         }
-        private TemporaryTone _TemporaryTone;
 
         public TemporaryTone TemporaryTone
         {
@@ -650,7 +658,7 @@ namespace Integra
         /// <param name="e">An <see cref="SystemExclusiveMessageEventArgs"/> containing event data.</param>
         private void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
-            Debug.Print($"[{nameof(Device)}.{nameof(SystemExclusiveReceived)}] {string.Join(" ", e.Message.Data.Select(x => string.Format("{0:X2}", x)))}");
+            //Debug.Print($"[{nameof(Device)}.{nameof(SystemExclusiveReceived)}] {string.Join(" ", e.Message.Data.Select(x => string.Format("{0:X2}", x)))}");
         }
 
         #endregion
@@ -807,46 +815,30 @@ namespace Integra
         {
             IsConnected = false;
 
-            Task<bool> connectionValidation = new Task<bool>(() =>
-            {
-                int connectionTimeOut = 0;
+            int connectionTimeOut = 0;
 
+            await Task.Factory.StartNew(() =>
+            {
                 // Report the initialization message
-                ReportProgress(this, new StatusMessage("Validating Connection", "Please wait...", 0, "Connecting"));
+                ReportInit(this, new StatusMessage("Validating Connection", "Please wait...", 0, "Connecting"));
 
                 // Send the identity request
                 MidiOutputDevice.Send(new UniversalNonRealTimeMessage(new byte[] { 0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7 }));
 
                 while (!IsConnected)
                 {
-                    Thread.Sleep(DEVICE_LATENCY);
                     connectionTimeOut += DEVICE_LATENCY;
 
                     // Report the progress message
                     ReportProgress(this, new StatusMessage("Validating Connection", "Please wait...", 100d / DEVICE_CONNECTION_TIMEOUT * connectionTimeOut, "Connecting"));
 
                     if (connectionTimeOut > DEVICE_CONNECTION_TIMEOUT)
-                        return false;
+                        ReportComplete(this, new StatusMessage("Validating Connection", "Connection timeout", 100d, "Connection Error"));
                 }
 
-                return true;
+                ReportComplete(this, new StatusMessage("Validating Connection", "Connection successful", 100, "Done"));
 
             }, TaskCreationOptions.LongRunning);
-
-            // Start the task using the task manager to keep track of running tasks
-            StartTask(connectionValidation);
-
-            await connectionValidation;
-
-            // Report the finalization message
-            if (IsConnected)
-            {
-                ReportProgress(this, new StatusMessage("Validating Connection", "Connection successful", 100, "Done"));
-            }
-            else
-            {
-                ReportProgress(this, new StatusMessage("Validating Connection", "Connection timeout", 100d, "Connection Error"));
-            }
 
             return IsConnected;
         }
@@ -856,121 +848,45 @@ namespace Integra
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="dataStructure"></param>
-        internal async void Initialize<T>(IntegraBase<T> dataStructure) where T : IntegraBase<T>
+        internal async Task Initialize<T>(IntegraBase<T> dataStructure) where T : IntegraBase<T>
         {
             // Ensure the INTEGRA-7 is connected before starting initialization
             while (!_IsConnected)
             {
                 await Task.Delay(DEVICE_LATENCY);
-                //Thread.Sleep(DEVICE_CONNECTION_TIMEOUT);
             }
 
-            Task<bool> initialization = new Task<bool>(() =>
+            await Task.Factory.StartNew(() =>
             {
+                ReportInit(this, new StatusMessage($"Initializing {dataStructure.Name}", "Please wait...", 100, "Initializing"));
+
                 // Hookup the system exclusive event handler to the INTEGRA-7 data structure
                 MidiInputDevice.SystemExclusiveReceived += dataStructure.SystemExclusiveReceived;
 
                 // Send all requests contained inside the data structure
-                for (int i = 0; i < dataStructure.Requests.Count; i++)
-                {
-                    SendSystemExclusive(new IntegraSystemExclusive(dataStructure.Address, dataStructure.Requests[i]));
-                    
-                }
+                //lock (MidiOutputDevice)
+                //{
+                    for (int i = 0; i < dataStructure.Requests.Count; i++)
+                    {
+                   
+                        SendSystemExclusive(new IntegraSystemExclusive(dataStructure.Address, dataStructure.Requests[i]));
+                        //Thread.Sleep(DEVICE_LATENCY);
+                    }
+                //}
 
                 while (!dataStructure.IsInitialized)
                 {
                     // Allow the data struture to report progress
-                    Task.Delay(DEVICE_LATENCY);
+                    //await Task.Delay(DEVICE_LATENCY);
+                    Thread.Sleep(DEVICE_LATENCY);
                 }
 
-                return true;
-            });
+                ReportComplete(this, new StatusMessage($"Initializing {dataStructure.Name}", "Complete", 100, "Done"));
 
-            // Start the task using the task manager to keep track of running tasks
-            StartTask(initialization);
-
-            await initialization;
+            }, TaskCreationOptions.LongRunning);
         }
 
-        public int TaskCounter
-        {
-            get { return _OperationQueue; }
-        }
-        /// <summary>
-        /// Adds the provided <paramref name="task"/> to the task list and starts the <see cref="TaskManager"/> if not already running.
-        /// </summary>
-        /// <param name="task">The <see cref="Task"/> to start.</param>
-        private async void StartTask(Task task)
-        {
-            lock (_Tasks)
-            {
-                Interlocked.Increment(ref _OperationQueue);
-                NotifyPropertyChanged(nameof(TaskCounter));
-                _Tasks.Add(task);
-            }
-
-            if (!_IsTaskRunning)
-            {
-                //task.Start();
-                await TaskManager(task);
-            }
-            else
-            {
-                task.Start();
-            }
-        }
-
-        /// <summary>
-        /// Manages any running tasks and raises the <see cref="OperationStart"/> event upon invokation and the <see cref="OperationComplete"/> event when no tasks left.
-        /// </summary>
-        /// <returns>An awaitable <see cref="Task"/>.</returns>
-        private async Task TaskManager(Task t)
-        {
-            lock (_Tasks)
-            {
-                _IsTaskRunning = true;
-                t.Start();
-            }
-
-            
-
-            // Report the initialization message
-            _UIContext.Post(o => OperationStart?.Invoke(this, new IntegraOperationEventArgs(Status)), null);
-
-            while (_OperationQueue != 0)
-            {
-                Task task = null;
-
-                //if (_Tasks.Count != 0)
-                    task = await Task.WhenAny(_Tasks.ToArray());
-                //else
-                //    break;
-
-                lock (_Tasks)
-                {
-                    _Tasks.Remove(task);
-                    Interlocked.Decrement(ref _OperationQueue);
-                    NotifyPropertyChanged(nameof(TaskCounter));
-                }
-
-                // Let UI update
-                await Task.Delay(DEVICE_LATENCY);
-                //Thread.Sleep(DEVICE_LATENCY);
-            }
-
-            lock (_Tasks)
-                _IsTaskRunning = false;
-
-            // Let UI update
-            //await Task.Delay(DEVICE_LATENCY);
-            Thread.Sleep(DEVICE_LATENCY);
-
-            
-                // Report the finalization message
-                _UIContext.Post(o => OperationComplete?.Invoke(this, new IntegraOperationEventArgs(Status)), null);
-            
-        }
- 
+       
         /// <summary>
         /// Reports task progress to the UI.
         /// </summary>
@@ -985,16 +901,34 @@ namespace Integra
 
         internal void ReportInit(object sender, StatusMessage message)
         {
-            Status.Update(message);
+            lock (_OperationLock)
+            {
+                if(_OperationStack == 0)
+                {
+                    Status.Update(message);
+                    _UIContext.Send(o => OperationStart?.Invoke(sender, new IntegraOperationEventArgs(Status)), null);
+                }
 
-            _UIContext.Send(o => OperationStart?.Invoke(sender, new IntegraOperationEventArgs(Status)), null);
+                OperationStack++;
+            }
         }
 
         internal void ReportComplete(object sender, StatusMessage message)
         {
-            Status.Update(message);
+            lock(_OperationLock)
+            {
+                OperationStack--;
 
-            _UIContext.Send(o => OperationComplete?.Invoke(sender, new IntegraOperationEventArgs(Status)), null);
+                if (_OperationStack != 0)
+                    return;
+
+                Status.Update(message);
+
+
+                Thread.Sleep(500);
+
+                _UIContext.Send(o => OperationComplete?.Invoke(sender, new IntegraOperationEventArgs(Status)), null);
+            }
         }
 
         #endregion

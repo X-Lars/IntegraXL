@@ -588,6 +588,19 @@ namespace Integra.Core
 
         #endregion
 
+        #region Overrides
+
+        /// <summary>
+        /// Overrides <see cref="ToString"/> to return the name of the <see cref="IntegraBase{T}"/> inheriting class.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return Name;
+        }
+
+        #endregion
+
         #region Debug
 
         /// <summary>

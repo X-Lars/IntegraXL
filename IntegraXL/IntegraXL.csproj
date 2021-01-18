@@ -55,7 +55,8 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ControlsXL">
+    <Reference Include="ControlsXL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\ControlsXL\ControlsXL\ControlsXL\bin\Debug\ControlsXL.dll</HintPath>
     </Reference>
     <Reference Include="System" />

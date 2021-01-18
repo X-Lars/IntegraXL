@@ -112,7 +112,7 @@
                        MinHeight="20">
 
                 <StatusBarItem>
-                    <TextBlock Text="{Binding TaskCounter}"/>
+                    <TextBlock Text="{Binding OperationStack}"/>
                 </StatusBarItem>
                 <StatusBarItem>
                     <Grid>
