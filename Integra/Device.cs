@@ -126,6 +126,11 @@ namespace Integra
         private IntegraTone _SelectedTone = new IntegraTone();
 
         /// <summary>
+        /// Stores a reference to the INTEGRA-7 virtual slots data structure.
+        /// </summary>
+        private VirtualSlots _VirtualSlots = new VirtualSlots();
+
+        /// <summary>
         /// Tracks the currently selected INTEGRA-7 part.
         /// </summary>
         private IntegraParts _SelectedPart;
@@ -412,6 +417,14 @@ namespace Integra
             get { return _StudioSets; }
         }
 
+        /// <summary>
+        /// Gets the INTEGRA-7 virtual slots.
+        /// </summary>
+        public VirtualSlots VirtualSlots
+        {
+            get { return _VirtualSlots; }
+        }
+
         [Bindable(BindableSupport.Yes, BindingDirection.TwoWay)]
         public IntegraTone SelectedTone
         {
@@ -423,6 +436,8 @@ namespace Integra
                 NotifyPropertyChanged();
             }
         }
+
+
         private IntegraToneTypes _ToneType = IntegraToneTypes.SuperNATURALAcousticTone;
 
         public IntegraToneTypes ToneType

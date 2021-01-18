@@ -120,6 +120,31 @@ namespace Integra.Core
     }
 
     [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraExpansions : byte
+    {
+        [Description("Off")]                                    Off   = 0x00,
+        [Description("SRX 01: Dynamic Drums")]                  Exp01 = 0x01,
+        [Description("SRX 02: Concert Piano")]                  Exp02 = 0x02,
+        [Description("SRX 03: Studio SRX")]                     Exp03 = 0x03,
+        [Description("SRX 04: Symphonique Strings")]            Exp04 = 0x04,
+        [Description("SRX 05: Supreme Dance")]                  Exp05 = 0x05,
+        [Description("SRX 06: Complete Orchestra")]             Exp06 = 0x06,
+        [Description("SRX 07: Ultimate Keys")]                  Exp07 = 0x07,
+        [Description("SRX 08: Platinum Trax")]                  Exp08 = 0x08,
+        [Description("SRX 09: World Collection")]               Exp09 = 0x09,
+        [Description("SRX 10: Big Brass Ensemble")]             Exp10 = 0x0A,
+        [Description("SRX 11: Complete Piano")]                 Exp11 = 0x0B,
+        [Description("SRX 12: Classic Electric Pianos")]        Exp12 = 0x0C,
+        [Description("ExSN 01: SuperNATURAL Ethnic")]           Exp13 = 0x0D,
+        [Description("ExSN 02: SuperNATURAL Woodwinds")]        Exp14 = 0x0E,
+        [Description("ExSN 03: SuperNATURAL Session")]          Exp15 = 0x0F,
+        [Description("ExSN 04: SuperNATURAL Acoustic Guitar")]  Exp16 = 0x10,
+        [Description("ExSN 05: SuperNATURAL Brass")]            Exp17 = 0x11,
+        [Description("ExSN 06: SuperNATURAL SFX")]              Exp18 = 0x12,
+        [Description("ExPCM: HQ GM2 + HQ PCM Sound")]           Exp19 = 0x13
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraToneCategories : byte
     {
         [Description("Unassigned")]             Unassigned          = 0x00,

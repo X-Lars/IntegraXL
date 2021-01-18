@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Commands.cs" />
     <Compile Include="Common\EnumerationExtensions.cs" />
     <Compile Include="Common\IntegerExtensions.cs" />
     <Compile Include="Core\IntegraAddress.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Models\Tone.cs" />
     <Compile Include="Models\ToneBank.cs" />
     <Compile Include="Models\ToneMFX.cs" />
+    <Compile Include="Models\VirtualSlots.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

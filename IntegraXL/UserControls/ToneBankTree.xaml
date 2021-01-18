@@ -10,23 +10,71 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
 
-        <Label>INTEGRA-7 Library</Label>
-
         <TreeViewItem Header="SuperNATURAL" IsExpanded="True">
 
             <TreeViewItem Header="Presets" IsExpanded="True">
-                <xl:LinkButton Command="{Binding ShowIntegraWindow}" CommandParameter="{x:Type models:SNAPresetToneBank}">Acoustic Tones</xl:LinkButton>
-                <xl:LinkButton Command="{Binding ShowIntegraWindow}" CommandParameter="{x:Type models:SNSPresetToneBank}">Synth Tones</xl:LinkButton>
-                <xl:LinkButton Command="{Binding ShowIntegraWindow}" CommandParameter="{x:Type models:SNDPresetToneBank}">Drum Kits</xl:LinkButton>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:SNAPresetToneBank}"
+                               Content="Acoustic Tones"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:SNSPresetToneBank}"
+                               Content="Synth Tones"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:SNDPresetToneBank}"
+                               Content="Drum Kits"/>
+                
             </TreeViewItem>
 
             <TreeViewItem Header="User" IsExpanded="True">
-                <xl:LinkButton Command="{Binding ShowIntegraWindow}" CommandParameter="{x:Type models:SNAUserToneBank}">Acoustic Tones</xl:LinkButton>
-                <xl:LinkButton Command="{Binding ShowIntegraWindow}" CommandParameter="{x:Type models:SNSUserToneBank}">Synth Tones</xl:LinkButton>
-                <xl:LinkButton Command="{Binding ShowIntegraWindow}" CommandParameter="{x:Type models:SNDUserToneBank}">Drum Kits</xl:LinkButton>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:SNAUserToneBank}"
+                               Content="Acoustic Tones"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:SNSUserToneBank}"
+                               Content="Synth Tones"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:SNDUserToneBank}"
+                               Content="Drum Kits"/> 
+                
             </TreeViewItem>
 
             <TreeViewItem Header="Expansions" IsExpanded="False">
+                
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:ExSN01ToneBank}"
+                               Content="ExSN 01: SuperNATURAL Ethnic"
+                               IsEnabled="{Binding Integra.VirtualSlots[13]}"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:ExSN02ToneBank}"
+                               Content="ExSN 02: SuperNATURAL Woodwinds"
+                               IsEnabled="{Binding Integra.VirtualSlots[14]}"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:ExSN03ToneBank}"
+                               Content="ExSN 03: SuperNATURAL Session"
+                               IsEnabled="{Binding Integra.VirtualSlots[15]}"/>
+                
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:ExSN04ToneBank}"
+                               Content="ExSN 04: SuperNATURAL Acoustic Guitar"
+                               IsEnabled="{Binding Integra.VirtualSlots[16]}"/>
+                
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:ExSN05ToneBank}"
+                               Content="ExSN 05: SuperNATURAL Brass"
+                               IsEnabled="{Binding Integra.VirtualSlots[17]}"/>
+                
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:ExSN06ToneBank}"
+                               Content="ExSN 06: SuperNATURAL SFX"
+                               IsEnabled="{Binding Integra.VirtualSlots[18]}"/>
                 
             </TreeViewItem>
             
@@ -35,373 +83,110 @@
         <TreeViewItem Header="PCM" IsExpanded="True">
 
             <TreeViewItem Header="Presets" IsExpanded="True">
-                <xl:LinkButton Command="{Binding ShowIntegraWindow}" CommandParameter="{x:Type models:PCMPresetToneBank}">Tones</xl:LinkButton>
-                <xl:LinkButton Command="{Binding ShowIntegraWindow}" CommandParameter="{x:Type models:PCMPresetDrumKits}">Drum Kits</xl:LinkButton>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:PCMPresetToneBank}"
+                               Content="Tones"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:PCMPresetDrumKits}"
+                               Content="Drum Kits"/>
+                
             </TreeViewItem>
             
             <TreeViewItem Header="User" IsExpanded="True">
-                <xl:LinkButton Command="{Binding ShowIntegraWindow}" CommandParameter="{x:Type models:PCMUserToneBank}">Tones</xl:LinkButton>
-                <xl:LinkButton Command="{Binding ShowIntegraWindow}" CommandParameter="{x:Type models:PCMUserDrumKits}">Drum Kits</xl:LinkButton>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:PCMUserToneBank}"
+                               Content="Tones"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:PCMUserDrumKits}"
+                               Content="Drum Kits"/>
+                
             </TreeViewItem>
 
             <TreeViewItem Header="Expansions" IsExpanded="False">
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:SRX01ToneBank}"
+                               Content="SRX 01: Dynamic Drums"
+                               IsEnabled="{Binding Integra.VirtualSlots[1]}"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:SRX02ToneBank}"
+                               Content="SRX 02: Concert Piano"
+                               IsEnabled="{Binding Integra.VirtualSlots[2]}"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:SRX03ToneBank}"
+                               Content="SRX 03: Studio SRX"
+                               IsEnabled="{Binding Integra.VirtualSlots[3]}"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:SRX04ToneBank}"
+                               Content="SRX 04: Symphonique Strings"
+                               IsEnabled="{Binding Integra.VirtualSlots[4]}"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:SRX05ToneBank}"
+                               Content="SRX 05: Supreme Dance"
+                               IsEnabled="{Binding Integra.VirtualSlots[5]}"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:SRX06ToneBank}"
+                               Content="SRX 06: Complete Orchestra"
+                               IsEnabled="{Binding Integra.VirtualSlots[6]}"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:SRX07ToneBank}"
+                               Content="SRX 07: Ultimate Keys"
+                               IsEnabled="{Binding Integra.VirtualSlots[7]}"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:SRX08ToneBank}"
+                               Content="SRX 08: Platinum Trax"
+                               IsEnabled="{Binding Integra.VirtualSlots[8]}"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:SRX09ToneBank}"
+                               Content="SRX 09: World Collection"
+                               IsEnabled="{Binding Integra.VirtualSlots[9]}"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:SRX10ToneBank}"
+                               Content="SRX 10: Big Brass Ensemble"
+                               IsEnabled="{Binding Integra.VirtualSlots[10]}"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:SRX11ToneBank}"
+                               Content="SRX 11: Complete Piano"
+                               IsEnabled="{Binding Integra.VirtualSlots[11]}"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:SRX12ToneBank}"
+                               Content="SRX 12: Classic Electric Pianos"
+                               IsEnabled="{Binding Integra.VirtualSlots[12]}"/>
+
+                <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                               CommandParameter="{x:Type models:ExPCMTonebank}"
+                               Content="ExPCM: HQ GM2 + HQ PCM Sound"
+                               IsEnabled="{Binding Integra.VirtualSlots[19]}"/>
                 
             </TreeViewItem>
             
         </TreeViewItem>
 
         <TreeViewItem Header="GM2" IsExpanded="True">
-            <xl:LinkButton Command="{Binding ShowIntegraWindow}" CommandParameter="{x:Type models:GM2ToneBank}">Tones</xl:LinkButton>
-            <xl:LinkButton Command="{Binding ShowIntegraWindow}" CommandParameter="{x:Type models:GM2DrumKits}">Drum Kits</xl:LinkButton>
+
+            <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                           CommandParameter="{x:Type models:GM2ToneBank}"
+                           Content="Tones"/>
+
+            <xl:LinkButton Command="{Binding ShowIntegraWindow}" 
+                           CommandParameter="{x:Type models:GM2DrumKits}"
+                           Content="Drum Kits"/>
+            
         </TreeViewItem>
-        <!--<TreeViewItem Header="User" IsExpanded="True">
-                    <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SNAUserToneBank}">Acoustic Tones</xl:LinkButton>
-                    <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SNSUserToneBank}">Synth Tones</xl:LinkButton>
-                    <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SNDUserToneBank}">Drum Kits</xl:LinkButton>
-                </TreeViewItem>
-                <TreeViewItem Header="Expansions" IsExpanded="False">
-                    <xl:LinkButton Content="Etnic" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:ExSN01ToneBank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[13]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="Woodwinds" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:ExSN02ToneBank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[14]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="Session" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:ExSN03ToneBank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[15]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="Acoustic Guitar" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:ExSN04ToneBank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[16]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="Brass" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:ExSN05ToneBank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[17]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SFX" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:ExSN06ToneBank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[18]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                </TreeViewItem>
-            </TreeViewItem>
-            <TreeViewItem Header="PCM" IsExpanded="True">
-                <TreeViewItem Header="Preset" IsExpanded="True">
-                    <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:PCMPresetToneBank}">Tones</xl:LinkButton>
-                    <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:PCMPresetDrumKits}">Drum Kits</xl:LinkButton>
-                </TreeViewItem>
-                <TreeViewItem Header="User" IsExpanded="True">
-                    <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:PCMUserToneBank}">Tones</xl:LinkButton>
-                    <xl:LinkButton Command="{Binding ShowWindow}" CommandParameter="{x:Type models:PCMUserDrumKits}">Drum Kits</xl:LinkButton>
-                </TreeViewItem>
-                <TreeViewItem Header="Expansions">
-                    <xl:LinkButton Content="SRX-01 Dynamic Drums" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX01ToneBank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[1]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SRX-01 Drum Kits" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX01DrumKits}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[1]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SRX-02 Concert Piano" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX02ToneBank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[2]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SRX-03 Studio SRX" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX03ToneBank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[3]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SRX-03 Drum Kits" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX03DrumKits}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[3]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SRX-04 Symphonique Strings" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX04ToneBank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[4]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SRX-05 Supreme Dance" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX05ToneBank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[5]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SRX-05 Drum Kits" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX05DrumKits}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[5]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SRX-06 Complete Orchestra" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX06ToneBank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[6]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SRX-06 Drum Kits" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX06DrumKits}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[6]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SRX-07 Ultimate Keys" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX07ToneBank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[7]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SRX-07 Drum Kits" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX07DrumKits}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[7]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SRX-08 Platinum Trax" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX08ToneBank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[8]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SRX-08 Drum Kits" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX08DrumKits}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[8]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SRX-09 World Collection" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX09ToneBank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[9]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SRX-09 Drum Kits" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX09DrumKits}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[9]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SRX-10 Big Brass Ensemble" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX10ToneBank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[10]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SRX-11 Complete Piano" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX11ToneBank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[11]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="SRX-12 Classic EP's" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:SRX12ToneBank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[12]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="ExPCM HQ GM2 + HQ PCM Sound" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:ExPCMTonebank}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[19]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                    <xl:LinkButton Content="ExPCM DrumKits" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:ExPCMDrumKits}">
-                        <xl:LinkButton.Style>
-                            <Style TargetType="xl:LinkButton">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Integra.VirtualSlots[19]}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </xl:LinkButton.Style>
-                    </xl:LinkButton>
-                </TreeViewItem>
-            </TreeViewItem>
-            <TreeViewItem Header="GM2" IsExpanded="False">
-                <xl:LinkButton Content="Tones" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:GM2ToneBank}"/>
-                <xl:LinkButton Content="Drum Kits" Command="{Binding ShowWindow}" CommandParameter="{x:Type models:GM2DrumKits}"/>
-            </TreeViewItem>-->
-        <Label>Database Library</Label>
     </StackPanel>
 </UserControl>

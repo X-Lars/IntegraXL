@@ -1,9 +1,10 @@
-﻿using Integra.Core;
-using Integra.Common;
+﻿using Integra.Common;
+using Integra.Core;
 using Integra.Core.Interfaces;
 using Integra.Models.MFX;
 using MidiXL;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Integra.Models
@@ -243,41 +244,6 @@ namespace Integra.Models
 
         #region Methods
 
-        ///// <summary>
-        ///// Gets the parameter data without the leading INTEGRA-7 parameter prefix.
-        ///// </summary>
-        ///// <param name="value">The <see cref="int"/> prefixed parameter.</param>
-        ///// <returns>An <see cref="int"/> without the parameter prefix.</returns>
-        //private int GetData(int value)
-        //{
-        //    byte[] values = BitConverter.GetBytes(value);
-
-        //    if (BitConverter.IsLittleEndian)
-        //        Array.Reverse(values);
-
-        //    return ((values[1] & 0x0F) << 8 | (values[2] & 0x0F) << 4 | (values[3] & 0x0F));
-        //}
-
-        ///// <summary>
-        ///// Prefixes the data with the INTEGRA-7 parameter prefix of 0x08.
-        ///// </summary>
-        ///// <param name="value">The <see cref="int"/> to prefix.</param>
-        ///// <returns>An <see cref="int"/> with the parameter prefix.</returns>
-        //private int SetData(int value)
-        //{
-        //    byte[] result = new byte[4];
-
-        //    result[0] = 0x08;
-        //    result[1] = (byte)((value >> 8) & 0x0F);
-        //    result[2] = (byte)((value >> 4) & 0x0F);
-        //    result[3] = (byte)((value & 0x0F));
-
-        //    if (BitConverter.IsLittleEndian)
-        //        Array.Reverse(result);
-
-        //    return BitConverter.ToInt32(result, 0);
-        //}
-
         /// <summary>
         /// Sets the MFX model to use for parameter conversion and validation.
         /// </summary>
@@ -346,5 +312,10 @@ namespace Integra.Models
         }
 
         #endregion;
+
+        #region Enumerations
+
+        
+        #endregion
     }
 }
