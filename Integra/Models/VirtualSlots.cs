@@ -87,11 +87,13 @@ namespace Integra.Models
         /// </summary>
         public VirtualSlots() : base(LOADED_EXPANSIONS, 0x00000000)
         {
-            Debug.Print($"[{nameof(VirtualSlots)}]");
+            //Debug.Print($"[{nameof(VirtualSlots)}]");
 
             Name = "Virtual Slots";
 
             LoadCommand = new UICommand(new Action<object>(Load));
+            UnloadCommand = new UICommand(new Action<object>(Unload));
+            SetStartupCommand = new UICommand(new Action<object>(SetStartup));
         }
 
         #endregion
@@ -109,7 +111,7 @@ namespace Integra.Models
         public ICommand LoadCommand
         {
             get { return _LoadCommand; }
-            set { _LoadCommand = value; }
+            private set { _LoadCommand = value; }
         }
 
         /// <summary>
@@ -118,7 +120,8 @@ namespace Integra.Models
         [Bindable(BindableSupport.Yes)]
         public ICommand UnloadCommand
         {
-            get { return _UnloadCommand ?? (_UnloadCommand = new UICommand(Unload)); }
+            get { return _UnloadCommand; }
+            private set { _UnloadCommand = value; }
         }
 
         /// <summary>
@@ -127,7 +130,8 @@ namespace Integra.Models
         [Bindable(BindableSupport.Yes)]
         public ICommand SetStartupCommand
         {
-            get { return _SetStartupCommand ?? (_SetStartupCommand = new UICommand(SetStartup)); }
+            get { return _SetStartupCommand; }
+            private set { _SetStartupCommand = value; }
         }
 
         #endregion
@@ -315,8 +319,6 @@ namespace Integra.Models
             if (!SlotAIsDirty && !SlotBIsDirty && !SlotCIsDirty && !SlotDIsDirty)
                 return;
 
-            //Device.ReportOperationInitialization(new DeviceStatusMessage("LOADING EXPANSIONS", "Please wait...", "Receiving.", 0));
-
             IntegraSystemExclusive systemExclusive = new IntegraSystemExclusive(LOAD_EXPANSIONS, new byte[] { (byte)_SlotA, (byte)_SlotB, (byte)_SlotC, (byte)_SlotD });
 
             Device.Instance.SendSystemExclusive(systemExclusive);
@@ -438,18 +440,18 @@ namespace Integra.Models
             }
             else if (syx.Address == START_LOADING_EXPANSIONS)
             {
-                Device.Instance.ReportProgress(new StatusMessage("Loading Expansions", "Please wait...", 0, "Loading"));
+                Device.Instance.ReportInit(this, new StatusMessage("Loading Expansions", "Please wait...", 0, "Loading"));
 
-                Loading?.Invoke(this, new EventArgs());
+                //Loading?.Invoke(this, new EventArgs());
             }
             else if (syx.Address == FINISHED_LOADING_EXPANSIONS)
             {
-                Device.Instance.ReportProgress(new StatusMessage("Loading Expansions", "Loaded", 100, "Done"));
+                Device.Instance.ReportComplete(this, new StatusMessage("Loading Expansions", "Loaded", 100, "Done"));
 
                 // Raise notify property changed for the indexer property
                 NotifyPropertyChanged("Item[]", false);
 
-                Complete?.Invoke(this, new EventArgs());
+                //Complete?.Invoke(this, new EventArgs());
             }
             else if (syx.Address == STARTUP_EXPANSIONS)
             {
@@ -459,24 +461,29 @@ namespace Integra.Models
 
         protected override bool Initialize(byte[] data)
         {
-            _InitialExpansions[0] = _ActualExpansions[0] = _SlotA = (IntegraExpansions)data[0x00];
-
-            if (_SlotA == IntegraExpansions.Exp19)
+            if (!IsInitialized)
             {
-                _InitialExpansions[1] = _ActualExpansions[1] = _SlotB = _SlotA;
-                _InitialExpansions[2] = _ActualExpansions[2] = _SlotC = _SlotA;
-                _InitialExpansions[3] = _ActualExpansions[3] = _SlotD = _SlotA;
+                _InitialExpansions[0] = _ActualExpansions[0] = _SlotA = (IntegraExpansions)data[0x00];
 
-                _AllSlotsUsed = true;
-            }
-            else
-            {
-                _InitialExpansions[1] = _ActualExpansions[1] = _SlotB = (IntegraExpansions)data[0x01];
-                _InitialExpansions[2] = _ActualExpansions[2] = _SlotC = (IntegraExpansions)data[0x02];
-                _InitialExpansions[3] = _ActualExpansions[3] = _SlotD = (IntegraExpansions)data[0x03];
-            }
+                if (_SlotA == IntegraExpansions.Exp19)
+                {
+                    _InitialExpansions[1] = _ActualExpansions[1] = _SlotB = _SlotA;
+                    _InitialExpansions[2] = _ActualExpansions[2] = _SlotC = _SlotA;
+                    _InitialExpansions[3] = _ActualExpansions[3] = _SlotD = _SlotA;
 
-            IsInitialized = true;
+                    _AllSlotsUsed = true;
+                }
+                else
+                {
+                    _InitialExpansions[1] = _ActualExpansions[1] = _SlotB = (IntegraExpansions)data[0x01];
+                    _InitialExpansions[2] = _ActualExpansions[2] = _SlotC = (IntegraExpansions)data[0x02];
+                    _InitialExpansions[3] = _ActualExpansions[3] = _SlotD = (IntegraExpansions)data[0x03];
+                }
+
+                NotifyPropertyChanged(string.Empty, false);
+
+                IsInitialized = true;
+            }
 
             return IsInitialized;
         }

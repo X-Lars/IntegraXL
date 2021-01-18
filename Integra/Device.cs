@@ -101,7 +101,7 @@ namespace Integra
         /// </summary>
         private static readonly object _Lock = new object();
 
-
+        private static int _TaskCount = 0;
 
         #region Fields: INTEGRA-7
 
@@ -140,6 +140,13 @@ namespace Integra
         /// </summary>
         private bool _IsPreviewRunning = false;
 
+        /// <summary>
+        /// Stores the synchronization context of instantiating class.
+        /// </summary>
+        private static readonly SynchronizationContext _UIContext = SynchronizationContext.Current;
+
+        private static int _OperationQueue = 0;
+
         #endregion
 
         #endregion
@@ -163,17 +170,17 @@ namespace Integra
         /// <summary>
         /// Raised when the <see cref="Device"/> starts an operation.
         /// </summary>
-        public event DeviceOperationEventHandler OperationStart;
+        public static event DeviceOperationEventHandler OperationStart;
 
         /// <summary>
         /// Raised when the <see cref="Device"/> operation progresses.
         /// </summary>
-        public event DeviceOperationEventHandler OperationProgress;
+        public static event DeviceOperationEventHandler OperationProgress;
 
         /// <summary>
         /// Raised when the <see cref="Device"/> finished an operation.
         /// </summary>
-        public event DeviceOperationEventHandler OperationComplete;
+        public static event DeviceOperationEventHandler OperationComplete;
 
         /// <summary>
         /// Raised when the <see cref="Status"/> is changed. <b>Must be subscribed to before any call to <see cref="Instance"/>!</b>
@@ -181,10 +188,6 @@ namespace Integra
         /// <remarks><i>Event is static to be able to subscribe to the event before the Singleton instance is created and auto initialized.</i></remarks>
         public static event DeviceStatusEventHandler StatusChanged;
 
-        /// <summary>
-        /// Stores the synchronization context of instantiating class.
-        /// </summary>
-        private static readonly SynchronizationContext _UIContext = SynchronizationContext.Current;
         
         #endregion
 
@@ -661,6 +664,7 @@ namespace Integra
             {
                 MidiOutputDevice.Send(new SystemExclusiveMessage(syx));
                 Thread.Sleep(DEVICE_LATENCY);
+                
             }
         }
 
@@ -808,7 +812,7 @@ namespace Integra
                 int connectionTimeOut = 0;
 
                 // Report the initialization message
-                ReportProgress(new StatusMessage("Validating Connection", "Please wait...", 0, "Connecting"));
+                ReportProgress(this, new StatusMessage("Validating Connection", "Please wait...", 0, "Connecting"));
 
                 // Send the identity request
                 MidiOutputDevice.Send(new UniversalNonRealTimeMessage(new byte[] { 0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7 }));
@@ -819,7 +823,7 @@ namespace Integra
                     connectionTimeOut += DEVICE_LATENCY;
 
                     // Report the progress message
-                    ReportProgress(new StatusMessage("Validating Connection", "Please wait...", 100d / DEVICE_CONNECTION_TIMEOUT * connectionTimeOut, "Connecting"));
+                    ReportProgress(this, new StatusMessage("Validating Connection", "Please wait...", 100d / DEVICE_CONNECTION_TIMEOUT * connectionTimeOut, "Connecting"));
 
                     if (connectionTimeOut > DEVICE_CONNECTION_TIMEOUT)
                         return false;
@@ -831,17 +835,17 @@ namespace Integra
 
             // Start the task using the task manager to keep track of running tasks
             StartTask(connectionValidation);
-            
+
             await connectionValidation;
 
             // Report the finalization message
             if (IsConnected)
             {
-                ReportProgress(new StatusMessage("Validating Connection", "Connection successful", 100, "Done"));
+                ReportProgress(this, new StatusMessage("Validating Connection", "Connection successful", 100, "Done"));
             }
             else
             {
-                ReportProgress(new StatusMessage("Validating Connection", "Connection timeout", 100d, "Connection Error"));
+                ReportProgress(this, new StatusMessage("Validating Connection", "Connection timeout", 100d, "Connection Error"));
             }
 
             return IsConnected;
@@ -857,8 +861,8 @@ namespace Integra
             // Ensure the INTEGRA-7 is connected before starting initialization
             while (!_IsConnected)
             {
-                //await Task.Delay(DEVICE_LATENCY);
-                Thread.Sleep(DEVICE_CONNECTION_TIMEOUT);
+                await Task.Delay(DEVICE_LATENCY);
+                //Thread.Sleep(DEVICE_CONNECTION_TIMEOUT);
             }
 
             Task<bool> initialization = new Task<bool>(() =>
@@ -869,17 +873,14 @@ namespace Integra
                 // Send all requests contained inside the data structure
                 for (int i = 0; i < dataStructure.Requests.Count; i++)
                 {
-                    lock (MidiOutputDevice)
-                    {
-                        SendSystemExclusive(new IntegraSystemExclusive(dataStructure.Address, dataStructure.Requests[i]));
-                        Thread.Sleep(DEVICE_LATENCY);
-                    }
+                    SendSystemExclusive(new IntegraSystemExclusive(dataStructure.Address, dataStructure.Requests[i]));
+                    
                 }
 
                 while (!dataStructure.IsInitialized)
                 {
                     // Allow the data struture to report progress
-                    Thread.Sleep(DEVICE_LATENCY);
+                    Task.Delay(DEVICE_LATENCY);
                 }
 
                 return true;
@@ -891,6 +892,10 @@ namespace Integra
             await initialization;
         }
 
+        public int TaskCounter
+        {
+            get { return _OperationQueue; }
+        }
         /// <summary>
         /// Adds the provided <paramref name="task"/> to the task list and starts the <see cref="TaskManager"/> if not already running.
         /// </summary>
@@ -898,14 +903,16 @@ namespace Integra
         private async void StartTask(Task task)
         {
             lock (_Tasks)
-            { 
+            {
+                Interlocked.Increment(ref _OperationQueue);
+                NotifyPropertyChanged(nameof(TaskCounter));
                 _Tasks.Add(task);
             }
 
             if (!_IsTaskRunning)
             {
-                task.Start();
-                await TaskManager();
+                //task.Start();
+                await TaskManager(task);
             }
             else
             {
@@ -917,26 +924,37 @@ namespace Integra
         /// Manages any running tasks and raises the <see cref="OperationStart"/> event upon invokation and the <see cref="OperationComplete"/> event when no tasks left.
         /// </summary>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        private async Task TaskManager()
+        private async Task TaskManager(Task t)
         {
             lock (_Tasks)
             {
                 _IsTaskRunning = true;
+                t.Start();
             }
+
+            
 
             // Report the initialization message
             _UIContext.Post(o => OperationStart?.Invoke(this, new IntegraOperationEventArgs(Status)), null);
 
-            while (_Tasks.Any())
+            while (_OperationQueue != 0)
             {
-                Task task = await Task.WhenAny(_Tasks.ToArray());
+                Task task = null;
 
+                //if (_Tasks.Count != 0)
+                    task = await Task.WhenAny(_Tasks.ToArray());
+                //else
+                //    break;
 
                 lock (_Tasks)
+                {
                     _Tasks.Remove(task);
+                    Interlocked.Decrement(ref _OperationQueue);
+                    NotifyPropertyChanged(nameof(TaskCounter));
+                }
 
                 // Let UI update
-                //await Task.Delay(DEVICE_LATENCY);
+                await Task.Delay(DEVICE_LATENCY);
                 //Thread.Sleep(DEVICE_LATENCY);
             }
 
@@ -944,14 +962,13 @@ namespace Integra
                 _IsTaskRunning = false;
 
             // Let UI update
-            //Thread.Sleep(DEVICE_LATENCY);
+            //await Task.Delay(DEVICE_LATENCY);
+            Thread.Sleep(DEVICE_LATENCY);
 
-            lock (_Tasks)
-            {
-                Thread.Sleep(DEVICE_LATENCY);
+            
                 // Report the finalization message
                 _UIContext.Post(o => OperationComplete?.Invoke(this, new IntegraOperationEventArgs(Status)), null);
-            }
+            
         }
  
         /// <summary>
@@ -959,11 +976,25 @@ namespace Integra
         /// </summary>
         /// <param name="progress">A <see cref="StatusMessage"/> containing the progress to report.</param>
         /// <remarks><i>Only effective if a task is started using the <see cref="StartTask(Task)"/> method and the <see cref="TaskManager"/> is running.</i></remarks>
-        internal void ReportProgress(StatusMessage progress)
+        internal void ReportProgress(object sender, StatusMessage progress)
         {
             Status.Update(progress);
 
-            _UIContext.Send(o => OperationProgress?.Invoke(this, new IntegraOperationEventArgs(Status)), null);
+            _UIContext.Send(o => OperationProgress?.Invoke(sender, new IntegraOperationEventArgs(Status)), null);
+        }
+
+        internal void ReportInit(object sender, StatusMessage message)
+        {
+            Status.Update(message);
+
+            _UIContext.Send(o => OperationStart?.Invoke(sender, new IntegraOperationEventArgs(Status)), null);
+        }
+
+        internal void ReportComplete(object sender, StatusMessage message)
+        {
+            Status.Update(message);
+
+            _UIContext.Send(o => OperationComplete?.Invoke(sender, new IntegraOperationEventArgs(Status)), null);
         }
 
         #endregion

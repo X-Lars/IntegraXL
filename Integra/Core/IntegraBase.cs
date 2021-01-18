@@ -516,7 +516,7 @@ namespace Integra.Core
                 if (syx.Data.Length == Requests[0].Size)
                 {
                     if (Initialize(syx.Data))
-                        Device.Instance.ReportProgress(new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
+                        Device.Instance.ReportProgress(this, new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
                 }
                 else
                 {

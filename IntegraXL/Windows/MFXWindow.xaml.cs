@@ -24,6 +24,7 @@ namespace IntegraXL.Windows
 
             DataContext = this;
 
+            Type = type;
             Type mfxType = typeof(Thru);
 
             switch(type)
@@ -44,6 +45,25 @@ namespace IntegraXL.Windows
         /// Registers the property to get the MFX control for the <see cref="MFXWindow"/>.
         /// </summary>
         public static readonly DependencyProperty MFXControlProperty = DependencyProperty.Register(nameof(MFXControl), typeof(UserControl), typeof(MFXWindow), new PropertyMetadata(null));
+
+
+
+        public IntegraMFXTypes Type
+        {
+            get { return (IntegraMFXTypes)GetValue(TypeProperty); }
+            set { SetValue(TypeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Type.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TypeProperty =
+            DependencyProperty.Register("Type", typeof(IntegraMFXTypes), typeof(MFXWindow), new PropertyMetadata(IntegraMFXTypes.Thru, new PropertyChangedCallback(TypePropertyChanged)));
+
+        private static void TypePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+
+            //throw new NotImplementedException();
+        }
+
 
         #endregion
 

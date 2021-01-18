@@ -39,9 +39,9 @@ namespace IntegraXL
 
             InitializeComponent();
 
-            Integra.OperationStart += IntegraOperationStart;
-            Integra.OperationProgress += IntegraOperationProgress;
-            Integra.OperationComplete += IntegraOperationComplete;
+            Device.OperationStart    += IntegraOperationStart;
+            Device.OperationProgress += IntegraOperationProgress;
+            Device.OperationComplete += IntegraOperationComplete;
 
 
             CommandBindings.Add(new CommandBinding(_ShowWindowCommand, OnShowWindow));
@@ -283,9 +283,12 @@ namespace IntegraXL
 
             //if (_Dialog != null)
             //    return;
-            _Dialog = DialogManager.ProgressDialog(e.Action, e.Message, e.Text);
+            
 
-               
+            if (sender.GetType() == typeof(VirtualSlots))
+                _Dialog = DialogManager.ProgressDialog(e.Action, e.Message, e.Text, true);
+            else
+                _Dialog = DialogManager.ProgressDialog(e.Action, e.Message, e.Text);
         }
 
         /// <summary>
@@ -300,6 +303,7 @@ namespace IntegraXL
 
             if(_Dialog == null)
                 _Dialog = DialogManager.ProgressDialog(e.Action, e.Message, e.Text);
+
 
             _Dialog.Title = e.Action;
             _Dialog.Message = e.Message;
@@ -322,7 +326,7 @@ namespace IntegraXL
             _Dialog.Message = e.Message;
             _Dialog.Progress = e.Progress;
             _Dialog.Status = e.Text;
-            
+
             _Dialog.Close();
 
         }

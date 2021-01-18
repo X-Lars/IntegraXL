@@ -110,7 +110,10 @@
                        DockPanel.Dock="Bottom" 
                        HorizontalAlignment="Right"
                        MinHeight="20">
-                
+
+                <StatusBarItem>
+                    <TextBlock Text="{Binding TaskCounter}"/>
+                </StatusBarItem>
                 <StatusBarItem>
                     <Grid>
                         <ProgressBar Foreground="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}" 

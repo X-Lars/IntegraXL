@@ -6,8 +6,20 @@
                      xmlns:local="clr-namespace:IntegraXL.Windows"
                      mc:Ignorable="d" 
                      d:DesignHeight="450" d:DesignWidth="800">
-    
-    <!-- Presents the MFX user control -->
-    <ContentPresenter Content="{Binding MFXControl}"/>
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <ComboBox Grid.Row="0"
+                  ItemsSource="{Binding Type}"/>
+        
+        <!-- Presents the MFX user control -->
+        <ContentPresenter Content="{Binding MFXControl}"
+                          Grid.Row="1"/>
+    </Grid>
     
 </local:IntegraWindow>

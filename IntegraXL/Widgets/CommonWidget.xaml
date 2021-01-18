@@ -211,8 +211,8 @@
                     <Label Grid.Column="0" Grid.Row="3" Content="Slot D"/>
 
                     <ComboBox Grid.Column="1" Grid.Row="0"
-                          ItemsSource="{Binding VirtualSlots.Expansions}"
-                          SelectedItem="{Binding VirtualSlots.SlotA}"/>
+                              ItemsSource="{Binding VirtualSlots.Expansions, NotifyOnSourceUpdated=True}"
+                              SelectedItem="{Binding VirtualSlots.SlotA}"/>
                     <ComboBox Grid.Column="1" Grid.Row="1"
                           ItemsSource="{Binding VirtualSlots.Expansions}"
                           SelectedItem="{Binding VirtualSlots.SlotB}"/>

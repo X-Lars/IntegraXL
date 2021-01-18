@@ -63,11 +63,11 @@ namespace Integra.Core
 
                     if(Initialize(syx.Data))
                     {
-                        Device.Instance.ReportProgress(new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
+                        Device.Instance.ReportProgress(this, new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
                     }
                     else
                     {
-                        Device.Instance.ReportProgress(new StatusMessage($"Initializing {Name}", "Please wait...", Progress, $"Tone {IDCounter} of {DataSize}"));
+                        Device.Instance.ReportProgress(this, new StatusMessage($"Initializing {Name}", "Please wait...", Progress, $"Tone {IDCounter} of {DataSize}"));
                     }
                 }
             }

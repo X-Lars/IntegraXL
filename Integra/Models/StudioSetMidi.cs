@@ -40,11 +40,11 @@ namespace Integra.Models
                 {
                     if (Initialize(syx.Data))
                     {
-                        Device.Instance.ReportProgress(new StatusMessage($"Initializing Studio Set MIDI {_Part}", "Initialized", 100, "Done"));
+                        Device.Instance.ReportProgress(this, new StatusMessage($"Initializing Studio Set MIDI {_Part}", "Initialized", 100, "Done"));
                     }
                     else
                     {
-                        Device.Instance.ReportProgress(new StatusMessage($"Initializing Studio Set MIDI {_Part}", "Please wait...", 100, "Initializing"));
+                        Device.Instance.ReportProgress(this, new StatusMessage($"Initializing Studio Set MIDI {_Part}", "Please wait...", 100, "Initializing"));
                     }
                 }
                 else
