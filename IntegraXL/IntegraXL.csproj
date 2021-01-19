@@ -114,6 +114,9 @@
     <Compile Include="Windows\MidiDevicesWindow.xaml.cs">
       <DependentUpon>MidiDevicesWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\SystemExclusivesWindow.xaml.cs">
+      <DependentUpon>SystemExclusivesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ToneBankWindow.xaml.cs">
       <DependentUpon>ToneBankWindow.xaml</DependentUpon>
     </Compile>
@@ -158,6 +161,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\MidiDevicesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SystemExclusivesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

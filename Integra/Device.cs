@@ -184,7 +184,9 @@ namespace Integra
         /// <remarks><i>Event is static to be able to subscribe to the event before the Singleton instance is created and auto initialized.</i></remarks>
         public static event DeviceStatusEventHandler StatusChanged;
 
-        
+        public delegate void SystemExclusiveEventHandler(object sender, IntegraSystemExclusiveEventArgs e);
+
+        public event SystemExclusiveEventHandler IntegraSystemExclusiveReceived;
         #endregion
 
         #region Constructor
@@ -659,6 +661,9 @@ namespace Integra
         private void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
             //Debug.Print($"[{nameof(Device)}.{nameof(SystemExclusiveReceived)}] {string.Join(" ", e.Message.Data.Select(x => string.Format("{0:X2}", x)))}");
+
+            _UIContext.Send(o => IntegraSystemExclusiveReceived?.Invoke(this, new IntegraSystemExclusiveEventArgs(new IntegraSystemExclusive(e.Message))), null);
+            //IntegraSystemExclusiveReceived?.Invoke(this, new IntegraSystemExclusiveEventArgs(new IntegraSystemExclusive(e.Message)));
         }
 
         #endregion
@@ -673,6 +678,15 @@ namespace Integra
                 MidiOutputDevice.Send(new SystemExclusiveMessage(syx));
                 Thread.Sleep(DEVICE_LATENCY);
                 
+            }
+        }
+
+        public void SendSystemExclusive(uint address, uint request)
+        {
+            lock(MidiOutputDevice)
+            {
+                MidiOutputDevice.Send(new SystemExclusiveMessage(new IntegraSystemExclusive(address, request)));
+                Thread.Sleep(DEVICE_LATENCY);
             }
         }
 
@@ -864,15 +878,16 @@ namespace Integra
                 MidiInputDevice.SystemExclusiveReceived += dataStructure.SystemExclusiveReceived;
 
                 // Send all requests contained inside the data structure
-                //lock (MidiOutputDevice)
-                //{
+                lock (MidiOutputDevice)
+                {
                     for (int i = 0; i < dataStructure.Requests.Count; i++)
                     {
-                   
+
                         SendSystemExclusive(new IntegraSystemExclusive(dataStructure.Address, dataStructure.Requests[i]));
                         //Thread.Sleep(DEVICE_LATENCY);
                     }
-                //}
+                }
+            
 
                 while (!dataStructure.IsInitialized)
                 {

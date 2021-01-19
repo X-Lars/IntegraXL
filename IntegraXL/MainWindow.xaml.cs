@@ -57,7 +57,12 @@ namespace IntegraXL
             //Config<IntegraConfiguration>.Print();
         }
 
-        
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            Application.Current.Shutdown();
+        }
         private void MainWindowLoaded(object sender, RoutedEventArgs e)
         {
             //Integra.OperationStart += IntegraOperationStart;
@@ -416,6 +421,7 @@ namespace IntegraXL
                 ToneBankWindow mdiChild = (ToneBankWindow)Activator.CreateInstance(typeof(ToneBankWindow), new object[] { type });
 
                 mdiChild.Title = type.Name;
+                
                 Host.Items.Add(mdiChild);
 
                 return;

@@ -49,4 +49,29 @@ namespace Integra.Core
         public string Message { get; }
         public string Text { get; }
     }
+
+    public class IntegraSystemExclusiveEventArgs : EventArgs
+    {
+        private IntegraSystemExclusive _SystemExclusive;
+
+        public IntegraSystemExclusiveEventArgs(IntegraSystemExclusive syx)
+        {
+            _SystemExclusive = syx;
+        }
+
+        public string Message
+        {
+            get { return string.Join(string.Empty, ((byte[])_SystemExclusive).Select(x => string.Format("{0:X2}", x))); }
+        }
+
+        public string Data
+        {
+            get { return string.Join(string.Empty, _SystemExclusive.Data.Select(x => string.Format("{0:X2}", x))); }
+        }
+
+        public string Address
+        {
+            get { return string.Join(string.Empty, ((byte[])_SystemExclusive.Address).Select(x => string.Format("{0:X2}", x))); }
+        }
+    }
 }

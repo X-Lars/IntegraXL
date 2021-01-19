@@ -20,5 +20,4 @@ namespace IntegraXL.Common
             throw new NotImplementedException();
         }
     }
-
 }

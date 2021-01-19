@@ -23,7 +23,7 @@ namespace IntegraXL.Windows
     /// </summary>
     public partial class ToneBankWindow : IntegraWindow
     {
-        public static DependencyProperty ToneBankProperty = DependencyProperty.Register("ToneBank", typeof(IntegraBaseToneBank), typeof(ToneBankWindow), new PropertyMetadata(null));
+        public static DependencyProperty ToneBankProperty = DependencyProperty.Register(nameof(ToneBank), typeof(IntegraBaseToneBank), typeof(ToneBankWindow), new PropertyMetadata(null));
 
         public ToneBankWindow(Type type) : base()
         {

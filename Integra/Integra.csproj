@@ -53,6 +53,7 @@
     <Compile Include="Common\Commands.cs" />
     <Compile Include="Common\EnumerationExtensions.cs" />
     <Compile Include="Common\IntegerExtensions.cs" />
+    <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="Core\IntegraAddress.cs" />
     <Compile Include="Core\IntegraAttributes.cs" />
     <Compile Include="Core\IntegraBase.cs" />

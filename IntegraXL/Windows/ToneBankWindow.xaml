@@ -4,11 +4,36 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IntegraXL.Windows"
+                     xmlns:xl="clr-namespace:ControlsXL;assembly=ControlsXL"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid MaxHeight="600">
 
-        <DataGrid ItemsSource="{Binding ToneBank}"
+        <xl:FilteredDataGrid AutoGenerateColumns="False" 
+                             IsReadOnly="True"
+                             ItemsSource="{Binding Path=ToneBank}"
+                             SelectedItem="{Binding DeviceContext.SelectedTone}"
+                             VirtualizingPanel.IsVirtualizing="True"
+                             VirtualizingPanel.VirtualizationMode="Recycling">
+            <xl:FilteredDataGrid.Columns>
+                <xl:FilteredDataGridTextColumn Binding="{Binding Path=ID, StringFormat='0000'}"
+                                               Filter="False"
+                                               Header="ID"
+                                               MinWidth="36"/>
+
+                <xl:FilteredDataGridTextColumn Binding="{Binding Path=Name}"
+                                               Filter="True"
+                                               Header="Name"
+                                               MinWidth="200"/>
+
+                <xl:FilteredDataGridTextColumn Binding="{Binding Path=Category}"
+                                               Filter="True"
+                                               Header="Category"
+                                               MinWidth="100"/>
+
+            </xl:FilteredDataGrid.Columns>
+        </xl:FilteredDataGrid>
+        <!--<DataGrid ItemsSource="{Binding ToneBank}"
                   SelectedItem="{Binding DeviceContext.SelectedTone}"
                   AutoGenerateColumns="False"
                   VerticalAlignment="Stretch"
@@ -32,7 +57,7 @@
                                                MinWidth="100"/>
 
             </DataGrid.Columns>
-        </DataGrid>
+        </DataGrid>-->
       
     </Grid>
 </local:IntegraWindow>

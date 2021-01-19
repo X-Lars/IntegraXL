@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace Integra.Common
 {
-    class UICommand : ICommand
+    public class UICommand : ICommand
     {
         private Action<object> _action;
 
