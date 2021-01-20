@@ -114,6 +114,16 @@ namespace Integra.Models
         public bool IsUserTone { get; set; }
         public bool IsExpansion { get; set; }
 
+        private IntegraToneTypes _ToneType;
+        public IntegraToneTypes ToneType
+        {
+            get { return _ToneType; }
+            set
+            {
+                _ToneType = value;
+                NotifyPropertyChanged();
+            }
+        }
         //private void UpdateRequest(byte msb, byte lsb, byte pc)
         //{
         //    Requests.Clear();

@@ -1,4 +1,5 @@
 ﻿using Integra.Core;
+using Integra.Core.Interfaces;
 using MidiXL;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,5 @@ namespace Integra.Models
                 }
             }
         }
-
     }
 }

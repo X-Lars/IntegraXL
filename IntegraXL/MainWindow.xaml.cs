@@ -217,12 +217,19 @@ namespace IntegraXL
 
             if (type != typeof(IntegraToneTypes))
                 e.CanExecute = false;
-            if (Integra.StudioSet.Parts[(int)Integra.SelectedPart].TemporaryTone == null)
+
+            //if (Integra.StudioSet.Parts[(int)Integra.SelectedPart].TemporaryTone == null)
+            //{
+            //    e.CanExecute = false;
+            //    return;
+            //}
+            //e.CanExecute = Integra.StudioSet.Parts[(int)Integra.SelectedPart].TemporaryTone.Type == (IntegraToneTypes)e.Parameter;
+            if (Integra.StudioSet.Part.TemporaryTone == null)
             {
                 e.CanExecute = false;
                 return;
             }
-            e.CanExecute = Integra.StudioSet.Parts[(int)Integra.SelectedPart].TemporaryTone.Type == (IntegraToneTypes)e.Parameter;
+            e.CanExecute = Integra.StudioSet.Part.TemporaryTone.Type == (IntegraToneTypes)e.Parameter;
         }
 
         #endregion
@@ -449,6 +456,7 @@ namespace IntegraXL
         private void AddMFXWindow(IntegraMFXTypes type)
         {
             MFXWindow mdiChild = (MFXWindow)Activator.CreateInstance(typeof(MFXWindow), new object[] { type });
+            //mdiChild.Title = type.ToString();
             Host.Items.Add(mdiChild);
         }
 

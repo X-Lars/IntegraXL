@@ -24,7 +24,7 @@ namespace Integra.Core
             Name = Encoding.ASCII.GetString(data, 5, 16);
         }
 
-        internal IntegraTone(byte msb, byte lsb, byte pc)
+        public IntegraTone(byte msb, byte lsb, byte pc)
         {
             MSB = msb;
             LSB = lsb;

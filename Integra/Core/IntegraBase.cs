@@ -60,8 +60,11 @@ namespace Integra.Core
 
             Requests.AddRange(requests);
 
+           
             Initialize();
         }
+
+        
 
         #endregion
 
@@ -100,12 +103,30 @@ namespace Integra.Core
 
         #region Methods
 
+        private void DeviceConnected(object sender, EventArgs e)
+        {
+            Device.Connected -= DeviceConnected;
+
+            Device.Instance.MidiInputDevice.SystemExclusiveReceived += SystemExclusiveReceived;
+
+            Task.Factory.StartNew(() => Device.Instance.Initialize(this), TaskCreationOptions.LongRunning);
+        }
+
         public void Initialize()
         {
             InitializeCache();
 
-            // [NON BLOCKING]
-            Task.Factory.StartNew(() => Device.Instance.Initialize(this), TaskCreationOptions.LongRunning);
+            if (Device._IsConnected)
+            {
+                Device.Instance.MidiInputDevice.SystemExclusiveReceived += SystemExclusiveReceived;
+
+                // [NON BLOCKING]
+                Task.Factory.StartNew(() => Device.Instance.Initialize(this), TaskCreationOptions.LongRunning);
+            }
+            else
+            {
+                Device.Connected += DeviceConnected;
+            }
         }
 
         /// <summary>
@@ -145,9 +166,13 @@ namespace Integra.Core
 
                                 int offset = field.Key + (i * 4);
 
-                                values[0] = (byte)((data[offset] >> 12) & 0x0F);
-                                values[1] = (byte)((data[offset + 1] >> 8) & 0x0F);
-                                values[2] = (byte)((data[offset + 2] >> 4) & 0x0F);
+                                //values[0] = (byte)((data[offset] >> 12) & 0x0F);
+                                //values[1] = (byte)((data[offset + 1] >> 8) & 0x0F);
+                                //values[2] = (byte)((data[offset + 2] >> 4) & 0x0F);
+                                //values[3] = (byte)((data[offset + 3]) & 0x0F);
+                                values[0] = (byte)((data[offset]) & 0x0F);
+                                values[1] = (byte)((data[offset + 1]) & 0x0F);
+                                values[2] = (byte)((data[offset + 2]) & 0x0F);
                                 values[3] = (byte)((data[offset + 3]) & 0x0F);
 
                                 if (BitConverter.IsLittleEndian)
@@ -213,7 +238,7 @@ namespace Integra.Core
         /// <summary>
         /// Reinitializes the fields of the <see cref="IntegraBase{T}"/> derived class.
         /// </summary>
-        protected virtual void Reinitialize()
+        internal virtual void Reinitialize()
         {
             Console.WriteLine($"[{GetType().Name}.{nameof(Reinitialize)}]");
             IsInitialized = false;

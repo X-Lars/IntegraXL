@@ -119,19 +119,9 @@ namespace Integra
         private StudioSets _StudioSets = new StudioSets();
 
         /// <summary>
-        /// Stores a reference to the currently selected INTEGRA-7 tone.
-        /// </summary>
-        private IntegraTone _SelectedTone = new IntegraTone();
-
-        /// <summary>
         /// Stores a reference to the INTEGRA-7 virtual slots data structure.
         /// </summary>
         private VirtualSlots _VirtualSlots = new VirtualSlots();
-
-        /// <summary>
-        /// Tracks the currently selected INTEGRA-7 part.
-        /// </summary>
-        private IntegraParts _SelectedPart;
 
         /// <summary>
         /// Tracks the state of the INTEGRA-7 tone preview.
@@ -166,27 +156,46 @@ namespace Integra
         /// <summary>
         /// Raised when the <see cref="Device"/> starts an operation.
         /// </summary>
+        /// <remarks><i>Event is static to be able to bind event handlers without the creating an instance.</i></remarks>
         public static event DeviceOperationEventHandler OperationStart;
 
         /// <summary>
         /// Raised when the <see cref="Device"/> operation progresses.
         /// </summary>
+        /// <remarks><i>Event is static to be able to bind event handlers without the creating an instance.</i></remarks>
         public static event DeviceOperationEventHandler OperationProgress;
 
         /// <summary>
         /// Raised when the <see cref="Device"/> finished an operation.
         /// </summary>
+        /// <remarks><i>Event is static to be able to bind event handlers without the creating an instance.</i></remarks>
         public static event DeviceOperationEventHandler OperationComplete;
 
         /// <summary>
         /// Raised when the <see cref="Status"/> is changed. <b>Must be subscribed to before any call to <see cref="Instance"/>!</b>
         /// </summary>
-        /// <remarks><i>Event is static to be able to subscribe to the event before the Singleton instance is created and auto initialized.</i></remarks>
+        /// <remarks><i>Event is static to be able to bind event handlers without the creating an instance.</i></remarks>
         public static event DeviceStatusEventHandler StatusChanged;
 
+        /// <summary>
+        /// Provides the signature for system exclusive events.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
+        /// <param name="e">An <see cref="IntegraSystemExclusiveEventArgs"/> containing event data.</param>
         public delegate void SystemExclusiveEventHandler(object sender, IntegraSystemExclusiveEventArgs e);
 
+        /// <summary>
+        /// Raised when a <see cref="IntegraSystemExclusive"/> message is received.
+        /// </summary>
+        /// <remarks><i>Used for UI logging of system exclusive messages.</i></remarks>
         public event SystemExclusiveEventHandler IntegraSystemExclusiveReceived;
+
+        /// <summary>
+        /// Raised when the <see cref="Device"/> is successfully connected.
+        /// </summary>
+        /// <remarks><i>Event is static to be able to bind event handlers without the creating an instance.</i></remarks>
+        public static event EventHandler Connected;
+
         #endregion
 
         #region Constructor
@@ -284,6 +293,9 @@ namespace Integra
                 {
                     _IsConnected = value;
                     NotifyPropertyChanged();
+
+                    if(_IsConnected)
+                        Connected?.Invoke(this, new EventArgs());
                 }
             }
         }
@@ -425,7 +437,7 @@ namespace Integra
         /// <summary>
         /// Gets the collection of INTEGRA-7 studio sets.
         /// </summary>
-        [Bindable(BindableSupport.Yes, BindingDirection.TwoWay)]
+        [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
         public StudioSets StudioSets
         {
             get { return _StudioSets; }
@@ -434,179 +446,10 @@ namespace Integra
         /// <summary>
         /// Gets the INTEGRA-7 virtual slots.
         /// </summary>
+        [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
         public VirtualSlots VirtualSlots
         {
             get { return _VirtualSlots; }
-        }
-
-        [Bindable(BindableSupport.Yes, BindingDirection.TwoWay)]
-        public IntegraTone SelectedTone
-        {
-            get { return _SelectedTone; }
-            set
-            {
-                _SelectedTone = value;
-                Tone = new Tone(value);
-                NotifyPropertyChanged();
-            }
-        }
-
-
-        private IntegraToneTypes _ToneType = IntegraToneTypes.SuperNATURALAcousticTone;
-
-        public IntegraToneTypes ToneType
-        {
-            get { return _ToneType; }
-            set
-            {
-                if (_ToneType != value)
-                {
-                    _ToneType = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the data context of the MFX structure of the current tone type.
-        /// </summary>
-        public IToneMFX MFXDataContext
-        {
-            get
-            {
-                switch (ToneType)
-                {
-                    case IntegraToneTypes.SuperNATURALAcousticTone:
-                        return StudioSet.Parts[(int)SelectedPart].SuperNATURALAcousticTone;
-
-                    case IntegraToneTypes.SuperNATURALSynthTone:
-                        return StudioSet.Parts[(int)SelectedPart].SuperNATURALSynthTone;
-
-                    case IntegraToneTypes.SuperNATURALDrumkit:
-                        return StudioSet.Parts[(int)SelectedPart].SuperNATURALDrumKit;
-
-                    case IntegraToneTypes.PCMSynthTone:
-                        return StudioSet.Parts[(int)SelectedPart].PCMSynthTone;
-
-                    case IntegraToneTypes.PCMDrumkit:
-                        return StudioSet.Parts[(int)SelectedPart].PCMDrumKit;
-
-                    default:
-                        return null;
-                }
-            }
-        }
-            
-
-
-        public IntegraMFXTypes MFXType
-        {
-            get
-            {
-                try
-                {
-                    switch (ToneType)
-                    {
-                        case IntegraToneTypes.SuperNATURALAcousticTone:
-                            if (StudioSet.Parts[(int)SelectedPart].SuperNATURALAcousticTone == null)
-                                return IntegraMFXTypes.Thru;
-                            return StudioSet.Parts[(int)SelectedPart].SuperNATURALAcousticTone.MFX.Type;
-
-                        case IntegraToneTypes.SuperNATURALSynthTone:
-                            return StudioSet.Parts[(int)SelectedPart].SuperNATURALSynthTone.MFX.Type;
-
-                        case IntegraToneTypes.SuperNATURALDrumkit:
-                            return StudioSet.Parts[(int)SelectedPart].SuperNATURALDrumKit.MFX.Type;
-
-                        case IntegraToneTypes.PCMSynthTone:
-                            return StudioSet.Parts[(int)SelectedPart].PCMSynthTone.MFX.Type;
-
-                        case IntegraToneTypes.PCMDrumkit:
-                            return StudioSet.Parts[(int)SelectedPart].PCMDrumKit.MFX.Type;
-
-                        default:
-                            return IntegraMFXTypes.Thru;
-                    }
-                }
-                catch(Exception)
-                {
-                    return IntegraMFXTypes.Thru;
-                }
-            }
-        }
-
-        public TemporaryTone TemporaryTone
-        {
-            get { return StudioSet.Parts[(int)SelectedPart].TemporaryTone; }
-        }
-
-        public Tone _Tone;// = new Tone(0x00, 0x00, 0x00);
-
-        public Tone Tone
-        {
-            get
-            {
-                if (_Tone == null)
-                {
-                    //_Tone = new Tone(StudioSet.Parts[(int)SelectedPart].ToneBankSelectMSB, StudioSet.Parts[(int)SelectedPart].ToneBankSelectLSB, StudioSet.Parts[(int)SelectedPart].ToneProgramNumber);
-                    
-                    _Tone = new Tone(StudioSet.Parts[(int)SelectedPart].Tone);
-
-
-                    //_Tone = new Tone(StudioSet.Part.ToneBankSelectMSB, StudioSet.Part.ToneBankSelectLSB, StudioSet.Part.ToneProgramNumber);
-                }
-
-                return _Tone;
-            }
-
-            set
-            {
-                if(_Tone != value)
-                {
-                    _Tone = value;
-
-                    StudioSet.Parts[(int)SelectedPart].Tone = new IntegraTone(value.MSB, value.LSB, value.PC);
-                    ToneType = StudioSet.Parts[(int)SelectedPart].TemporaryTone.Type;
-                    //StudioSet.Parts[(int)SelectedPart].ToneBankSelectMSB = _Tone.MSB;
-                    //StudioSet.Parts[(int)SelectedPart].ToneBankSelectLSB = _Tone.LSB;
-                    //StudioSet.Parts[(int)SelectedPart].ToneProgramNumber = _Tone.PC;
-
-                    //StudioSet.Part.ToneBankSelectMSB = _Tone.MSB;
-                    //StudioSet.Part.ToneBankSelectLSB = _Tone.LSB;
-                    //StudioSet.Part.ToneProgramNumber = _Tone.PC;
-
-
-
-
-                    //MidiOutputDevice.Send(new ControlChangeMessage((MidiChannels)(int)StudioSet.Part[(int)SelectedPart].ReceiveChannel, 0, _Tone.MSB));
-                    //MidiOutputDevice.Send(new ControlChangeMessage((MidiChannels)(int)StudioSet.Part[(int)SelectedPart].ReceiveChannel, 32, _Tone.LSB));
-                    //MidiOutputDevice.Send(new ProgramChangeMessage((MidiChannels)(int)StudioSet.Part[(int)SelectedPart].ReceiveChannel, _Tone.PC));
-
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-        [Bindable(BindableSupport.Yes, BindingDirection.TwoWay)]
-        public IntegraParts SelectedPart
-        {
-            get { return _SelectedPart; }
-            set
-            {
-                if (_SelectedPart != value)
-                {
-                    _SelectedPart = value;
-                    NotifyPropertyChanged();
-
-                    Tone = new Tone(StudioSet.Parts[(int)SelectedPart].ToneBankSelectMSB, StudioSet.Parts[(int)SelectedPart].ToneBankSelectLSB, StudioSet.Parts[(int)SelectedPart].ToneProgramNumber);
-
-
-                    
-
-
-                    //Tone = new Tone(StudioSet.Part.ToneBankSelectMSB, StudioSet.Part.ToneBankSelectLSB, StudioSet.Part.ToneProgramNumber);
-                }
-            }
         }
 
         /// <summary>
@@ -623,7 +466,7 @@ namespace Integra
 
                     if(_IsPreviewRunning)
                     {
-                        SystemExclusiveMessage syx = new SystemExclusiveMessage(new byte[] { 0xF0, 0x41, 0x10, 0x00, 0x00, 0x64, 0x12, 0x0F, 0x00, 0x20, 0x00, (byte)(SelectedPart + 1), 0x00, 0xF7 });
+                        SystemExclusiveMessage syx = new SystemExclusiveMessage(new byte[] { 0xF0, 0x41, 0x10, 0x00, 0x00, 0x64, 0x12, 0x0F, 0x00, 0x20, 0x00, (byte)(StudioSet.SelectedPart + 1), 0x00, 0xF7 });
                         SendSystemExclusive(new IntegraSystemExclusive(syx));
                     }
                     else
@@ -660,8 +503,9 @@ namespace Integra
         /// <param name="e">An <see cref="SystemExclusiveMessageEventArgs"/> containing event data.</param>
         private void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
-            //Debug.Print($"[{nameof(Device)}.{nameof(SystemExclusiveReceived)}] {string.Join(" ", e.Message.Data.Select(x => string.Format("{0:X2}", x)))}");
+            Debug.Print($"[{nameof(Device)}.{nameof(SystemExclusiveReceived)}] {string.Join(" ", e.Message.Data.Select(x => string.Format("{0:X2}", x)))}");
 
+            //IntegraSystemExclusiveReceived?.Invoke(this, new IntegraSystemExclusiveEventArgs(new IntegraSystemExclusive(e.Message)));
             _UIContext.Send(o => IntegraSystemExclusiveReceived?.Invoke(this, new IntegraSystemExclusiveEventArgs(new IntegraSystemExclusive(e.Message))), null);
             //IntegraSystemExclusiveReceived?.Invoke(this, new IntegraSystemExclusiveEventArgs(new IntegraSystemExclusive(e.Message)));
         }
@@ -865,26 +709,21 @@ namespace Integra
         internal async Task Initialize<T>(IntegraBase<T> dataStructure) where T : IntegraBase<T>
         {
             // Ensure the INTEGRA-7 is connected before starting initialization
-            while (!_IsConnected)
-            {
-                await Task.Delay(DEVICE_LATENCY);
-            }
+            // MOVED TO: IntegraBase
 
             await Task.Factory.StartNew(() =>
             {
                 ReportInit(this, new StatusMessage($"Initializing {dataStructure.Name}", "Please wait...", 100, "Initializing"));
 
                 // Hookup the system exclusive event handler to the INTEGRA-7 data structure
-                MidiInputDevice.SystemExclusiveReceived += dataStructure.SystemExclusiveReceived;
+                // MOVED TO: IntegraBase
 
                 // Send all requests contained inside the data structure
                 lock (MidiOutputDevice)
                 {
                     for (int i = 0; i < dataStructure.Requests.Count; i++)
                     {
-
                         SendSystemExclusive(new IntegraSystemExclusive(dataStructure.Address, dataStructure.Requests[i]));
-                        //Thread.Sleep(DEVICE_LATENCY);
                     }
                 }
             
@@ -892,7 +731,6 @@ namespace Integra
                 while (!dataStructure.IsInitialized)
                 {
                     // Allow the data struture to report progress
-                    //await Task.Delay(DEVICE_LATENCY);
                     Thread.Sleep(DEVICE_LATENCY);
                 }
 

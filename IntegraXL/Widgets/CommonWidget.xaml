@@ -40,8 +40,8 @@
             </ComboBox>
         </xl:Expander>
 
-        <xl:Expander Header="Selected Part"
-                  IsExpanded="True">
+        <xl:Expander DataContext="{Binding StudioSet}" Header="Selected Part"
+                     IsExpanded="True">
 
             <Grid HorizontalAlignment="Center">
 
@@ -62,7 +62,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <RadioButton Padding="4" Grid.Column="0" Grid.Row="0" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="01" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part01}}" IsEnabled="{Binding StudioSet.Parts[0].IsInitialized}"/>
+                <!--<RadioButton Padding="4" Grid.Column="0" Grid.Row="0" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="01" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part01}}" IsEnabled="{Binding StudioSet.Parts[0].IsInitialized}"/>
                 <RadioButton Padding="4" Grid.Column="1" Grid.Row="0" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="02" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part02}}" IsEnabled="{Binding StudioSet.Parts[1].IsInitialized}"/>
                 <RadioButton Padding="4" Grid.Column="2" Grid.Row="0" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="03" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part03}}" IsEnabled="{Binding StudioSet.Parts[2].IsInitialized}"/>
                 <RadioButton Padding="4" Grid.Column="3" Grid.Row="0" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="04" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part04}}" IsEnabled="{Binding StudioSet.Parts[3].IsInitialized}"/>
@@ -77,13 +77,31 @@
                 <RadioButton Padding="4" Grid.Column="4" Grid.Row="1" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="13" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part13}}" IsEnabled="{Binding StudioSet.Parts[12].IsInitialized}"/>
                 <RadioButton Padding="4" Grid.Column="5" Grid.Row="1" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="14" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part14}}" IsEnabled="{Binding StudioSet.Parts[13].IsInitialized}"/>
                 <RadioButton Padding="4" Grid.Column="6" Grid.Row="1" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="15" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part15}}" IsEnabled="{Binding StudioSet.Parts[14].IsInitialized}"/>
-                <RadioButton Padding="4" Grid.Column="7" Grid.Row="1" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="16" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part16}}" IsEnabled="{Binding StudioSet.Parts[15].IsInitialized}"/>
+                <RadioButton Padding="4" Grid.Column="7" Grid.Row="1" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="16" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part16}}" IsEnabled="{Binding StudioSet.Parts[15].IsInitialized}"/>-->
+
+                <RadioButton Padding="4" Grid.Column="0" Grid.Row="0" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="01" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part01}}"/>
+                <RadioButton Padding="4" Grid.Column="1" Grid.Row="0" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="02" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part02}}"/>
+                <RadioButton Padding="4" Grid.Column="2" Grid.Row="0" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="03" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part03}}"/>
+                <RadioButton Padding="4" Grid.Column="3" Grid.Row="0" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="04" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part04}}"/>
+                <RadioButton Padding="4" Grid.Column="4" Grid.Row="0" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="05" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part05}}"/>
+                <RadioButton Padding="4" Grid.Column="5" Grid.Row="0" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="06" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part06}}"/>
+                <RadioButton Padding="4" Grid.Column="6" Grid.Row="0" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="07" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part07}}"/>
+                <RadioButton Padding="4" Grid.Column="7" Grid.Row="0" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="08" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part08}}"/>
+                <RadioButton Padding="4" Grid.Column="0" Grid.Row="1" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="09" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part09}}"/>
+                <RadioButton Padding="4" Grid.Column="1" Grid.Row="1" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="10" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part10}}"/>
+                <RadioButton Padding="4" Grid.Column="2" Grid.Row="1" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="11" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part11}}"/>
+                <RadioButton Padding="4" Grid.Column="3" Grid.Row="1" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="12" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part12}}"/>
+                <RadioButton Padding="4" Grid.Column="4" Grid.Row="1" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="13" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part13}}"/>
+                <RadioButton Padding="4" Grid.Column="5" Grid.Row="1" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="14" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part14}}"/>
+                <RadioButton Padding="4" Grid.Column="6" Grid.Row="1" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="15" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part15}}"/>
+                <RadioButton Padding="4" Grid.Column="7" Grid.Row="1" GroupName="PartGroup" Style="{StaticResource {x:Type ToggleButton}}" Content="16" IsChecked="{Binding SelectedPart, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static core:IntegraParts.Part16}}"/>
 
             </Grid>
 
         </xl:Expander>
 
-        <xl:Expander Header="Selected Tone"
+        <xl:Expander DataContext="{Binding StudioSet}" 
+                     Header="Selected Tone"
                      IsExpanded="True">
 
             <Grid>
@@ -104,7 +122,7 @@
 
                 <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" 
                            Padding="2"
-                           Text="{Binding Tone.ToneBank}"/>
+                           Text="{Binding Tone.ToneBank, NotifyOnSourceUpdated=True}"/>
                 <TextBlock Grid.Column="0" Grid.Row="1" 
                            Padding="2"
                            Text="{Binding Tone.ID, StringFormat='0000'}"/>
@@ -155,25 +173,9 @@
 
                 </Grid>
 
-                <!--<TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="4">
-                    <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Text" Value="{Binding MidiOutputDevice.Name}"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding MidiOutputDevice}" Value="{x:Null}">
-                                    <Setter Property="Text" Value="Not Selected"/>
-                                    <Setter Property="FontStyle" Value="Italic"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding MidiOutputDevices.Count}" Value="0">
-                                    <Setter Property="Text" Value="None available"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>-->
                 <ToggleButton Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="4"
                               Content="Preview" 
-                              IsChecked="{Binding Preview}"/>
+                              IsChecked="{Binding Path=Integra.Preview, RelativeSource={RelativeSource AncestorType=Window}}"/>
             </Grid>
         </xl:Expander>
         <!-- VIRTUAL SLOTS -->

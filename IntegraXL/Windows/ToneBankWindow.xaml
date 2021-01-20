@@ -5,16 +5,22 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IntegraXL.Windows"
                      xmlns:xl="clr-namespace:ControlsXL;assembly=ControlsXL"
+                     xmlns:converters="clr-namespace:IntegraXL.Common.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <local:IntegraWindow.Resources>
+        <converters:ToneConverter x:Key="ToneConverter"/>
+    </local:IntegraWindow.Resources>
     <Grid MaxHeight="600">
 
         <xl:FilteredDataGrid AutoGenerateColumns="False" 
                              IsReadOnly="True"
                              ItemsSource="{Binding Path=ToneBank}"
-                             SelectedItem="{Binding DeviceContext.SelectedTone}"
+                             SelectedItem="{Binding DeviceContext.StudioSet.Tone, Converter={StaticResource ToneConverter }}"
+                             SelectionMode="Single"
                              VirtualizingPanel.IsVirtualizing="True"
                              VirtualizingPanel.VirtualizationMode="Recycling">
+
             <xl:FilteredDataGrid.Columns>
                 <xl:FilteredDataGridTextColumn Binding="{Binding Path=ID, StringFormat='0000'}"
                                                Filter="False"
@@ -33,31 +39,6 @@
 
             </xl:FilteredDataGrid.Columns>
         </xl:FilteredDataGrid>
-        <!--<DataGrid ItemsSource="{Binding ToneBank}"
-                  SelectedItem="{Binding DeviceContext.SelectedTone}"
-                  AutoGenerateColumns="False"
-                  VerticalAlignment="Stretch"
-                  IsReadOnly="True"
-                  VirtualizingPanel.VirtualizationMode="Recycling"
-                  VirtualizingPanel.IsVirtualizing="True">
-
-            <DataGrid.Columns>
-
-                <DataGridTextColumn Binding="{Binding Path=ID, StringFormat='0000'}"
-                                               Header="ID"
-                                               MinWidth="36"/>
-
-
-                <DataGridTextColumn Binding="{Binding Path=Name}"
-                                               Header="Tone Name"
-                                               MinWidth="200"/>
-
-                <DataGridTextColumn Binding="{Binding Path=Category}"
-                                               Header="Category"
-                                               MinWidth="100"/>
-
-            </DataGrid.Columns>
-        </DataGrid>-->
-      
+        
     </Grid>
 </local:IntegraWindow>

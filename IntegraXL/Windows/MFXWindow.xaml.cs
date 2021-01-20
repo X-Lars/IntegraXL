@@ -89,7 +89,7 @@ namespace IntegraXL.Windows
         /// </summary>
         public IToneMFX MFXContext
         {
-            get { return DeviceContext.MFXDataContext; }
+            get { return DeviceContext.StudioSet.MFXDataContext; }
         }
 
         #endregion

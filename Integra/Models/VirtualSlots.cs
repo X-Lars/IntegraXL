@@ -75,8 +75,8 @@ namespace Integra.Models
 
         #region Events
 
-        public event EventHandler<EventArgs> Loading;
-        public event EventHandler<EventArgs> Complete;
+        //public event EventHandler<EventArgs> Loading;
+        //public event EventHandler<EventArgs> Complete;
 
         #endregion
 
@@ -87,22 +87,14 @@ namespace Integra.Models
         /// </summary>
         public VirtualSlots() : base(LOADED_EXPANSIONS, 0x00000000)
         {
-            //Debug.Print($"[{nameof(VirtualSlots)}]");
+            Debug.Print($"[{nameof(VirtualSlots)}]");
 
             Name = "Virtual Slots";
-
-            LoadCommand = new UICommand(new Action<object>(Load));
-            UnloadCommand = new UICommand(new Action<object>(Unload));
-            SetStartupCommand = new UICommand(new Action<object>(SetStartup));
         }
 
         #endregion
 
         #region Commands
-
-        private ICommand _LoadCommand;
-        private ICommand _UnloadCommand;
-        private ICommand _SetStartupCommand;
 
         /// <summary>
         /// Gets a bindable <see cref="ICommand"/> to load the currently selected expansions.
@@ -110,8 +102,7 @@ namespace Integra.Models
         [Bindable(BindableSupport.Yes)]
         public ICommand LoadCommand
         {
-            get { return _LoadCommand; }
-            private set { _LoadCommand = value; }
+            get { return new UICommand(new Action<object>(Load)); }
         }
 
         /// <summary>
@@ -120,8 +111,7 @@ namespace Integra.Models
         [Bindable(BindableSupport.Yes)]
         public ICommand UnloadCommand
         {
-            get { return _UnloadCommand; }
-            private set { _UnloadCommand = value; }
+            get { return new UICommand(new Action<object>(Unload)); }
         }
 
         /// <summary>
@@ -130,8 +120,7 @@ namespace Integra.Models
         [Bindable(BindableSupport.Yes)]
         public ICommand SetStartupCommand
         {
-            get { return _SetStartupCommand; }
-            private set { _SetStartupCommand = value; }
+            get { return new UICommand(new Action<object>(SetStartup)); }
         }
 
         #endregion
@@ -139,21 +128,14 @@ namespace Integra.Models
         #region Properties
 
         /// <summary>
-        /// Gets if a specific expansion is loaded, indexer property is used to provide a way to pass a parameter from the UI.
+        /// Gets whether the expansion with the specified index is loaded.
         /// </summary>
-        /// <param name="expansions"></param>
-        /// <returns>A <see cref="bool"/> containing true if the expansion with the provided index number is loaded, false otherwise.</returns>
-        /// <remarks></remarks>
+        /// <param name="expansion">An <see cref="IntegraExpansions"/> specifying the expansion to check.</param>
+        /// <returns>A <see cref="bool"/> containing true if the <paramref name="expansion"/> is loaded.</returns>
         [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
-        public bool this[int expansions]
+        public bool this[IntegraExpansions expansion]
         {
-            get
-            {
-                if (expansions < (int)IntegraExpansions.Exp01 || expansions > (int)IntegraExpansions.Exp19)
-                    throw new IndexOutOfRangeException($"[{GetType().Name}] Indexer property.");
-
-                return Contains((IntegraExpansions)expansions);
-            }
+            get { return IsLoaded(expansion); }
         }
 
         /// <summary>
@@ -165,7 +147,7 @@ namespace Integra.Models
             get { return _SlotA; }
             set
             {
-                if (value == _SlotA)
+                if (_SlotA == value)
                     return;
 
                 InvalidateDuplicateExpansions(value);
@@ -187,7 +169,7 @@ namespace Integra.Models
             get { return _SlotB; }
             set
             {
-                if (value == _SlotB)
+                if (_SlotB == value)
                     return;
 
                 InvalidateDuplicateExpansions(value);
@@ -209,7 +191,7 @@ namespace Integra.Models
             get { return _SlotC; }
             set
             {
-                if (value == _SlotC)
+                if (_SlotC == value)
                     return;
 
                 InvalidateDuplicateExpansions(value);
@@ -231,7 +213,7 @@ namespace Integra.Models
             get { return _SlotD; }
             set
             {
-                if (value == _SlotD)
+                if (_SlotD == value)
                     return;
 
                 InvalidateDuplicateExpansions(value);
@@ -289,7 +271,7 @@ namespace Integra.Models
         /// </summary>
         /// <param name="expansion">The expansion to check.</param>
         /// <returns>True if the specified expansion is loaded, false otherwise.</returns>
-        public bool Contains(IntegraExpansions expansion)
+        public bool IsLoaded(IntegraExpansions expansion)
         {
             if (SlotA == expansion && !SlotAIsDirty)
                 return true;

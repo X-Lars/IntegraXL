@@ -86,6 +86,7 @@
     </ApplicationDefinition>
     <Compile Include="Common\Converters\ComparisonConverters.cs" />
     <Compile Include="Common\Converters\ByteToHexConverter.cs" />
+    <Compile Include="Common\Converters\ToneConverter.cs" />
     <Compile Include="Common\Extensions\MarkupExtensions.cs" />
     <Compile Include="UserControls\MFX\Equalizer.xaml.cs">
       <DependentUpon>Equalizer.xaml</DependentUpon>

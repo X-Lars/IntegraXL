@@ -59,7 +59,6 @@
     <Compile Include="Core\IntegraBase.cs" />
     <Compile Include="Core\IntegraBaseCollection.cs" />
     <Compile Include="Core\IntegraBaseItem.cs" />
-    <Compile Include="Core\IntegraBaseTone.cs" />
     <Compile Include="Core\IntegraBaseToneBank.cs" />
     <Compile Include="Core\IntegraConfiguration.cs" />
     <Compile Include="Core\IntegraConstants.cs" />

@@ -109,6 +109,10 @@ namespace Integra.Core
         {
             switch (msb)
             {
+                case 0x00:
+                    // NOT INITIALIZED YET
+                    return IntegraToneTypes.SuperNATURALAcousticTone;
+
                 case 0x56:
                 case 0x5C: // SRX
                 case 0x60:

@@ -6,6 +6,21 @@ using System.Threading.Tasks;
 
 namespace Integra.Common
 {
+    public static class UIntExtensions
+    {
+        /// <summary>
+        /// Filter the <see cref="uint"/> based on the provided filter and mask.
+        /// </summary>
+        /// <param name="value">The <see cref="uint"/> to filter.</param>
+        /// <param name="filter">The <see cref="uint"/> providing the value to filter.</param>
+        /// <param name="mask">The <see cref="uint"/> providing the mask for filtering.</param>
+        /// <returns>A <see cref="bool"/> containing true if the masked <paramref name="value"/> matches masked <paramref name="filter"/>.</returns>
+        public static bool Filter(this uint value, uint filter, uint mask)
+        {
+            return (value & mask) == (filter & mask);
+        }
+    }
+
     public static class IntExtensions
     {
         /// <summary>
@@ -20,6 +35,7 @@ namespace Integra.Common
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(values);
 
+            
             return ((values[1] & 0x0F) << 8 | (values[2] & 0x0F) << 4 | (values[3] & 0x0F));
         }
 
@@ -56,6 +72,18 @@ namespace Integra.Common
             value = Math.Max(value, min);
 
             return value;
+        }
+
+        /// <summary>
+        /// Filter the <see cref="int"/> based on the provided filter and mask.
+        /// </summary>
+        /// <param name="value">The <see cref="int"/> to filter.</param>
+        /// <param name="filter">The <see cref="int"/> providing the value to filter.</param>
+        /// <param name="mask">The <see cref="int"/> providing the mask for filtering.</param>
+        /// <returns>A <see cref="bool"/> containing true if the masked <paramref name="value"/> matches masked <paramref name="filter"/>.</returns>
+        public static bool Filter(this int value, int filter, int mask)
+        {
+            return (value & mask) == (filter & mask);
         }
 
         /// <summary>

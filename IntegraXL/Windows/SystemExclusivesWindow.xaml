@@ -10,7 +10,7 @@
                      Title="System Exclusives"
                      ShowStatusBar="False">
    
-    <Grid Width="800">
+    <Grid>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
