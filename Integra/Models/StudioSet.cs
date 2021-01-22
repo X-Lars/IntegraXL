@@ -14,22 +14,26 @@ namespace Integra.Models
     public class StudioSet : IntegraBase<StudioSet>
     {
         StudioSetMidi[] _StudioSetMidi = new StudioSetMidi[16];
-        //StudioSetPart[] _StudioSetParts = new StudioSetPart[16];
+        StudioSetPart[] _StudioSetParts = new StudioSetPart[16];
 
-        StudioSetPart _Part = new StudioSetPart(IntegraParts.Part01);
+        //StudioSetPart _Part = new StudioSetPart(IntegraParts.Part01);
+
+        public delegate void PartChangeEventHandler(object sender, IntegraPartChangeEventArts e);
+
+        public event PartChangeEventHandler PartChanged;
 
         public StudioSet() : base(0x18002000, 0x0000004D)
         {
             //_Part = new StudioSetPart(IntegraParts.Part01);
-            //for (int i = 0; i < 16; i++)
-            //{
-            //    _StudioSetParts[i] = new StudioSetPart((IntegraParts)i);
-            //}
-
             for (int i = 0; i < 16; i++)
             {
-                _StudioSetMidi[i] = new StudioSetMidi((IntegraParts)i);
+                _StudioSetParts[i] = new StudioSetPart((IntegraParts)i);
             }
+
+            //for (int i = 0; i < 16; i++)
+            //{
+            //    _StudioSetMidi[i] = new StudioSetMidi((IntegraParts)i);
+            //}
         }
 
         internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
@@ -81,9 +85,10 @@ namespace Integra.Models
                     Part.ToneBankSelectLSB = value.LSB;
                     Part.ToneProgramNumber = value.PC;
 
+                    ToneType = IntegraToneExtensions.Type(value.MSB);
+
                     NotifyPropertyChanged();
 
-                    ToneType = IntegraToneExtensions.Type(value.MSB);
                 }
             }
         }
@@ -103,34 +108,17 @@ namespace Integra.Models
         {
             get
             {
-                if (Part.TemporaryTone == null)
-                    return IntegraMFXTypes.Thru;
+                if(MFXDataContext != null)
+                    return MFXDataContext.MFX.Type;
 
-                switch (ToneType)
-                {
-                    case IntegraToneTypes.SuperNATURALAcousticTone:
+                return IntegraMFXTypes.Thru;
+            }
 
-                        return Part.SuperNATURALAcousticTone.MFX.Type;
-
-                    case IntegraToneTypes.SuperNATURALSynthTone:
-
-                        return Part.SuperNATURALSynthTone.MFX.Type;
-
-                    case IntegraToneTypes.SuperNATURALDrumkit:
-
-                        return Part.SuperNATURALDrumKit.MFX.Type;
-
-                    case IntegraToneTypes.PCMSynthTone:
-
-                        return Part.PCMSynthTone.MFX.Type;
-
-                    case IntegraToneTypes.PCMDrumkit:
-
-                        return Part.PCMDrumKit.MFX.Type;
-
-                    default:
-                        return IntegraMFXTypes.Thru;
-                }
+            set
+            {
+                MFXDataContext.MFX.Type = value;
+                NotifyPropertyChanged();
+                
             }
         }
 
@@ -170,57 +158,32 @@ namespace Integra.Models
             {
                 if(_SelectedPart != value)
                 {
+
+
                     _SelectedPart = value;
 
-                    
-                    Reinitialize();
-                    Part = new StudioSetPart(value);
-                    
+
+                    Tone = new Tone(Part.ToneBankSelectMSB, Part.ToneBankSelectLSB, Part.ToneProgramNumber);
+                    //Reinitialize();
+                    //Part = new StudioSetPart(value);
+                    NotifyPropertyChanged(nameof(Part));
+                    NotifyPropertyChanged(nameof(MFXDataContext));
                     NotifyPropertyChanged();
-                    Console.WriteLine("PART CHANGED");
+                    //PartChanged?.Invoke(this, new IntegraPartChangeEventArts(_SelectedPart, value));
                 }
             }
         }
 
-        //public StudioSetPart this[IntegraParts part]
-        //{
-        //    get
-        //    {
-        //        if(!_StudioSetParts[(int)part].IsInitialized)
-        //        {
-        //            _StudioSetParts[(int)part].Initialize();
-        //        }
-
-        //        return _StudioSetParts[(int)part];
-        //    }
-        //}
-
-        //public StudioSetMidi[] Midi
-        //{
-        //    get { return _StudioSetMidi; }
-        //}
-
-        //public StudioSetPart[] Parts
-        //{
-        //    get 
-        //    { 
-        //        return _StudioSetParts; 
-        //    }
-        //}
+        public StudioSetPart[] Parts
+        {
+            get { return _StudioSetParts; }
+        }
 
         public StudioSetPart Part
         {
-            get { return _Part; }
-            set
-            {
-                if (_Part != value)
-                {
-                    _Part = value;
-                    NotifyPropertyChanged();
-                }
-            }
+            get { return _StudioSetParts[(int)SelectedPart]; }
+           
         }
-
 
     }
 }

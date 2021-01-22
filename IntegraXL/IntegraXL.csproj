@@ -107,8 +107,7 @@
       <DependentUpon>MidiDevicesWidget.xaml</DependentUpon>
     </Compile>
     <Compile Include="Widgets\Widget.cs" />
-    <Compile Include="Windows\CommonWindow.cs" />
-    <Compile Include="Windows\IntegraWindow.cs" />
+    <Compile Include="Windows\BaseWindows.cs" />
     <Compile Include="Windows\MFXWindow.xaml.cs">
       <DependentUpon>MFXWindow.xaml</DependentUpon>
     </Compile>

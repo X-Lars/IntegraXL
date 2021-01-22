@@ -31,6 +31,14 @@ namespace Integra.Models
         public ToneMFX MFX
         {
             get { return _MFX; }
+            //set
+            //{
+            //    if(_MFX != value)
+            //    {
+            //        _MFX = value;
+            //        NotifyPropertyChanged();
+            //    }
+            //}
         }
 
         //internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)

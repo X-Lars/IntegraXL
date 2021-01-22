@@ -422,15 +422,15 @@ namespace Integra.Core
                 if(property != null)
                 {
                     // Check for indexer property
-                    if (property.GetIndexParameters() == null)
+                    if (property.GetIndexParameters().Length == 0)
                     {
                         NotifyPropertyChanged(property.Name, false);
-                        Debug.Print($"[{Name}] {property.Name}: {property.GetValue(this)}");
+                        //Debug.Print($"[{Name}] {property.Name}: {property.GetValue(this)}");
                     }
                     else
                     {
                         NotifyPropertyChanged("Item[]", false);
-                        Debug.Print($"[{Name}] {property.Name}");
+                        //Debug.Print($"[{Name}] {property.Name}");
                     }
                 }
 

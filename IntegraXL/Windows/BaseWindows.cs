@@ -1,4 +1,5 @@
 ﻿using ControlsXL;
+using Integra;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -40,5 +41,22 @@ namespace IntegraXL.Windows
         }
 
         #endregion
+    }
+
+    /// <summary>
+    /// Provides a base class for windows have INTEGRA-7 dependencies.
+    /// </summary>
+    public class IntegraWindow : CommonWindow
+    {
+
+        public IntegraWindow() { }
+
+        /// <summary>
+        /// Gets the device context.
+        /// </summary>
+        public Device DeviceContext
+        {
+            get { return ApplicationContext.Integra; }
+        }
     }
 }

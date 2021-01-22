@@ -6,6 +6,7 @@ using MidiXL;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Integra.Models
 {
@@ -64,7 +65,7 @@ namespace Integra.Models
             set
             {
                 _Type = value;
-                SetModel(value);
+                SetValidationModel(value);
                 NotifyPropertyChanged();
             }
         }
@@ -228,13 +229,11 @@ namespace Integra.Models
         {
             get
             {
-                //return _Model.GetParameter(index, GetData(_Parameters[index]));
                 return _Model.Get(index, _Parameters[index].ConvertFromIntegraParameter());
             }
 
             set
             {
-                //_Parameters[index] = SetData(_Model.SetParameter(index, value));
                 _Parameters[index] = _Model.Set(index, value).ConvertToIntegraParameter();
                 NotifyIndexerPropertyChanged(index);
             }
@@ -248,7 +247,7 @@ namespace Integra.Models
         /// Sets the MFX model to use for parameter conversion and validation.
         /// </summary>
         /// <param name="type">An <see cref="IntegraMFXTypes"/> specifying the model to bind.</param>
-        private void SetModel(IntegraMFXTypes type)
+        private void SetValidationModel(IntegraMFXTypes type)
         {
             switch (type)
             {
@@ -279,8 +278,6 @@ namespace Integra.Models
                     if (Initialize(syx.Data))
                         Device.Instance.ReportProgress(this, new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
                 }
-                
-
             }
             else
             {
@@ -305,7 +302,7 @@ namespace Integra.Models
             {
                 base.Initialize(data);
 
-                SetModel(Type);
+                SetValidationModel(Type);
             }
 
             return IsInitialized;
@@ -315,7 +312,11 @@ namespace Integra.Models
 
         #region Enumerations
 
-        
+        public IEnumerable<IntegraMFXTypes> MFXTypes
+        {
+            get { return Enum.GetValues(typeof(IntegraMFXTypes)).Cast<IntegraMFXTypes>(); }
+        }
+
         #endregion
     }
 }

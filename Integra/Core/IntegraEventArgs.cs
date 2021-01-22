@@ -74,4 +74,16 @@ namespace Integra.Core
             get { return string.Join(string.Empty, ((byte[])_SystemExclusive.Address).Select(x => string.Format("{0:X2}", x))); }
         }
     }
+
+    public class IntegraPartChangeEventArts : EventArgs
+    {
+        public IntegraPartChangeEventArts(IntegraParts oldPart, IntegraParts newPart)
+        {
+            OldPart = oldPart;
+            NewPart = newPart;
+        }
+
+        public IntegraParts OldPart { get; }
+        public IntegraParts NewPart { get; }
+    }
 }

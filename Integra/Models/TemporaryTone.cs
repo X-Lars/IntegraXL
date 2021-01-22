@@ -3,13 +3,15 @@ using Integra.Core.Interfaces;
 using MidiXL;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Integra.Models
 {
-    public class TemporaryTone : IntegraBase<TemporaryTone>
+    public class TemporaryTone : IntegraBase<TemporaryTone>, IToneMFX
     {
         private IntegraToneTypes _Type;
 
@@ -26,6 +28,9 @@ namespace Integra.Models
             Address += (uint)type;
 
             Type = type;
+
+            MFX = new ToneMFX(Address);
+
             Console.WriteLine($"[{nameof(TemporaryTone)}] {Address}");
         }
 
@@ -39,6 +44,17 @@ namespace Integra.Models
                     _Type = value;
                     NotifyPropertyChanged();
                 }
+            }
+        }
+
+        private ToneMFX _MFX;
+        public ToneMFX MFX
+        {
+            get { return _MFX; }
+            set
+            {
+                _MFX = value;
+                NotifyPropertyChanged();
             }
         }
     }

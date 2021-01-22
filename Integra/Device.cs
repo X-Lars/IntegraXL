@@ -690,8 +690,13 @@ namespace Integra
                     // Report the progress message
                     ReportProgress(this, new StatusMessage("Validating Connection", "Please wait...", 100d / DEVICE_CONNECTION_TIMEOUT * connectionTimeOut, "Connecting"));
 
+                    Thread.Sleep(DEVICE_LATENCY);
+
                     if (connectionTimeOut > DEVICE_CONNECTION_TIMEOUT)
+                    {
                         ReportComplete(this, new StatusMessage("Validating Connection", "Connection timeout", 100d, "Connection Error"));
+                        return;
+                    }
                 }
 
                 ReportComplete(this, new StatusMessage("Validating Connection", "Connection successful", 100, "Done"));

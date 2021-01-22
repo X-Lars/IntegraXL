@@ -455,8 +455,25 @@ namespace IntegraXL
 
         private void AddMFXWindow(IntegraMFXTypes type)
         {
-            MFXWindow mdiChild = (MFXWindow)Activator.CreateInstance(typeof(MFXWindow), new object[] { type });
-            //mdiChild.Title = type.ToString();
+            foreach (MDIChild child in Host.Items)
+            {
+                if (child.GetType() == typeof(MFXWindow))
+                {
+                    // TODO: Remove child
+                    ((MFXWindow)child).MFXType = type;
+                    
+                    return;
+                    //if (((MFXWindow)child).ToneBank.GetType() == type)
+                    //{
+                    //    Host.SelectChild(child);
+
+                    //    return;
+                    //}
+                }
+            }
+
+            MFXWindow mdiChild = (MFXWindow)Activator.CreateInstance(typeof(MFXWindow));
+            mdiChild.Title = "MFX";
             Host.Items.Add(mdiChild);
         }
 
