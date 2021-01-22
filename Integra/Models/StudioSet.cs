@@ -36,6 +36,7 @@ namespace Integra.Models
             //}
         }
 
+
         internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
             IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
@@ -94,7 +95,7 @@ namespace Integra.Models
         }
         private IntegraToneTypes _ToneType = IntegraToneTypes.SuperNATURALAcousticTone;
 
-        public IntegraToneTypes ToneType
+        private IntegraToneTypes ToneType
         {
             get { return _ToneType; }
             set
@@ -108,7 +109,7 @@ namespace Integra.Models
         {
             get
             {
-                if(MFXDataContext != null)
+                if (MFXDataContext != null)
                     return MFXDataContext.MFX.Type;
 
                 return IntegraMFXTypes.Thru;
@@ -118,7 +119,7 @@ namespace Integra.Models
             {
                 MFXDataContext.MFX.Type = value;
                 NotifyPropertyChanged();
-                
+
             }
         }
 
@@ -174,7 +175,7 @@ namespace Integra.Models
             }
         }
 
-        public StudioSetPart[] Parts
+        public virtual StudioSetPart[] Parts
         {
             get { return _StudioSetParts; }
         }

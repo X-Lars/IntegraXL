@@ -362,3 +362,9 @@ MigrationBackup/
 FodyWeavers.xsd
 /Test
 /IntegraDatabase
+/Integra/Migrations
+/Integra/Database/IntegraDataSet.xsc
+/Integra/Database/IntegraDataSet.xsd
+/Integra/Database/IntegraDataSet.Designer.cs
+/Integra/Database/IntegraDataSet.xss
+/Integra/Database/IntegraDataSet.cs

@@ -71,6 +71,11 @@ namespace Integra.Core
         #region Properties
 
         /// <summary>
+        /// Gets the ID associated with the <see cref="Session"/>.
+        /// </summary>
+        public int SessionID { get; internal set; }
+
+        /// <summary>
         /// Gets the name of the data structure.
         /// </summary>
         public string Name { get; protected set; }
