@@ -1,0 +1,429 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DataSet1" targetNamespace="http://tempuri.org/DataSet1.xsd" xmlns:mstns="http://tempuri.org/DataSet1.xsd" xmlns="http://tempuri.org/DataSet1.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DataSet1" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DataSet1" msprop:Generator_UserDSName="DataSet1">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="Sessions" msprop:Generator_TableClassName="SessionsDataTable" msprop:Generator_TableVarName="tableSessions" msprop:Generator_TablePropName="Sessions" msprop:Generator_RowDeletingName="SessionsRowDeleting" msprop:Generator_RowChangingName="SessionsRowChanging" msprop:Generator_RowEvHandlerName="SessionsRowChangeEventHandler" msprop:Generator_RowDeletedName="SessionsRowDeleted" msprop:Generator_UserTableName="Sessions" msprop:Generator_RowChangedName="SessionsRowChanged" msprop:Generator_RowEvArgName="SessionsRowChangeEvent" msprop:Generator_RowClassName="SessionsRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:int" />
+              <xs:element name="Name" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnName" msprop:Generator_ColumnPropNameInRow="Name" msprop:Generator_ColumnPropNameInTable="NameColumn" msprop:Generator_UserColumnName="Name">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="DateTime" msprop:Generator_ColumnVarNameInTable="columnDateTime" msprop:Generator_ColumnPropNameInRow="DateTime" msprop:Generator_ColumnPropNameInTable="DateTimeColumn" msprop:Generator_UserColumnName="DateTime" type="xs:dateTime" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="StudioSet" msprop:Generator_TableClassName="StudioSetDataTable" msprop:Generator_TableVarName="tableStudioSet" msprop:Generator_TablePropName="StudioSet" msprop:Generator_RowDeletingName="StudioSetRowDeleting" msprop:Generator_RowChangingName="StudioSetRowChanging" msprop:Generator_RowEvHandlerName="StudioSetRowChangeEventHandler" msprop:Generator_RowDeletedName="StudioSetRowDeleted" msprop:Generator_UserTableName="StudioSet" msprop:Generator_RowChangedName="StudioSetRowChanged" msprop:Generator_RowEvArgName="StudioSetRowChangeEvent" msprop:Generator_RowClassName="StudioSetRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="TemporaryTone" msprop:Generator_TableClassName="TemporaryToneDataTable" msprop:Generator_TableVarName="tableTemporaryTone" msprop:Generator_TablePropName="TemporaryTone" msprop:Generator_RowDeletingName="TemporaryToneRowDeleting" msprop:Generator_RowChangingName="TemporaryToneRowChanging" msprop:Generator_RowEvHandlerName="TemporaryToneRowChangeEventHandler" msprop:Generator_RowDeletedName="TemporaryToneRowDeleted" msprop:Generator_UserTableName="TemporaryTone" msprop:Generator_RowChangedName="TemporaryToneRowChanged" msprop:Generator_RowEvArgName="TemporaryToneRowChangeEvent" msprop:Generator_RowClassName="TemporaryToneRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+              <xs:element name="Part" msprop:Generator_ColumnVarNameInTable="columnPart" msprop:Generator_ColumnPropNameInRow="Part" msprop:Generator_ColumnPropNameInTable="PartColumn" msprop:Generator_UserColumnName="Part" type="xs:unsignedByte" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="StudioSetCommonChorus" msprop:Generator_TableClassName="StudioSetCommonChorusDataTable" msprop:Generator_TableVarName="tableStudioSetCommonChorus" msprop:Generator_TablePropName="StudioSetCommonChorus" msprop:Generator_RowDeletingName="StudioSetCommonChorusRowDeleting" msprop:Generator_RowChangingName="StudioSetCommonChorusRowChanging" msprop:Generator_RowEvHandlerName="StudioSetCommonChorusRowChangeEventHandler" msprop:Generator_RowDeletedName="StudioSetCommonChorusRowDeleted" msprop:Generator_UserTableName="StudioSetCommonChorus" msprop:Generator_RowChangedName="StudioSetCommonChorusRowChanged" msprop:Generator_RowEvArgName="StudioSetCommonChorusRowChangeEvent" msprop:Generator_RowClassName="StudioSetCommonChorusRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="StudioSetCommonReverb" msprop:Generator_TableClassName="StudioSetCommonReverbDataTable" msprop:Generator_TableVarName="tableStudioSetCommonReverb" msprop:Generator_TablePropName="StudioSetCommonReverb" msprop:Generator_RowDeletingName="StudioSetCommonReverbRowDeleting" msprop:Generator_RowChangingName="StudioSetCommonReverbRowChanging" msprop:Generator_RowEvHandlerName="StudioSetCommonReverbRowChangeEventHandler" msprop:Generator_RowDeletedName="StudioSetCommonReverbRowDeleted" msprop:Generator_UserTableName="StudioSetCommonReverb" msprop:Generator_RowChangedName="StudioSetCommonReverbRowChanged" msprop:Generator_RowEvArgName="StudioSetCommonReverbRowChangeEvent" msprop:Generator_RowClassName="StudioSetCommonReverbRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="StudioSetCommonMotionalSurround" msprop:Generator_TableClassName="StudioSetCommonMotionalSurroundDataTable" msprop:Generator_TableVarName="tableStudioSetCommonMotionalSurround" msprop:Generator_TablePropName="StudioSetCommonMotionalSurround" msprop:Generator_RowDeletingName="StudioSetCommonMotionalSurroundRowDeleting" msprop:Generator_RowChangingName="StudioSetCommonMotionalSurroundRowChanging" msprop:Generator_RowEvHandlerName="StudioSetCommonMotionalSurroundRowChangeEventHandler" msprop:Generator_RowDeletedName="StudioSetCommonMotionalSurroundRowDeleted" msprop:Generator_UserTableName="StudioSetCommonMotionalSurround" msprop:Generator_RowChangedName="StudioSetCommonMotionalSurroundRowChanged" msprop:Generator_RowEvArgName="StudioSetCommonMotionalSurroundRowChangeEvent" msprop:Generator_RowClassName="StudioSetCommonMotionalSurroundRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="StudioSetMasterEQ" msprop:Generator_TableClassName="StudioSetMasterEQDataTable" msprop:Generator_TableVarName="tableStudioSetMasterEQ" msprop:Generator_TablePropName="StudioSetMasterEQ" msprop:Generator_RowDeletingName="StudioSetMasterEQRowDeleting" msprop:Generator_RowChangingName="StudioSetMasterEQRowChanging" msprop:Generator_RowEvHandlerName="StudioSetMasterEQRowChangeEventHandler" msprop:Generator_RowDeletedName="StudioSetMasterEQRowDeleted" msprop:Generator_UserTableName="StudioSetMasterEQ" msprop:Generator_RowChangedName="StudioSetMasterEQRowChanged" msprop:Generator_RowEvArgName="StudioSetMasterEQRowChangeEvent" msprop:Generator_RowClassName="StudioSetMasterEQRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="StudioSetMIDI" msprop:Generator_TableClassName="StudioSetMIDIDataTable" msprop:Generator_TableVarName="tableStudioSetMIDI" msprop:Generator_TablePropName="StudioSetMIDI" msprop:Generator_RowDeletingName="StudioSetMIDIRowDeleting" msprop:Generator_RowChangingName="StudioSetMIDIRowChanging" msprop:Generator_RowEvHandlerName="StudioSetMIDIRowChangeEventHandler" msprop:Generator_RowDeletedName="StudioSetMIDIRowDeleted" msprop:Generator_UserTableName="StudioSetMIDI" msprop:Generator_RowChangedName="StudioSetMIDIRowChanged" msprop:Generator_RowEvArgName="StudioSetMIDIRowChangeEvent" msprop:Generator_RowClassName="StudioSetMIDIRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+              <xs:element name="Part" msprop:Generator_ColumnVarNameInTable="columnPart" msprop:Generator_ColumnPropNameInRow="Part" msprop:Generator_ColumnPropNameInTable="PartColumn" msprop:Generator_UserColumnName="Part" type="xs:unsignedByte" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="StudioSetPart" msprop:Generator_TableClassName="StudioSetPartDataTable" msprop:Generator_TableVarName="tableStudioSetPart" msprop:Generator_TablePropName="StudioSetPart" msprop:Generator_RowDeletingName="StudioSetPartRowDeleting" msprop:Generator_RowChangingName="StudioSetPartRowChanging" msprop:Generator_RowEvHandlerName="StudioSetPartRowChangeEventHandler" msprop:Generator_RowDeletedName="StudioSetPartRowDeleted" msprop:Generator_UserTableName="StudioSetPart" msprop:Generator_RowChangedName="StudioSetPartRowChanged" msprop:Generator_RowEvArgName="StudioSetPartRowChangeEvent" msprop:Generator_RowClassName="StudioSetPartRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+              <xs:element name="Part" msprop:Generator_ColumnVarNameInTable="columnPart" msprop:Generator_ColumnPropNameInRow="Part" msprop:Generator_ColumnPropNameInTable="PartColumn" msprop:Generator_UserColumnName="Part" type="xs:unsignedByte" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="StudioSetPartEQ" msprop:Generator_TableClassName="StudioSetPartEQDataTable" msprop:Generator_TableVarName="tableStudioSetPartEQ" msprop:Generator_TablePropName="StudioSetPartEQ" msprop:Generator_RowDeletingName="StudioSetPartEQRowDeleting" msprop:Generator_RowChangingName="StudioSetPartEQRowChanging" msprop:Generator_RowEvHandlerName="StudioSetPartEQRowChangeEventHandler" msprop:Generator_RowDeletedName="StudioSetPartEQRowDeleted" msprop:Generator_UserTableName="StudioSetPartEQ" msprop:Generator_RowChangedName="StudioSetPartEQRowChanged" msprop:Generator_RowEvArgName="StudioSetPartEQRowChangeEvent" msprop:Generator_RowClassName="StudioSetPartEQRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+              <xs:element name="Part" msprop:Generator_ColumnVarNameInTable="columnPart" msprop:Generator_ColumnPropNameInRow="Part" msprop:Generator_ColumnPropNameInTable="PartColumn" msprop:Generator_UserColumnName="Part" type="xs:unsignedByte" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="TemporaryPCMSynthTone" msprop:Generator_TableClassName="TemporaryPCMSynthToneDataTable" msprop:Generator_TableVarName="tableTemporaryPCMSynthTone" msprop:Generator_TablePropName="TemporaryPCMSynthTone" msprop:Generator_RowDeletingName="TemporaryPCMSynthToneRowDeleting" msprop:Generator_RowChangingName="TemporaryPCMSynthToneRowChanging" msprop:Generator_RowEvHandlerName="TemporaryPCMSynthToneRowChangeEventHandler" msprop:Generator_RowDeletedName="TemporaryPCMSynthToneRowDeleted" msprop:Generator_UserTableName="TemporaryPCMSynthTone" msprop:Generator_RowChangedName="TemporaryPCMSynthToneRowChanged" msprop:Generator_RowEvArgName="TemporaryPCMSynthToneRowChangeEvent" msprop:Generator_RowClassName="TemporaryPCMSynthToneRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+              <xs:element name="Part" msprop:Generator_ColumnVarNameInTable="columnPart" msprop:Generator_ColumnPropNameInRow="Part" msprop:Generator_ColumnPropNameInTable="PartColumn" msprop:Generator_UserColumnName="Part" type="xs:unsignedByte" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="TemporarySuperNATURALSynthTone" msprop:Generator_TableClassName="TemporarySuperNATURALSynthToneDataTable" msprop:Generator_TableVarName="tableTemporarySuperNATURALSynthTone" msprop:Generator_TablePropName="TemporarySuperNATURALSynthTone" msprop:Generator_RowDeletingName="TemporarySuperNATURALSynthToneRowDeleting" msprop:Generator_RowChangingName="TemporarySuperNATURALSynthToneRowChanging" msprop:Generator_RowEvHandlerName="TemporarySuperNATURALSynthToneRowChangeEventHandler" msprop:Generator_RowDeletedName="TemporarySuperNATURALSynthToneRowDeleted" msprop:Generator_UserTableName="TemporarySuperNATURALSynthTone" msprop:Generator_RowChangedName="TemporarySuperNATURALSynthToneRowChanged" msprop:Generator_RowEvArgName="TemporarySuperNATURALSynthToneRowChangeEvent" msprop:Generator_RowClassName="TemporarySuperNATURALSynthToneRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+              <xs:element name="Part" msprop:Generator_ColumnVarNameInTable="columnPart" msprop:Generator_ColumnPropNameInRow="Part" msprop:Generator_ColumnPropNameInTable="PartColumn" msprop:Generator_UserColumnName="Part" type="xs:unsignedByte" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="TemporarySuperNATURALAcousticTone" msprop:Generator_TableClassName="TemporarySuperNATURALAcousticToneDataTable" msprop:Generator_TableVarName="tableTemporarySuperNATURALAcousticTone" msprop:Generator_TablePropName="TemporarySuperNATURALAcousticTone" msprop:Generator_RowDeletingName="TemporarySuperNATURALAcousticToneRowDeleting" msprop:Generator_RowChangingName="TemporarySuperNATURALAcousticToneRowChanging" msprop:Generator_RowEvHandlerName="TemporarySuperNATURALAcousticToneRowChangeEventHandler" msprop:Generator_RowDeletedName="TemporarySuperNATURALAcousticToneRowDeleted" msprop:Generator_UserTableName="TemporarySuperNATURALAcousticTone" msprop:Generator_RowChangedName="TemporarySuperNATURALAcousticToneRowChanged" msprop:Generator_RowEvArgName="TemporarySuperNATURALAcousticToneRowChangeEvent" msprop:Generator_RowClassName="TemporarySuperNATURALAcousticToneRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+              <xs:element name="Part" msprop:Generator_ColumnVarNameInTable="columnPart" msprop:Generator_ColumnPropNameInRow="Part" msprop:Generator_ColumnPropNameInTable="PartColumn" msprop:Generator_UserColumnName="Part" type="xs:unsignedByte" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="TemporarySuperNATURALDrumKit" msprop:Generator_TableClassName="TemporarySuperNATURALDrumKitDataTable" msprop:Generator_TableVarName="tableTemporarySuperNATURALDrumKit" msprop:Generator_TablePropName="TemporarySuperNATURALDrumKit" msprop:Generator_RowDeletingName="TemporarySuperNATURALDrumKitRowDeleting" msprop:Generator_RowChangingName="TemporarySuperNATURALDrumKitRowChanging" msprop:Generator_RowEvHandlerName="TemporarySuperNATURALDrumKitRowChangeEventHandler" msprop:Generator_RowDeletedName="TemporarySuperNATURALDrumKitRowDeleted" msprop:Generator_UserTableName="TemporarySuperNATURALDrumKit" msprop:Generator_RowChangedName="TemporarySuperNATURALDrumKitRowChanged" msprop:Generator_RowEvArgName="TemporarySuperNATURALDrumKitRowChangeEvent" msprop:Generator_RowClassName="TemporarySuperNATURALDrumKitRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+              <xs:element name="Part" msprop:Generator_ColumnVarNameInTable="columnPart" msprop:Generator_ColumnPropNameInRow="Part" msprop:Generator_ColumnPropNameInTable="PartColumn" msprop:Generator_UserColumnName="Part" type="xs:unsignedByte" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="TemporaryPCMDrumKit" msprop:Generator_TableClassName="TemporaryPCMDrumKitDataTable" msprop:Generator_TableVarName="tableTemporaryPCMDrumKit" msprop:Generator_TablePropName="TemporaryPCMDrumKit" msprop:Generator_RowDeletingName="TemporaryPCMDrumKitRowDeleting" msprop:Generator_RowChangingName="TemporaryPCMDrumKitRowChanging" msprop:Generator_RowEvHandlerName="TemporaryPCMDrumKitRowChangeEventHandler" msprop:Generator_RowDeletedName="TemporaryPCMDrumKitRowDeleted" msprop:Generator_UserTableName="TemporaryPCMDrumKit" msprop:Generator_RowChangedName="TemporaryPCMDrumKitRowChanged" msprop:Generator_RowEvArgName="TemporaryPCMDrumKitRowChangeEvent" msprop:Generator_RowClassName="TemporaryPCMDrumKitRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+              <xs:element name="Part" msprop:Generator_ColumnVarNameInTable="columnPart" msprop:Generator_ColumnPropNameInRow="Part" msprop:Generator_ColumnPropNameInTable="PartColumn" msprop:Generator_UserColumnName="Part" type="xs:unsignedByte" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="StudioSetCommon" msprop:Generator_TableClassName="StudioSetCommonDataTable" msprop:Generator_TableVarName="tableStudioSetCommon" msprop:Generator_TablePropName="StudioSetCommon" msprop:Generator_RowDeletingName="StudioSetCommonRowDeleting" msprop:Generator_RowChangingName="StudioSetCommonRowChanging" msprop:Generator_RowEvHandlerName="StudioSetCommonRowChangeEventHandler" msprop:Generator_RowDeletedName="StudioSetCommonRowDeleted" msprop:Generator_UserTableName="StudioSetCommon" msprop:Generator_RowChangedName="StudioSetCommonRowChanged" msprop:Generator_RowEvArgName="StudioSetCommonRowChangeEvent" msprop:Generator_RowClassName="StudioSetCommonRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="PCMSynthToneCommon" msprop:Generator_TableClassName="PCMSynthToneCommonDataTable" msprop:Generator_TableVarName="tablePCMSynthToneCommon" msprop:Generator_TablePropName="PCMSynthToneCommon" msprop:Generator_RowDeletingName="PCMSynthToneCommonRowDeleting" msprop:Generator_RowChangingName="PCMSynthToneCommonRowChanging" msprop:Generator_RowEvHandlerName="PCMSynthToneCommonRowChangeEventHandler" msprop:Generator_RowDeletedName="PCMSynthToneCommonRowDeleted" msprop:Generator_UserTableName="PCMSynthToneCommon" msprop:Generator_RowChangedName="PCMSynthToneCommonRowChanged" msprop:Generator_RowEvArgName="PCMSynthToneCommonRowChangeEvent" msprop:Generator_RowClassName="PCMSynthToneCommonRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+              <xs:element name="Part" msprop:Generator_ColumnVarNameInTable="columnPart" msprop:Generator_ColumnPropNameInRow="Part" msprop:Generator_ColumnPropNameInTable="PartColumn" msprop:Generator_UserColumnName="Part" type="xs:unsignedByte" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="PCMSynthToneCommonMFX" msprop:Generator_TableClassName="PCMSynthToneCommonMFXDataTable" msprop:Generator_TableVarName="tablePCMSynthToneCommonMFX" msprop:Generator_TablePropName="PCMSynthToneCommonMFX" msprop:Generator_RowDeletingName="PCMSynthToneCommonMFXRowDeleting" msprop:Generator_RowChangingName="PCMSynthToneCommonMFXRowChanging" msprop:Generator_RowEvHandlerName="PCMSynthToneCommonMFXRowChangeEventHandler" msprop:Generator_RowDeletedName="PCMSynthToneCommonMFXRowDeleted" msprop:Generator_UserTableName="PCMSynthToneCommonMFX" msprop:Generator_RowChangedName="PCMSynthToneCommonMFXRowChanged" msprop:Generator_RowEvArgName="PCMSynthToneCommonMFXRowChangeEvent" msprop:Generator_RowClassName="PCMSynthToneCommonMFXRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+              <xs:element name="Part" msprop:Generator_ColumnVarNameInTable="columnPart" msprop:Generator_ColumnPropNameInRow="Part" msprop:Generator_ColumnPropNameInTable="PartColumn" msprop:Generator_UserColumnName="Part" type="xs:unsignedByte" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="PCMSynthTonePMT" msprop:Generator_TableClassName="PCMSynthTonePMTDataTable" msprop:Generator_TableVarName="tablePCMSynthTonePMT" msprop:Generator_TablePropName="PCMSynthTonePMT" msprop:Generator_RowDeletingName="PCMSynthTonePMTRowDeleting" msprop:Generator_RowChangingName="PCMSynthTonePMTRowChanging" msprop:Generator_RowEvHandlerName="PCMSynthTonePMTRowChangeEventHandler" msprop:Generator_RowDeletedName="PCMSynthTonePMTRowDeleted" msprop:Generator_UserTableName="PCMSynthTonePMT" msprop:Generator_RowChangedName="PCMSynthTonePMTRowChanged" msprop:Generator_RowEvArgName="PCMSynthTonePMTRowChangeEvent" msprop:Generator_RowClassName="PCMSynthTonePMTRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+              <xs:element name="Part" msprop:Generator_ColumnVarNameInTable="columnPart" msprop:Generator_ColumnPropNameInRow="Part" msprop:Generator_ColumnPropNameInTable="PartColumn" msprop:Generator_UserColumnName="Part" type="xs:unsignedByte" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="PCMSynthTonePartial01" msprop:Generator_TableClassName="PCMSynthTonePartial01DataTable" msprop:Generator_TableVarName="tablePCMSynthTonePartial01" msprop:Generator_TablePropName="PCMSynthTonePartial01" msprop:Generator_RowDeletingName="PCMSynthTonePartial01RowDeleting" msprop:Generator_RowChangingName="PCMSynthTonePartial01RowChanging" msprop:Generator_RowEvHandlerName="PCMSynthTonePartial01RowChangeEventHandler" msprop:Generator_RowDeletedName="PCMSynthTonePartial01RowDeleted" msprop:Generator_UserTableName="PCMSynthTonePartial01" msprop:Generator_RowChangedName="PCMSynthTonePartial01RowChanged" msprop:Generator_RowEvArgName="PCMSynthTonePartial01RowChangeEvent" msprop:Generator_RowClassName="PCMSynthTonePartial01Row">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+              <xs:element name="Part" msprop:Generator_ColumnVarNameInTable="columnPart" msprop:Generator_ColumnPropNameInRow="Part" msprop:Generator_ColumnPropNameInTable="PartColumn" msprop:Generator_UserColumnName="Part" type="xs:unsignedByte" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="PCMSynthTonePartial02" msprop:Generator_TableClassName="PCMSynthTonePartial02DataTable" msprop:Generator_TableVarName="tablePCMSynthTonePartial02" msprop:Generator_TablePropName="PCMSynthTonePartial02" msprop:Generator_RowDeletingName="PCMSynthTonePartial02RowDeleting" msprop:Generator_RowChangingName="PCMSynthTonePartial02RowChanging" msprop:Generator_RowEvHandlerName="PCMSynthTonePartial02RowChangeEventHandler" msprop:Generator_RowDeletedName="PCMSynthTonePartial02RowDeleted" msprop:Generator_UserTableName="PCMSynthTonePartial02" msprop:Generator_RowChangedName="PCMSynthTonePartial02RowChanged" msprop:Generator_RowEvArgName="PCMSynthTonePartial02RowChangeEvent" msprop:Generator_RowClassName="PCMSynthTonePartial02Row">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+              <xs:element name="Part" msprop:Generator_ColumnVarNameInTable="columnPart" msprop:Generator_ColumnPropNameInRow="Part" msprop:Generator_ColumnPropNameInTable="PartColumn" msprop:Generator_UserColumnName="Part" type="xs:unsignedByte" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="PCMSynthTonePartial03" msprop:Generator_TableClassName="PCMSynthTonePartial03DataTable" msprop:Generator_TableVarName="tablePCMSynthTonePartial03" msprop:Generator_TablePropName="PCMSynthTonePartial03" msprop:Generator_RowDeletingName="PCMSynthTonePartial03RowDeleting" msprop:Generator_RowChangingName="PCMSynthTonePartial03RowChanging" msprop:Generator_RowEvHandlerName="PCMSynthTonePartial03RowChangeEventHandler" msprop:Generator_RowDeletedName="PCMSynthTonePartial03RowDeleted" msprop:Generator_UserTableName="PCMSynthTonePartial03" msprop:Generator_RowChangedName="PCMSynthTonePartial03RowChanged" msprop:Generator_RowEvArgName="PCMSynthTonePartial03RowChangeEvent" msprop:Generator_RowClassName="PCMSynthTonePartial03Row">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+              <xs:element name="Part" msprop:Generator_ColumnVarNameInTable="columnPart" msprop:Generator_ColumnPropNameInRow="Part" msprop:Generator_ColumnPropNameInTable="PartColumn" msprop:Generator_UserColumnName="Part" type="xs:unsignedByte" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="PCMSynthTonePartial04" msprop:Generator_TableClassName="PCMSynthTonePartial04DataTable" msprop:Generator_TableVarName="tablePCMSynthTonePartial04" msprop:Generator_TablePropName="PCMSynthTonePartial04" msprop:Generator_RowDeletingName="PCMSynthTonePartial04RowDeleting" msprop:Generator_RowChangingName="PCMSynthTonePartial04RowChanging" msprop:Generator_RowEvHandlerName="PCMSynthTonePartial04RowChangeEventHandler" msprop:Generator_RowDeletedName="PCMSynthTonePartial04RowDeleted" msprop:Generator_UserTableName="PCMSynthTonePartial04" msprop:Generator_RowChangedName="PCMSynthTonePartial04RowChanged" msprop:Generator_RowEvArgName="PCMSynthTonePartial04RowChangeEvent" msprop:Generator_RowClassName="PCMSynthTonePartial04Row">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+              <xs:element name="Part" msprop:Generator_ColumnVarNameInTable="columnPart" msprop:Generator_ColumnPropNameInRow="Part" msprop:Generator_ColumnPropNameInTable="PartColumn" msprop:Generator_UserColumnName="Part" type="xs:unsignedByte" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="PCMSynthToneCommon02" msprop:Generator_TableClassName="PCMSynthToneCommon02DataTable" msprop:Generator_TableVarName="tablePCMSynthToneCommon02" msprop:Generator_TablePropName="PCMSynthToneCommon02" msprop:Generator_RowDeletingName="PCMSynthToneCommon02RowDeleting" msprop:Generator_RowChangingName="PCMSynthToneCommon02RowChanging" msprop:Generator_RowEvHandlerName="PCMSynthToneCommon02RowChangeEventHandler" msprop:Generator_RowDeletedName="PCMSynthToneCommon02RowDeleted" msprop:Generator_UserTableName="PCMSynthToneCommon02" msprop:Generator_RowChangedName="PCMSynthToneCommon02RowChanged" msprop:Generator_RowEvArgName="PCMSynthToneCommon02RowChangeEvent" msprop:Generator_RowClassName="PCMSynthToneCommon02Row">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SessionID" msprop:Generator_ColumnVarNameInTable="columnSessionID" msprop:Generator_ColumnPropNameInRow="SessionID" msprop:Generator_ColumnPropNameInTable="SessionIDColumn" msprop:Generator_UserColumnName="SessionID" type="xs:int" />
+              <xs:element name="Part" msprop:Generator_ColumnVarNameInTable="columnPart" msprop:Generator_ColumnPropNameInRow="Part" msprop:Generator_ColumnPropNameInTable="PartColumn" msprop:Generator_UserColumnName="Part" type="xs:unsignedByte" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="PKSessions" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:Sessions" />
+      <xs:field xpath="mstns:ID" />
+    </xs:unique>
+    <xs:unique name="PKStudioSet">
+      <xs:selector xpath=".//mstns:StudioSet" />
+      <xs:field xpath="mstns:SessionID" />
+    </xs:unique>
+    <xs:unique name="PKTemporaryTone" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:TemporaryTone" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:unique>
+    <xs:unique name="PKStudioSetCommonChorus">
+      <xs:selector xpath=".//mstns:StudioSetCommonChorus" />
+      <xs:field xpath="mstns:SessionID" />
+    </xs:unique>
+    <xs:unique name="PKStudioSetCommonReverb" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:StudioSetCommonReverb" />
+      <xs:field xpath="mstns:SessionID" />
+    </xs:unique>
+    <xs:unique name="PKStudioSetCommonMotionalSurround" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:StudioSetCommonMotionalSurround" />
+      <xs:field xpath="mstns:SessionID" />
+    </xs:unique>
+    <xs:unique name="PKStudioSetMasterEQ" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:StudioSetMasterEQ" />
+      <xs:field xpath="mstns:SessionID" />
+    </xs:unique>
+    <xs:unique name="PKStudioSetMIDI" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:StudioSetMIDI" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:unique>
+    <xs:unique name="PKStudioSetPart" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:StudioSetPart" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:unique>
+    <xs:unique name="PKStudioSetPartEQ" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:StudioSetPartEQ" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:unique>
+    <xs:unique name="PKTemporaryPCMSynthTone" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:TemporaryPCMSynthTone" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:unique>
+    <xs:unique name="PKTemporarySuperNATURALSynthTone" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:TemporarySuperNATURALSynthTone" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:unique>
+    <xs:unique name="PKTemporarySuperNATURALAcousticTone" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:TemporarySuperNATURALAcousticTone" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:unique>
+    <xs:unique name="PKTemporarySuperNATURALDrumKit" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:TemporarySuperNATURALDrumKit" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:unique>
+    <xs:unique name="PKTemporaryPCMDrumKit" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:TemporaryPCMDrumKit" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:unique>
+    <xs:unique name="PKStudioSetCommon" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:StudioSetCommon" />
+      <xs:field xpath="mstns:SessionID" />
+    </xs:unique>
+    <xs:unique name="PKPCMSynthToneCommon" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:PCMSynthToneCommon" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:unique>
+    <xs:unique name="PKPCMSynthToneCommonMFX" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:PCMSynthToneCommonMFX" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:unique>
+    <xs:unique name="PKPCMSynthTonePMT" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:PCMSynthTonePMT" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:unique>
+    <xs:unique name="PKPCMSynthTonePartial01" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:PCMSynthTonePartial01" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:unique>
+    <xs:unique name="PKPCMSynthTonePartial02" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:PCMSynthTonePartial02" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:unique>
+    <xs:unique name="PKPCMSynthTonePartial03" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:PCMSynthTonePartial03" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:unique>
+    <xs:unique name="PKPCMSynthTonePartial04" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:PCMSynthTonePartial04" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:unique>
+    <xs:unique name="PKPCMSynthToneCommon02" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:PCMSynthToneCommon02" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:unique>
+    <xs:keyref name="FK_TemporaryPCMSynthTone_PCMSynthToneCommon02" refer="PKTemporaryPCMSynthTone" msprop:rel_Generator_UserChildTable="PCMSynthToneCommon02" msprop:rel_Generator_ChildPropName="GetPCMSynthToneCommon02Rows" msprop:rel_Generator_UserRelationName="FK_TemporaryPCMSynthTone_PCMSynthToneCommon02" msprop:rel_Generator_ParentPropName="TemporaryPCMSynthToneRowParent" msprop:rel_Generator_RelationVarName="relationFK_TemporaryPCMSynthTone_PCMSynthToneCommon02" msprop:rel_Generator_UserParentTable="TemporaryPCMSynthTone">
+      <xs:selector xpath=".//mstns:PCMSynthToneCommon02" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:keyref>
+    <xs:keyref name="FK_TemporaryPCMSynthTone_PCMSynthTonePartial04" refer="PKTemporaryPCMSynthTone" msprop:rel_Generator_UserChildTable="PCMSynthTonePartial04" msprop:rel_Generator_ChildPropName="GetPCMSynthTonePartial04Rows" msprop:rel_Generator_UserRelationName="FK_TemporaryPCMSynthTone_PCMSynthTonePartial04" msprop:rel_Generator_ParentPropName="TemporaryPCMSynthToneRowParent" msprop:rel_Generator_RelationVarName="relationFK_TemporaryPCMSynthTone_PCMSynthTonePartial04" msprop:rel_Generator_UserParentTable="TemporaryPCMSynthTone">
+      <xs:selector xpath=".//mstns:PCMSynthTonePartial04" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:keyref>
+    <xs:keyref name="FK_TemporaryPCMSynthTone_PCMSynthTonePartial03" refer="PKTemporaryPCMSynthTone" msprop:rel_Generator_UserChildTable="PCMSynthTonePartial03" msprop:rel_Generator_ChildPropName="GetPCMSynthTonePartial03Rows" msprop:rel_Generator_UserRelationName="FK_TemporaryPCMSynthTone_PCMSynthTonePartial03" msprop:rel_Generator_ParentPropName="TemporaryPCMSynthToneRowParent" msprop:rel_Generator_RelationVarName="relationFK_TemporaryPCMSynthTone_PCMSynthTonePartial03" msprop:rel_Generator_UserParentTable="TemporaryPCMSynthTone">
+      <xs:selector xpath=".//mstns:PCMSynthTonePartial03" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:keyref>
+    <xs:keyref name="FK_TemporaryPCMSynthTone_PCMSynthTonePartial02" refer="PKTemporaryPCMSynthTone" msprop:rel_Generator_UserChildTable="PCMSynthTonePartial02" msprop:rel_Generator_ChildPropName="GetPCMSynthTonePartial02Rows" msprop:rel_Generator_UserRelationName="FK_TemporaryPCMSynthTone_PCMSynthTonePartial02" msprop:rel_Generator_ParentPropName="TemporaryPCMSynthToneRowParent" msprop:rel_Generator_RelationVarName="relationFK_TemporaryPCMSynthTone_PCMSynthTonePartial02" msprop:rel_Generator_UserParentTable="TemporaryPCMSynthTone">
+      <xs:selector xpath=".//mstns:PCMSynthTonePartial02" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:keyref>
+    <xs:keyref name="FK_TemporaryPCMSynthTone_PCMSynthTonePartial01" refer="PKTemporaryPCMSynthTone" msprop:rel_Generator_UserChildTable="PCMSynthTonePartial01" msprop:rel_Generator_ChildPropName="GetPCMSynthTonePartial01Rows" msprop:rel_Generator_UserRelationName="FK_TemporaryPCMSynthTone_PCMSynthTonePartial01" msprop:rel_Generator_ParentPropName="TemporaryPCMSynthToneRowParent" msprop:rel_Generator_RelationVarName="relationFK_TemporaryPCMSynthTone_PCMSynthTonePartial01" msprop:rel_Generator_UserParentTable="TemporaryPCMSynthTone">
+      <xs:selector xpath=".//mstns:PCMSynthTonePartial01" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:keyref>
+    <xs:keyref name="FK_TemporaryPCMSynthTone_PCMSynthTonePMT" refer="PKTemporaryPCMSynthTone" msprop:rel_Generator_UserChildTable="PCMSynthTonePMT" msprop:rel_Generator_ChildPropName="GetPCMSynthTonePMTRows" msprop:rel_Generator_UserRelationName="FK_TemporaryPCMSynthTone_PCMSynthTonePMT" msprop:rel_Generator_ParentPropName="TemporaryPCMSynthToneRowParent" msprop:rel_Generator_RelationVarName="relationFK_TemporaryPCMSynthTone_PCMSynthTonePMT" msprop:rel_Generator_UserParentTable="TemporaryPCMSynthTone">
+      <xs:selector xpath=".//mstns:PCMSynthTonePMT" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:keyref>
+    <xs:keyref name="FK_TemporaryPCMSynthTone_PCMSynthToneCommonMFX" refer="PKTemporaryPCMSynthTone" msprop:rel_Generator_UserChildTable="PCMSynthToneCommonMFX" msprop:rel_Generator_ChildPropName="GetPCMSynthToneCommonMFXRows" msprop:rel_Generator_UserRelationName="FK_TemporaryPCMSynthTone_PCMSynthToneCommonMFX" msprop:rel_Generator_ParentPropName="TemporaryPCMSynthToneRowParent" msprop:rel_Generator_RelationVarName="relationFK_TemporaryPCMSynthTone_PCMSynthToneCommonMFX" msprop:rel_Generator_UserParentTable="TemporaryPCMSynthTone">
+      <xs:selector xpath=".//mstns:PCMSynthToneCommonMFX" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:keyref>
+    <xs:keyref name="FK_TemporaryPCMSynthTone_PCMSynthToneCommon" refer="PKTemporaryPCMSynthTone" msprop:rel_Generator_UserChildTable="PCMSynthToneCommon" msprop:rel_Generator_ChildPropName="GetPCMSynthToneCommonRows" msprop:rel_Generator_UserRelationName="FK_TemporaryPCMSynthTone_PCMSynthToneCommon" msprop:rel_Generator_ParentPropName="TemporaryPCMSynthToneRowParent" msprop:rel_Generator_RelationVarName="relationFK_TemporaryPCMSynthTone_PCMSynthToneCommon" msprop:rel_Generator_UserParentTable="TemporaryPCMSynthTone">
+      <xs:selector xpath=".//mstns:PCMSynthToneCommon" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:keyref>
+    <xs:keyref name="FK_StudioSet_StudioSetCommon" refer="PKStudioSet" msprop:rel_Generator_UserChildTable="StudioSetCommon" msprop:rel_Generator_ChildPropName="GetStudioSetCommonRows" msprop:rel_Generator_UserRelationName="FK_StudioSet_StudioSetCommon" msprop:rel_Generator_ParentPropName="StudioSetRow" msprop:rel_Generator_RelationVarName="relationFK_StudioSet_StudioSetCommon" msprop:rel_Generator_UserParentTable="StudioSet">
+      <xs:selector xpath=".//mstns:StudioSetCommon" />
+      <xs:field xpath="mstns:SessionID" />
+    </xs:keyref>
+    <xs:keyref name="FK_TemporaryTone_TemporaryPCMDrumKit" refer="PKTemporaryTone" msprop:rel_Generator_UserChildTable="TemporaryPCMDrumKit" msprop:rel_Generator_ChildPropName="GetTemporaryPCMDrumKitRows" msprop:rel_Generator_UserRelationName="FK_TemporaryTone_TemporaryPCMDrumKit" msprop:rel_Generator_ParentPropName="TemporaryToneRowParent" msprop:rel_Generator_RelationVarName="relationFK_TemporaryTone_TemporaryPCMDrumKit" msprop:rel_Generator_UserParentTable="TemporaryTone">
+      <xs:selector xpath=".//mstns:TemporaryPCMDrumKit" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:keyref>
+    <xs:keyref name="FK_TemporaryTone_TemporarySuperNATURALDrumKit" refer="PKTemporaryTone" msprop:rel_Generator_UserChildTable="TemporarySuperNATURALDrumKit" msprop:rel_Generator_ChildPropName="GetTemporarySuperNATURALDrumKitRows" msprop:rel_Generator_UserRelationName="FK_TemporaryTone_TemporarySuperNATURALDrumKit" msprop:rel_Generator_ParentPropName="TemporaryToneRowParent" msprop:rel_Generator_RelationVarName="relationFK_TemporaryTone_TemporarySuperNATURALDrumKit" msprop:rel_Generator_UserParentTable="TemporaryTone">
+      <xs:selector xpath=".//mstns:TemporarySuperNATURALDrumKit" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:keyref>
+    <xs:keyref name="FK_TemporaryTone_TemporarySuperNATURALAcousticTone" refer="PKTemporaryTone" msprop:rel_Generator_UserChildTable="TemporarySuperNATURALAcousticTone" msprop:rel_Generator_ChildPropName="GetTemporarySuperNATURALAcousticToneRows" msprop:rel_Generator_UserRelationName="FK_TemporaryTone_TemporarySuperNATURALAcousticTone" msprop:rel_Generator_ParentPropName="TemporaryToneRowParent" msprop:rel_Generator_RelationVarName="relationFK_TemporaryTone_TemporarySuperNATURALAcousticTone" msprop:rel_Generator_UserParentTable="TemporaryTone">
+      <xs:selector xpath=".//mstns:TemporarySuperNATURALAcousticTone" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:keyref>
+    <xs:keyref name="FK_TemporaryTone_TemporarySUPERNaturalSynthTone" refer="PKTemporaryTone" msprop:rel_Generator_UserChildTable="TemporarySuperNATURALSynthTone" msprop:rel_Generator_ChildPropName="GetTemporarySuperNATURALSynthToneRows" msprop:rel_Generator_UserRelationName="FK_TemporaryTone_TemporarySUPERNaturalSynthTone" msprop:rel_Generator_ParentPropName="TemporaryToneRowParent" msprop:rel_Generator_RelationVarName="relationFK_TemporaryTone_TemporarySUPERNaturalSynthTone" msprop:rel_Generator_UserParentTable="TemporaryTone">
+      <xs:selector xpath=".//mstns:TemporarySuperNATURALSynthTone" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:keyref>
+    <xs:keyref name="FK_TemporaryTone_TemporaryPCMSynthTone" refer="PKTemporaryTone" msprop:rel_Generator_UserChildTable="TemporaryPCMSynthTone" msprop:rel_Generator_ChildPropName="GetTemporaryPCMSynthToneRows" msprop:rel_Generator_UserRelationName="FK_TemporaryTone_TemporaryPCMSynthTone" msprop:rel_Generator_ParentPropName="TemporaryToneRowParent" msprop:rel_Generator_RelationVarName="relationFK_TemporaryTone_TemporaryPCMSynthTone" msprop:rel_Generator_UserParentTable="TemporaryTone">
+      <xs:selector xpath=".//mstns:TemporaryPCMSynthTone" />
+      <xs:field xpath="mstns:SessionID" />
+      <xs:field xpath="mstns:Part" />
+    </xs:keyref>
+    <xs:keyref name="FK_StudioSet_StudioSetPartEQ" refer="PKStudioSet" msprop:rel_Generator_UserChildTable="StudioSetPartEQ" msprop:rel_Generator_ChildPropName="GetStudioSetPartEQRows" msprop:rel_Generator_UserRelationName="FK_StudioSet_StudioSetPartEQ" msprop:rel_Generator_ParentPropName="StudioSetRow" msprop:rel_Generator_RelationVarName="relationFK_StudioSet_StudioSetPartEQ" msprop:rel_Generator_UserParentTable="StudioSet">
+      <xs:selector xpath=".//mstns:StudioSetPartEQ" />
+      <xs:field xpath="mstns:SessionID" />
+    </xs:keyref>
+    <xs:keyref name="FK_StudioSet_StudioSetPart" refer="PKStudioSet" msprop:rel_Generator_UserChildTable="StudioSetPart" msprop:rel_Generator_ChildPropName="GetStudioSetPartRows" msprop:rel_Generator_UserRelationName="FK_StudioSet_StudioSetPart" msprop:rel_Generator_ParentPropName="StudioSetRow" msprop:rel_Generator_RelationVarName="relationFK_StudioSet_StudioSetPart" msprop:rel_Generator_UserParentTable="StudioSet">
+      <xs:selector xpath=".//mstns:StudioSetPart" />
+      <xs:field xpath="mstns:SessionID" />
+    </xs:keyref>
+    <xs:keyref name="FK_StudioSet_StudioSetMIDI" refer="PKStudioSet" msprop:rel_Generator_UserChildTable="StudioSetMIDI" msprop:rel_Generator_ChildPropName="GetStudioSetMIDIRows" msprop:rel_Generator_UserRelationName="FK_StudioSet_StudioSetMIDI" msprop:rel_Generator_ParentPropName="StudioSetRow" msprop:rel_Generator_RelationVarName="relationFK_StudioSet_StudioSetMIDI" msprop:rel_Generator_UserParentTable="StudioSet">
+      <xs:selector xpath=".//mstns:StudioSetMIDI" />
+      <xs:field xpath="mstns:SessionID" />
+    </xs:keyref>
+    <xs:keyref name="FK_StudioSet_StudioSetMasterEQ" refer="PKStudioSet" msprop:rel_Generator_UserChildTable="StudioSetMasterEQ" msprop:rel_Generator_ChildPropName="GetStudioSetMasterEQRows" msprop:rel_Generator_UserRelationName="FK_StudioSet_StudioSetMasterEQ" msprop:rel_Generator_ParentPropName="StudioSetRow" msprop:rel_Generator_RelationVarName="relationFK_StudioSet_StudioSetMasterEQ" msprop:rel_Generator_UserParentTable="StudioSet">
+      <xs:selector xpath=".//mstns:StudioSetMasterEQ" />
+      <xs:field xpath="mstns:SessionID" />
+    </xs:keyref>
+    <xs:keyref name="FK_StudioSet_StudioSetCommonMotionalSurround" refer="PKStudioSet" msprop:rel_Generator_UserChildTable="StudioSetCommonMotionalSurround" msprop:rel_Generator_ChildPropName="GetStudioSetCommonMotionalSurroundRows" msprop:rel_Generator_UserRelationName="FK_StudioSet_StudioSetCommonMotionalSurround" msprop:rel_Generator_ParentPropName="StudioSetRow" msprop:rel_Generator_RelationVarName="relationFK_StudioSet_StudioSetCommonMotionalSurround" msprop:rel_Generator_UserParentTable="StudioSet">
+      <xs:selector xpath=".//mstns:StudioSetCommonMotionalSurround" />
+      <xs:field xpath="mstns:SessionID" />
+    </xs:keyref>
+    <xs:keyref name="FK_StudioSet_StudioSetCommonReverb" refer="PKStudioSet" msprop:rel_Generator_UserChildTable="StudioSetCommonReverb" msprop:rel_Generator_ChildPropName="GetStudioSetCommonReverbRows" msprop:rel_Generator_UserRelationName="FK_StudioSet_StudioSetCommonReverb" msprop:rel_Generator_ParentPropName="StudioSetRow" msprop:rel_Generator_RelationVarName="relationFK_StudioSet_StudioSetCommonReverb" msprop:rel_Generator_UserParentTable="StudioSet">
+      <xs:selector xpath=".//mstns:StudioSetCommonReverb" />
+      <xs:field xpath="mstns:SessionID" />
+    </xs:keyref>
+    <xs:keyref name="FK_StudioSet_StudioSetCommonChorus" refer="PKStudioSet" msprop:rel_Generator_UserChildTable="StudioSetCommonChorus" msprop:rel_Generator_ChildPropName="GetStudioSetCommonChorusRows" msprop:rel_Generator_UserRelationName="FK_StudioSet_StudioSetCommonChorus" msprop:rel_Generator_ParentPropName="StudioSetRow" msprop:rel_Generator_RelationVarName="relationFK_StudioSet_StudioSetCommonChorus" msprop:rel_Generator_UserParentTable="StudioSet">
+      <xs:selector xpath=".//mstns:StudioSetCommonChorus" />
+      <xs:field xpath="mstns:SessionID" />
+    </xs:keyref>
+    <xs:keyref name="FK_StudioSet_TemporaryTone" refer="PKStudioSet" msprop:rel_Generator_UserChildTable="TemporaryTone" msprop:rel_Generator_ChildPropName="GetTemporaryToneRows" msprop:rel_Generator_UserRelationName="FK_StudioSet_TemporaryTone" msprop:rel_Generator_ParentPropName="StudioSetRow" msprop:rel_Generator_RelationVarName="relationFK_StudioSet_TemporaryTone" msprop:rel_Generator_UserParentTable="StudioSet">
+      <xs:selector xpath=".//mstns:TemporaryTone" />
+      <xs:field xpath="mstns:SessionID" />
+    </xs:keyref>
+    <xs:keyref name="FK_Sessions_StudioSet" refer="PKSessions" msprop:rel_Generator_UserChildTable="StudioSet" msprop:rel_Generator_ChildPropName="GetStudioSetRows" msprop:rel_Generator_UserRelationName="FK_Sessions_StudioSet" msprop:rel_Generator_ParentPropName="SessionsRow" msprop:rel_Generator_RelationVarName="relationFK_Sessions_StudioSet" msprop:rel_Generator_UserParentTable="Sessions">
+      <xs:selector xpath=".//mstns:StudioSet" />
+      <xs:field xpath="mstns:SessionID" />
+    </xs:keyref>
+  </xs:element>
+</xs:schema>
