@@ -1,5 +1,6 @@
 ﻿using Integra.Core;
 using Integra.Core.Interfaces;
+using Integra.Database;
 using Integra.Models;
 using MidiXL;
 using System;
@@ -503,7 +504,7 @@ namespace Integra
         /// <param name="e">An <see cref="SystemExclusiveMessageEventArgs"/> containing event data.</param>
         private void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
-            Debug.Print($"[{nameof(Device)}.{nameof(SystemExclusiveReceived)}] {string.Join(" ", e.Message.Data.Select(x => string.Format("{0:X2}", x)))}");
+            //Debug.Print($"[{nameof(Device)}.{nameof(SystemExclusiveReceived)}] {string.Join(" ", e.Message.Data.Select(x => string.Format("{0:X2}", x)))}");
 
             //IntegraSystemExclusiveReceived?.Invoke(this, new IntegraSystemExclusiveEventArgs(new IntegraSystemExclusive(e.Message)));
             _UIContext.Send(o => IntegraSystemExclusiveReceived?.Invoke(this, new IntegraSystemExclusiveEventArgs(new IntegraSystemExclusive(e.Message))), null);
@@ -534,6 +535,13 @@ namespace Integra
             }
         }
 
+        private static int _ID = 0;
+        public static int ID
+        {
+            get { return _ID; }
+            private set { _ID = value; }
+        }
+
         /// <summary>
         /// Initializes the <see cref="Device"/>.
         /// </summary>
@@ -544,6 +552,10 @@ namespace Integra
             // Check for initial status to load devices from the configuration
             if (!_IsInitialized)
             {
+                ID = DataAccess.GetNextID();
+                Debug.Print($"[{nameof(Device)}.{nameof(Initialize)}] ID: { ID }");
+                
+
                 DeviceStatusFlags flags = DeviceStatusFlags.DEVICE_READY;
 
                 // Load MIDI configuration from App.config

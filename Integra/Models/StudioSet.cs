@@ -2,10 +2,6 @@
 using Integra.Core.Interfaces;
 using MidiXL;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Integra.Models
 {
@@ -13,10 +9,14 @@ namespace Integra.Models
     // TODO: Make only the studio set report progress
     public class StudioSet : IntegraBase<StudioSet>
     {
-        StudioSetMidi[] _StudioSetMidi = new StudioSetMidi[16];
-        StudioSetPart[] _StudioSetParts = new StudioSetPart[16];
+        private IntegraParts _SelectedPart = IntegraParts.Part01;
 
-        //StudioSetPart _Part = new StudioSetPart(IntegraParts.Part01);
+        IntegraBasePartial<StudioSetPart> _StudioSetParts = new IntegraBasePartial<StudioSetPart>(0x18002000, 0x00004D);
+        IntegraBasePartial<StudioSetMidi> _Midi = new IntegraBasePartial<StudioSetMidi>(0x18001000, 0x00000001);
+
+
+        StudioSetCommon _Common = new StudioSetCommon();
+
 
         public delegate void PartChangeEventHandler(object sender, IntegraPartChangeEventArts e);
 
@@ -24,18 +24,30 @@ namespace Integra.Models
 
         public StudioSet() : base(0x18002000, 0x0000004D)
         {
-            //_Part = new StudioSetPart(IntegraParts.Part01);
-            for (int i = 0; i < 16; i++)
-            {
-                _StudioSetParts[i] = new StudioSetPart((IntegraParts)i);
-            }
-
-            //for (int i = 0; i < 16; i++)
-            //{
-            //    _StudioSetMidi[i] = new StudioSetMidi((IntegraParts)i);
-            //}
         }
 
+        public IntegraBasePartial<StudioSetMidi> MIDI
+        {
+            get { return _Midi; }
+            set
+            {
+                _Midi = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public StudioSetCommon Common
+        {
+            get { return _Common; }
+            set
+            {
+                if(_Common != value)
+                {
+                    _Common = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
@@ -66,6 +78,7 @@ namespace Integra.Models
 
 
                 IsInitialized = true;
+                //Save();
             }
 
             return IsInitialized;
@@ -82,9 +95,9 @@ namespace Integra.Models
                 {
                     _SelectedTone = value;
 
-                    Part.ToneBankSelectMSB = value.MSB;
-                    Part.ToneBankSelectLSB = value.LSB;
-                    Part.ToneProgramNumber = value.PC;
+                    Parts[(int)SelectedPart].ToneBankSelectMSB = value.MSB;
+                    Parts[(int)SelectedPart].ToneBankSelectLSB = value.LSB;
+                    Parts[(int)SelectedPart].ToneProgramNumber = value.PC;
 
                     ToneType = IntegraToneExtensions.Type(value.MSB);
 
@@ -95,7 +108,7 @@ namespace Integra.Models
         }
         private IntegraToneTypes _ToneType = IntegraToneTypes.SuperNATURALAcousticTone;
 
-        private IntegraToneTypes ToneType
+        public IntegraToneTypes ToneType
         {
             get { return _ToneType; }
             set
@@ -130,27 +143,25 @@ namespace Integra.Models
                 switch (ToneType)
                 {
                     case IntegraToneTypes.SuperNATURALAcousticTone:
-                        return Part.SuperNATURALAcousticTone;
+                        return Parts[(int)SelectedPart].SuperNATURALAcousticTone;
 
                     case IntegraToneTypes.SuperNATURALSynthTone:
-                        return Part.SuperNATURALSynthTone;
+                        return Parts[(int)SelectedPart].SuperNATURALSynthTone;
 
                     case IntegraToneTypes.SuperNATURALDrumkit:
-                        return Part.SuperNATURALDrumKit;
+                        return Parts[(int)SelectedPart].SuperNATURALDrumKit;
 
                     case IntegraToneTypes.PCMSynthTone:
-                        return Part.PCMSynthTone;
+                        return Parts[(int)SelectedPart].PCMSynthTone;
 
                     case IntegraToneTypes.PCMDrumkit:
-                        return Part.PCMDrumKit;
+                        return Parts[(int)SelectedPart].PCMDrumKit;
 
                     default:
                         return null;
                 }
             }
         }
-
-        private IntegraParts _SelectedPart = IntegraParts.Part01;
 
         public IntegraParts SelectedPart
         {
@@ -159,32 +170,19 @@ namespace Integra.Models
             {
                 if(_SelectedPart != value)
                 {
-
-
                     _SelectedPart = value;
 
+                    Tone = new Tone(Parts[(int)value].ToneBankSelectMSB, Parts[(int)value].ToneBankSelectLSB, Parts[(int)value].ToneProgramNumber);
 
-                    Tone = new Tone(Part.ToneBankSelectMSB, Part.ToneBankSelectLSB, Part.ToneProgramNumber);
-                    //Reinitialize();
-                    //Part = new StudioSetPart(value);
-                    NotifyPropertyChanged(nameof(Part));
                     NotifyPropertyChanged(nameof(MFXDataContext));
                     NotifyPropertyChanged();
-                    //PartChanged?.Invoke(this, new IntegraPartChangeEventArts(_SelectedPart, value));
                 }
             }
         }
 
-        public virtual StudioSetPart[] Parts
+        public IntegraBasePartial<StudioSetPart> Parts
         {
             get { return _StudioSetParts; }
         }
-
-        public StudioSetPart Part
-        {
-            get { return _StudioSetParts[(int)SelectedPart]; }
-           
-        }
-
     }
 }

@@ -10,7 +10,8 @@ using System.Reflection;
 
 namespace Integra.Core
 {
-    public abstract class IntegraBaseCollection<T, U> : IntegraBase<T>, IEnumerable<U>, INotifyCollectionChanged where T: IntegraBase<T> where U: IntegraBaseItem
+   
+    public abstract class IntegraBaseCollection<T, U> : IntegraBase<T>, IEnumerable<U>, INotifyCollectionChanged where T: IntegraBase<T>// where U: IntegraBaseItem
     {
         /// <summary>
         /// Stores the collection of items of type <see cref="U"/>.

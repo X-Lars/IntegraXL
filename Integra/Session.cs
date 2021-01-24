@@ -1,14 +1,13 @@
 ﻿using Integra.Core;
 using Integra.Models;
 using System;
-using System.Data.Entity;
 using System.Reflection;
 
 namespace Integra
 {
     public class Session
     {
-        public int SessionID { get; private set; }
+        public int SessionID { get; internal set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public StudioSet StudioSet { get; set; }

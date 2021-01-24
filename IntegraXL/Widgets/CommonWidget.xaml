@@ -232,6 +232,10 @@
 
             </Grid>
         </xl:Expander>
-
+        
+        <xl:NumericTextBox MinValue="0" MaxValue="1" Interval="1"
+                           Value="{Binding StudioSet.MIDI[0].PhaseLock}"/>
+        <xl:LinkButton Command="{Binding Save, RelativeSource={RelativeSource AncestorType=Window}}"
+                       Content="Save"/>
     </StackPanel>
 </local:Widget>

@@ -7,7 +7,7 @@ namespace Integra.Core
     /// </summary>
     /// <remarks><i>Used for reflection inside the <see cref="IntegraBase{T}"/> to determin the property or field offset.</i></remarks>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
-    public class Offset : Attribute
+    internal class Offset : Attribute
     {
         /// <summary>
         /// Creates and initalizes a new <see cref="Offset"/> attribute instance.

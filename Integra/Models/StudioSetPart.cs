@@ -27,6 +27,11 @@ namespace Integra.Models
         [Offset(0x0007)] private byte _ToneBankSelectLSB;
         [Offset(0x0008)] private byte _ToneProgramNumber;
 
+        public StudioSetPart()
+        {
+
+        }
+
         public StudioSetPart(IntegraParts part) : base(new IntegraAddress(0x18, 0x00, (byte)(0x20 + part), 0x00), new IntegraRequest(0x00, 0x00, 0x00, 0x4D))
         {
             Name = $"Studio Set Part {(int)part + 1}";

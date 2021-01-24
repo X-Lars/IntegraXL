@@ -1,10 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
 namespace Integra.Common
 {
+    public interface IEnumeration
+    {
+        List<string> Values { get; }
+    }
+    public abstract class Enumeration : IEnumeration
+    {
+        public int Value { get; set; }
+        public List<string> Values { get; }
+        public override string ToString()
+        {
+            return Values[Value];
+        }
+    }
+
     public static class EnumerationExtensions
     {
         public static string Description<T>(this T value) where T: struct

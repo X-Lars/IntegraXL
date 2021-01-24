@@ -37,4 +37,20 @@ namespace Integra.Core.Interfaces
         /// <returns>The converted <paramref name="value"/>.</returns>
         int Set(int index, int value);
     }
+
+    public interface IIntegraBase
+    {
+        void Save();
+    }
+
+    public interface IIntegraBaseCollection
+    {
+        void Save();
+    }
+
+    public interface IIntegraPartialCollection
+    {
+        IntegraParts Part { get; set; }
+        void Save();
+    }
 }

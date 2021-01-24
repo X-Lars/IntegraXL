@@ -48,7 +48,7 @@ namespace IntegraXL
             CommandBindings.Add(new CommandBinding(_ShowIntegraWindowCommand, OnShowIntegraWindow, CanExecuteOnConnection));
             CommandBindings.Add(new CommandBinding(_ShowIntegraMFXWindowCommand, OnShowIntegraMFXWindow));
             CommandBindings.Add(new CommandBinding(_ShowIntegraToneWindowCommand, OnShowIntegraToneWindow, CanExecuteOnToneType));
-
+            CommandBindings.Add(new CommandBinding(_SaveCommand, OnSave, CanExecuteOnSave));
 
 
             Host.SelectionChanged += HostSelectionChanged;
@@ -56,6 +56,9 @@ namespace IntegraXL
             Loaded += MainWindowLoaded;
             //Config<IntegraConfiguration>.Print();
         }
+
+       
+        
 
         protected override void OnClosed(EventArgs e)
         {
@@ -96,10 +99,16 @@ namespace IntegraXL
         /// </summary>
         private static RoutedUICommand _ShowIntegraWindowCommand = new RoutedUICommand(nameof(ShowIntegraWindow), nameof(ShowIntegraWindow), typeof(MainWindow));
 
+        private static RoutedUICommand _SaveCommand = new RoutedUICommand(nameof(Save), nameof(Save), typeof(MainWindow));
+
         #endregion
 
         #region Commands: Properties
 
+        public static ICommand Save
+        {
+            get { return _SaveCommand; }
+        }
         /// <summary>
         /// Gets the command to show a <see cref="MDIChild"/> window.
         /// </summary>
@@ -132,6 +141,15 @@ namespace IntegraXL
 
         #region Commands: Handlers
 
+        private void OnSave(object sender, ExecutedRoutedEventArgs e)
+        {
+            MainWindow caller = sender as MainWindow;
+
+            if(caller != null)
+            {
+                caller.Integra.StudioSet.Save();
+            }
+        }
         /// <summary>
         /// Handles the <see cref="ShowIntegraWindow"/> command.
         /// </summary>
@@ -211,6 +229,13 @@ namespace IntegraXL
             e.CanExecute = Integra.IsConnected;
         }
 
+        private void CanExecuteOnSave(object sender, CanExecuteRoutedEventArgs e)
+        {
+            // TODO: Enable save on changes made
+            e.CanExecute = true;
+        }
+
+
         private void CanExecuteOnToneType(object sender, CanExecuteRoutedEventArgs e)
         {
             Type type = e.Parameter.GetType();
@@ -224,12 +249,12 @@ namespace IntegraXL
             //    return;
             //}
             //e.CanExecute = Integra.StudioSet.Parts[(int)Integra.SelectedPart].TemporaryTone.Type == (IntegraToneTypes)e.Parameter;
-            if (Integra.StudioSet.Part.TemporaryTone == null)
+            if (Integra.StudioSet.Parts[(int)Integra.StudioSet.SelectedPart].TemporaryTone == null)
             {
                 e.CanExecute = false;
                 return;
             }
-            e.CanExecute = Integra.StudioSet.Part.TemporaryTone.Type == (IntegraToneTypes)e.Parameter;
+            e.CanExecute = Integra.StudioSet.Parts[(int)Integra.StudioSet.SelectedPart].TemporaryTone.Type == (IntegraToneTypes)e.Parameter;
         }
 
         #endregion
