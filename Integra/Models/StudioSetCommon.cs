@@ -81,6 +81,9 @@ namespace Integra.Models
             {
                 if (Name != value)
                 {
+                    if (value == null)
+                        return;
+
                     // Copy the string to the backing field byte array
                     Array.Copy(Encoding.ASCII.GetBytes(value), 0, _NameData, 0, 16);
 

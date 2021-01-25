@@ -1,64 +1,116 @@
 ﻿using Integra.Core;
+using Integra.Database;
 using Integra.Models;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace Integra
 {
-    public class Session
+    public enum SessionTypes : byte
     {
-        public int SessionID { get; internal set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public StudioSet StudioSet { get; set; }
-        public DateTime CreatedDate { get; set; }
+        StudioSet = 0x00,
+        Tone      = 0x01,
+        MFX       = 0x02
     }
 
-    //public class IntegraContext : DbContext
-    //{
-    //    public IntegraContext() : base(nameof(Integra))
-    //    {
+    public class SessionData
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public SessionTypes Type { get; set; }
+        public string Description { get; set; }
+    }
 
-    //    }
+    public class Session : IntegraBase<Session>
+    {
+        public Session() 
+        {
+            SessionID = DataAccess.GetNextID(this);
 
-    //    public DbSet<Session> Sessions { get; set; }
+            Debug.Print($"[{nameof(Session)}] ID: {SessionID}");
 
-    //    protected override void OnModelCreating(DbModelBuilder modelBuilder)
-    //    {
-            
+            //_Data = new List<SessionData>();
 
-    //        modelBuilder.Entity<StudioSet>()
-    //            .HasKey(pk => pk.SessionID);
+            //DataAccess.Select(this);
+        }
 
-    //        modelBuilder.Entity<StudioSet>()
-    //            .Property(p => p.Name)
-    //            .IsRequired()
-    //            .HasMaxLength(16);
+        private List<SessionData> _Data;
 
-    //        // IGNORE
-    //        modelBuilder.Entity<StudioSet>().Ignore(p => p.SelectedPart);
-    //        modelBuilder.Entity<StudioSet>().Ignore(p => p.Tone);
-    //        modelBuilder.Entity<StudioSet>().Ignore(p => p.Part);
-    //        modelBuilder.Entity<StudioSet>().Ignore(p => p.MFXType);
-    //        modelBuilder.Entity<StudioSet>().Ignore(p => p.IsInitialized);
+        public List<SessionData> Sessions 
+        {
+            get { return _Data; }
 
-    //        PropertyInfo[] properties = typeof(StudioSet).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            private set
+            {
+                _Data = value;
+                NotifyPropertyChanged();
+            }
+        }
 
-    //        foreach (PropertyInfo property in properties)
-    //        {
-    //            Offset attribute = property.GetCustomAttribute<Offset>(false);
+        // TODO: Associate virtual slots used by the session
 
-    //            if (attribute == null)
-    //            {
-    //                modelBuilder.Entity<StudioSet>().Ignore(p => );
-    //            }
-    //        }
+        public int SessionID { get; private set; }
+        public new string Name { get; set; } = string.Empty;
+        public SessionTypes Type { get; private set; } = SessionTypes.StudioSet;
+        public string Description { get; set; } = string.Empty;
 
-    //    }
+        protected override void InitializeParameterCache()
+        {
+            if (_TypeCacheInitialized)
+            {
+                return;
+            }
 
+            _TypeCache.Add(new SQLData(0, typeof(string), 0, nameof(Name)));
+            _TypeCache.Add(new SQLData(0, typeof(byte), 0, nameof(Type)));
+            _TypeCache.Add(new SQLData(0, typeof(string), 0, nameof(Description)));
+        }
 
+        public override void Load(int id)
+        {
+            DataAccess.Load(this, 1);
 
-    //        base.OnModelCreating(modelBuilder);
-    //    }
-    //}
+            foreach (var item in Parameters)
+            {
+                GetType().GetProperty(item.Name).SetValue(this, item.Value);
+            }
+
+            SessionID = id;
+            DebugPrint();
+        }
+
+        public override void Save()
+        {
+            List<SQLParameter> parameters = new List<SQLParameter>();
+
+            parameters.Add(new SQLParameter(0, typeof(string), nameof(Name), Name));
+            parameters.Add(new SQLParameter(1, typeof(byte), nameof(Type), (byte)Type));
+            parameters.Add(new SQLParameter(2, typeof(string), nameof(Description), Description));
+
+            DataAccess.Save(this, parameters, false, false);
+
+            Device.Instance.StudioSet.Save();
+
+            SessionID = DataAccess.GetNextID(this);
+        }
+
+        public override void Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Truncate()
+        {
+            DataAccess.Truncate(this);
+
+            Device.Instance.StudioSet.Truncate();
+
+            SessionID = DataAccess.GetNextID(this);
+
+            DebugPrint();
+        }
+    }
+
 }

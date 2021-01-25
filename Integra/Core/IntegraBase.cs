@@ -101,11 +101,6 @@ namespace Integra.Core
         #region Properties
 
         /// <summary>
-        /// Gets the ID associated with the <see cref="Session"/>.
-        /// </summary>
-        public int SessionID { get; internal set; }
-
-        /// <summary>
         /// Gets the name defaulted to the inheriting data structure type name.
         /// </summary>
         public string Name { get; protected set; }
@@ -728,7 +723,10 @@ namespace Integra.Core
             foreach(var property in properties)
             {
                 Type type = property.PropertyType;
-                
+
+                if (type == typeof(Tone))
+                    continue;
+
                 if(type.GetInterfaces().Contains(typeof(IIntegraDataClass)))
                 {
                     // The property is of type IntegraBase<T>
@@ -889,10 +887,10 @@ namespace Integra.Core
             DataAccess.Save(this, parameters, GetType().GetInterfaces().Contains(typeof(IIntegraPartial)));
         }
 
-        private bool _TypeCacheInitialized = false;
-        private List<SQLData> _TypeCache = new List<SQLData>();
+        protected bool _TypeCacheInitialized = false;
+        protected List<SQLData> _TypeCache = new List<SQLData>();
 
-        private void InitializeParameterCache()
+        protected virtual void InitializeParameterCache()
         {
             if (_TypeCacheInitialized)
             {
@@ -1041,14 +1039,14 @@ namespace Integra.Core
         public virtual void Truncate()
         {
             // TODO: Remove temporary exclusion
-            if (GetType() != typeof(StudioSetMidi) && GetType() != typeof(StudioSet) && GetType() != typeof(StudioSetCommon))
+            if (GetType() != typeof(StudioSetMidi) && GetType() != typeof(StudioSet) && GetType() != typeof(StudioSetCommon) && GetType() != typeof(Session))
                 return;
 
             PropertyInfo[] properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
 
             foreach (var property in properties)
             {
-                if (property.GetType().GetInterfaces().Contains(typeof(IIntegraDataClass)))
+                if (property.PropertyType.GetInterfaces().Contains(typeof(IIntegraDataClass)))
                 {
 
                     ((IIntegraDataClass)GetType().GetProperty(property.Name).GetValue(this)).Truncate();
@@ -1076,13 +1074,16 @@ namespace Integra.Core
             }
 
 
-            DataAccess.Load(this, id);
+            int rows = DataAccess.Load(this, id);
 
-            foreach (var item in Parameters)
+            if (rows > 0)
             {
-                if(item.Type != typeof(IIntegraDataClass))
+                foreach (var item in Parameters)
                 {
-                    GetType().GetProperty(item.Name).SetValue(this, item.Value);
+                    if (item.Type != typeof(IIntegraDataClass))
+                    {
+                        GetType().GetProperty(item.Name).SetValue(this, item.Value);
+                    }
                 }
             }
         }

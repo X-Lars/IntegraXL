@@ -162,7 +162,7 @@ namespace IntegraXL
                 // TODO: Parameter to select type of data structure to load
                 // TODO: Parameter ID to load
                 // TODO: Remove temporary fixed parameter
-                caller.Integra.StudioSet.Load(30);
+                Device.Session.Load(1);
             }
         }
 
@@ -172,7 +172,8 @@ namespace IntegraXL
 
             if(caller != null)
             {
-                caller.Integra.StudioSet.Save();
+                Device.Session.Save();
+                //caller.Integra.ses.Save();
             }
         }
 
@@ -186,7 +187,7 @@ namespace IntegraXL
             if (caller != null)
             {
                 if(result == DialogResults.DialogYes)
-                    caller.Integra.StudioSet.Truncate();
+                    Device.Session.Truncate();
             }
         }
 

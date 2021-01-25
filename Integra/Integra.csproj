@@ -139,9 +139,6 @@
     <None Include="Database\IntegraDataSet.xss">
       <DependentUpon>IntegraDataSet.xsd</DependentUpon>
     </None>
-    <Content Include="Integra.db">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Integra.cd" />
   </ItemGroup>
   <ItemGroup>

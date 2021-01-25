@@ -30,8 +30,17 @@ namespace Integra.Database
 
                 using (var command = new SqlCommand(sql, connection))
                 {
+                    var maxID = command.ExecuteScalar();
 
-                    result = Convert.ToInt32(command.ExecuteScalar());
+                    // Check for DBNull when the table is empty
+                    if (maxID.GetType() == typeof(DBNull))
+                    {
+                        result = 0;
+                    }
+                    else
+                    {
+                        result = Convert.ToInt32(maxID);
+                    }
                 }
 
                 CloseConnection(connection);
@@ -41,9 +50,28 @@ namespace Integra.Database
             return result + 1;
         }
 
-        public static void GetList<T>(IntegraBase<T> integraBase) where T: IntegraBase<T>
+        public static void Select<T>(IntegraBase<T> integraBase) where T: IntegraBase<T>
         {
-            //string sql = $"SELECT * FROM {typeof(T).Name} WHERE ID = {id}";
+            using (var connection = new SqlConnection(GetConnectionString()))
+            {
+                string sql = $"SELECT * FROM {typeof(T).Name}";
+
+                OpenConnection(connection);
+
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if(reader.HasRows)
+                        {
+
+                        }
+                    }
+                }
+
+                CloseConnection(connection);
+
+            }
         }
         
         /// <summary>
@@ -52,8 +80,10 @@ namespace Integra.Database
         /// <typeparam name="T">The type of class specifying the table name to retreive the data structure from.</typeparam>
         /// <param name="integraBase">The data structure to load.</param>
         /// <param name="id">The ID of the data structure to load.</param>
-        public static void Load<T>(IntegraBase<T> integraBase, int id) where T: IntegraBase<T>
+        public static int Load<T>(IntegraBase<T> integraBase, int id) where T: IntegraBase<T>
         {
+            int result = 0;
+
             string sql = $"SELECT * FROM {typeof(T).Name} WHERE ID = {id}";
 
             // Skip the ID column
@@ -80,64 +110,80 @@ namespace Integra.Database
                         int count = reader.FieldCount - columnOffset;
                         int offset = 0;
 
-                        while (reader.Read())
+                        if (reader.HasRows)
                         {
 
-                            for (int i = 0; i < integraBase.Parameters.Count; i++)
+                            while (reader.Read())
                             {
-                                SQLData data = integraBase.Parameters[i];
+                                if (result == 1)
+                                    throw new Exception("");
 
-                                if (data.Type == typeof(string))
+                                for (int i = 0; i < integraBase.Parameters.Count; i++)
                                 {
-                                    data.Value = reader.GetString(offset + columnOffset);
-                                    offset++;
-                                }
-                                else if (data.Type == typeof(byte[]))
-                                {
-                                    byte[] values = new byte[data.Size];
+                                    SQLData data = integraBase.Parameters[i];
 
-                                    for (int v = 0; v < data.Size; v++)
+                                    if (data.Type == typeof(string))
                                     {
-                                        values[v] = reader.GetByte(offset + columnOffset);
+                                        data.Value = reader.GetString(offset + columnOffset);
+
+                                        if (data.Value == null)
+                                            data.Value = string.Empty;
+
                                         offset++;
                                     }
-
-                                    data.Value = values;
-                                }
-                                else if (data.Type == typeof(int[]))
-                                {
-                                    int[] values = new int[data.Size];
-
-                                    for (int v = 0; v < data.Size; v++)
+                                    else if (data.Type == typeof(byte[]))
                                     {
-                                        values[v] = reader.GetInt32(offset + columnOffset);
+                                        byte[] values = new byte[data.Size];
+
+                                        for (int v = 0; v < data.Size; v++)
+                                        {
+                                            values[v] = reader.GetByte(offset + columnOffset);
+                                            offset++;
+                                        }
+
+                                        data.Value = values;
+                                    }
+                                    else if (data.Type == typeof(int[]))
+                                    {
+                                        int[] values = new int[data.Size];
+
+                                        for (int v = 0; v < data.Size; v++)
+                                        {
+                                            values[v] = reader.GetInt32(offset + columnOffset);
+                                            offset++;
+                                        }
+
+                                        data.Value = values;
+                                    }
+                                    else if (data.Type == typeof(short))
+                                    {
+                                        data.Value = reader.GetInt16(offset + columnOffset);
                                         offset++;
                                     }
+                                    else if (data.Type == typeof(bool))
+                                    {
+                                        data.Value = reader.GetBoolean(offset + columnOffset);
+                                        offset++;
+                                    }
+                                    else if (data.Type == typeof(int))
+                                    {
+                                        data.Value = reader.GetInt32(offset + columnOffset);
+                                        offset++;
+                                    }
+                                    else if (data.Type == typeof(byte))
+                                    {
+                                        data.Value = reader.GetByte(offset + columnOffset);
+                                        offset++;
+                                    }
+                                }
 
-                                    data.Value = values;
-                                }
-                                else if (data.Type == typeof(short))
-                                {
-                                    data.Value = reader.GetInt16(offset + columnOffset);
-                                    offset++;
-                                }
-                                else if (data.Type == typeof(bool))
-                                {
-                                    data.Value = reader.GetBoolean(offset + columnOffset);
-                                    offset++;
-                                }
-                                else if (data.Type == typeof(int))
-                                {
-                                    data.Value = reader.GetInt32(offset + columnOffset);
-                                    offset++;
-                                }
-                                else if (data.Type == typeof(byte))
-                                {
-                                    data.Value = reader.GetByte(offset + columnOffset);
-                                    offset++;
-                                }
+                                result += 1;
                             }
                             
+                        }
+                        else
+                        {
+                            result = 0;
                         }
 
                     }
@@ -146,6 +192,8 @@ namespace Integra.Database
                 CloseConnection(connection);
 
             }
+
+            return result;
         }
 
 
@@ -156,7 +204,7 @@ namespace Integra.Database
             columns += IsPartial == true ? "Part," : string.Empty;
 
             string values = string.Empty;
-            values += IsIdentity == true ? string.Empty : $"{Device.SessionID},";
+            values += IsIdentity == true ? string.Empty : $"{Device.Session.SessionID},";
             values += IsPartial == true ? $"{(byte)((IIntegraPartial)integraBase).Part}," : string.Empty;
 
             for (int i = 0; i < parameters.Count; i++)

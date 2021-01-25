@@ -535,11 +535,12 @@ namespace Integra
             }
         }
 
-        private static int _SessionID = 0;
-        public static int SessionID
+        private static Session _Session = new Session();
+
+        public static Session Session
         {
-            get { return _SessionID; }
-            internal set { _SessionID = value; }
+            get { return _Session; }
+            internal set { _Session = value; }
         }
 
         /// <summary>
@@ -552,11 +553,6 @@ namespace Integra
             // Check for initial status to load devices from the configuration
             if (!_IsInitialized)
             {
-                SessionID = DataAccess.GetNextID(StudioSet);
-
-                Debug.Print($"[{nameof(Device)}.{nameof(Initialize)}] ID: { SessionID }");
-                
-
                 DeviceStatusFlags flags = DeviceStatusFlags.DEVICE_READY;
 
                 // Load MIDI configuration from App.config
