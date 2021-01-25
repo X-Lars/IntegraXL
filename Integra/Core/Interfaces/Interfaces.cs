@@ -44,15 +44,21 @@ namespace Integra.Core.Interfaces
     public interface IIntegraDataClass
     {
         /// <summary>
-        /// Saves the instance to the database.
+        /// Stores the instance in the database.
         /// </summary>
         void Save();
 
         /// <summary>
-        /// Loads the instance from the database.
+        /// Loads the the instance with the specified <paramref name="id"/> from the database.
         /// </summary>
-        /// <param name="id">The ID of the data to load.</param>
+        /// <param name="id">The ID of the instance to load.</param>
         void Load(int id);
+
+        /// <summary>
+        /// Removes the instance with the specified <paramref name="id"/> from the database.
+        /// </summary>
+        /// <param name="id">The ID of the instance to delete.</param>
+        void Delete(int id);
 
         /// <summary>
         /// Deletes all instances from the database.

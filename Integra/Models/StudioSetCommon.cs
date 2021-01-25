@@ -12,12 +12,9 @@ namespace Integra.Models
    
     public class StudioSetCommon : IntegraBase<StudioSetCommon>
     {
-        #region Variables
-
-        //[Offset(0x0000)] private string _Name;
+        #region Fields
 
         [Offset(0x0000)] private byte[] _NameData = new byte[16];
-
         [Offset(0x0018)] private byte _VoiceReserve01;
         [Offset(0x0019)] private byte _VoiceReserve02;
         [Offset(0x001A)] private byte _VoiceReserve03;
@@ -34,42 +31,35 @@ namespace Integra.Models
         [Offset(0x0025)] private byte _VoiceReserve14;
         [Offset(0x0026)] private byte _VoiceReserve15;
         [Offset(0x0027)] private byte _VoiceReserve16;
-
         [Offset(0x0039)] private IntegraControlSources _ToneControl01;
         [Offset(0x003A)] private IntegraControlSources _ToneControl02;
         [Offset(0x003B)] private IntegraControlSources _ToneControl03;
         [Offset(0x003C)] private IntegraControlSources _ToneControl04;
-
         [Offset(0x003D)] private byte[] _StudioSetTempoData = new byte[2];
-
         [Offset(0x003F)] private byte _SoloPart;
-
         [Offset(0x0040)] private bool _ReverbSwitch;
         [Offset(0x0041)] private bool _ChorusSwitch;
         [Offset(0x0042)] private bool _MasterEQSwitch;
         [Offset(0x0043)] private bool _DrumCompEQSwitch;
-
         [Offset(0x0044)] private IntegraParts _DrumCompEQPart;
-
         [Offset(0x0045)] private IntegraOutputAssigns _DrumCompEQOutputAssign01;
         [Offset(0x0046)] private IntegraOutputAssigns _DrumCompEQOutputAssign02;
         [Offset(0x0047)] private IntegraOutputAssigns _DrumCompEQOutputAssign03;
         [Offset(0x0048)] private IntegraOutputAssigns _DrumCompEQOutputAssign04;
         [Offset(0x0049)] private IntegraOutputAssigns _DrumCompEQOutputAssign05;
         [Offset(0x004A)] private IntegraOutputAssigns _DrumCompEQOutputAssign06;
-
         [Offset(0x004C)] private byte _ExtPartLevel;
         [Offset(0x004D)] private byte _ExtPartChorusSendLevel;
         [Offset(0x004E)] private byte _ExtPartReverbSendLevel;
         [Offset(0x004F)] private bool _ExtPartMuteSwitch;
 
-        private short _StudioSetTempo;
-        private string _Name;
-
         #endregion
 
         #region Constructor
 
+        /// <summary>
+        /// Creates and initializes a new connected <see cref="StudioSetCommon"/> instance.
+        /// </summary>
         public StudioSetCommon() : base(new IntegraAddress(0x18, 0x00, 0x00, 0x00), new IntegraRequest(0x00, 0x00, 0x00, 0x54))
         {
             Debug.Print($"[{nameof(StudioSetCommon)}]");
@@ -79,29 +69,28 @@ namespace Integra.Models
 
         #region Properties
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0000)]
         public new string Name
         {
             get
             {
-                SetStudioSetName();
-                return _Name;
+                // Convert the backing field byte array to string
+                return Encoding.ASCII.GetString(_NameData, 0, 16);
             }
             set
             {
-                if (_Name == value)
-                    return;
+                if (Name != value)
+                {
+                    // Copy the string to the backing field byte array
+                    Array.Copy(Encoding.ASCII.GetBytes(value), 0, _NameData, 0, 16);
 
-                SetStudioSetNameData();
-                // TODO: Store studioset name
-                NotifyPropertyChanged(nameof(Name), false);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
-        #region Voice Reserve
+        #region Properties: Voice Reserves
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0018)]
         public byte VoiceReserve01
         {
@@ -113,7 +102,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0019)]
         public byte VoiceReserve02
         {
@@ -125,7 +113,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x001A)]
         public byte VoiceReserve03
         {
@@ -137,7 +124,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x001B)]
         public byte VoiceReserve04
         {
@@ -149,7 +135,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x001C)]
         public byte VoiceReserve05
         {
@@ -161,7 +146,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x001D)]
         public byte VoiceReserve06
         {
@@ -173,7 +157,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x001E)]
         public byte VoiceReserve07
         {
@@ -185,7 +168,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x001F)]
         public byte VoiceReserve08
         {
@@ -197,7 +179,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0020)]
         public byte VoiceReserve09
         {
@@ -209,7 +190,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0021)]
         public byte VoiceReserve10
         {
@@ -221,7 +201,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0022)]
         public byte VoiceReserve11
         {
@@ -233,7 +212,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0023)]
         public byte VoiceReserve12
         {
@@ -245,7 +223,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0024)]
         public byte VoiceReserve13
         {
@@ -257,7 +234,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0025)]
         public byte VoiceReserve14
         {
@@ -269,7 +245,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0026)]
         public byte VoiceReserve15
         {
@@ -281,7 +256,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0027)]
         public byte VoiceReserve16
         {
@@ -296,9 +270,8 @@ namespace Integra.Models
 
         #endregion
 
-        #region Tone Control Sources
+        #region Properties: Tone Control Sources
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0039)]
         public IntegraControlSources ToneControlSource01
         {
@@ -310,7 +283,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x003A)]
         public IntegraControlSources ToneControlSource02
         {
@@ -322,7 +294,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x003B)]
         public IntegraControlSources ToneControlSource03
         {
@@ -334,7 +305,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x003C)]
         public IntegraControlSources ToneControlSource04
         {
@@ -348,26 +318,30 @@ namespace Integra.Models
 
         #endregion
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x003D)]
         public short Tempo
         {
             get
             {
-                SetStudioSetTempo();
-
-                return _StudioSetTempo;
+                // Convert the backing field byte array to short
+                return (short)((_StudioSetTempoData[0] & 0x0F) << 4 | (_StudioSetTempoData[1] & 0x0F));
             }
             set
             {
-                _StudioSetTempo = value;
+                if (Tempo != value)
+                {
+                    // Copy the short to the backing field byte array
+                    value = Math.Min(value, (short)250);
+                    value = Math.Max(value, (short)20);
 
-                SetStudioSetTempoData();
-                NotifyPropertyChanged();
+                    _StudioSetTempoData[0] = (byte)((value >> 4) & 0x0F);
+                    _StudioSetTempoData[1] = (byte)((value) & 0x0F);
+
+                    NotifyPropertyChanged();
+                }
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x003F)]
         public byte SoloPart
         {
@@ -379,9 +353,8 @@ namespace Integra.Models
             }
         }
 
-        #region Switches
+        #region Properties: Switches
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0040)]
         public bool ReverbSwitch
         {
@@ -393,7 +366,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0041)]
         public bool ChorusSwitch
         {
@@ -405,7 +377,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0042)]
         public bool MasterEQSwitch
         {
@@ -417,7 +388,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0043)]
         public bool DrumCompEQSwitch
         {
@@ -431,7 +401,6 @@ namespace Integra.Models
 
         #endregion
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0044)]
         public IntegraParts DrumCompEQPart
         {
@@ -443,9 +412,8 @@ namespace Integra.Models
             }
         }
 
-        #region Drum Compressor + EQ Output Assign
+        #region Properties: Drum Compressor + EQ Output Assign
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0045)]
         public IntegraOutputAssigns DrumCompEQOutputAssign01
         {
@@ -457,7 +425,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0046)]
         public IntegraOutputAssigns DrumCompEQOutputAssign02
         {
@@ -469,7 +436,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0047)]
         public IntegraOutputAssigns DrumCompEQOutputAssign03
         {
@@ -481,7 +447,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0048)]
         public IntegraOutputAssigns DrumCompEQOutputAssign04
         {
@@ -493,7 +458,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0049)]
         public IntegraOutputAssigns DrumCompEQOutputAssign05
         {
@@ -505,7 +469,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x004A)]
         public IntegraOutputAssigns DrumCompEQOutputAssign06
         {
@@ -519,9 +482,8 @@ namespace Integra.Models
 
         #endregion
 
-        #region External Part
+        #region Properties: External Part
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x004C)]
         public byte ExtPartLevel
         {
@@ -533,7 +495,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x004D)]
         public byte ExtPartChorusSendLevel
         {
@@ -545,7 +506,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x004E)]
         public byte ExtPartReverbSendLevel
         {
@@ -557,7 +517,6 @@ namespace Integra.Models
             }
         }
 
-        [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x004F)]
         public bool ExtPartMuteSwitch
         {
@@ -575,115 +534,44 @@ namespace Integra.Models
 
         #region Methods
 
-        /// <summary>
-        /// Method to initialize the properties of the <see cref="StudioSetCommon"/> class by the received system exclusive data.
-        /// </summary>
-        /// <param name="data">A <see cref="byte[]"/> array containing the received system exclusive data part.</param>
-        protected override bool Initialize(byte[] data)
-        {
-            if(base.Initialize(data))
-            {
-                _Name = Encoding.ASCII.GetString(data, 0, 16);
-            }
+        ///// <summary>
+        ///// Method to initialize the properties of the <see cref="StudioSetCommon"/> class by the received system exclusive data.
+        ///// </summary>
+        ///// <param name="data">A <see cref="byte[]"/> array containing the received system exclusive data part.</param>
+        //protected override bool Initialize(byte[] data)
+        //{
+        //    return base.Initialize(data);
+        //    //if(base.Initialize(data))
+        //    //{
+        //    //    _Name = Encoding.ASCII.GetString(data, 0, 16);
+        //    //}
 
-            return true;
-            //_Name = Encoding.ASCII.GetString(data, 0, 16);
+        //    //return true;
 
-            _NameData[0] = data[0x00];
-            _NameData[1] = data[0x01];
-            _NameData[2] = data[0x02];
-            _NameData[3] = data[0x03];
-            _NameData[4] = data[0x04];
-            _NameData[5] = data[0x05];
-            _NameData[6] = data[0x06];
-            _NameData[7] = data[0x07];
-            _NameData[8] = data[0x08];
-            _NameData[9] = data[0x09];
-            _NameData[10] = data[0x0A];
-            _NameData[11] = data[0x0B];
-            _NameData[12] = data[0x0C];
-            _NameData[13] = data[0x0D];
-            _NameData[14] = data[0x0E];
-            _NameData[15] = data[0x0F];
+        //}
 
-            _VoiceReserve01 = data[0x18];
-            _VoiceReserve02 = data[0x19];
-            _VoiceReserve03 = data[0x1A];
-            _VoiceReserve04 = data[0x1B];
-            _VoiceReserve05 = data[0x1C];
-            _VoiceReserve06 = data[0x1D];
-            _VoiceReserve07 = data[0x1E];
-            _VoiceReserve08 = data[0x1F];
-            _VoiceReserve09 = data[0x20];
-            _VoiceReserve10 = data[0x21];
-            _VoiceReserve11 = data[0x22];
-            _VoiceReserve12 = data[0x23];
-            _VoiceReserve13 = data[0x24];
-            _VoiceReserve14 = data[0x25];
-            _VoiceReserve15 = data[0x26];
-            _VoiceReserve16 = data[0x27];
+        //private void SetStudioSetName()
+        //{
+        //    _Name = Encoding.ASCII.GetString(_NameData, 0, 16);
+        //}
+        //private void SetStudioSetNameData()
+        //{
+        //    Array.Copy(Encoding.ASCII.GetBytes(_Name), 0, _NameData, 0, 16);
+        //}
 
-            _ToneControl01 = (IntegraControlSources)data[0x39];
-            _ToneControl02 = (IntegraControlSources)data[0x3A];
-            _ToneControl03 = (IntegraControlSources)data[0x3B];
-            _ToneControl04 = (IntegraControlSources)data[0x3C];
+        //private void SetStudioSetTempo()
+        //{
+        //    _StudioSetTempo = (short)((_StudioSetTempoData[0] & 0x0F) << 4 | (_StudioSetTempoData[1] & 0x0F));
+        //}
 
-            _StudioSetTempoData[0] = data[0x3D];
-            _StudioSetTempoData[1] = data[0x3E];
+        //private void SetStudioSetTempoData()
+        //{
+        //    _StudioSetTempo = Math.Min(_StudioSetTempo, (short)250);
+        //    _StudioSetTempo = Math.Max(_StudioSetTempo, (short)20);
 
-            // Retreive lower 4 bits of each byte in the _SystemTempoData byte array and combine them into a byte
-            //_StudioSetTempo = (byte)((_StudioSetTempoData[0] & 0x0F) << 4 | (_StudioSetTempoData[1] & 0x0F));
-
-            _SoloPart = data[0x3F];
-
-            _ReverbSwitch = Convert.ToBoolean(data[0x40]);
-            _ChorusSwitch = Convert.ToBoolean(data[0x41]);
-            _MasterEQSwitch = Convert.ToBoolean(data[0x42]);
-            _DrumCompEQSwitch = Convert.ToBoolean(data[0x43]);
-
-            _DrumCompEQPart = (IntegraParts)data[0x44];
-
-            _DrumCompEQOutputAssign01 = (IntegraOutputAssigns)data[0x45];
-            _DrumCompEQOutputAssign02 = (IntegraOutputAssigns)data[0x46];
-            _DrumCompEQOutputAssign03 = (IntegraOutputAssigns)data[0x47];
-            _DrumCompEQOutputAssign04 = (IntegraOutputAssigns)data[0x48];
-            _DrumCompEQOutputAssign05 = (IntegraOutputAssigns)data[0x49];
-            _DrumCompEQOutputAssign06 = (IntegraOutputAssigns)data[0x4A];
-
-            _ExtPartLevel = data[0x4C];
-            _ExtPartChorusSendLevel = data[0x4D];
-            _ExtPartReverbSendLevel = data[0x4E];
-            _ExtPartMuteSwitch = Convert.ToBoolean(data[0x4F]);
-
-            this.IsInitialized = true;
-
-            //this.DebugPrint();
-
-            return IsInitialized;
-        }
-
-        private void SetStudioSetName()
-        {
-            _Name = Encoding.ASCII.GetString(_NameData, 0, 16);
-        }
-        private void SetStudioSetNameData()
-        {
-            Array.Copy(Encoding.ASCII.GetBytes(_Name), 0, _NameData, 0, 16);
-        }
-
-        private void SetStudioSetTempo()
-        {
-            _StudioSetTempo = (short)((_StudioSetTempoData[0] & 0x0F) << 4 | (_StudioSetTempoData[1] & 0x0F));
-        }
-
-        private void SetStudioSetTempoData()
-        {
-            _StudioSetTempo = Math.Min(_StudioSetTempo, (short)250);
-            _StudioSetTempo = Math.Max(_StudioSetTempo, (short)20);
-
-            _StudioSetTempoData[0] = (byte)((_StudioSetTempo >> 4) & 0x0F);
-            _StudioSetTempoData[1] = (byte)((_StudioSetTempo) & 0x0F);
-        }
+        //    _StudioSetTempoData[0] = (byte)((_StudioSetTempo >> 4) & 0x0F);
+        //    _StudioSetTempoData[1] = (byte)((_StudioSetTempo) & 0x0F);
+        //}
 
         #endregion
 

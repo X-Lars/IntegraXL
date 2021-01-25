@@ -5,42 +5,56 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Integra.Database
 {
     public class DataAccess
     {
-        public static int GetNextID()
+        /// <summary>
+        /// Gets the next highest ID to use for data storage.
+        /// </summary>
+        /// <typeparam name="T">The type of class specifying the table name to retreive the highest ID from.</typeparam>
+        /// <param name="integraBase">The data structure specifying the table name.</param>
+        /// <returns>The next free ID for data storage.</returns>
+        internal static int GetNextID<T>(IntegraBase<T> integraBase) where T: IntegraBase<T>
         {
-            int nextID;
+            int result;
 
             using (var connection = new SqlConnection(GetConnectionString()))
             {
+                string sql = $"SELECT MAX(ID) FROM {typeof(T).Name}";
+
                 OpenConnection(connection);
 
-                //string sql = "SELECT IDENT_CURRENT('StudioSet')";
-                string sql = "SELECT MAX(ID) FROM StudioSet";
                 using (var command = new SqlCommand(sql, connection))
                 {
 
-                    nextID = Convert.ToInt32(command.ExecuteScalar());
+                    result = Convert.ToInt32(command.ExecuteScalar());
                 }
 
                 CloseConnection(connection);
 
             }
 
-            return nextID + 1;
+            return result + 1;
         }
 
+        public static void GetList<T>(IntegraBase<T> integraBase) where T: IntegraBase<T>
+        {
+            //string sql = $"SELECT * FROM {typeof(T).Name} WHERE ID = {id}";
+        }
+        
+        /// <summary>
+        /// Gets the data structure with the specified <paramref name="id"/> from the database.
+        /// </summary>
+        /// <typeparam name="T">The type of class specifying the table name to retreive the data structure from.</typeparam>
+        /// <param name="integraBase">The data structure to load.</param>
+        /// <param name="id">The ID of the data structure to load.</param>
         public static void Load<T>(IntegraBase<T> integraBase, int id) where T: IntegraBase<T>
         {
-            string sql = $"SELECT * FROM {integraBase.GetType().Name} WHERE ID = {id}";
+            string sql = $"SELECT * FROM {typeof(T).Name} WHERE ID = {id}";
 
             // Skip the ID column
             int columnOffset = 1;
@@ -142,7 +156,7 @@ namespace Integra.Database
             columns += IsPartial == true ? "Part," : string.Empty;
 
             string values = string.Empty;
-            values += IsIdentity == true ? string.Empty : $"{Device.ID},";
+            values += IsIdentity == true ? string.Empty : $"{Device.SessionID},";
             values += IsPartial == true ? $"{(byte)((IIntegraPartial)integraBase).Part}," : string.Empty;
 
             for (int i = 0; i < parameters.Count; i++)

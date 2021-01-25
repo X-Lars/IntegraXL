@@ -535,11 +535,11 @@ namespace Integra
             }
         }
 
-        private static int _ID = 0;
-        public static int ID
+        private static int _SessionID = 0;
+        public static int SessionID
         {
-            get { return _ID; }
-            internal set { _ID = value; }
+            get { return _SessionID; }
+            internal set { _SessionID = value; }
         }
 
         /// <summary>
@@ -552,8 +552,9 @@ namespace Integra
             // Check for initial status to load devices from the configuration
             if (!_IsInitialized)
             {
-                ID = DataAccess.GetNextID();
-                Debug.Print($"[{nameof(Device)}.{nameof(Initialize)}] ID: { ID }");
+                SessionID = DataAccess.GetNextID(StudioSet);
+
+                Debug.Print($"[{nameof(Device)}.{nameof(Initialize)}] ID: { SessionID }");
                 
 
                 DeviceStatusFlags flags = DeviceStatusFlags.DEVICE_READY;

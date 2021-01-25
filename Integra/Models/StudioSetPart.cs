@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Integra.Models
 {
-    public class StudioSetPart : IntegraBase<StudioSetPart>, IIntegraPartial
+    public sealed class StudioSetPart : IntegraBase<StudioSetPart>, IIntegraPartial
     {
         private IntegraParts _Part;
         

@@ -705,6 +705,11 @@ namespace Integra.Core
 
         #endregion
 
+        public virtual void Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         #region Database
         //TODO: Remove to data access layer
         public virtual void Save()
@@ -1035,17 +1040,18 @@ namespace Integra.Core
 
         public virtual void Truncate()
         {
+            // TODO: Remove temporary exclusion
             if (GetType() != typeof(StudioSetMidi) && GetType() != typeof(StudioSet) && GetType() != typeof(StudioSetCommon))
                 return;
 
             PropertyInfo[] properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
 
-            foreach (var property in Parameters)
+            foreach (var property in properties)
             {
-                if (property.Type == typeof(IIntegraDataClass))
+                if (property.GetType().GetInterfaces().Contains(typeof(IIntegraDataClass)))
                 {
 
-                    //((IIntegraBase)GetType().GetProperty(property.Name).GetValue(this)).Load(id);
+                    ((IIntegraDataClass)GetType().GetProperty(property.Name).GetValue(this)).Truncate();
                 }
             }
 

@@ -50,7 +50,7 @@ namespace IntegraXL
             CommandBindings.Add(new CommandBinding(_ShowIntegraToneWindowCommand, OnShowIntegraToneWindow, CanExecuteOnToneType));
             CommandBindings.Add(new CommandBinding(_LoadCommand, OnLoad, CanExecuteOnLoad));
             CommandBindings.Add(new CommandBinding(_SaveCommand, OnSave, CanExecuteOnSave));
-
+            CommandBindings.Add(new CommandBinding(_TruncateCommand, OnTruncate));
 
             Host.SelectionChanged += HostSelectionChanged;
 
@@ -58,7 +58,6 @@ namespace IntegraXL
             //Config<IntegraConfiguration>.Print();
         }
 
-        
         
 
         protected override void OnClosed(EventArgs e)
@@ -87,7 +86,7 @@ namespace IntegraXL
 
         private static RoutedUICommand _LoadCommand = new RoutedUICommand(nameof(Load), nameof(Load), typeof(MainWindow));
         private static RoutedUICommand _SaveCommand = new RoutedUICommand(nameof(Save), nameof(Save), typeof(MainWindow));
-
+        private static RoutedUICommand _TruncateCommand = new RoutedUICommand(nameof(Truncate), nameof(Truncate), typeof(MainWindow));
         /// <summary>
         /// Registers the command to show a <see cref="MDIChild"/> window.
         /// </summary>
@@ -116,6 +115,11 @@ namespace IntegraXL
         public static ICommand Save
         {
             get { return _SaveCommand; }
+        }
+
+        public static ICommand Truncate
+        {
+            get { return _TruncateCommand; }
         }
         /// <summary>
         /// Gets the command to show a <see cref="MDIChild"/> window.
@@ -171,6 +175,21 @@ namespace IntegraXL
                 caller.Integra.StudioSet.Save();
             }
         }
+
+        private async void OnTruncate(object sender, ExecutedRoutedEventArgs e)
+        {
+            MainWindow caller = sender as MainWindow;
+
+            DialogResults result = await DialogManager.QuestionDialog("Delete", "This will erase all data, are you sure?").Result();
+
+
+            if (caller != null)
+            {
+                if(result == DialogResults.DialogYes)
+                    caller.Integra.StudioSet.Truncate();
+            }
+        }
+
         /// <summary>
         /// Handles the <see cref="ShowIntegraWindow"/> command.
         /// </summary>

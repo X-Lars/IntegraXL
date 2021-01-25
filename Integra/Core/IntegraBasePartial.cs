@@ -16,7 +16,7 @@ namespace Integra.Core
     /// <summary>
     /// Base collection for INTEGRA-7 per part data structures.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The type contained by the collection.</typeparam>
     public class IntegraBasePartial<T> : ObservableCollection<T>, IIntegraDataClass  where T : IntegraBase<T>, IIntegraPartial
     {
         private readonly SynchronizationContext _Context;
@@ -46,6 +46,11 @@ namespace Integra.Core
         #endregion
 
         #region IIntegraDataClass
+
+        public void Delete(int id) 
+        {
+            throw new NotImplementedException();
+        }
 
         public void Load(int id)
         {

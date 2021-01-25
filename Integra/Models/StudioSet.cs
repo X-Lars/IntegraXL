@@ -200,29 +200,27 @@ namespace Integra.Models
         public override void Save()
         {
             Console.WriteLine("SAVE STUDIO SET CALLED");
-
             
             List<SQLParameter> parameters = new List<SQLParameter>();
 
-            int id = DataAccess.GetNextID();
+            // TODO: Question overwrite else next ID
+            Device.SessionID = DataAccess.GetNextID(this);
 
 
-            parameters.Add(new SQLParameter(0, typeof(int), nameof(StudioSetCommon), id));
-            //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetCommonChorus", id));
-            //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetCommonReverb", id));
-            //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetCommonMotionalSurround", id));
-            //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetMasterEQ", id));
-            parameters.Add(new SQLParameter(0, typeof(int), "StudioSetMIDI", id));
-            parameters.Add(new SQLParameter(0, typeof(int), "StudioSetPart", id));
-            //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetPartEQ", id));
+            parameters.Add(new SQLParameter(0, typeof(int), nameof(StudioSetCommon), Device.SessionID));
+            //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetCommonChorus",  Device.ID));
+            //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetCommonReverb",  Device.ID));
+            //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetCommonMotionalSurround",  Device.ID));
+            //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetMasterEQ",  Device.ID));
+            parameters.Add(new SQLParameter(0, typeof(int), "StudioSetMIDI", Device.SessionID));
+            parameters.Add(new SQLParameter(0, typeof(int), "StudioSetPart", Device.SessionID));
+            //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetPartEQ",  Device.ID));
 
-            DataAccess.Save(this, parameters, false, true);
-            
+            DataAccess.Save(this, parameters, false, false);
 
-            
+
             base.Save();
-            Device.ID = DataAccess.GetNextID();
-            Console.WriteLine(DataAccess.GetNextID());
+            Console.WriteLine(Device.SessionID);
             
         }
     }
