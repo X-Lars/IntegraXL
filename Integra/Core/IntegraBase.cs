@@ -18,7 +18,7 @@ namespace Integra.Core
     /// Base class for all INTEGRA-7 data structures.
     /// </summary>
     /// <typeparam name="T">A class <typeparamref name="T"/> defining the INTEGRA-7 data structure.</typeparam>
-    public abstract class IntegraBase<T> : IIntegraBase, INotifyPropertyChanged where T : IntegraBase<T>
+    public abstract class IntegraBase<T> : IIntegraDataClass, INotifyPropertyChanged where T : IntegraBase<T>
     {
         #region Fields
 
@@ -47,27 +47,48 @@ namespace Integra.Core
 
         #region Constructor
 
-        public IntegraBase()
-        {
+        /// <summary>
+        /// Creates a new <see cref="IntegraBase{T}"/> instance.
+        /// </summary>
+        /// <remarks><i>Default constructor for dynamic instance creation by reflection.</i></remarks>
+        public IntegraBase() { }
 
-        }
-
+        /// <summary>
+        /// Creates and initializes new unconnected <see cref="IntegraBase{T}"/> instance.
+        /// </summary>
+        /// <param name="address">The INTEGRA-7 base address the data structure refers to.</param>
+        /// <remarks><i>Use for creation of single or collection instances that need manual configuration.</i></remarks>
         public IntegraBase(IntegraAddress address)
         {
-            Name = GetType().Name;
             Address = address;
+
+            // Name defaults to type name
+            Name = GetType().Name;
         }
 
+        /// <summary>
+        /// Creates and initializes a new connected <see cref="IntegraBase{T}"/> instance.
+        /// </summary>
+        /// <param name="address">The INTEGRA-7 base address the data structure refers to.</param>
+        /// <param name="request">The request specifying the size of the data structure.</param>
+        /// <remarks><i>Use for creation of a single instance.</i></remarks>
         public IntegraBase(IntegraAddress address, IntegraRequest request) : this(address, new IntegraRequest[] { request }) { }
 
+        /// <summary>
+        /// Creates and initializes a new connected <see cref="IntegraBase{T}"/> instance.
+        /// </summary>
+        /// <param name="address">The INTEGRA-7 base address the data structure refers to.</param>
+        /// <param name="requests">The requests specifying the number of items to</param>
+        /// <remarks><i>Use for creation of a collection of instances.</i></remarks>
         public IntegraBase(IntegraAddress address, IntegraRequest[] requests)
         {
             Debug.Print($"[{GetType().Name}]");
 
-            Name = GetType().Name;
             Address = address;
-
             Requests.AddRange(requests);
+
+            // Name defaults to type name
+            Name = GetType().Name;
 
            
             Initialize();
@@ -85,7 +106,7 @@ namespace Integra.Core
         public int SessionID { get; internal set; }
 
         /// <summary>
-        /// Gets the name of the data structure.
+        /// Gets the name defaulted to the inheriting data structure type name.
         /// </summary>
         public string Name { get; protected set; }
 
@@ -685,11 +706,13 @@ namespace Integra.Core
         #endregion
 
         #region Database
-
+        //TODO: Remove to data access layer
         public virtual void Save()
         {
             //DataAccess.Save(this);
 
+            if (GetType() != typeof(StudioSetMidi) && GetType() != typeof(StudioSet) && GetType() != typeof(StudioSetCommon))
+                return;
 
             List<SQLParameter> parameters = new List<SQLParameter>();
 
@@ -701,7 +724,7 @@ namespace Integra.Core
             {
                 Type type = property.PropertyType;
                 
-                if(type.GetInterfaces().Contains(typeof(IIntegraBase)))
+                if(type.GetInterfaces().Contains(typeof(IIntegraDataClass)))
                 {
                     // The property is of type IntegraBase<T>
                     Debug.Print($"SAVE --> [{GetType().Name}] --> SAVE --> {property.Name}");
@@ -712,13 +735,7 @@ namespace Integra.Core
                         continue;
 
                     // Invoke the save method on the property
-                    ((IIntegraBase)property.GetValue(this)).Save();
-                }
-                else if (type.GetInterfaces().Contains(typeof(IIntegraBaseCollection)))
-                {
-                    // The property is a IntegraBase<T> collection
-                    // Invoke the save method on the collection property
-                    ((IIntegraBaseCollection)property.GetValue(this)).Save();
+                    ((IIntegraDataClass)property.GetValue(this)).Save();
                 }
                 else if(property.GetCustomAttribute(typeof(Offset)) != null)
                 {
@@ -774,6 +791,11 @@ namespace Integra.Core
                         Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <bool>");
                         parameters.Add(new SQLParameter(index.Value, type, property.Name, property.GetValue(this)));
                     }
+                    else if (type == typeof(short))
+                    {
+                        Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <short>");
+                        parameters.Add(new SQLParameter(index.Value, type, property.Name, property.GetValue(this)));
+                    }
                     else if (type == typeof(int))
                     {
                         if (property.GetIndexParameters().Length > 0)
@@ -798,7 +820,18 @@ namespace Integra.Core
                         {
                             // The property is of type int
                             Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <int>");
-                            parameters.Add(new SQLParameter(index.Value, type, property.Name, property.GetValue(this)));
+                            if (type.IsEnum)
+                            {
+                                Type enumType = Enum.GetUnderlyingType(type);
+
+                                //object underlyingValue = Convert.ChangeType(property.GetValue(this), Enum.GetUnderlyingType(property.GetValue(this).GetType()));
+                                parameters.Add(new SQLParameter(index.Value, type, property.Name, Convert.ChangeType(property.GetValue(this), enumType)));
+
+                            }
+                            else
+                            {
+                                parameters.Add(new SQLParameter(index.Value, type, property.Name, property.GetValue(this)));
+                            }
                         }
                     }
                     else
@@ -828,8 +861,6 @@ namespace Integra.Core
                             if (type.IsEnum)
                             {
                                 Type enumType = Enum.GetUnderlyingType(type);
-                                Array values = type.GetEnumValues();
-
                                 
                                 //object underlyingValue = Convert.ChangeType(property.GetValue(this), Enum.GetUnderlyingType(property.GetValue(this).GetType()));
                                 parameters.Add(new SQLParameter(index.Value, type, property.Name, Convert.ChangeType(property.GetValue(this), enumType)));
@@ -846,9 +877,209 @@ namespace Integra.Core
 
             }
 
-            DataAccess.Save(this, parameters);
+
+            if (GetType() == typeof(StudioSet))
+                return;
+
+            DataAccess.Save(this, parameters, GetType().GetInterfaces().Contains(typeof(IIntegraPartial)));
         }
 
+        private bool _TypeCacheInitialized = false;
+        private List<SQLData> _TypeCache = new List<SQLData>();
+
+        private void InitializeParameterCache()
+        {
+            if (_TypeCacheInitialized)
+            {
+                return;
+            }
+
+            Debug.Print($"[{GetType().Name}.{nameof(InitializeParameterCache)}]");
+
+            PropertyInfo[] properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
+            //FieldInfo[] fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+
+            foreach (var property in properties)
+            {
+                Type type = property.PropertyType;
+
+                // TODO: Ignore attribute?
+                if (type == typeof(Tone))
+                    continue;
+
+                if (type.GetInterfaces().Contains(typeof(IIntegraDataClass)))
+                {
+                    // The property is a IntegraBase<T>
+                    _TypeCache.Add(new SQLData(0, typeof(IIntegraDataClass), 0, property.Name));
+                }
+                else if (property.GetCustomAttribute(typeof(Offset)) != null)
+                {
+                    // The property is part of this class and has an offset attribute
+                    // Handle saving of the property
+                    Offset index = (Offset)property.GetCustomAttribute(typeof(Offset));
+
+                    if (type == typeof(string))
+                    {
+                        // The property is of type string
+                        // Get the length of the backing field byte array
+                        var fieldInfo = GetCachedField(index.Value);
+                        Array fieldArray = (Array)fieldInfo.GetValue(this);
+                        
+                        _TypeCache.Add(new SQLData(index.Value, typeof(string), fieldArray.Length, property.Name));
+                    }
+                    else if (type.IsArray)
+                    {
+                        // The property is an array
+                        Array propertyArray = (Array)property.GetValue(this);
+
+                        // Get the type of elements in the array
+                        Type propertyArrayType = propertyArray.GetType().GetElementType();
+
+
+                        if (propertyArrayType == typeof(byte))
+                        {
+                            _TypeCache.Add(new SQLData(index.Value, typeof(byte[]), propertyArray.Length, property.Name));
+
+                        }
+                        else if (propertyArrayType == typeof(int))
+                        {
+                            _TypeCache.Add(new SQLData(index.Value, typeof(int[]), propertyArray.Length, property.Name));
+                        }
+                    }
+                    else if (type == typeof(short))
+                    {
+                        _TypeCache.Add(new SQLData(index.Value, typeof(short), 2, property.Name));
+                    }
+                    else if (type == typeof(bool))
+                    {
+                        // The property is of type bool
+                        _TypeCache.Add(new SQLData(index.Value, typeof(bool), 1, property.Name));
+                    }
+                    else if (type == typeof(int))
+                    {
+                        if (property.GetIndexParameters().Length > 0)
+                        {
+                            // The property is an indexer property of type int
+                            // Get the values from the backing field
+                            Offset offset = (Offset)property.GetCustomAttribute(typeof(Offset));
+                            FieldInfo field = GetCachedField(offset.Value);
+
+                            // Create an array of the backing field to get the data length
+                            Array propertyArray = (Array)field.GetValue(this);
+
+                            _TypeCache.Add(new SQLData(index.Value, typeof(int[]), propertyArray.Length, property.Name));
+                        }
+                        else
+                        {
+                            //// The property is of type int
+                            //if (type.IsEnum)
+                            //{
+                            //    Type enumType = Enum.GetUnderlyingType(type);
+
+                            //    //object underlyingValue = Convert.ChangeType(property.GetValue(this), Enum.GetUnderlyingType(property.GetValue(this).GetType()));
+                            //    _TypeCache.Add(new SQLParameter(index.Value, type, property.Name, Convert.ChangeType(property.GetValue(this), enumType)));
+
+                            //}
+                            //else
+                            //{
+                            _TypeCache.Add(new SQLData(index.Value, typeof(int), 1, property.Name));
+                            //}
+                        }
+                    }
+                    else
+                    {
+                        if (property.GetIndexParameters().Length > 0)
+                        {
+                            // The property is an indexer property of type byte
+                            // Get the values from the backing field
+                            Offset offset = (Offset)property.GetCustomAttribute(typeof(Offset));
+                            FieldInfo field = GetCachedField(offset.Value);
+
+                            // Create an array of the backing field to get the data length
+                            Array propertyArray = (Array)field.GetValue(this);
+
+                            _TypeCache.Add(new SQLData(index.Value, typeof(byte), propertyArray.Length, property.Name));
+                        }
+                        else
+                        {
+                            //// The property is of type byte
+                            //if (type.IsEnum)
+                            //{
+                            //    Type enumType = Enum.GetUnderlyingType(type);
+
+                            //    //object underlyingValue = Convert.ChangeType(property.GetValue(this), Enum.GetUnderlyingType(property.GetValue(this).GetType()));
+                            //    _TypeCache.Add(new SQLParameter(index.Value, type, property.Name, Convert.ChangeType(property.GetValue(this), enumType)));
+                            //}
+                            //else
+                            //{
+                            _TypeCache.Add(new SQLData(index.Value, typeof(byte), 1, property.Name));
+                            //}
+                        }
+                    }
+                }
+            }
+
+            _TypeCacheInitialized = true;
+        }
+
+        public List<SQLData> Parameters
+        {
+            get 
+            {
+                if (!_TypeCacheInitialized)
+                    InitializeParameterCache();
+
+                return _TypeCache; 
+            }
+        }
+
+        public virtual void Truncate()
+        {
+            if (GetType() != typeof(StudioSetMidi) && GetType() != typeof(StudioSet) && GetType() != typeof(StudioSetCommon))
+                return;
+
+            PropertyInfo[] properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
+
+            foreach (var property in Parameters)
+            {
+                if (property.Type == typeof(IIntegraDataClass))
+                {
+
+                    //((IIntegraBase)GetType().GetProperty(property.Name).GetValue(this)).Load(id);
+                }
+            }
+
+            DataAccess.Truncate(this);
+        }
+
+        public virtual void Load(int id)
+        {
+            // TODO: Remove temporary exclude
+            if (GetType() != typeof(StudioSetMidi) && GetType() != typeof(StudioSet) && GetType() != typeof(StudioSetCommon))
+                return;
+
+            PropertyInfo[] properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
+
+            foreach (var property in Parameters)
+            {
+                if (property.Type == typeof(IIntegraDataClass))
+                {
+                    
+                    ((IIntegraDataClass)GetType().GetProperty(property.Name).GetValue(this)).Load(id);
+                }
+            }
+
+
+            DataAccess.Load(this, id);
+
+            foreach (var item in Parameters)
+            {
+                if(item.Type != typeof(IIntegraDataClass))
+                {
+                    GetType().GetProperty(item.Name).SetValue(this, item.Value);
+                }
+            }
+        }
         #endregion
     }
 

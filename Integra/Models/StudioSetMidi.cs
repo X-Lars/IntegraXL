@@ -1,30 +1,51 @@
 ﻿using Integra.Core;
+using Integra.Core.Interfaces;
 using MidiXL;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Integra.Models
 {
-    public class StudioSetMidi : IntegraBase<StudioSetMidi>
+    /// <summary>
+    /// Defines the INTEGRA-7 MIDI data structure.
+    /// </summary>
+    /// <remarks><i>Address 01 00 00 00</i></remarks>
+    public class StudioSetMidi : IntegraBase<StudioSetMidi>, IIntegraPartial
     {
-        [Offset(0x0000)] private byte _PhaseLock;
-        private IntegraParts _Part;
-        public StudioSetMidi()
-        {
+        #region Fields
 
-        }
+        [Offset(0x0000)] private bool _PhaseLock;
+
+        #endregion
+
+        private IntegraParts _Part;
+
+        #region Constructor
+
+        /// <summary>
+        /// Creates a new <see cref="StudioSetMidi"/> instance.
+        /// </summary>
+        /// <remarks><i>Default constructor for dynamic instance creation.</i></remarks>
+        public StudioSetMidi() { }
+
         public StudioSetMidi(IntegraAddress address, IntegraRequest request) : base(address, request)
         {
             _Part = (IntegraParts)((address & 0x00000F00) >> 8);
             Initialize();
         }
 
+        #endregion
+
+        #region Properties
+
+        public IntegraParts Part
+        {
+            get { return _Part; }
+        }
+
+        #region Properties: INTEGRA-7
+
         [Offset(0x0000)]
-        public byte PhaseLock
+        public bool PhaseLock
         {
             get { return _PhaseLock; }
             set
@@ -33,6 +54,12 @@ namespace Integra.Models
                 NotifyPropertyChanged();
             }
         }
+
+        #endregion
+
+        #endregion
+
+        #region Overrides
 
         internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
@@ -66,73 +93,15 @@ namespace Integra.Models
                 DebugPrint();
                 _Part = (IntegraParts)((Address & 0x00000F00) >> 8);
 
-                _PhaseLock = data[0x00];
+                _PhaseLock = Convert.ToBoolean(data[0x00]);
                 NotifyPropertyChanged(string.Empty);
                 IsInitialized = true;
             }
 
             return IsInitialized;
         }
+
+        #endregion
     }
 
-
-    //public class StudioSetMidi : IntegraBase<StudioSetMidi>
-    //{
-    //    [Offset(0x0000)] private byte _PhaseLock;
-    //    private IntegraParts _Part;
-    //    public StudioSetMidi(IntegraParts part) : base(new IntegraAddress(0x18, 0x00, (byte)(0x10 + part), 0x00), 0x00000001)
-    //    {
-    //        _Part = part;
-    //    }
-
-    //    [Offset(0x0000)]
-    //    public byte PhaseLock
-    //    {
-    //        get { return _PhaseLock; }
-    //        set
-    //        {
-    //            _PhaseLock = value;
-    //            NotifyPropertyChanged();
-    //        }
-    //    }
-
-    //    internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
-    //    {
-    //        IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
-
-    //        if (syx.Address == Address)
-    //        {
-
-    //            if (!IsInitialized)
-    //            {
-    //                if (Initialize(syx.Data))
-    //                {
-    //                    Device.Instance.ReportProgress(this, new StatusMessage($"Initializing Studio Set MIDI {_Part}", "Initialized", 100, "Done"));
-    //                }
-    //                else
-    //                {
-    //                    Device.Instance.ReportProgress(this, new StatusMessage($"Initializing Studio Set MIDI {_Part}", "Please wait...", 100, "Initializing"));
-    //                }
-    //            }
-    //            else
-    //            {
-    //                InitializeField(syx);
-    //            }
-    //        }
-    //    }
-
-    //    protected override bool Initialize(byte[] data)
-    //    {
-    //        if (!IsInitialized)
-    //        {
-    //            //_Part = (IntegraParts)((Address & 0x00000F00) >> 8);
-
-    //            _PhaseLock = data[0x00];
-
-    //            IsInitialized = true;
-    //        }
-
-    //        return IsInitialized;
-    //    }
-    //}
 }

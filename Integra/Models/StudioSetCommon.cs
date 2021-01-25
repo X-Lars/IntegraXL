@@ -63,7 +63,7 @@ namespace Integra.Models
         [Offset(0x004E)] private byte _ExtPartReverbSendLevel;
         [Offset(0x004F)] private bool _ExtPartMuteSwitch;
 
-        private int _StudioSetTempo;
+        private short _StudioSetTempo;
         private string _Name;
 
         #endregion
@@ -81,12 +81,8 @@ namespace Integra.Models
 
         [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x0000)]
-        public string Name
+        public new string Name
         {
-            //get { return Encoding.ASCII.GetString(new byte[] { _StudioSetName01, _StudioSetName02, _StudioSetName03, _StudioSetName04,
-            //                                                   _StudioSetName05, _StudioSetName06, _StudioSetName07, _StudioSetName08,
-            //                                                   _StudioSetName09, _StudioSetName10, _StudioSetName11, _StudioSetName12,
-            //                                                   _StudioSetName13, _StudioSetName14, _StudioSetName15, _StudioSetName16}, 0, 16); }
             get
             {
                 SetStudioSetName();
@@ -98,8 +94,8 @@ namespace Integra.Models
                     return;
 
                 SetStudioSetNameData();
-                NotifyPropertyChanged();
                 // TODO: Store studioset name
+                NotifyPropertyChanged(nameof(Name), false);
             }
         }
 
@@ -354,7 +350,7 @@ namespace Integra.Models
 
         [Bindable(true, BindingDirection.TwoWay)]
         [Offset(0x003D)]
-        public int Tempo
+        public short Tempo
         {
             get
             {
@@ -585,8 +581,12 @@ namespace Integra.Models
         /// <param name="data">A <see cref="byte[]"/> array containing the received system exclusive data part.</param>
         protected override bool Initialize(byte[] data)
         {
-            return base.Initialize(data);
+            if(base.Initialize(data))
+            {
+                _Name = Encoding.ASCII.GetString(data, 0, 16);
+            }
 
+            return true;
             //_Name = Encoding.ASCII.GetString(data, 0, 16);
 
             _NameData[0] = data[0x00];
@@ -673,13 +673,13 @@ namespace Integra.Models
 
         private void SetStudioSetTempo()
         {
-            _StudioSetTempo = ((_StudioSetTempoData[0] & 0x0F) << 4 | (_StudioSetTempoData[1] & 0x0F));
+            _StudioSetTempo = (short)((_StudioSetTempoData[0] & 0x0F) << 4 | (_StudioSetTempoData[1] & 0x0F));
         }
 
         private void SetStudioSetTempoData()
         {
-            _StudioSetTempo = Math.Min(_StudioSetTempo, 250);
-            _StudioSetTempo = Math.Max(_StudioSetTempo, 20);
+            _StudioSetTempo = Math.Min(_StudioSetTempo, (short)250);
+            _StudioSetTempo = Math.Max(_StudioSetTempo, (short)20);
 
             _StudioSetTempoData[0] = (byte)((_StudioSetTempo >> 4) & 0x0F);
             _StudioSetTempoData[1] = (byte)((_StudioSetTempo) & 0x0F);

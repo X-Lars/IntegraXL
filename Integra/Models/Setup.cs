@@ -1,15 +1,11 @@
 ﻿using Integra.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Integra.Models
 {
     /// <summary>
-    /// Provides the INEGRA-7 setup data structure.
+    /// Definese the INTEGRA-7 setup data structure.
     /// </summary>
+    /// <remarks><i>Address 01 00 00 00</i></remarks>
     public class Setup : IntegraBase<Setup>
     {
         #region Fields

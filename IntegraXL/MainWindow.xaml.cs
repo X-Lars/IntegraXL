@@ -48,6 +48,7 @@ namespace IntegraXL
             CommandBindings.Add(new CommandBinding(_ShowIntegraWindowCommand, OnShowIntegraWindow, CanExecuteOnConnection));
             CommandBindings.Add(new CommandBinding(_ShowIntegraMFXWindowCommand, OnShowIntegraMFXWindow));
             CommandBindings.Add(new CommandBinding(_ShowIntegraToneWindowCommand, OnShowIntegraToneWindow, CanExecuteOnToneType));
+            CommandBindings.Add(new CommandBinding(_LoadCommand, OnLoad, CanExecuteOnLoad));
             CommandBindings.Add(new CommandBinding(_SaveCommand, OnSave, CanExecuteOnSave));
 
 
@@ -57,7 +58,7 @@ namespace IntegraXL
             //Config<IntegraConfiguration>.Print();
         }
 
-       
+        
         
 
         protected override void OnClosed(EventArgs e)
@@ -83,6 +84,10 @@ namespace IntegraXL
 
         #region Commands: Registration
 
+
+        private static RoutedUICommand _LoadCommand = new RoutedUICommand(nameof(Load), nameof(Load), typeof(MainWindow));
+        private static RoutedUICommand _SaveCommand = new RoutedUICommand(nameof(Save), nameof(Save), typeof(MainWindow));
+
         /// <summary>
         /// Registers the command to show a <see cref="MDIChild"/> window.
         /// </summary>
@@ -99,11 +104,14 @@ namespace IntegraXL
         /// </summary>
         private static RoutedUICommand _ShowIntegraWindowCommand = new RoutedUICommand(nameof(ShowIntegraWindow), nameof(ShowIntegraWindow), typeof(MainWindow));
 
-        private static RoutedUICommand _SaveCommand = new RoutedUICommand(nameof(Save), nameof(Save), typeof(MainWindow));
-
         #endregion
 
         #region Commands: Properties
+
+        public static ICommand Load
+        {
+            get { return _LoadCommand; }
+        }
 
         public static ICommand Save
         {
@@ -140,6 +148,19 @@ namespace IntegraXL
         #endregion
 
         #region Commands: Handlers
+
+        private void OnLoad(object sender, ExecutedRoutedEventArgs e)
+        {
+            MainWindow caller = sender as MainWindow;
+
+            if(caller != null)
+            {
+                // TODO: Parameter to select type of data structure to load
+                // TODO: Parameter ID to load
+                // TODO: Remove temporary fixed parameter
+                caller.Integra.StudioSet.Load(30);
+            }
+        }
 
         private void OnSave(object sender, ExecutedRoutedEventArgs e)
         {
@@ -228,6 +249,14 @@ namespace IntegraXL
         {
             e.CanExecute = Integra.IsConnected;
         }
+
+        private void CanExecuteOnLoad(object sender, CanExecuteRoutedEventArgs e)
+        {
+            // TODO: Ensure a user Studio Set is selected 32-64
+            // TODO: Enable after save current changes request
+            e.CanExecute = true;
+        }
+
 
         private void CanExecuteOnSave(object sender, CanExecuteRoutedEventArgs e)
         {

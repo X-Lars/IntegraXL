@@ -1,4 +1,5 @@
 ﻿using Integra.Core;
+using Integra.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Integra.Models
 {
-    public class StudioSetPart : IntegraBase<StudioSetPart>
+    public class StudioSetPart : IntegraBase<StudioSetPart>, IIntegraPartial
     {
         private IntegraParts _Part;
         

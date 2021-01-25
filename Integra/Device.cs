@@ -539,7 +539,7 @@ namespace Integra
         public static int ID
         {
             get { return _ID; }
-            private set { _ID = value; }
+            internal set { _ID = value; }
         }
 
         /// <summary>

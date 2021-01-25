@@ -1,7 +1,9 @@
 ﻿using Integra.Core;
 using Integra.Core.Interfaces;
+using Integra.Database;
 using MidiXL;
 using System;
+using System.Collections.Generic;
 
 namespace Integra.Models
 {
@@ -183,6 +185,45 @@ namespace Integra.Models
         public IntegraBasePartial<StudioSetPart> Parts
         {
             get { return _StudioSetParts; }
+        }
+
+        public override void Load(int id)
+        {
+            // Temp for testing
+            //Device.ID = 1;
+
+            // Temporary fixed ID
+            base.Load(id);
+            
+        }
+
+        public override void Save()
+        {
+            Console.WriteLine("SAVE STUDIO SET CALLED");
+
+            
+            List<SQLParameter> parameters = new List<SQLParameter>();
+
+            int id = DataAccess.GetNextID();
+
+
+            parameters.Add(new SQLParameter(0, typeof(int), nameof(StudioSetCommon), id));
+            //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetCommonChorus", id));
+            //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetCommonReverb", id));
+            //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetCommonMotionalSurround", id));
+            //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetMasterEQ", id));
+            parameters.Add(new SQLParameter(0, typeof(int), "StudioSetMIDI", id));
+            parameters.Add(new SQLParameter(0, typeof(int), "StudioSetPart", id));
+            //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetPartEQ", id));
+
+            DataAccess.Save(this, parameters, false, true);
+            
+
+            
+            base.Save();
+            Device.ID = DataAccess.GetNextID();
+            Console.WriteLine(DataAccess.GetNextID());
+            
         }
     }
 }

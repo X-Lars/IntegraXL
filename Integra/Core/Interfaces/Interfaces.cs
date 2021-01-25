@@ -38,19 +38,33 @@ namespace Integra.Core.Interfaces
         int Set(int index, int value);
     }
 
-    public interface IIntegraBase
+    /// <summary>
+    /// Ensures classes provide recursive data access.
+    /// </summary>
+    public interface IIntegraDataClass
     {
+        /// <summary>
+        /// Saves the instance to the database.
+        /// </summary>
         void Save();
+
+        /// <summary>
+        /// Loads the instance from the database.
+        /// </summary>
+        /// <param name="id">The ID of the data to load.</param>
+        void Load(int id);
+
+        /// <summary>
+        /// Deletes all instances from the database.
+        /// </summary>
+        void Truncate();
     }
 
-    public interface IIntegraBaseCollection
+    /// <summary>
+    /// Defines an interface for classes that are instantiated per part.
+    /// </summary>
+    public interface IIntegraPartial
     {
-        void Save();
-    }
-
-    public interface IIntegraPartialCollection
-    {
-        IntegraParts Part { get; set; }
-        void Save();
+        IntegraParts Part { get; }
     }
 }

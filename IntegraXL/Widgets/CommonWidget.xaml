@@ -236,6 +236,8 @@
         <xl:NumericTextBox MinValue="0" MaxValue="1" Interval="1"
                            Value="{Binding StudioSet.MIDI[0].PhaseLock}"/>
         <xl:LinkButton Command="{Binding Save, RelativeSource={RelativeSource AncestorType=Window}}"
-                       Content="Save"/>
+                       Content="Test Save"/>
+        <xl:LinkButton Command="{Binding Load, RelativeSource={RelativeSource AncestorType=Window}}"
+                       Content="Test Load"/>
     </StackPanel>
 </local:Widget>
