@@ -7,11 +7,14 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 
 namespace Integra.Database
 {
     public class DataAccess
     {
+        private static Dictionary<Type, List<SQLParameter>> _DataTemplateCache = new Dictionary<Type, List<SQLParameter>>();
+
         /// <summary>
         /// Gets the next highest ID to use for data storage.
         /// </summary>
@@ -50,12 +53,14 @@ namespace Integra.Database
             return result + 1;
         }
 
-        public static void Select<T>(IntegraBase<T> integraBase) where T: IntegraBase<T>
+        public static List<U> Select<T, U>(IntegraBase<T> integraBase, IntegraDataTemplate<U> items) where T: IntegraBase<T> where U: IntegraDataTemplate<U>
         {
+            List<U> result = new List<U>();
+
+            string sql = $"SELECT * FROM {typeof(T).Name}";
+
             using (var connection = new SqlConnection(GetConnectionString()))
             {
-                string sql = $"SELECT * FROM {typeof(T).Name}";
-
                 OpenConnection(connection);
 
                 using (var command = new SqlCommand(sql, connection))
@@ -64,7 +69,22 @@ namespace Integra.Database
                     {
                         if(reader.HasRows)
                         {
+                            while(reader.Read())
+                            {
+                                var item = Activator.CreateInstance<U>();
 
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    PropertyInfo property = items.PropertyCache[reader.GetName(i)];
+
+                                    if(property != null)
+                                    {
+                                        property.SetValue(item, reader.GetValue(i));
+                                    }
+                                }
+
+                                result.Add(item);
+                            }
                         }
                     }
                 }
@@ -72,6 +92,8 @@ namespace Integra.Database
                 CloseConnection(connection);
 
             }
+
+            return result;
         }
         
         /// <summary>

@@ -69,6 +69,7 @@ namespace Integra.Core.Interfaces
     /// <summary>
     /// Defines an interface for classes that are instantiated per part.
     /// </summary>
+    /// <remarks><i>Used by the data access layer load and save methods to dynamically add the partial column.</i></remarks>
     public interface IIntegraPartial
     {
         IntegraParts Part { get; }

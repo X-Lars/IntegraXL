@@ -753,7 +753,7 @@ namespace Integra.Core
                         // The property is of type string
                         Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <string>");
 
-                        parameters.Add(new SQLParameter(index.Value, type, property.Name, property.GetValue(this)));
+                        parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
                     }
                     else if(type.IsArray)
                     {
@@ -771,7 +771,7 @@ namespace Integra.Core
                                 Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <byte[{i}]>");
 
                                 // Property name is "<Property Name>#" where '#' is the index
-                                parameters.Add(new SQLParameter(index.Value, propertyArrayType, property.Name + (i), property.GetValue(this)));
+                                parameters.Add(new SQLParameter(propertyArrayType, property.Name + (i), property.GetValue(this)));
 
                             }
 
@@ -784,7 +784,7 @@ namespace Integra.Core
                                 Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <int[{i}]>");
 
                                 // Property name is "<Property Name>#" where '#' is the index
-                                parameters.Add(new SQLParameter(index.Value, propertyArrayType, property.Name + (i), property.GetValue(this)));
+                                parameters.Add(new SQLParameter(propertyArrayType, property.Name + (i), property.GetValue(this)));
                             }
                         }
                     }
@@ -792,12 +792,12 @@ namespace Integra.Core
                     {
                         // The property is of type bool
                         Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <bool>");
-                        parameters.Add(new SQLParameter(index.Value, type, property.Name, property.GetValue(this)));
+                        parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
                     }
                     else if (type == typeof(short))
                     {
                         Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <short>");
-                        parameters.Add(new SQLParameter(index.Value, type, property.Name, property.GetValue(this)));
+                        parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
                     }
                     else if (type == typeof(int))
                     {
@@ -816,7 +816,7 @@ namespace Integra.Core
                                 Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <int[{i}]>");
 
                                 // Property name is "Item#" where '#' is the index
-                                parameters.Add(new SQLParameter(index.Value + i, type, property.Name + (i), property.GetValue(this, new object[] { i})));
+                                parameters.Add(new SQLParameter(type, property.Name + (i), property.GetValue(this, new object[] { i})));
                             }
                         }
                         else
@@ -828,12 +828,12 @@ namespace Integra.Core
                                 Type enumType = Enum.GetUnderlyingType(type);
 
                                 //object underlyingValue = Convert.ChangeType(property.GetValue(this), Enum.GetUnderlyingType(property.GetValue(this).GetType()));
-                                parameters.Add(new SQLParameter(index.Value, type, property.Name, Convert.ChangeType(property.GetValue(this), enumType)));
+                                parameters.Add(new SQLParameter(type, property.Name, Convert.ChangeType(property.GetValue(this), enumType)));
 
                             }
                             else
                             {
-                                parameters.Add(new SQLParameter(index.Value, type, property.Name, property.GetValue(this)));
+                                parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
                             }
                         }
                     }
@@ -854,7 +854,7 @@ namespace Integra.Core
                                 Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <byte[{i}]>");
 
                                 // Property name is "Item#" where '#' is the index
-                                parameters.Add(new SQLParameter(index.Value + i, type, property.Name + (i), property.GetValue(this, new object[] { i })));
+                                parameters.Add(new SQLParameter(type, property.Name + (i), property.GetValue(this, new object[] { i })));
                             }
                         }
                         else
@@ -866,11 +866,11 @@ namespace Integra.Core
                                 Type enumType = Enum.GetUnderlyingType(type);
                                 
                                 //object underlyingValue = Convert.ChangeType(property.GetValue(this), Enum.GetUnderlyingType(property.GetValue(this).GetType()));
-                                parameters.Add(new SQLParameter(index.Value, type, property.Name, Convert.ChangeType(property.GetValue(this), enumType)));
+                                parameters.Add(new SQLParameter(type, property.Name, Convert.ChangeType(property.GetValue(this), enumType)));
                             }
                             else
                             {
-                                parameters.Add(new SQLParameter(index.Value, type, property.Name, property.GetValue(this)));
+                                parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
                             }
                         }
                     }

@@ -119,6 +119,9 @@
     <Compile Include="Windows\MidiDevicesWindow.xaml.cs">
       <DependentUpon>MidiDevicesWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\SessionsWindow.xaml.cs">
+      <DependentUpon>SessionsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\SystemExclusivesWindow.xaml.cs">
       <DependentUpon>SystemExclusivesWindow.xaml</DependentUpon>
     </Compile>
@@ -166,6 +169,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\MidiDevicesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SessionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

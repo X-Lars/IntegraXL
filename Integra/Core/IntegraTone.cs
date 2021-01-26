@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Integra.Core
 {
-    public sealed class IntegraTone : IntegraBaseItem
+    public sealed class IntegraTone : IntegraDataTemplate<IntegraStudioSet>
     {
         public IntegraTone()
         {

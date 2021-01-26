@@ -8,9 +8,8 @@ namespace Integra.Database
 {
     public class SQLParameter
     {
-        public SQLParameter(int offset, Type type, string name, object value)
+        public SQLParameter(Type type, string name, object value)
         {
-            Offset = offset;
             Type = type;
             Value = value;
             Name = name;
@@ -18,8 +17,6 @@ namespace Integra.Database
         public object Value { get; private set; }
 
         public Type Type { get; private set; }
-
-        public int Offset { get; private set; }
 
         public string Name { get; set; }
     }

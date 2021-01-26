@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Integra.Core
 {
     ///
-    public sealed class IntegraStudioSet : IntegraBaseItem
+    public sealed class IntegraStudioSet : IntegraDataTemplate<IntegraStudioSet>
     {
         private uint _ID;
         private string _Name;
@@ -29,6 +29,10 @@ namespace Integra.Core
            
         }
 
+        public bool IsEditable
+        {
+            get { return PC > 0x0F; }
+        }
 
         public uint ID
         {
@@ -56,7 +60,6 @@ namespace Integra.Core
             get { return _LSB; }
             set { _LSB = value; NotifyPropertyChanged(); }
         }
-
 
         public byte PC
         {
