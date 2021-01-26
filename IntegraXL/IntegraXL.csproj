@@ -93,6 +93,9 @@
     <Compile Include="Common\Converters\ByteToHexConverter.cs" />
     <Compile Include="Common\Converters\ToneConverter.cs" />
     <Compile Include="Common\Extensions\MarkupExtensions.cs" />
+    <Compile Include="UserControls\FavoritesTree.xaml.cs">
+      <DependentUpon>FavoritesTree.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\MFX\Equalizer.xaml.cs">
       <DependentUpon>Equalizer.xaml</DependentUpon>
     </Compile>
@@ -140,6 +143,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UserControls\FavoritesTree.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\MFX\Equalizer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

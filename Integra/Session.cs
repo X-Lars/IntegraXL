@@ -92,7 +92,7 @@ namespace Integra
             parameters.Add(new SQLParameter(typeof(byte), nameof(Type), (byte)Type));
             parameters.Add(new SQLParameter(typeof(string), nameof(Description), Description));
 
-            DataAccess.Save(this, parameters, false, false);
+            DataAccess.Save(this, parameters);
 
             Device.Instance.StudioSet.Save();
 

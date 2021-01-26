@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using Integra.Database;
 
 namespace IntegraXL
 {
@@ -19,6 +20,8 @@ namespace IntegraXL
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        private ObservableCollection<Tone> _FavoriteTones;//
+
         private ProgressDialog _Dialog;
         private MessageDialog _MessageDialog;
 
@@ -51,11 +54,13 @@ namespace IntegraXL
             CommandBindings.Add(new CommandBinding(_LoadCommand, OnLoad, CanExecuteOnLoad));
             CommandBindings.Add(new CommandBinding(_SaveCommand, OnSave, CanExecuteOnSave));
             CommandBindings.Add(new CommandBinding(_TruncateCommand, OnTruncate));
-
+            CommandBindings.Add(new CommandBinding(_AddFavoriteCommand, OnAddFavorite));
             Host.SelectionChanged += HostSelectionChanged;
 
             Loaded += MainWindowLoaded;
             //Config<IntegraConfiguration>.Print();
+
+
         }
 
         
@@ -68,6 +73,7 @@ namespace IntegraXL
         }
         private void MainWindowLoaded(object sender, RoutedEventArgs e)
         {
+            //_FavoriteTones = new ObservableCollection<IntegraTone>(DataAccess.Select(Integra.StudioSet.Tone, new IntegraTone()));
             //Integra.OperationStart += IntegraOperationStart;
             //Integra.OperationProgress += IntegraOperationProgress;
             //Integra.OperationComplete += IntegraOperationComplete;
@@ -87,6 +93,8 @@ namespace IntegraXL
         private static RoutedUICommand _LoadCommand = new RoutedUICommand(nameof(Load), nameof(Load), typeof(MainWindow));
         private static RoutedUICommand _SaveCommand = new RoutedUICommand(nameof(Save), nameof(Save), typeof(MainWindow));
         private static RoutedUICommand _TruncateCommand = new RoutedUICommand(nameof(Truncate), nameof(Truncate), typeof(MainWindow));
+        private static RoutedUICommand _AddFavoriteCommand = new RoutedUICommand(nameof(AddFavorite), nameof(AddFavorite), typeof(MainWindow));
+
         /// <summary>
         /// Registers the command to show a <see cref="MDIChild"/> window.
         /// </summary>
@@ -121,6 +129,12 @@ namespace IntegraXL
         {
             get { return _TruncateCommand; }
         }
+
+        public static ICommand AddFavorite
+        {
+            get { return _AddFavoriteCommand; }
+        }
+
         /// <summary>
         /// Gets the command to show a <see cref="MDIChild"/> window.
         /// </summary>
@@ -188,6 +202,16 @@ namespace IntegraXL
             {
                 if(result == DialogResults.DialogYes)
                     Device.Session.Truncate();
+            }
+        }
+
+        private void OnAddFavorite(object sender, ExecutedRoutedEventArgs e)
+        {
+            MainWindow caller = sender as MainWindow;
+
+            if (caller != null)
+            {
+                Integra.StudioSet.SaveFavorite();
             }
         }
 

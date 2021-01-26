@@ -197,6 +197,12 @@ namespace Integra.Models
             
         }
 
+        public void SaveFavorite()
+        {
+
+            Console.WriteLine($"StudioSet Save Tone!");
+            Tone.Save();
+        }
         //public override void Save()
         //{
         //    Console.WriteLine("SAVE STUDIO SET CALLED");

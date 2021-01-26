@@ -10,8 +10,22 @@ using System.Threading.Tasks;
 
 namespace Integra.Core
 {
+    /// <summary>
+    /// Base collection for all INTEGRA-7 tone banks
+    /// </summary>
     public abstract class IntegraBaseToneBank : IntegraBaseCollection<IntegraBaseToneBank, IntegraTone>
     {
+        #region Fields
+
+        /// <summary>
+        /// Tracks whether initialization can be done from the database.
+        /// </summary>
+        protected bool _IsPersistent = false;
+
+        #endregion
+
+        #region Constructor
+
         internal protected IntegraBaseToneBank() : base(0x0F000402) { }
 
         public IntegraBaseToneBank(byte msb, byte lsb, uint size) : base(0x0F000402)
@@ -42,41 +56,68 @@ namespace Integra.Core
             }
         }
 
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the most significant byte of the tone bank request.
+        /// </summary>
+        public byte MSB { get; internal protected set; }
+
+        /// <summary>
+        /// Gets the least significant byte of the tone bank request.
+        /// </summary>
+        public byte LSB { get; internal protected set; }
+
+        /// <summary>
+        /// Gets the size of the tone bank.
+        /// </summary>
+        public uint Size { get; internal protected set; }
+
+        #endregion
+
+        #region Overrides
+
+        /// <summary>
+        /// Overrides the default behaviour to initialize the data structure from the data base when possible.
+        /// </summary>
         public override void Initialize()
         {
-            Debug.Print($"[{nameof(IntegraBaseToneBank)}.{nameof(Initialize)}] {GetType().Name}");
-            // TODO: Check if exists in database
+            // TODO: User tone banks should always be loaded from the INTEGRA-7 because they can be changed
 
-            _IsPersisted = DataAccess.GetCount(this) == Size;
+            _IsPersistent = DataAccess.GetCount(this) == Size;
 
-            if(!_IsPersisted)
+            if (!_IsPersistent)
             {
-                // Ensure table is empty
+                Debug.Print($"[{nameof(IntegraBaseToneBank)}.{nameof(Initialize)}] {GetType().Name} ");
+
+                // Ensures table is empty
                 DataAccess.Truncate(this);
 
+                // Initialize the tone bank from the INTEGRA-7
                 base.Initialize();
-
-                // insert into database after initializaiont
             }
             else
             {
-                // Load from database
+                Debug.Print($"[{nameof(IntegraBaseToneBank)}.{nameof(Initialize)}] {GetType().Name}");
+
+                // Initialize the tone bank from the database.
                 DataAccess.Select(this, new IntegraTone()).ForEach(Collection.Add);
             }
         }
 
-        // Exists in database?
-        protected bool _IsPersisted = false;
-
-        public byte MSB { get; internal protected set; }
-        public byte LSB { get; internal protected set; }
-        public uint Size { get; internal protected set; }
 
         protected override uint DataSize
         {
             get { return Size; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
             if (IsInitialized)
@@ -93,7 +134,9 @@ namespace Integra.Core
                     if(Initialize(syx.Data))
                     {
                         Device.Instance.ReportProgress(this, new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
-                        if (!_IsPersisted)
+
+                        // Store the tone bank in the database
+                        if (!_IsPersistent)
                         {
                             DataAccess.BatchInsert(this, new IntegraTone());
                         }
@@ -106,5 +149,6 @@ namespace Integra.Core
             }
         }
 
+        #endregion
     }
 }

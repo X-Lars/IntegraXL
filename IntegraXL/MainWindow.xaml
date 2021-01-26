@@ -23,30 +23,7 @@
                         Width="250">
                 
                 <xl:Sidebar.CommonContent>
-                    <StackPanel>
-                        
-                        
-                            <TreeViewItem Header="Presets" IsExpanded="True">
-                                <TreeViewItem Header="SuperNATURAL Tones" IsExpanded="True">
-                                    <xl:LinkButton>SuperNATURAL Acoustic Tones</xl:LinkButton>
-                                    <xl:LinkButton>SuperNATURAL Synth Tones</xl:LinkButton>
-                                </TreeViewItem>
-                                <TreeViewItem Header="PCM Tones" IsExpanded="True">
-
-                                </TreeViewItem>
-
-                            </TreeViewItem>
-                            <TreeViewItem Header="User" IsExpanded="True">
-                                <TreeViewItem>
-                                    <xl:LinkButton>SuperNATURAL Acoustic Tones</xl:LinkButton>
-                                </TreeViewItem>
-                            </TreeViewItem>
-                            <TreeViewItem Header="Expansions" IsExpanded="False">
-                                <xl:LinkButton>Exp01</xl:LinkButton>
-                            </TreeViewItem>
-                        
-                        
-                    </StackPanel>
+                    <uc:FavoritesTree/>
                 </xl:Sidebar.CommonContent>
                 
                 <xl:Sidebar.Sections>

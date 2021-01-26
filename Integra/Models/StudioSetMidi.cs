@@ -90,7 +90,6 @@ namespace Integra.Models
         {
             if (!IsInitialized)
             {
-                DebugPrint();
                 _Part = (IntegraParts)((Address & 0x00000F00) >> 8);
 
                 _PhaseLock = Convert.ToBoolean(data[0x00]);

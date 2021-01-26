@@ -1,9 +1,5 @@
 ﻿using Integra.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Integra.Database;
 
 namespace Integra.Models
 {
@@ -84,4 +80,17 @@ namespace Integra.Models
     }
 
     public class GM2DrumKits : IntegraBaseToneBank { public GM2DrumKits() : base(0x78, 0x00, 9) { Name = "GM2 Drum Kits"; } }
+
+    public class Favorites : IntegraBaseToneBank 
+    { 
+        public Favorites() : base(0x00, 0x00, 0) 
+        { 
+            Name = "Favorites"; 
+        }
+
+        public override void Initialize()
+        {
+            DataAccess.Select(this, new IntegraTone()).ForEach(Collection.Add);
+        }
+    }
 }

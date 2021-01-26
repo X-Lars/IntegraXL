@@ -1,4 +1,6 @@
-﻿using Integra.Models;
+﻿using Integra.Database;
+using Integra.Models;
+using System.Collections.Generic;
 
 namespace Integra.Core.Interfaces
 {

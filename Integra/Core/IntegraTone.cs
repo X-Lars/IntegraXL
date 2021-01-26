@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Integra.Core
 {
-    public sealed class IntegraTone : IntegraDataTemplate<IntegraTone>
+    public class IntegraTone : IntegraDataTemplate<IntegraTone>
     {
         public IntegraTone()
         {
@@ -37,5 +37,12 @@ namespace Integra.Core
         public byte LSB { get; set; }
         public byte PC { get; set; }
         public IntegraToneCategories Category { get; set; }
+
+        // TODO: Batch insert exclude virtual properties
+
+        //public virtual IntegraToneBanks ToneBank
+        //{
+        //    get { return new Tone(this).ToneBank; }
+        //}
     }
 }

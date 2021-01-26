@@ -10,6 +10,7 @@ using System.Reflection;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Integra.Core.Interfaces;
+using Integra.Database;
 
 namespace Integra.Core
 {

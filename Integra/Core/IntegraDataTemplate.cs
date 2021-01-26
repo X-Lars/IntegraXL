@@ -1,30 +1,51 @@
-﻿using Integra.Database;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Integra.Core
 {
+    /// <summary>
+    /// Base class specifying a data template for items to use by the INTEGRA-7 collection classes.
+    /// </summary>
+    /// <typeparam name="T">The type of item data template.</typeparam>
     public abstract class IntegraDataTemplate<T> : INotifyPropertyChanged where T: IntegraDataTemplate<T>
     {
+        #region Fields
+
+        /// <summary>
+        /// Stores a property cache per inherited type.
+        /// </summary>
         private static Dictionary<string, PropertyInfo> _PropertyCache = new Dictionary<string, PropertyInfo>();
+
+        /// <summary>
+        /// Stores whether the properties of the inherited class are cached.
+        /// </summary>
         private static bool _IsCached = false;
 
-        public IntegraDataTemplate() 
-        {
-        }
+        #endregion
 
-       
-        protected IntegraDataTemplate(int id, byte[] data) 
-        {
-        }
+        #region Constructor
 
-        private void InitializeCache()
+        /// <summary>
+        /// Creates a new <see cref="IntegraDataTemplate{T}"/> instance.
+        /// </summary>
+        public IntegraDataTemplate() { }
+
+        /// <summary>
+        /// Creates and initializes a new <see cref="IntegraDataTemplate{T}"/> instance.
+        /// </summary>
+        /// <param name="id">The ID associated with the data.</param>
+        /// <param name="data">The data to initialize the template.</param>
+        protected IntegraDataTemplate(int id, byte[] data) { }
+
+        #endregion
+
+        /// <summary>
+        /// Initializes the property cache.
+        /// </summary>
+        /// <remarks><i>All public instance properties are cached.</i></remarks>
+        protected virtual void InitializeCache()
         {
             PropertyInfo[] properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 
@@ -36,6 +57,9 @@ namespace Integra.Core
             _IsCached = true;
         }
 
+        /// <summary>
+        /// Gets a reference to the property cache of the data template.
+        /// </summary>
         internal Dictionary<string, PropertyInfo> PropertyCache
         {
             get 
@@ -50,18 +74,18 @@ namespace Integra.Core
         #region INotifyPropertyChanged
 
         /// <summary>
-        /// Event to raise when a property value of an <see cref="INotifyPropertyChanged"/> implementing class is changed.
+        /// Event to raised when a property value is changed.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
 
         /// <summary>
-        /// Method to call on a property of an <see cref="INotifyPropertyChanged"/> implementing class when it's value is changed to raise the <see cref="PropertyChanged"/> event.
+        /// Raises the property changed event for the specified property.
         /// </summary>
-        /// <param name="propertyName">A <see cref="string"/> equal to the name of the property that is changed.</param>
-        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        /// <param name="name">The name of the property.</param>
+        protected void NotifyPropertyChanged([CallerMemberName] string name = "")
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         #endregion

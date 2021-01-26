@@ -1,21 +1,38 @@
 ﻿using Integra.Core;
+using Integra.Core.Interfaces;
+using Integra.Database;
 using MidiXL;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Integra.Models
 {
-    public class Tone : IntegraBase<Tone>
+    /// <summary>
+    /// 
+    /// </summary>
+    [Table("Favorites")]
+    public class Tone : IntegraBase<Tone>, IIntegraDataClass
     {
+        #region Fields
+
+        private int _ID;
+        private string _Name;
+        private byte _MSB;
+        private byte _LSB;
+        private byte _PC;
+        private IntegraToneCategories _Category;
+
+        #endregion
+
+        #region Constructor
+
         public Tone(byte msb, byte lsb, byte pc) : base(0x0F000402)
         {
             ID = ((lsb % 64) * 128) + pc + 1;
-            _MSB = msb;
-            _LSB = lsb;
-            _PC = pc;
+            MSB = msb;
+            LSB = lsb;
+            PC = pc;
 
             ToneBank = this.ToneBank();
             IsUserTone = this.IsUserTone();
@@ -29,9 +46,9 @@ namespace Integra.Models
         public Tone(IntegraTone tone) : base(0x0F000402)
         {
             ID = tone.ID;
-            _MSB = tone.MSB;
-            _LSB = tone.LSB;
-            _PC = tone.PC;
+            MSB = tone.MSB;
+            LSB = tone.LSB;
+            PC = tone.PC;
             Category = tone.Category;
             Name = tone.Name;
             ToneBank = this.ToneBank();
@@ -42,8 +59,26 @@ namespace Integra.Models
             //Initialize();
         }
 
-        private string _Name;
-        public int ID { get; set; }
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the ID of the tone.
+        /// </summary>
+        public int ID 
+        {
+            get { return _ID; } 
+            private set
+            {
+                _ID = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the tone.
+        /// </summary>
         public new string Name 
         {
             get { return _Name; }
@@ -53,10 +88,10 @@ namespace Integra.Models
                 NotifyPropertyChanged(nameof(Name), false);
             }
         }
-        private byte _MSB;
-        private byte _LSB;
-        private byte _PC;
 
+        /// <summary>
+        /// Gets the most significant byte of the tone request.
+        /// </summary>
         public byte MSB
         {
             get { return _MSB; }
@@ -65,11 +100,14 @@ namespace Integra.Models
                 if(_MSB != value)
                 {
                     _MSB = value;
-                    //UpdateRequest(value, _LSB, _PC);
                     NotifyPropertyChanged();
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the least significant byte of the tone request.
+        /// </summary>
         public byte LSB
         {
             get { return _LSB; }
@@ -78,11 +116,14 @@ namespace Integra.Models
                 if(_LSB != value)
                 {
                     _LSB = value;
-                    //UpdateRequest(_MSB, value, _PC);
                     NotifyPropertyChanged();
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the propgram change of the tone request.
+        /// </summary>
         public byte PC
         {
             get { return _PC; }
@@ -91,13 +132,14 @@ namespace Integra.Models
                 if (_PC != value)
                 {
                     _PC = value;
-                    //UpdateRequest(_MSB, _LSB, value);
                     NotifyPropertyChanged();
                 }
             }
         }
-        private IntegraToneCategories _Category;
 
+        /// <summary>
+        /// Gets the category associated with the tone.
+        /// </summary>
         public IntegraToneCategories Category
         {
             get { return _Category; }
@@ -110,7 +152,9 @@ namespace Integra.Models
                 }
             }
         }
+
         public IntegraToneBanks ToneBank { get; set; }
+
         public bool IsUserTone { get; set; }
         public bool IsExpansion { get; set; }
 
@@ -124,21 +168,10 @@ namespace Integra.Models
                 NotifyPropertyChanged();
             }
         }
-        //private void UpdateRequest(byte msb, byte lsb, byte pc)
-        //{
-        //    Requests.Clear();
-        //    Requests.Add(new IntegraRequest(msb, lsb, pc, 0x01));
-        //}
 
-        //internal void Reinitialize()
-        //{
-           
+        #endregion
 
-        //    Requests.Add(new IntegraRequest(MSB, LSB, PC, 0x01));
-        //    IsInitialized = false;
-
-        //    Initialize();
-        //}
+        #region Overrides
 
         internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
@@ -149,7 +182,7 @@ namespace Integra.Models
                 if(syx.Address == Address)
                 {
                     Console.WriteLine($"[{GetType().Name}.{nameof(SystemExclusiveReceived)}] {syx}");
-                    //Initialize(syx.Data);
+
                     if (Initialize(syx.Data))
                         Device.Instance.ReportProgress(this, new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
                 }
@@ -172,5 +205,51 @@ namespace Integra.Models
 
             return IsInitialized;
         }
+
+
+
+
+        public override void Save()
+        {
+            List<SQLParameter> parameters = new List<SQLParameter>();
+
+            parameters.Add(new SQLParameter(typeof(byte), nameof(MSB), MSB));
+            parameters.Add(new SQLParameter(typeof(byte), nameof(LSB), LSB));
+            parameters.Add(new SQLParameter(typeof(byte), nameof(PC), PC));
+
+            if (DataAccess.Exists(this, parameters))
+            {
+                Console.WriteLine("Tone already favorited");
+                return;
+            }
+
+            parameters.Clear();
+            parameters.Add(new SQLParameter(typeof(int),    nameof(ID), ID));
+            parameters.Add(new SQLParameter(typeof(string), nameof(Name), Name));
+            parameters.Add(new SQLParameter(typeof(byte),   nameof(MSB), MSB));
+            parameters.Add(new SQLParameter(typeof(byte),   nameof(LSB), LSB));
+            parameters.Add(new SQLParameter(typeof(byte),   nameof(PC), PC));
+            parameters.Add(new SQLParameter(typeof(byte),   nameof(Category), (byte)Category));
+
+            DataAccess.Save(this, parameters, false);
+            
+        }
+
+        public override void Load(int id)
+        {
+            //base.Load(id);
+        }
+
+        public override void Delete(int id)
+        {
+            //base.Delete(id);
+        }
+
+        public override void Truncate()
+        {
+            //base.Truncate();
+        }
+
+        #endregion
     }
 }

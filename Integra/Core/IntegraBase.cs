@@ -23,14 +23,14 @@ namespace Integra.Core
         #region Fields
 
         /// <summary>
-        /// Cache for storing fields decorated with the <see cref="Offset"/> attribute.
+        /// Cache for fields decorated with the <see cref="Offset"/> attribute.
         /// </summary>
-        private static Dictionary<ushort, FieldInfo> _FieldCache = new Dictionary<ushort, FieldInfo>();
+        private static Dictionary<ushort, FieldInfo> _FieldOffsetCache = new Dictionary<ushort, FieldInfo>();
 
         /// <summary>
-        /// Cache for storing properties decorated with the <see cref="Offset"/> attribute.
+        /// Cache for properties decorated with the <see cref="Offset"/> attribute.
         /// </summary>
-        private static Dictionary<ushort, PropertyInfo> _PropertyCache = new Dictionary<ushort, PropertyInfo>();
+        private static Dictionary<ushort, PropertyInfo> _PropertyOffsetCache = new Dictionary<ushort, PropertyInfo>();
 
         /// <summary>
         /// Tracks whether the data structure is initialized.
@@ -89,36 +89,36 @@ namespace Integra.Core
 
             // Name defaults to type name
             Name = GetType().Name;
-
            
             Initialize();
         }
-
-        
 
         #endregion
 
         #region Properties
 
         /// <summary>
-        /// Gets the name defaulted to the inheriting data structure type name.
+        /// Gets the name of the instance.
         /// </summary>
         public string Name { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the base address of the data structure in the INTEGRA-7.
+        /// Gets or sets the base address reference of the data structure to the INTEGRA-7.
         /// </summary>
         internal protected IntegraAddress Address { get; set; }
 
         /// <summary>
-        /// Gets the list of request addresses required to initialize the data structure.
+        /// Gets the list of requests required to initialize the data structure.
         /// </summary>
         internal protected List<IntegraRequest> Requests { get; private set; } = new List<IntegraRequest>();
 
+        /// <summary>
+        /// Gets whether the instance is initialized with data.
+        /// </summary>
         public virtual bool IsInitialized
         {
             get { return _IsInitialized; }
-            set
+            protected set
             {
                 if (_IsInitialized == value)
                     return;
@@ -132,16 +132,10 @@ namespace Integra.Core
         #endregion
 
         #region Methods
-
-        private void DeviceConnected(object sender, EventArgs e)
-        {
-            Device.Connected -= DeviceConnected;
-
-            Device.Instance.MidiInputDevice.SystemExclusiveReceived += SystemExclusiveReceived;
-
-            Task.Factory.StartNew(() => Device.Instance.Initialize(this), TaskCreationOptions.LongRunning);
-        }
-
+        
+        /// <summary>
+        /// Initializes the instance by request from the INTEGRA-7.
+        /// </summary>
         public virtual void Initialize()
         {
             InitializeCache();
@@ -155,22 +149,23 @@ namespace Integra.Core
             }
             else
             {
+                // Do initialization in the device connected event handler
                 Device.Connected += DeviceConnected;
             }
         }
 
         /// <summary>
-        /// Initalizes the fields of the <see cref="IntegraBase{T}"/> inherited class.
+        /// Initalizes the fields of the instance from the data part of a received system exclusive.
         /// </summary>
-        /// <param name="data">The <see cref="IntegraSystemExclusive.Data"/> part to initialize the class.</param>
-        /// <returns>A <see cref="bool"/> containing true if the class is initialized.</returns>
+        /// <param name="data">The system exclusive data part.</param>
+        /// <returns>True if the class is completely initialized.</returns>
         protected virtual bool Initialize(byte[] data)
         {
             if (!IsInitialized)
             {
-                int count = _FieldCache.Count;
+                int count = _FieldOffsetCache.Count;
 
-                foreach(KeyValuePair<ushort, FieldInfo> field in _FieldCache)
+                foreach(KeyValuePair<ushort, FieldInfo> field in _FieldOffsetCache)
                 {
                     if(field.Value.FieldType.IsArray)
                     {
@@ -266,7 +261,7 @@ namespace Integra.Core
         }
 
         /// <summary>
-        /// Reinitializes the fields of the <see cref="IntegraBase{T}"/> derived class.
+        /// Reinitializes the data of the instance.
         /// </summary>
         internal virtual void Reinitialize()
         {
@@ -278,7 +273,7 @@ namespace Integra.Core
         #region Methods: Private
 
         /// <summary>
-        /// Initalizes the field and property cache.
+        /// Initalizes the field offset and property offset cache.
         /// </summary>
         private void InitializeCache()
         {
@@ -295,10 +290,10 @@ namespace Integra.Core
 
                 if (attribute != null)
                 {
-                    if (_FieldCache.ContainsKey(attribute.Value))
+                    if (_FieldOffsetCache.ContainsKey(attribute.Value))
                         throw new Exception($"[{GetType().Name}.{nameof(InitializeCache)}] Duplicate field offset attribute 0x{attribute.Value.ToString("X4")}!");
 
-                    _FieldCache.Add(attribute.Value, field);
+                    _FieldOffsetCache.Add(attribute.Value, field);
                 }
             }
 
@@ -312,35 +307,35 @@ namespace Integra.Core
 
                 if (attribute != null)
                 {
-                    if (_PropertyCache.ContainsKey(attribute.Value))
+                    if (_PropertyOffsetCache.ContainsKey(attribute.Value))
                         throw new Exception($"[{GetType().Name}.{nameof(InitializeCache)}] Duplicate property offset attribute 0x{attribute.Value.ToString("X4")}!");
 
-                    _PropertyCache.Add(attribute.Value, property);
+                    _PropertyOffsetCache.Add(attribute.Value, property);
                 }
             }
 
             _IsCached = true;
         }
 
-        private FieldInfo GetCachedField(ushort offset)
+        internal FieldInfo GetCachedField(ushort offset)
         {
-            if (!_FieldCache.ContainsKey(offset))
+            if (!_FieldOffsetCache.ContainsKey(offset))
                 return null;
 
-            return _FieldCache[offset];
+            return _FieldOffsetCache[offset];
         }
 
-        private PropertyInfo GetCachedProperty(ushort offset)
+        internal PropertyInfo GetCachedProperty(ushort offset)
         {
-            if (!_PropertyCache.ContainsKey(offset))
+            if (!_PropertyOffsetCache.ContainsKey(offset))
                 return null;
 
-            return _PropertyCache[offset];
+            return _PropertyOffsetCache[offset];
         }
 
-        private Offset GetPropertyOffset(string propertyName)
+        internal Offset GetPropertyOffset(string propertyName)
         {
-            foreach(var property in _PropertyCache)
+            foreach(var property in _PropertyOffsetCache)
             {
                 if(property.Value.Name == propertyName)
                 {
@@ -351,6 +346,10 @@ namespace Integra.Core
             return null;
         }
 
+        /// <summary>
+        /// Initializes one or more fields from a received system exclusive message.
+        /// </summary>
+        /// <param name="syx">The received system exclusive message.</param>
         protected void InitializeField(IntegraSystemExclusive syx)
         {
             // The offset of the property to set
@@ -408,18 +407,6 @@ namespace Integra.Core
                             array.SetValue(BitConverter.ToInt32(values, 0), i);
                             fieldOffset += 4;
                         }
-                        //Array.Copy(syx.Data, fieldOffset, array, 0, l);
-                        //fieldOffset += p * 4;
-
-
-                        //Array.Copy(syx.Data, syx.Data.Length - 4, values, 0, 4);
-
-                        //if (BitConverter.IsLittleEndian)
-                        //    Array.Reverse(values);
-                        
-                        //array.SetValue(BitConverter.ToInt32(values, 0), p - 1);
-                        //fieldOffset += p * 4;
-                        ////propertyOffset += 4;
                     }
                     else
                     {
@@ -464,11 +451,16 @@ namespace Integra.Core
                     }
                 }
 
-                // Property offset has to be realligned in case the field is an array
+                // Property offset has to be realigned in case the field is an array
                 propertyOffset = fieldOffset;
             }
         }
 
+        /// <summary>
+        /// Transmits a property value to the INTEGRA-7.
+        /// </summary>
+        /// <param name="offset">The offset of the property.</param>
+        /// <param name="value">The value of the property.</param>
         private void TransmitProperty(ushort offset, byte[] value)
         {
             if (IsInitialized)
@@ -476,19 +468,23 @@ namespace Integra.Core
                 IntegraSystemExclusive systemExclusive = new IntegraSystemExclusive(this.Address, offset, value);
 
                 Device.Instance.SendSystemExclusive(systemExclusive);
-                
             }
         }
 
-        private void TransmitProperty(string propertyName, int? index)
+        /// <summary>
+        /// Transmits an indexer property value to the INTEGRA-7.
+        /// </summary>
+        /// <param name="propertyName">The name of the indexer property.</param>
+        /// <param name="index">The index of the property value.</param>
+        private void TransmitIndexerProperty(string propertyName, int? index)
         {
             Offset offset = GetPropertyOffset(propertyName);
 
             if(offset != null)
             {
-                if (_FieldCache.ContainsKey(offset.Value))
+                if (_FieldOffsetCache.ContainsKey(offset.Value))
                 {
-                    FieldInfo field = _FieldCache[offset.Value];
+                    FieldInfo field = _FieldOffsetCache[offset.Value];
 
                     if (field.FieldType.IsArray)
                     {
@@ -548,12 +544,25 @@ namespace Integra.Core
             }
         }
 
-       
         #endregion
 
         #endregion
 
         #region Event Handlers
+
+        /// <summary>
+        /// Initializes the instance on device connection.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event data.</param>
+        private void DeviceConnected(object sender, EventArgs e)
+        {
+            Device.Connected -= DeviceConnected;
+
+            Device.Instance.MidiInputDevice.SystemExclusiveReceived += SystemExclusiveReceived;
+
+            Task.Factory.StartNew(() => Device.Instance.Initialize(this), TaskCreationOptions.LongRunning);
+        }
 
         /// <summary>
         /// Eventhandler that handles the <see cref="Device.SystemExclusiveReceived"/>.
@@ -582,15 +591,6 @@ namespace Integra.Core
             {
                 InitializeField(syx);
             }
-            //else if ((syx.Address & 0xF000FF00) == (Address &0xF000FF00))
-            //{
-            //    if(syx.Data.Length == 4)
-            //    InitializeField(syx);
-            //}
-            else
-            {
-                //Debug.Print($"[{GetType().Name}.{nameof(SystemExclusiveReceived)}] Unhandled addres: [{syx.Address}]");
-            }
         }
 
         #endregion
@@ -617,7 +617,7 @@ namespace Integra.Core
                 if(IsInitialized)
                 {
                     if(!string.IsNullOrEmpty(propertyName))
-                        TransmitProperty(propertyName, null);
+                        TransmitIndexerProperty(propertyName, null);
                 }
             }
         }
@@ -627,7 +627,6 @@ namespace Integra.Core
         /// </summary>
         /// <param name="index">An <see cref="int"/> specifying the index of the indexer property that is changed.</param>
         /// <param name="transmit">A <see cref="bool"/> to determin if the property has to be transmitted.</param>
-        /// <remarks><i>If no property name is specified, the actual name of the property in code is used.</i></remarks>
         protected void NotifyIndexerPropertyChanged(int index, bool transmit = true)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
@@ -636,7 +635,7 @@ namespace Integra.Core
             {
                 if (IsInitialized)
                 {
-                    TransmitProperty("Item", index);
+                    TransmitIndexerProperty("Item", index);
                 }
             }
         }
@@ -646,7 +645,7 @@ namespace Integra.Core
         #region Overrides
 
         /// <summary>
-        /// Overrides <see cref="ToString"/> to return the name of the <see cref="IntegraBase{T}"/> inheriting class.
+        /// Overrides <see cref="ToString"/> to return the name of the instance.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
@@ -707,184 +706,212 @@ namespace Integra.Core
 
         #region Database
         //TODO: Remove to data access layer
+
         public virtual void Save()
+        {
+            Save(null);
+        }
+
+        public virtual void Save(List<SQLParameter> parameters = null)
         {
             //DataAccess.Save(this);
 
             if (GetType() != typeof(StudioSetMidi) && GetType() != typeof(StudioSet) && GetType() != typeof(StudioSetCommon))
                 return;
 
-            List<SQLParameter> parameters = new List<SQLParameter>();
-
-            
-
             PropertyInfo[] properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
-            
-            foreach(var property in properties)
+
+            foreach (var property in properties)
             {
-                Type type = property.PropertyType;
-
-                if (type == typeof(Tone))
-                    continue;
-
-                if(type.GetInterfaces().Contains(typeof(IIntegraDataClass)))
+                if(property.PropertyType.GetInterfaces().Contains(typeof(IIntegraDataClass)))
                 {
-                    // The property is of type IntegraBase<T>
-                    Debug.Print($"SAVE --> [{GetType().Name}] --> SAVE --> {property.Name}");
-
-                    // Prevent property null values in case of StudioSetPart where not all properties are initialized
-                    // Only one of five tone properties are initialized
                     if (property.GetValue(this) == null)
                         continue;
 
-                    // Invoke the save method on the property
                     ((IIntegraDataClass)property.GetValue(this)).Save();
                 }
-                else if(property.GetCustomAttribute(typeof(Offset)) != null)
-                {
-                    // The property is part of this class and has an offset attribute
-                    // Handle saving of the property
-                    Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <{type}>");
-
-                    Offset index = (Offset)property.GetCustomAttribute(typeof(Offset));
-
-                    if(type == typeof(string))
-                    {
-                        // The property is of type string
-                        Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <string>");
-
-                        parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
-                    }
-                    else if(type.IsArray)
-                    {
-                        // The property is an array
-                        Array propertyArray = (Array)property.GetValue(this);
-
-                        // Get the type of elements in the array
-                        Type propertyArrayType = propertyArray.GetType().GetElementType();
-
-                        if(propertyArrayType == typeof(byte))
-                        {
-                            // The array is of type byte
-                            for (int i = 0; i < propertyArray.Length; i++)
-                            {
-                                Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <byte[{i}]>");
-
-                                // Property name is "<Property Name>#" where '#' is the index
-                                parameters.Add(new SQLParameter(propertyArrayType, property.Name + (i), property.GetValue(this)));
-
-                            }
-
-                        }
-                        else if (propertyArrayType == typeof(int))
-                        {
-                            // The array is of type int
-                            for (int i = 0; i < propertyArray.Length; i++)
-                            {
-                                Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <int[{i}]>");
-
-                                // Property name is "<Property Name>#" where '#' is the index
-                                parameters.Add(new SQLParameter(propertyArrayType, property.Name + (i), property.GetValue(this)));
-                            }
-                        }
-                    }
-                    else if(type == typeof(bool))
-                    {
-                        // The property is of type bool
-                        Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <bool>");
-                        parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
-                    }
-                    else if (type == typeof(short))
-                    {
-                        Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <short>");
-                        parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
-                    }
-                    else if (type == typeof(int))
-                    {
-                        if (property.GetIndexParameters().Length > 0)
-                        {
-                            // The property is an indexer property of type int
-                            // Get the values from the backing field
-                            Offset offset = (Offset)property.GetCustomAttribute(typeof(Offset));
-                            FieldInfo field = GetCachedField(offset.Value);
-
-                            // Create an array of the backing field to get the data length
-                            Array propertyArray = (Array)field.GetValue(this);
-
-                            for (int i = 0; i < propertyArray.Length; i++)
-                            {
-                                Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <int[{i}]>");
-
-                                // Property name is "Item#" where '#' is the index
-                                parameters.Add(new SQLParameter(type, property.Name + (i), property.GetValue(this, new object[] { i})));
-                            }
-                        }
-                        else
-                        {
-                            // The property is of type int
-                            Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <int>");
-                            if (type.IsEnum)
-                            {
-                                Type enumType = Enum.GetUnderlyingType(type);
-
-                                //object underlyingValue = Convert.ChangeType(property.GetValue(this), Enum.GetUnderlyingType(property.GetValue(this).GetType()));
-                                parameters.Add(new SQLParameter(type, property.Name, Convert.ChangeType(property.GetValue(this), enumType)));
-
-                            }
-                            else
-                            {
-                                parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (property.GetIndexParameters().Length > 0)
-                        {
-                            // The property is an indexer property of type byte
-                            // Get the values from the backing field
-                            Offset offset = (Offset)property.GetCustomAttribute(typeof(Offset));
-                            FieldInfo field = GetCachedField(offset.Value);
-
-                            // Create an array of the backing field to get the data length
-                            Array propertyArray = (Array)field.GetValue(this);
-
-                            for (int i = 0; i < propertyArray.Length; i++)
-                            {
-                                Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <byte[{i}]>");
-
-                                // Property name is "Item#" where '#' is the index
-                                parameters.Add(new SQLParameter(type, property.Name + (i), property.GetValue(this, new object[] { i })));
-                            }
-                        }
-                        else
-                        {
-                            // The property is of type byte
-                            Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <byte>");
-                            if (type.IsEnum)
-                            {
-                                Type enumType = Enum.GetUnderlyingType(type);
-                                
-                                //object underlyingValue = Convert.ChangeType(property.GetValue(this), Enum.GetUnderlyingType(property.GetValue(this).GetType()));
-                                parameters.Add(new SQLParameter(type, property.Name, Convert.ChangeType(property.GetValue(this), enumType)));
-                            }
-                            else
-                            {
-                                parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
-                            }
-                        }
-                    }
-                    
-
-                }
-
             }
 
 
-            if (GetType() == typeof(StudioSet))
-                return;
+            //if (GetType() == typeof(StudioSet))
+            //    return;
 
-            DataAccess.Save(this, parameters, GetType().GetInterfaces().Contains(typeof(IIntegraPartial)));
+            DataAccess.Save(this, parameters);
+
+
+
+
+            //List<SQLParameter> parameters = new List<SQLParameter>();
+
+            
+
+            //PropertyInfo[] properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
+            
+            //foreach(var property in properties)
+            //{
+            //    Type type = property.PropertyType;
+
+            //    if (type == typeof(Tone))
+            //        continue;
+
+            //    if(type.GetInterfaces().Contains(typeof(IIntegraDataClass)))
+            //    {
+            //        // The property is of type IntegraBase<T>
+            //        Debug.Print($"SAVE --> [{GetType().Name}] --> SAVE --> {property.Name}");
+
+            //        // Prevent property null values in case of StudioSetPart where not all properties are initialized
+            //        // Only one of five tone properties are initialized
+            //        if (property.GetValue(this) == null)
+            //            continue;
+
+            //        // Invoke the save method on the property
+            //        ((IIntegraDataClass)property.GetValue(this)).Save();
+            //    }
+            //    else if(property.GetCustomAttribute(typeof(Offset)) != null)
+            //    {
+            //        // The property is part of this class and has an offset attribute
+            //        // Handle saving of the property
+            //        Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <{type}>");
+
+            //        Offset index = (Offset)property.GetCustomAttribute(typeof(Offset));
+
+            //        if(type == typeof(string))
+            //        {
+            //            // The property is of type string
+            //            Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <string>");
+
+            //            parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
+            //        }
+            //        else if(type.IsArray)
+            //        {
+            //            // The property is an array
+            //            Array propertyArray = (Array)property.GetValue(this);
+
+            //            // Get the type of elements in the array
+            //            Type propertyArrayType = propertyArray.GetType().GetElementType();
+
+            //            if(propertyArrayType == typeof(byte))
+            //            {
+            //                // The array is of type byte
+            //                for (int i = 0; i < propertyArray.Length; i++)
+            //                {
+            //                    Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <byte[{i}]>");
+
+            //                    // Property name is "<Property Name>#" where '#' is the index
+            //                    parameters.Add(new SQLParameter(propertyArrayType, property.Name + (i), property.GetValue(this)));
+
+            //                }
+
+            //            }
+            //            else if (propertyArrayType == typeof(int))
+            //            {
+            //                // The array is of type int
+            //                for (int i = 0; i < propertyArray.Length; i++)
+            //                {
+            //                    Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <int[{i}]>");
+
+            //                    // Property name is "<Property Name>#" where '#' is the index
+            //                    parameters.Add(new SQLParameter(propertyArrayType, property.Name + (i), property.GetValue(this)));
+            //                }
+            //            }
+            //        }
+            //        else if(type == typeof(bool))
+            //        {
+            //            // The property is of type bool
+            //            Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <bool>");
+            //            parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
+            //        }
+            //        else if (type == typeof(short))
+            //        {
+            //            Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <short>");
+            //            parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
+            //        }
+            //        else if (type == typeof(int))
+            //        {
+            //            if (property.GetIndexParameters().Length > 0)
+            //            {
+            //                // The property is an indexer property of type int
+            //                // Get the values from the backing field
+            //                Offset offset = (Offset)property.GetCustomAttribute(typeof(Offset));
+            //                FieldInfo field = GetCachedField(offset.Value);
+
+            //                // Create an array of the backing field to get the data length
+            //                Array propertyArray = (Array)field.GetValue(this);
+
+            //                for (int i = 0; i < propertyArray.Length; i++)
+            //                {
+            //                    Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <int[{i}]>");
+
+            //                    // Property name is "Item#" where '#' is the index
+            //                    parameters.Add(new SQLParameter(type, property.Name + (i), property.GetValue(this, new object[] { i})));
+            //                }
+            //            }
+            //            else
+            //            {
+            //                // The property is of type int
+            //                Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <int>");
+            //                if (type.IsEnum)
+            //                {
+            //                    Type enumType = Enum.GetUnderlyingType(type);
+
+            //                    //object underlyingValue = Convert.ChangeType(property.GetValue(this), Enum.GetUnderlyingType(property.GetValue(this).GetType()));
+            //                    parameters.Add(new SQLParameter(type, property.Name, Convert.ChangeType(property.GetValue(this), enumType)));
+
+            //                }
+            //                else
+            //                {
+            //                    parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
+            //                }
+            //            }
+            //        }
+            //        else
+            //        {
+            //            if (property.GetIndexParameters().Length > 0)
+            //            {
+            //                // The property is an indexer property of type byte
+            //                // Get the values from the backing field
+            //                Offset offset = (Offset)property.GetCustomAttribute(typeof(Offset));
+            //                FieldInfo field = GetCachedField(offset.Value);
+
+            //                // Create an array of the backing field to get the data length
+            //                Array propertyArray = (Array)field.GetValue(this);
+
+            //                for (int i = 0; i < propertyArray.Length; i++)
+            //                {
+            //                    Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <byte[{i}]>");
+
+            //                    // Property name is "Item#" where '#' is the index
+            //                    parameters.Add(new SQLParameter(type, property.Name + (i), property.GetValue(this, new object[] { i })));
+            //                }
+            //            }
+            //            else
+            //            {
+            //                // The property is of type byte
+            //                Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <byte>");
+            //                if (type.IsEnum)
+            //                {
+            //                    Type enumType = Enum.GetUnderlyingType(type);
+                                
+            //                    //object underlyingValue = Convert.ChangeType(property.GetValue(this), Enum.GetUnderlyingType(property.GetValue(this).GetType()));
+            //                    parameters.Add(new SQLParameter(type, property.Name, Convert.ChangeType(property.GetValue(this), enumType)));
+            //                }
+            //                else
+            //                {
+            //                    parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
+            //                }
+            //            }
+            //        }
+                    
+
+            //    }
+
+            //}
+
+
+            //if (GetType() == typeof(StudioSet))
+            //    return;
+
+            //DataAccess.Save(this, parameters);
         }
 
         protected bool _TypeCacheInitialized = false;

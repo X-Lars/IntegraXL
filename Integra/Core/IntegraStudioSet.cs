@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace Integra.Core
 {
-    ///
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class IntegraStudioSet : IntegraDataTemplate<IntegraStudioSet>
     {
         private int _ID;
@@ -17,23 +13,21 @@ namespace Integra.Core
         private byte _LSB;
         private byte _PC;
 
+        /// <summary>
+        /// Creates and initalizes a new <see cref="IntegraStudioSet"/> instance.
+        /// </summary>
+        /// <param name="id">The ID of the studio set.</param>
+        /// <param name="data">The data to initalize the instance.</param>
+        /// <remarks><i>Constructor used for dynamic instance creation.</i></remarks>
         private IntegraStudioSet(int id, byte[] data) : base(id, data)
         {
-           
-
             ID = id;
             Name = Encoding.ASCII.GetString(data, 5, 16);
             MSB = data[0];
             LSB = data[1];
             PC = data[2];
-           
         }
-
-        public bool IsEditable
-        {
-            get { return PC > 0x0F; }
-        }
-
+        
         public int ID
         {
             get { return _ID; }
@@ -66,6 +60,5 @@ namespace Integra.Core
             get { return _PC; }
             set { _PC = value; NotifyPropertyChanged(); }
         }
-       
     }
 }

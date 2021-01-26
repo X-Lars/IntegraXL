@@ -95,7 +95,7 @@ namespace Integra.Core
         public override bool IsInitialized
         {
             get { return base.IsInitialized; }
-            set
+            protected set
             {
                 base.IsInitialized = value;
 
