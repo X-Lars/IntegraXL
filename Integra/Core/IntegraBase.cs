@@ -142,7 +142,7 @@ namespace Integra.Core
             Task.Factory.StartNew(() => Device.Instance.Initialize(this), TaskCreationOptions.LongRunning);
         }
 
-        public void Initialize()
+        public virtual void Initialize()
         {
             InitializeCache();
 

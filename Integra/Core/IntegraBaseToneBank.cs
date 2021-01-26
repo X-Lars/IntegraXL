@@ -1,7 +1,10 @@
-﻿using MidiXL;
+﻿using Integra.Database;
+using MidiXL;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,6 +42,32 @@ namespace Integra.Core
             }
         }
 
+        public override void Initialize()
+        {
+            Debug.Print($"[{nameof(IntegraBaseToneBank)}.{nameof(Initialize)}] {GetType().Name}");
+            // TODO: Check if exists in database
+
+            _IsPersisted = DataAccess.GetCount(this) == Size;
+
+            if(!_IsPersisted)
+            {
+                // Ensure table is empty
+                DataAccess.Truncate(this);
+
+                base.Initialize();
+
+                // insert into database after initializaiont
+            }
+            else
+            {
+                // Load from database
+                DataAccess.Select(this, new IntegraTone()).ForEach(Collection.Add);
+            }
+        }
+
+        // Exists in database?
+        protected bool _IsPersisted = false;
+
         public byte MSB { get; internal protected set; }
         public byte LSB { get; internal protected set; }
         public uint Size { get; internal protected set; }
@@ -64,6 +93,10 @@ namespace Integra.Core
                     if(Initialize(syx.Data))
                     {
                         Device.Instance.ReportProgress(this, new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
+                        if (!_IsPersisted)
+                        {
+                            DataAccess.BatchInsert(this, new IntegraTone());
+                        }
                     }
                     else
                     {
@@ -72,5 +105,6 @@ namespace Integra.Core
                 }
             }
         }
+
     }
 }

@@ -7,21 +7,21 @@ using System.Threading.Tasks;
 
 namespace Integra.Core
 {
-    public sealed class IntegraTone : IntegraDataTemplate<IntegraStudioSet>
+    public sealed class IntegraTone : IntegraDataTemplate<IntegraTone>
     {
         public IntegraTone()
         {
 
         }
 
-        internal IntegraTone(uint id, byte[] data)
+        private IntegraTone(int id, byte[] data)
         {
             ID = id;
             MSB = data[0];
             LSB = data[1];
             PC = data[2];
             Category = (IntegraToneCategories)data[3];
-            Name = Encoding.ASCII.GetString(data, 5, 16);
+            Name = Encoding.ASCII.GetString(data, 5, 12);
         }
 
         public IntegraTone(byte msb, byte lsb, byte pc)
@@ -31,7 +31,7 @@ namespace Integra.Core
             PC = pc;
         }
 
-        public uint ID { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
         public byte MSB { get; set; }
         public byte LSB { get; set; }

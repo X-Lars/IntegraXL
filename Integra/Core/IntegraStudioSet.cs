@@ -11,13 +11,13 @@ namespace Integra.Core
     ///
     public sealed class IntegraStudioSet : IntegraDataTemplate<IntegraStudioSet>
     {
-        private uint _ID;
+        private int _ID;
         private string _Name;
         private byte _MSB;
         private byte _LSB;
         private byte _PC;
 
-        private IntegraStudioSet(uint id, byte[] data) : base(id, data)
+        private IntegraStudioSet(int id, byte[] data) : base(id, data)
         {
            
 
@@ -34,7 +34,7 @@ namespace Integra.Core
             get { return PC > 0x0F; }
         }
 
-        public uint ID
+        public int ID
         {
             get { return _ID; }
             set { _ID = value; NotifyPropertyChanged(); }

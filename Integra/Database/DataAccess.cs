@@ -2,6 +2,7 @@
 using Integra.Core.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -13,7 +14,86 @@ namespace Integra.Database
 {
     public class DataAccess
     {
-        private static Dictionary<Type, List<SQLParameter>> _DataTemplateCache = new Dictionary<Type, List<SQLParameter>>();
+    
+        internal static void BatchInsert<T, U>(IntegraBaseCollection<T, U> integraBase, IntegraDataTemplate<U> data) where T: IntegraBase<T> where U: IntegraDataTemplate<U>
+        {
+            Debug.Print($"[{nameof(DataAccess)}.{nameof(BatchInsert)}] {integraBase.GetType().Name}");
+
+            DataTable table = new DataTable(integraBase.GetType().Name);
+
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(U));
+
+            // TODO: Batch size
+
+            // Create the table columns
+            for (int i = 0; i < properties.Count; i++)
+            {
+                PropertyDescriptor property = properties[i];
+
+                if(property.PropertyType.IsEnum)
+                {
+                    table.Columns.Add(property.Name, typeof(byte));
+                }
+                else
+                {
+                    table.Columns.Add(property.Name, property.PropertyType);
+                }
+                
+            }
+
+            // Table row array
+            object[] rowData = new object[properties.Count];
+
+            // Create the table rows
+            foreach (U item in integraBase.Collection)
+            {
+                for (int i = 0; i < rowData.Length; i++)
+                {
+                    if (properties[i].PropertyType.IsEnum)
+                    {
+                        rowData[i] = (byte)properties[i].GetValue(item);
+                    }
+                    else
+                    {
+                        rowData[i] = properties[i].GetValue(item);
+                    }
+                }
+
+                table.Rows.Add(rowData);
+            }
+
+            using (var connection = new SqlConnection(GetConnectionString()))
+            {
+                connection.Open();
+
+                using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
+                {
+                    using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
+                    {
+
+                        bulkCopy.DestinationTableName = integraBase.GetType().Name;
+                        bulkCopy.BatchSize = 2000;
+
+                        try
+                        {
+                            // Write from the source to the destination.
+                            
+                            bulkCopy.WriteToServer(table);
+                            transaction.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            connection.Close();
+                            Console.WriteLine(ex.Message);
+                        }
+                    }
+                }
+
+                connection.Close();
+            }
+        }
+
 
         /// <summary>
         /// Gets the next highest ID to use for data storage.
@@ -27,7 +107,7 @@ namespace Integra.Database
 
             using (var connection = new SqlConnection(GetConnectionString()))
             {
-                string sql = $"SELECT MAX(ID) FROM {typeof(T).Name}";
+                string sql = $"SELECT MAX(ID) FROM {integraBase.GetType().Name}";
 
                 OpenConnection(connection);
 
@@ -53,11 +133,43 @@ namespace Integra.Database
             return result + 1;
         }
 
+        internal static int GetCount<T>(IntegraBase<T> integraBase) where T: IntegraBase<T>
+        {
+            int result;
+
+            using (var connection = new SqlConnection(GetConnectionString()))
+            {
+                string sql = $"SELECT COUNT(ID) FROM {integraBase.GetType().Name}";
+
+                OpenConnection(connection);
+
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    var count = command.ExecuteScalar();
+
+                    // Check for DBNull when the table is empty
+                    if (count.GetType() == typeof(DBNull))
+                    {
+                        result = 0;
+                    }
+                    else
+                    {
+                        result = Convert.ToInt32(count);
+                    }
+                }
+
+                CloseConnection(connection);
+
+            }
+
+            return result;
+        }
+
         public static List<U> Select<T, U>(IntegraBase<T> integraBase, IntegraDataTemplate<U> items) where T: IntegraBase<T> where U: IntegraDataTemplate<U>
         {
             List<U> result = new List<U>();
 
-            string sql = $"SELECT * FROM {typeof(T).Name}";
+            string sql = $"SELECT * FROM {integraBase.GetType().Name}";
 
             using (var connection = new SqlConnection(GetConnectionString()))
             {
@@ -106,7 +218,7 @@ namespace Integra.Database
         {
             int result = 0;
 
-            string sql = $"SELECT * FROM {typeof(T).Name} WHERE ID = {id}";
+            string sql = $"SELECT * FROM {integraBase.GetType().Name} WHERE ID = {id}";
 
             // Skip the ID column
             int columnOffset = 1;

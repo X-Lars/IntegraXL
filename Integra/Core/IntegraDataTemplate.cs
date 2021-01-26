@@ -20,7 +20,7 @@ namespace Integra.Core
         }
 
        
-        protected IntegraDataTemplate(uint id, byte[] data) 
+        protected IntegraDataTemplate(int id, byte[] data) 
         {
         }
 
@@ -36,7 +36,7 @@ namespace Integra.Core
             _IsCached = true;
         }
 
-        public Dictionary<string, PropertyInfo> PropertyCache
+        internal Dictionary<string, PropertyInfo> PropertyCache
         {
             get 
             {

@@ -11,7 +11,7 @@ using System.Reflection;
 namespace Integra.Core
 {
    
-    public abstract class IntegraBaseCollection<T, U> : IntegraBase<T>, IEnumerable<U>, INotifyCollectionChanged where T: IntegraBase<T>// where U: IntegraBaseItem
+    public abstract class IntegraBaseCollection<T, U> : IntegraBase<T>, IEnumerable<U>, INotifyCollectionChanged where T: IntegraBase<T> where U: IntegraDataTemplate<U>
     {
         /// <summary>
         /// Stores the collection of items of type <see cref="U"/>.
@@ -82,7 +82,7 @@ namespace Integra.Core
         /// <summary>
         /// Gets or sets the counter to create an identifier for the received item.
         /// </summary>
-        protected uint IDCounter { get; set; } = 0;
+        protected int IDCounter { get; set; } = 0;
 
         /// <summary>
         /// Gets the progress of the initialization.
@@ -149,7 +149,8 @@ namespace Integra.Core
         protected override bool Initialize(byte[] data)
         {
             Add((U)Activator.CreateInstance(typeof(U), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { IDCounter, data }, null));
-            
+
+
             if (IDCounter == DataSize)
             {
                 IsInitialized = true;

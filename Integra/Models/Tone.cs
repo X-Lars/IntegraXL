@@ -12,7 +12,7 @@ namespace Integra.Models
     {
         public Tone(byte msb, byte lsb, byte pc) : base(0x0F000402)
         {
-            ID = (uint)((lsb % 64) * 128) + pc + 1;
+            ID = ((lsb % 64) * 128) + pc + 1;
             _MSB = msb;
             _LSB = lsb;
             _PC = pc;
@@ -43,7 +43,7 @@ namespace Integra.Models
         }
 
         private string _Name;
-        public uint ID { get; set; }
+        public int ID { get; set; }
         public new string Name 
         {
             get { return _Name; }
@@ -163,7 +163,7 @@ namespace Integra.Models
                 MSB = data[0];
                 LSB = data[1];
                 PC = data[2];
-                Name = Encoding.ASCII.GetString(data, 5, 16);
+                Name = Encoding.ASCII.GetString(data, 5, 12);
                 Category = (IntegraToneCategories)data[3];
 
                 Device.Instance.MidiInputDevice.SystemExclusiveReceived -= SystemExclusiveReceived;

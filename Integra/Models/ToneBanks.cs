@@ -11,10 +11,10 @@ namespace Integra.Models
     /// Generic tone bank class to access the INTEGRA-7 tone banks by type.
     /// </summary>
     /// <typeparam name="T">A <typeparamref name="T"/> specifying the type of tone bank.</typeparam>
-    public sealed class ToneBank<T> : IntegraBase<ToneBank<T>> where T: IntegraBaseToneBank, new()
-    {
-        public ToneBank() : base(0x0F000402) { }
-    }
+    //public sealed class ToneBank<T> : IntegraBase<ToneBank<T>> where T: IntegraBaseToneBank, new()
+    //{
+    //    public ToneBank() : base(0x0F000402) { }
+    //}
 
     // Preset tone banks
 
