@@ -107,7 +107,7 @@ namespace Integra.Core
             }
         }
 
-
+        
         protected override uint DataSize
         {
             get { return Size; }

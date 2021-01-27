@@ -111,11 +111,8 @@ namespace Integra.Core
         protected void Add(U item)
         {
             lock(_Collection)
-            _Context.Post(o => Collection.Add(item), null);
-            //Collection.Add(item);
-            //CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
-            //if (_Context == null)
-            //    return;
+                _Context.Post(o => Collection.Add(item), null);
+
             _Context.Post(o => CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item)), null);
         }
 

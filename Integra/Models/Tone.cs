@@ -12,7 +12,7 @@ namespace Integra.Models
     /// 
     /// </summary>
     [Table("Favorites")]
-    public class Tone : IntegraBase<Tone>, IIntegraDataClass
+    public class Tone : IntegraBase<Tone>, IIntegraDataClass, IIntegraAddressable
     {
         #region Fields
 

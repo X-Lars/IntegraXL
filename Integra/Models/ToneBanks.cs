@@ -92,5 +92,7 @@ namespace Integra.Models
         {
             DataAccess.Select(this, new IntegraTone()).ForEach(Collection.Add);
         }
+
+        
     }
 }

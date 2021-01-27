@@ -23,7 +23,7 @@
                         Width="250">
                 
                 <xl:Sidebar.CommonContent>
-                    <uc:FavoritesTree/>
+                    <uc:FavoritesList/>
                 </xl:Sidebar.CommonContent>
                 
                 <xl:Sidebar.Sections>

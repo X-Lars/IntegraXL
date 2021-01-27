@@ -1,16 +1,7 @@
-﻿using MidiXL;
+﻿using Integra.Core.Interfaces;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Threading;
-using System.Reflection;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Integra.Core.Interfaces;
-using Integra.Database;
 
 namespace Integra.Core
 {
@@ -80,4 +71,6 @@ namespace Integra.Core
 
         #endregion
     }
+
+    
 }

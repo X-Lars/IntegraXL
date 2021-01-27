@@ -76,4 +76,11 @@ namespace Integra.Core.Interfaces
     {
         IntegraParts Part { get; }
     }
+
+    public interface IIntegraAddressable
+    {
+        byte MSB { get; }
+        byte LSB { get; }
+        byte PC { get; }
+    }
 }

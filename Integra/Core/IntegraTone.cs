@@ -1,13 +1,15 @@
-﻿using Integra.Models;
+﻿using Integra.Core.Interfaces;
+using Integra.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Integra.Core
 {
-    public class IntegraTone : IntegraDataTemplate<IntegraTone>
+    public class IntegraTone : IntegraDataTemplate<IntegraTone>, IIntegraAddressable, INotifyPropertyChanged
     {
         public IntegraTone()
         {
@@ -40,9 +42,14 @@ namespace Integra.Core
 
         // TODO: Batch insert exclude virtual properties
 
-        //public virtual IntegraToneBanks ToneBank
-        //{
-        //    get { return new Tone(this).ToneBank; }
-        //}
+        public virtual IntegraToneBanks ToneBank
+        {
+            get { return this.ToneBank(); }
+        }
+
+        public virtual IntegraExpansions Expansion
+        {
+            get { return this.GetExpansion(); }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Integra.Core;
+﻿using Integra;
+using Integra.Core;
 using Integra.Models;
 using System;
 using System.Collections.Generic;
@@ -84,10 +85,27 @@ namespace IntegraXL.Common.Converters
         /// <summary>
         /// ConvertBack value from binding back to source object. This isn't supported.
         /// </summary>
-        public object ConvertBack(object value, Type targetType,
-            object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new Exception("Can't convert back");
+            return Binding.DoNothing;
+        }
+    }
+
+    public class ExpansionConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            IntegraExpansions expansion = (IntegraExpansions)value;
+
+            if (expansion == IntegraExpansions.Off)
+                return true;
+
+            return Device.Instance.VirtualSlots[expansion];
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return Binding.DoNothing;
         }
     }
 

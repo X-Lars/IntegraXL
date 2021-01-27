@@ -312,6 +312,7 @@ namespace Integra.Models
             _InitialExpansions[3] = SlotD;
 
             NotifyPropertyChanged(string.Empty, false);
+            NotifyPropertyChanged("Item[]");
         }
 
         /// <summary>
@@ -334,6 +335,7 @@ namespace Integra.Models
 
             // Notifies is dirty for all slots false
             NotifyPropertyChanged(string.Empty, false);
+            NotifyPropertyChanged("Item[]");
         }
 
         /// <summary>
@@ -388,6 +390,7 @@ namespace Integra.Models
                 _AllSlotsUsed = true;
 
                 NotifyPropertyChanged(string.Empty, false);
+                NotifyPropertyChanged("Item[]");
             }
             else if (_AllSlotsUsed)
             {
@@ -403,6 +406,7 @@ namespace Integra.Models
                 _AllSlotsUsed = false;
 
                 NotifyPropertyChanged(string.Empty, false);
+                NotifyPropertyChanged("Item[]");
 
                 // Prevent restoring of a duplicate expansion
                 InvalidateDuplicateExpansions(expansion);

@@ -169,47 +169,80 @@ namespace Integra.Database
 
             DataTable table = new DataTable();
 
+            
+            PropertyInfo[] ps = template.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Where(p => p.GetGetMethod().IsVirtual == false).ToArray();
 
-            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(U));
-            // TODO: exclude virtual
-
-            // Create the table columns based on the properties of the data template
-            for (int i = 0; i < properties.Count; i++)
+            for (int i = 0; i < ps.Count(); i++)
             {
-                PropertyDescriptor property = properties[i];
-
-                
-                if(property.PropertyType.IsEnum)
+                if(ps[i].PropertyType.IsEnum)
                 {
-                    table.Columns.Add(property.Name, typeof(byte));
+                    table.Columns.Add(ps[i].Name, typeof(byte));
                 }
                 else
                 {
-                    table.Columns.Add(property.Name, property.PropertyType);
+                    table.Columns.Add(ps[i].Name, ps[i].PropertyType);
                 }
-                
             }
 
-            // Array to assign the row data
-            object[] dataRow = new object[properties.Count];
+            object[] dr = new object[ps.Count()];
 
-            // Create the table rows based on the items of the collection
-            foreach (U item in collection.Collection)
+            foreach (U item in collection)
             {
-                for (int i = 0; i < dataRow.Length; i++)
+                for (int i = 0; i < dr.Length; i++)
                 {
-                    if (properties[i].PropertyType.IsEnum)
+                    if(ps[i].PropertyType.IsEnum)
                     {
-                        dataRow[i] = (byte)properties[i].GetValue(item);
+                        dr[i] = (byte)ps[i].GetValue(item);
                     }
                     else
                     {
-                        dataRow[i] = properties[i].GetValue(item);
+                        dr[i] = ps[i].GetValue(item);
                     }
                 }
 
-                table.Rows.Add(dataRow);
+                table.Rows.Add(dr);
             }
+
+            //PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(U));
+            //// TODO: exclude virtual
+
+            //// Create the table columns based on the properties of the data template
+            //for (int i = 0; i < properties.Count; i++)
+            //{
+            //    PropertyDescriptor property = properties[i];
+
+                
+            //    if(property.PropertyType.IsEnum)
+            //    {
+            //        table.Columns.Add(property.Name, typeof(byte));
+            //    }
+            //    else
+            //    {
+            //        table.Columns.Add(property.Name, property.PropertyType);
+            //    }
+                
+            //}
+
+            //// Array to assign the row data
+            //object[] dataRow = new object[properties.Count];
+
+            //// Create the table rows based on the items of the collection
+            //foreach (U item in collection.Collection)
+            //{
+            //    for (int i = 0; i < dataRow.Length; i++)
+            //    {
+            //        if (properties[i].PropertyType.IsEnum)
+            //        {
+            //            dataRow[i] = (byte)properties[i].GetValue(item);
+            //        }
+            //        else
+            //        {
+            //            dataRow[i] = properties[i].GetValue(item);
+            //        }
+            //    }
+
+            //    table.Rows.Add(dataRow);
+            //}
 
             // Execute the batch
             using (var connection = new SqlConnection(GetConnectionString()))
