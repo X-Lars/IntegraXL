@@ -371,3 +371,5 @@ FodyWeavers.xsd
 /Integra/Integra.db
 /Integra/Integra.cd
 /Integra/Database/Conventions.txt
+/Integra/Core/IntegraBaseBase.cs
+/Integra/Core/IntegraCache.cs

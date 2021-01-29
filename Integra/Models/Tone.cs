@@ -66,7 +66,7 @@ namespace Integra.Models
         /// <summary>
         /// Gets the ID of the tone.
         /// </summary>
-        public int ID 
+        public new int ID 
         {
             get { return _ID; } 
             private set
@@ -153,13 +153,13 @@ namespace Integra.Models
             }
         }
 
-        public IntegraToneBanks ToneBank { get; set; }
+        public virtual IntegraToneBanks ToneBank { get; set; }
 
-        public bool IsUserTone { get; set; }
-        public bool IsExpansion { get; set; }
+        public virtual bool IsUserTone { get; set; }
+        public virtual bool IsExpansion { get; set; }
 
         private IntegraToneTypes _ToneType;
-        public IntegraToneTypes ToneType
+        public virtual IntegraToneTypes ToneType
         {
             get { return _ToneType; }
             set
@@ -209,7 +209,7 @@ namespace Integra.Models
 
 
 
-        public override void Save()
+        public override void Insert()
         {
             List<SQLParameter> parameters = new List<SQLParameter>();
 
@@ -217,7 +217,7 @@ namespace Integra.Models
             parameters.Add(new SQLParameter(typeof(byte), nameof(LSB), LSB));
             parameters.Add(new SQLParameter(typeof(byte), nameof(PC), PC));
 
-            if (DataAccess.Exists(this, parameters))
+            if (DataAccess.Exists(this))
             {
                 Console.WriteLine("Tone already favorited");
                 return;
@@ -225,22 +225,22 @@ namespace Integra.Models
 
             parameters.Clear();
             parameters.Add(new SQLParameter(typeof(int),    nameof(ID), ID));
-            parameters.Add(new SQLParameter(typeof(string), nameof(Name), Name));
+            parameters.Add(new SQLParameter(typeof(string), nameof(Name), $"{Name.Replace("'", "''")}"));
             parameters.Add(new SQLParameter(typeof(byte),   nameof(MSB), MSB));
             parameters.Add(new SQLParameter(typeof(byte),   nameof(LSB), LSB));
             parameters.Add(new SQLParameter(typeof(byte),   nameof(PC), PC));
             parameters.Add(new SQLParameter(typeof(byte),   nameof(Category), (byte)Category));
 
-            DataAccess.Save(this, parameters, false);
+            DataAccess.Insert(this, parameters, false);
             
         }
 
-        public override void Load(int id)
+        public override void Select(int id)
         {
             //base.Load(id);
         }
 
-        public override void Delete(int id)
+        public override void Delete()
         {
             //base.Delete(id);
         }

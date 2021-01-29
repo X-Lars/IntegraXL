@@ -16,233 +16,15 @@ namespace Integra.Database
     public class DataAccess
     {
         /// <summary>
-        /// Creates a list of SQL parameters based upon the instance type.
-        /// </summary>
-        /// <typeparam name="T">The instance type specifier.</typeparam>
-        /// <param name="instance">The instance to create the parameters.</param>
-        /// <returns>A list of SQL parameters to store the instance into the database.</returns>
-        private static List<SQLParameter> GetSQLParameters<T>(IntegraBase<T> instance) where T: IntegraBase<T>
-        {
-            List<SQLParameter> result = new List<SQLParameter>();
-
-            PropertyInfo[] properties = instance.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-
-            foreach (var property in properties)
-            {
-                // Skip virtual properties
-                if (property.GetGetMethod().IsVirtual)
-                    continue;
-
-                Type type = property.PropertyType;
-                
-                // Only cache property decorated with the offset attribute
-                if (property.GetCustomAttribute(typeof(Offset)) != null)
-                {
-                    Offset index = (Offset)property.GetCustomAttribute(typeof(Offset));
-
-                    if (type == typeof(string))
-                    {
-                        // The property is of type string
-                        result.Add(new SQLParameter(type, property.Name, property.GetValue(instance)));
-                    }
-                    else if (type.IsArray)
-                    {
-                        // The property is an array
-                        Array propertyArray = (Array)property.GetValue(instance);
-
-                        // Get the type of elements in the array
-                        Type propertyArrayType = propertyArray.GetType().GetElementType();
-
-                        if (propertyArrayType == typeof(byte))
-                        {
-                            // The array is of type byte
-                            for (int i = 0; i < propertyArray.Length; i++)
-                            {
-                                // Property name is "<Property Name>#" where '#' is the index
-                                result.Add(new SQLParameter(propertyArrayType, property.Name + (i), property.GetValue(instance)));
-                            }
-                        }
-                        else if (propertyArrayType == typeof(int))
-                        {
-                            // The array is of type int
-                            for (int i = 0; i < propertyArray.Length; i++)
-                            {
-                                // Property name is "<Property Name>#" where '#' is the index
-                                result.Add(new SQLParameter(propertyArrayType, property.Name + (i), property.GetValue(instance)));
-                            }
-                        }
-                    }
-                    else if (type == typeof(bool))
-                    {
-                        // The property is of type bool
-                        result.Add(new SQLParameter(type, property.Name, property.GetValue(instance)));
-                    }
-                    else if (type == typeof(short))
-                    {
-                        result.Add(new SQLParameter(type, property.Name, property.GetValue(instance)));
-                    }
-                    else if (type == typeof(int))
-                    {
-                        if (property.GetIndexParameters().Length > 0)
-                        {
-                            // The property is an indexer property of type int
-                            // Get the values from the backing field
-                            Offset offset = (Offset)property.GetCustomAttribute(typeof(Offset));
-
-                            FieldInfo field = instance.GetCachedField(offset.Value);
-
-                            // Create an array of the backing field to get the data length
-                            Array propertyArray = (Array)field.GetValue(instance);
-
-                            for (int i = 0; i < propertyArray.Length; i++)
-                            {
-                                // Property name is "Item#" where '#' is the index
-                                result.Add(new SQLParameter(type, property.Name + (i), property.GetValue(instance, new object[] { i })));
-                            }
-                        }
-                        else
-                        {
-                            // The property is of type int
-                            if (type.IsEnum)
-                            {
-                                Type enumType = Enum.GetUnderlyingType(type);
-
-                                //object underlyingValue = Convert.ChangeType(property.GetValue(this), Enum.GetUnderlyingType(property.GetValue(this).GetType()));
-                                result.Add(new SQLParameter(type, property.Name, Convert.ChangeType(property.GetValue(instance), enumType)));
-
-                            }
-                            else
-                            {
-                                result.Add(new SQLParameter(type, property.Name, property.GetValue(instance)));
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (property.GetIndexParameters().Length > 0)
-                        {
-                            // The property is an indexer property of type byte
-                            // Get the values from the backing field
-                            Offset offset = (Offset)property.GetCustomAttribute(typeof(Offset));
-                            FieldInfo field = instance.GetCachedField(offset.Value);
-
-                            // Create an array of the backing field to get the data length
-                            Array propertyArray = (Array)field.GetValue(instance);
-
-                            for (int i = 0; i < propertyArray.Length; i++)
-                            {
-                                // Property name is "Item#" where '#' is the index
-                                result.Add(new SQLParameter(type, property.Name + (i), property.GetValue(instance, new object[] { i })));
-                            }
-                        }
-                        else
-                        {
-                            // The property is of type byte
-                            if (type.IsEnum)
-                            {
-                                Type enumType = Enum.GetUnderlyingType(type);
-
-                                result.Add(new SQLParameter(type, property.Name, Convert.ChangeType(property.GetValue(instance), enumType)));
-                            }
-                            else
-                            {
-                                result.Add(new SQLParameter(type, property.Name, property.GetValue(instance)));
-                            }
-                        }
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
         /// Inserts a collection into the database.
         /// </summary>
         /// <typeparam name="T">The collection type specifier.</typeparam>
         /// <typeparam name="U">The item type specifier.</typeparam>
         /// <param name="collection">The collection to insert.</param>
         /// <param name="template">The item template used by the collection.</param>
-        internal static void BatchInsert<T, U>(IntegraBaseCollection<T, U> collection, IntegraDataTemplate<U> template) where T: IntegraBase<T> where U: IntegraDataTemplate<U>
+        internal static void BatchInsert<T, U>(IntegraBaseCollection<T, U> collection) where T: IntegraBase<T> where U: IntegraDataTemplate<U>
         {
             Debug.Print($"[{nameof(DataAccess)}.{nameof(BatchInsert)}] {GetTableName(collection)}");
-
-            DataTable table = new DataTable();
-
-            
-            PropertyInfo[] ps = template.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Where(p => p.GetGetMethod().IsVirtual == false).ToArray();
-
-            for (int i = 0; i < ps.Count(); i++)
-            {
-                if(ps[i].PropertyType.IsEnum)
-                {
-                    table.Columns.Add(ps[i].Name, typeof(byte));
-                }
-                else
-                {
-                    table.Columns.Add(ps[i].Name, ps[i].PropertyType);
-                }
-            }
-
-            object[] dr = new object[ps.Count()];
-
-            foreach (U item in collection)
-            {
-                for (int i = 0; i < dr.Length; i++)
-                {
-                    if(ps[i].PropertyType.IsEnum)
-                    {
-                        dr[i] = (byte)ps[i].GetValue(item);
-                    }
-                    else
-                    {
-                        dr[i] = ps[i].GetValue(item);
-                    }
-                }
-
-                table.Rows.Add(dr);
-            }
-
-            //PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(U));
-            //// TODO: exclude virtual
-
-            //// Create the table columns based on the properties of the data template
-            //for (int i = 0; i < properties.Count; i++)
-            //{
-            //    PropertyDescriptor property = properties[i];
-
-                
-            //    if(property.PropertyType.IsEnum)
-            //    {
-            //        table.Columns.Add(property.Name, typeof(byte));
-            //    }
-            //    else
-            //    {
-            //        table.Columns.Add(property.Name, property.PropertyType);
-            //    }
-                
-            //}
-
-            //// Array to assign the row data
-            //object[] dataRow = new object[properties.Count];
-
-            //// Create the table rows based on the items of the collection
-            //foreach (U item in collection.Collection)
-            //{
-            //    for (int i = 0; i < dataRow.Length; i++)
-            //    {
-            //        if (properties[i].PropertyType.IsEnum)
-            //        {
-            //            dataRow[i] = (byte)properties[i].GetValue(item);
-            //        }
-            //        else
-            //        {
-            //            dataRow[i] = properties[i].GetValue(item);
-            //        }
-            //    }
-
-            //    table.Rows.Add(dataRow);
-            //}
 
             // Execute the batch
             using (var connection = new SqlConnection(GetConnectionString()))
@@ -259,7 +41,7 @@ namespace Integra.Database
 
                         try
                         {
-                            batch.WriteToServer(table);
+                            batch.WriteToServer(IntegraCache.GetBatchData(collection));
                             transaction.Commit();
                         }
                         catch (Exception exception)
@@ -360,11 +142,13 @@ namespace Integra.Database
         /// <param name="instance">The instance specifying the associated table.</param>
         /// <param name="template">The item template to generate the list.</param>
         /// <returns>A list of <paramref name="instance"/>s.</returns>
-        public static List<U> Select<T, U>(IntegraBase<T> instance, IntegraDataTemplate<U> template) where T: IntegraBase<T> where U: IntegraDataTemplate<U>
+        public static List<U> SelectAll<T, U>(IntegraBase<T> instance, IntegraDataTemplate<U> template) where T : IntegraBase<T> where U : IntegraDataTemplate<U>
         {
             List<U> result = new List<U>();
 
             string sql = $"SELECT * FROM {GetTableName(instance)}";
+
+            Dictionary<string, PropertyInfo> templateCache = IntegraCache.GetTemplate<U>();
 
             using (var connection = new SqlConnection(GetConnectionString()))
             {
@@ -374,17 +158,17 @@ namespace Integra.Database
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        if(reader.HasRows)
+                        if (reader.HasRows)
                         {
-                            while(reader.Read())
+                            while (reader.Read())
                             {
                                 var item = Activator.CreateInstance<U>();
 
                                 for (int i = 0; i < reader.FieldCount; i++)
                                 {
-                                    PropertyInfo property = template.PropertyCache[reader.GetName(i)];
-
-                                    if(property != null)
+                                    //PropertyInfo property = template.PropertyCache[reader.GetName(i)];
+                                    PropertyInfo property = templateCache[reader.GetName(i)];
+                                    if (property != null)
                                     {
                                         property.SetValue(item, reader.GetValue(i));
                                     }
@@ -401,15 +185,19 @@ namespace Integra.Database
 
             return result;
         }
-        
+
+
+
         /// <summary>
         /// Gets the <paramref name="instance"/> with the specified <paramref name="id"/> from the database.
         /// </summary>
         /// <typeparam name="T">The instance type specifier.</typeparam>
         /// <param name="instance">The instance to load.</param>
         /// <param name="id">The ID of the instance in the database.</param>
-        public static int Load<T>(IntegraBase<T> instance, int id) where T: IntegraBase<T>
+        public static int Select<T>(IntegraBase<T> instance, int id) where T : IntegraBase<T>
         {
+            Debug.Print($"[{nameof(DataAccess)}.{nameof(Select)}] {instance.GetType().Name}");
+
             int result = 0;
 
             string sql = $"SELECT * FROM {GetTableName(instance)} WHERE ID = {id}";
@@ -425,6 +213,8 @@ namespace Integra.Database
                 columnOffset += 1;
             }
 
+            Console.WriteLine(sql);
+
             using (var connection = new SqlConnection(GetConnectionString()))
             {
                 OpenConnection(connection);
@@ -438,109 +228,131 @@ namespace Integra.Database
 
                         if (reader.HasRows)
                         {
-
                             while (reader.Read())
                             {
                                 if (result == 1)
                                     throw new Exception("");
+                                
+                                Dictionary<string, PropertyInfo> parameters = IntegraCache.GetTemplate<T>();
 
-                                for (int i = 0; i < instance.Parameters.Count; i++)
+                                foreach (var parameter in parameters)
                                 {
-                                    SQLData data = instance.Parameters[i];
-
-                                    if (data.Type == typeof(string))
+                                    if(parameter.Value.PropertyType.GetInterfaces().Contains(typeof(IIntegraDataClass)))
                                     {
-                                        data.Value = reader.GetString(offset + columnOffset);
-
-                                        if (data.Value == null)
-                                            data.Value = string.Empty;
-
+                                        ((IIntegraDataClass)parameter.Value.GetValue(instance)).Select(id);
                                         offset++;
                                     }
-                                    else if (data.Type == typeof(byte[]))
+                                    else if(parameter.Value.PropertyType.IsArray)
                                     {
-                                        byte[] values = new byte[data.Size];
+                                        Array array = (Array)parameter.Value.GetValue(instance);
 
-                                        for (int v = 0; v < data.Size; v++)
+                                        for (int i = 0; i < array.Length; i++)
                                         {
-                                            values[v] = reader.GetByte(offset + columnOffset);
+                                            parameter.Value.SetValue(instance, reader.GetValue(offset + columnOffset), new object[] { i });
                                             offset++;
                                         }
+                                    }
+                                    else
+                                    {
+                                        parameter.Value.SetValue(instance, reader.GetValue(offset + columnOffset));
+                                        offset++;
 
-                                        data.Value = values;
+                                        Debug.Print($"-{parameter.Value.Name, -20} = {parameter.Value.GetValue(instance)}");
                                     }
-                                    else if (data.Type == typeof(int[]))
-                                    {
-                                        int[] values = new int[data.Size];
 
-                                        for (int v = 0; v < data.Size; v++)
-                                        {
-                                            values[v] = reader.GetInt32(offset + columnOffset);
-                                            offset++;
-                                        }
-
-                                        data.Value = values;
-                                    }
-                                    else if (data.Type == typeof(short))
-                                    {
-                                        data.Value = reader.GetInt16(offset + columnOffset);
-                                        offset++;
-                                    }
-                                    else if (data.Type == typeof(bool))
-                                    {
-                                        data.Value = reader.GetBoolean(offset + columnOffset);
-                                        offset++;
-                                    }
-                                    else if (data.Type == typeof(int))
-                                    {
-                                        data.Value = reader.GetInt32(offset + columnOffset);
-                                        offset++;
-                                    }
-                                    else if (data.Type == typeof(byte))
-                                    {
-                                        data.Value = reader.GetByte(offset + columnOffset);
-                                        offset++;
-                                    }
+                                    //instance.NotifyPropertyChanged(parameter.Key);
                                 }
 
                                 result += 1;
                             }
-                            
                         }
-                        else
-                        {
-                            result = 0;
-                        }
-
                     }
                 }
 
                 CloseConnection(connection);
-
             }
 
             return result;
         }
 
-        public static bool Exists<T>(IntegraBase<T> instance, List<SQLParameter> parameters) where T: IntegraBase<T>
+       
+        private const string SQL_SCHEMA_INDEXES = "IndexColumns";
+        private const string SQL_SCHEMA_COLUMN_NAME = "column_name";
+        private const string SQL_SCHEMA_COLUMN_ORDINAL = "ordinal_position";
+
+        /// <summary>
+        /// Gets the index columns for the specified <paramref name="instance"/> associated table.
+        /// </summary>
+        /// <typeparam name="T">The instance type specifier.</typeparam>
+        /// <param name="instance">The instance specifying the database table.</param>
+        /// <returns>A list of key value pairs where the key is the <b><i>zero based</i></b> column ordinal and the value the column name of the table index.</returns>
+        /// <remarks><i>SQL Column oridinals are not zero based.</i></remarks>
+        private static Dictionary<int, string> GetIndex<T>(IntegraBase<T> instance) where T: IntegraBase<T>
         {
+            Dictionary<int, string> keyColumns = new Dictionary<int, string>();
+            string[] result;
+
+            using (var connection = new SqlConnection(GetConnectionString()))
+            {
+                connection.Open();
+
+                string[] indexRestrictions = new string[5];
+                indexRestrictions[2] = GetTableName(instance);
+                
+                DataTable indexes = connection.GetSchema(SQL_SCHEMA_INDEXES, indexRestrictions);
+
+                result = new string[indexes.Rows.Count];
+
+                for (int i = 0; i < indexes.Rows.Count; i++)
+                {
+                    keyColumns.Add((int)indexes.Rows[i][SQL_SCHEMA_COLUMN_ORDINAL]-1, indexes.Rows[i][SQL_SCHEMA_COLUMN_NAME].ToString());
+                }
+                
+                CloseConnection(connection);
+            }
+
+            return keyColumns;
+        }
+
+        /// <summary>
+        /// Checks if the specified <paramref name="instance"/> exists in the database.
+        /// </summary>
+        /// <typeparam name="T">The instance type specifier.</typeparam>
+        /// <param name="instance">The instance specifying the database table.</param>
+        /// <returns>True if the current instance exists in the associated database table.</returns>
+        /// <remarks><i>The check is performed on the index with the current property values of the <paramref name="instance"/>.</i></remarks>
+        public static bool Exists<T>(IntegraBase<T> instance) where T: IntegraBase<T>
+        {
+            Dictionary<int, string> keyColumns = GetIndex(instance);
+
+            string[] value = new string[keyColumns.Count];
+
+            Dictionary<string, PropertyInfo> template = IntegraCache.GetTemplate<T>();
+
+            foreach (var item in keyColumns.OrderBy(i => i.Key))
+            {
+                //PropertyInfo property = template[item.Value];
+                value[item.Key] = instance.GetType().GetProperty(item.Value).GetValue(instance).ToString();
+               
+            }
+           
+
             bool result = false;
 
             string where = string.Empty;
 
-            for (int i = 0; i < parameters.Count; i++)
+            foreach(var item in keyColumns.OrderBy(i => i.Key))
             {
-                where += parameters[i].Name;
+                where += item.Value;
                 where += "=";
-                where += parameters[i].Value.ToString();
+                where += value[item.Key];
 
-                if(i != parameters.Count - 1)
+                if (item.Key != keyColumns.Count - 1 )
                     where += " AND ";
-
             }
 
             string sql = $"SELECT * FROM {GetTableName(instance)} WHERE {where}";
-
+            Console.WriteLine(sql);
 
             using (var connection = new SqlConnection(GetConnectionString()))
             {
@@ -568,55 +380,83 @@ namespace Integra.Database
         /// <typeparam name="T">The instance type specifier.</typeparam>
         /// <param name="instance">The instance to store.</param>
         /// <param name="parameters"></param>
-        public static void Save<T>(IntegraBase<T> instance, List<SQLParameter> parameters = null, bool useSessionID = true) where T: IntegraBase<T>
+        public static void Insert<T>(IntegraBase<T> instance, List<SQLParameter> parameters = null, bool useSessionID = true) where T: IntegraBase<T>
         {
-            if (parameters == null)
-                parameters = GetSQLParameters(instance);
+            Dictionary<int, string> keyColumns = GetIndex(instance);
 
-            if (parameters.Count == 0)
-                return;
+            if(Exists(instance))
+             GetIndex(instance);
 
-            string columns = useSessionID == true ?  "ID," : string.Empty;
-            string values = useSessionID == true ?  $"{Device.Session.SessionID}," : string.Empty;
+            Debug.Print($"[{nameof(DataAccess)}.{nameof(Insert)}] {instance.GetType().Name}");
+            useSessionID = false;
+            string columns = useSessionID == true ? "ID," : string.Empty;
+            string values = useSessionID == true ? $"{Device.Session.ID}," : string.Empty;
 
             // Add the part parameter if the instance implements the IIntegraPartial interface
-            if(instance.GetType().GetInterfaces().Contains(typeof(IIntegraPartial)))
+            if (instance.GetType().GetInterfaces().Contains(typeof(IIntegraPartial)))
             {
                 columns += "Part,";
                 values += $"{(byte)((IIntegraPartial)instance).Part},";
             }
-
-            for (int i = 0; i < parameters.Count; i++)
+            parameters = null;
+            if (parameters != null)
             {
-                columns += parameters[i].Name;
-                columns += ",";
+                if (parameters.Count == 0)
+                    return;
 
-                if(parameters[i].Type == typeof(bool))
+                for (int i = 0; i < parameters.Count; i++)
                 {
-                    values += (bool)parameters[i].Value == true ? 1 : 0;
-                }
-                else if (parameters[i].Type == typeof(string))
-                {
-                    values += $"'{parameters[i].Value}'";
-                }
-                else
-                {
-                    values += parameters[i].Value.ToString();
+                    columns += parameters[i].Name;
+                    columns += ",";
+
+                    if (parameters[i].Type == typeof(bool))
+                    {
+                        values += (bool)parameters[i].Value == true ? 1 : 0;
+                    }
+                    else if (parameters[i].Type == typeof(string))
+                    {
+                        values += $"'{parameters[i].Value}'";
+                    }
+                    else
+                    {
+                        values += parameters[i].Value.ToString();
+                    }
+
+                    values += ",";
                 }
 
-                values += ",";
+                // Remove trailing separators
+                if (columns.Length > 0)
+                    columns = columns.Remove(columns.Length - 1);
+
+                if (values.Length > 0)
+                    values = values.Remove(values.Length - 1);
+
             }
+            else
+            {
+                if(IntegraCache.GetSQLParameters(instance).Keys.Count == 0)
+                    return;
 
-            // Remove trailing separators
-            if (columns.Length > 0)
-                columns = columns.Remove(columns.Length - 1);
+                Dictionary<string, string> sqlp = IntegraCache.GetSQLParameters(instance, Device.Session.ID.ToString());
+                //List<string> keys = new List<string>(sqlp.Keys);
 
-            if(values.Length > 0)
-                values = values.Remove(values.Length - 1);
+                //foreach (var item in keys)
+                //{
+                //    if(sqlp[item] == null)
+                //    {
+                //        sqlp[item] = Device.Session.SessionID.ToString();
+                //        //IntegraCache.GetSQLParameters(instance)[item.Key] = Device.Session.SessionID.ToString();
+                //    }
+                //}
+
+                columns += string.Join(",", sqlp.Keys);
+                values += string.Join(",", sqlp.Values);
+            }
 
 
             string sql = $"INSERT INTO {GetTableName(instance)} ({columns}) VALUES({values})";
-
+            Console.WriteLine(sql);
             using (var connection = new SqlConnection(GetConnectionString()))
             {
                 OpenConnection(connection);
@@ -625,13 +465,13 @@ namespace Integra.Database
                 {
                     var res = command.ExecuteNonQuery();
 
-                    Debug.Print($"[{nameof(DataAccess)}.{nameof(Save)}<{instance.GetType().Name}>] Result: {res}");
+                    Debug.Print($"[{nameof(DataAccess)}.{nameof(Insert)}<{instance.GetType().Name}>] Result: {res}");
                 }
 
                 CloseConnection(connection);
             }
 
-            Console.WriteLine(sql);
+            
         }
 
         /// <summary>
@@ -652,14 +492,40 @@ namespace Integra.Database
 
         }
 
-        public static void Delete<T>(IntegraBase<T> integraBase) where T: IntegraBase<T>
+        public static void Delete<T>(IntegraBase<T> instance) where T: IntegraBase<T>
         {
+            Debug.Print($"[{nameof(DataAccess)}.{nameof(Delete)}<{instance.GetType().Name}>]");
 
-        }
+            Dictionary<int, string> keyColumns = GetIndex(instance);
 
-        public static void Truncate<T>(IntegraBase<T> integraBase) where T: IntegraBase<T>
-        {
-            string sql = $"TRUNCATE TABLE {integraBase.GetType().Name}";
+            string[] value = new string[keyColumns.Count];
+
+            Dictionary<string, PropertyInfo> template = IntegraCache.GetTemplate<T>();
+
+            foreach (var item in keyColumns.OrderBy(i => i.Key))
+            {
+                //PropertyInfo property = template[item.Value];
+                value[item.Key] = instance.GetType().GetProperty(item.Value).GetValue(instance).ToString();
+
+            }
+
+
+            
+            string where = string.Empty;
+
+            foreach (var item in keyColumns.OrderBy(i => i.Key))
+            {
+                where += item.Value;
+                where += "=";
+                where += value[item.Key];
+
+                if (item.Key != keyColumns.Count - 1)
+                    where += " AND ";
+            }
+
+            //string sql = $"SELECT * FROM {GetTableName(instance)} WHERE {where}";
+            string sql = $"DELETE FROM {GetTableName(instance)} WHERE {where}";
+            Console.WriteLine(sql);
 
             using (var connection = new SqlConnection(GetConnectionString()))
             {
@@ -668,8 +534,34 @@ namespace Integra.Database
                 using (var command = new SqlCommand(sql, connection))
                 {
                     var res = command.ExecuteNonQuery();
+                }
 
-                    Debug.Print($"[{nameof(DataAccess)}.{nameof(Save)}<{integraBase.GetType().Name}>] Result: {res}");
+                CloseConnection(connection);
+            }
+        }
+
+        public static void Truncate<T>(IntegraBase<T> integraBase) where T: IntegraBase<T>
+        {
+            Debug.Print($"[{nameof(DataAccess)}.{nameof(Truncate)}<{integraBase.GetType().Name}>]");
+
+            string sql = $"TRUNCATE TABLE {integraBase.GetType().Name}";
+
+            Debug.Print(sql);
+
+            using (var connection = new SqlConnection(GetConnectionString()))
+            {
+                OpenConnection(connection);
+
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    foreach(var reference in IntegraCache.GetReferences(integraBase))
+                    {
+                        reference.Value.Truncate();
+                    }
+
+                    var res = command.ExecuteNonQuery();
+
+                    
                 }
 
                 CloseConnection(connection);

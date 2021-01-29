@@ -39,25 +39,27 @@ namespace Integra.Core
 
         #region IIntegraDataClass
 
-        public void Delete(int id) 
+        public int ID { get; }
+
+        public void Delete() 
         {
             throw new NotImplementedException();
         }
 
-        public void Load(int id)
+        public void Select(int id)
         {
             for (int i = 0; i < Items.Count; i++)
             {
-                Items[i].Load(id);
+                Items[i].Select(id);
             }
         }
 
-        public void Save()
+        public void Insert()
         {
             for (int i = 0; i < Items.Count; i++)
             {
                 // TODO: Call Save
-                Items[i].Save();
+                Items[i].Insert();
             }
         }
 

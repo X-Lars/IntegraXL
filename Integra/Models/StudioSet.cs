@@ -28,28 +28,38 @@ namespace Integra.Models
         {
         }
 
-        public IntegraBasePartial<StudioSetMidi> MIDI
-        {
-            get { return _Midi; }
-            set
-            {
-                _Midi = value;
-                NotifyPropertyChanged();
-            }
-        }
+        #region Properties
 
         public StudioSetCommon Common
         {
             get { return _Common; }
-            set
-            {
-                if(_Common != value)
-                {
-                    _Common = value;
-                    NotifyPropertyChanged();
-                }
-            }
+            //set
+            //{
+            //    if (_Common != value)
+            //    {
+            //        _Common = value;
+            //        NotifyPropertyChanged();
+            //    }
+            //}
         }
+
+
+        public IntegraBasePartial<StudioSetMidi> MIDI
+        {
+            get { return _Midi; }
+            //set
+            //{
+            //    _Midi = value;
+            //    NotifyPropertyChanged();
+            //}
+        }
+
+        public IntegraBasePartial<StudioSetPart> Parts
+        {
+            get { return _StudioSetParts; }
+        }
+
+        #endregion
 
         internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
@@ -88,7 +98,7 @@ namespace Integra.Models
 
         private Tone _SelectedTone;
 
-        public Tone Tone
+        public virtual Tone Tone
         {
             get { return _SelectedTone; }
             set
@@ -110,7 +120,7 @@ namespace Integra.Models
         }
         private IntegraToneTypes _ToneType = IntegraToneTypes.SuperNATURALAcousticTone;
 
-        public IntegraToneTypes ToneType
+        public virtual IntegraToneTypes ToneType
         {
             get { return _ToneType; }
             set
@@ -120,7 +130,7 @@ namespace Integra.Models
             }
         }
 
-        public IntegraMFXTypes MFXType
+        public virtual IntegraMFXTypes MFXType
         {
             get
             {
@@ -138,7 +148,7 @@ namespace Integra.Models
             }
         }
 
-        public IToneMFX MFXDataContext
+        public virtual IToneMFX MFXDataContext
         {
             get
             {
@@ -165,7 +175,7 @@ namespace Integra.Models
             }
         }
 
-        public IntegraParts SelectedPart
+        public virtual IntegraParts SelectedPart
         {
             get { return _SelectedPart; }
             set
@@ -182,18 +192,15 @@ namespace Integra.Models
             }
         }
 
-        public IntegraBasePartial<StudioSetPart> Parts
-        {
-            get { return _StudioSetParts; }
-        }
+        
 
-        public override void Load(int id)
+        public override void Select(int id)
         {
             // Temp for testing
             //Device.ID = 1;
 
             // Temporary fixed ID
-            base.Load(id);
+            base.Select(id);
             
         }
 
@@ -201,7 +208,8 @@ namespace Integra.Models
         {
 
             Console.WriteLine($"StudioSet Save Tone!");
-            Tone.Save();
+            
+            Tone.Insert();
         }
         //public override void Save()
         //{

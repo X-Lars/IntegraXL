@@ -96,11 +96,22 @@ namespace Integra.Core
         #endregion
 
         #region Properties
+        private int _ID;
+
+        public int ID 
+        {
+            get { return Device.Session.ID; }
+            set
+            {
+                _ID = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Gets the name of the instance.
         /// </summary>
-        public string Name { get; protected set; }
+        public virtual string Name { get; protected set; }
 
         /// <summary>
         /// Gets or sets the base address reference of the data structure to the INTEGRA-7.
@@ -128,7 +139,7 @@ namespace Integra.Core
                 NotifyPropertyChanged();
             }
         }
-
+        
         #endregion
 
         #region Methods
@@ -608,7 +619,7 @@ namespace Integra.Core
         /// <param name="propertyName">A <see cref="string"/> containing the name of the property that is changed.</param>
         /// <param name="transmit">A <see cref="bool"/> to determin if the property has to be transmitted.</param>
         /// <remarks><i>If no property name is specified, the actual name of the property in code is used.</i></remarks>
-        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "", bool transmit = true)
+        internal void NotifyPropertyChanged([CallerMemberName] string propertyName = "", bool transmit = true)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
@@ -699,369 +710,25 @@ namespace Integra.Core
 
         #endregion
 
-        public virtual void Delete(int id)
+        public virtual void Delete()
         {
-            throw new NotImplementedException();
+            if (GetType() != typeof(StudioSetMidi) && GetType() != typeof(StudioSet) && GetType() != typeof(StudioSetCommon))
+                return;
+
+            DataAccess.Delete(this);
         }
 
         #region Database
         //TODO: Remove to data access layer
 
-        public virtual void Save()
+        public virtual void Insert()
         {
-            Save(null);
-        }
-
-        public virtual void Save(List<SQLParameter> parameters = null)
-        {
-            //DataAccess.Save(this);
-
             if (GetType() != typeof(StudioSetMidi) && GetType() != typeof(StudioSet) && GetType() != typeof(StudioSetCommon))
                 return;
 
-            PropertyInfo[] properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
-
-            foreach (var property in properties)
-            {
-                if(property.PropertyType.GetInterfaces().Contains(typeof(IIntegraDataClass)))
-                {
-                    if (property.GetValue(this) == null)
-                        continue;
-
-                    ((IIntegraDataClass)property.GetValue(this)).Save();
-                }
-            }
-
-
-            //if (GetType() == typeof(StudioSet))
-            //    return;
-
-            DataAccess.Save(this, parameters);
-
-
-
-
-            //List<SQLParameter> parameters = new List<SQLParameter>();
-
-            
-
-            //PropertyInfo[] properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
-            
-            //foreach(var property in properties)
-            //{
-            //    Type type = property.PropertyType;
-
-            //    if (type == typeof(Tone))
-            //        continue;
-
-            //    if(type.GetInterfaces().Contains(typeof(IIntegraDataClass)))
-            //    {
-            //        // The property is of type IntegraBase<T>
-            //        Debug.Print($"SAVE --> [{GetType().Name}] --> SAVE --> {property.Name}");
-
-            //        // Prevent property null values in case of StudioSetPart where not all properties are initialized
-            //        // Only one of five tone properties are initialized
-            //        if (property.GetValue(this) == null)
-            //            continue;
-
-            //        // Invoke the save method on the property
-            //        ((IIntegraDataClass)property.GetValue(this)).Save();
-            //    }
-            //    else if(property.GetCustomAttribute(typeof(Offset)) != null)
-            //    {
-            //        // The property is part of this class and has an offset attribute
-            //        // Handle saving of the property
-            //        Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <{type}>");
-
-            //        Offset index = (Offset)property.GetCustomAttribute(typeof(Offset));
-
-            //        if(type == typeof(string))
-            //        {
-            //            // The property is of type string
-            //            Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <string>");
-
-            //            parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
-            //        }
-            //        else if(type.IsArray)
-            //        {
-            //            // The property is an array
-            //            Array propertyArray = (Array)property.GetValue(this);
-
-            //            // Get the type of elements in the array
-            //            Type propertyArrayType = propertyArray.GetType().GetElementType();
-
-            //            if(propertyArrayType == typeof(byte))
-            //            {
-            //                // The array is of type byte
-            //                for (int i = 0; i < propertyArray.Length; i++)
-            //                {
-            //                    Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <byte[{i}]>");
-
-            //                    // Property name is "<Property Name>#" where '#' is the index
-            //                    parameters.Add(new SQLParameter(propertyArrayType, property.Name + (i), property.GetValue(this)));
-
-            //                }
-
-            //            }
-            //            else if (propertyArrayType == typeof(int))
-            //            {
-            //                // The array is of type int
-            //                for (int i = 0; i < propertyArray.Length; i++)
-            //                {
-            //                    Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <int[{i}]>");
-
-            //                    // Property name is "<Property Name>#" where '#' is the index
-            //                    parameters.Add(new SQLParameter(propertyArrayType, property.Name + (i), property.GetValue(this)));
-            //                }
-            //            }
-            //        }
-            //        else if(type == typeof(bool))
-            //        {
-            //            // The property is of type bool
-            //            Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <bool>");
-            //            parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
-            //        }
-            //        else if (type == typeof(short))
-            //        {
-            //            Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <short>");
-            //            parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
-            //        }
-            //        else if (type == typeof(int))
-            //        {
-            //            if (property.GetIndexParameters().Length > 0)
-            //            {
-            //                // The property is an indexer property of type int
-            //                // Get the values from the backing field
-            //                Offset offset = (Offset)property.GetCustomAttribute(typeof(Offset));
-            //                FieldInfo field = GetCachedField(offset.Value);
-
-            //                // Create an array of the backing field to get the data length
-            //                Array propertyArray = (Array)field.GetValue(this);
-
-            //                for (int i = 0; i < propertyArray.Length; i++)
-            //                {
-            //                    Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <int[{i}]>");
-
-            //                    // Property name is "Item#" where '#' is the index
-            //                    parameters.Add(new SQLParameter(type, property.Name + (i), property.GetValue(this, new object[] { i})));
-            //                }
-            //            }
-            //            else
-            //            {
-            //                // The property is of type int
-            //                Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <int>");
-            //                if (type.IsEnum)
-            //                {
-            //                    Type enumType = Enum.GetUnderlyingType(type);
-
-            //                    //object underlyingValue = Convert.ChangeType(property.GetValue(this), Enum.GetUnderlyingType(property.GetValue(this).GetType()));
-            //                    parameters.Add(new SQLParameter(type, property.Name, Convert.ChangeType(property.GetValue(this), enumType)));
-
-            //                }
-            //                else
-            //                {
-            //                    parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
-            //                }
-            //            }
-            //        }
-            //        else
-            //        {
-            //            if (property.GetIndexParameters().Length > 0)
-            //            {
-            //                // The property is an indexer property of type byte
-            //                // Get the values from the backing field
-            //                Offset offset = (Offset)property.GetCustomAttribute(typeof(Offset));
-            //                FieldInfo field = GetCachedField(offset.Value);
-
-            //                // Create an array of the backing field to get the data length
-            //                Array propertyArray = (Array)field.GetValue(this);
-
-            //                for (int i = 0; i < propertyArray.Length; i++)
-            //                {
-            //                    Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <byte[{i}]>");
-
-            //                    // Property name is "Item#" where '#' is the index
-            //                    parameters.Add(new SQLParameter(type, property.Name + (i), property.GetValue(this, new object[] { i })));
-            //                }
-            //            }
-            //            else
-            //            {
-            //                // The property is of type byte
-            //                Debug.Print($"SAVE --> [{GetType().Name}] {property.Name} <byte>");
-            //                if (type.IsEnum)
-            //                {
-            //                    Type enumType = Enum.GetUnderlyingType(type);
-                                
-            //                    //object underlyingValue = Convert.ChangeType(property.GetValue(this), Enum.GetUnderlyingType(property.GetValue(this).GetType()));
-            //                    parameters.Add(new SQLParameter(type, property.Name, Convert.ChangeType(property.GetValue(this), enumType)));
-            //                }
-            //                else
-            //                {
-            //                    parameters.Add(new SQLParameter(type, property.Name, property.GetValue(this)));
-            //                }
-            //            }
-            //        }
-                    
-
-            //    }
-
-            //}
-
-
-            //if (GetType() == typeof(StudioSet))
-            //    return;
-
-            //DataAccess.Save(this, parameters);
+            DataAccess.Insert(this);
         }
 
-        protected bool _TypeCacheInitialized = false;
-        protected List<SQLData> _TypeCache = new List<SQLData>();
-
-        protected virtual void InitializeParameterCache()
-        {
-            if (_TypeCacheInitialized)
-            {
-                return;
-            }
-
-            Debug.Print($"[{GetType().Name}.{nameof(InitializeParameterCache)}]");
-
-            PropertyInfo[] properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
-            //FieldInfo[] fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
-
-            foreach (var property in properties)
-            {
-                Type type = property.PropertyType;
-
-                // TODO: Ignore attribute?
-                if (type == typeof(Tone))
-                    continue;
-
-                if (type.GetInterfaces().Contains(typeof(IIntegraDataClass)))
-                {
-                    // The property is a IntegraBase<T>
-                    _TypeCache.Add(new SQLData(0, typeof(IIntegraDataClass), 0, property.Name));
-                }
-                else if (property.GetCustomAttribute(typeof(Offset)) != null)
-                {
-                    // The property is part of this class and has an offset attribute
-                    // Handle saving of the property
-                    Offset index = (Offset)property.GetCustomAttribute(typeof(Offset));
-
-                    if (type == typeof(string))
-                    {
-                        // The property is of type string
-                        // Get the length of the backing field byte array
-                        var fieldInfo = GetCachedField(index.Value);
-                        Array fieldArray = (Array)fieldInfo.GetValue(this);
-                        
-                        _TypeCache.Add(new SQLData(index.Value, typeof(string), fieldArray.Length, property.Name));
-                    }
-                    else if (type.IsArray)
-                    {
-                        // The property is an array
-                        Array propertyArray = (Array)property.GetValue(this);
-
-                        // Get the type of elements in the array
-                        Type propertyArrayType = propertyArray.GetType().GetElementType();
-
-
-                        if (propertyArrayType == typeof(byte))
-                        {
-                            _TypeCache.Add(new SQLData(index.Value, typeof(byte[]), propertyArray.Length, property.Name));
-
-                        }
-                        else if (propertyArrayType == typeof(int))
-                        {
-                            _TypeCache.Add(new SQLData(index.Value, typeof(int[]), propertyArray.Length, property.Name));
-                        }
-                    }
-                    else if (type == typeof(short))
-                    {
-                        _TypeCache.Add(new SQLData(index.Value, typeof(short), 2, property.Name));
-                    }
-                    else if (type == typeof(bool))
-                    {
-                        // The property is of type bool
-                        _TypeCache.Add(new SQLData(index.Value, typeof(bool), 1, property.Name));
-                    }
-                    else if (type == typeof(int))
-                    {
-                        if (property.GetIndexParameters().Length > 0)
-                        {
-                            // The property is an indexer property of type int
-                            // Get the values from the backing field
-                            Offset offset = (Offset)property.GetCustomAttribute(typeof(Offset));
-                            FieldInfo field = GetCachedField(offset.Value);
-
-                            // Create an array of the backing field to get the data length
-                            Array propertyArray = (Array)field.GetValue(this);
-
-                            _TypeCache.Add(new SQLData(index.Value, typeof(int[]), propertyArray.Length, property.Name));
-                        }
-                        else
-                        {
-                            //// The property is of type int
-                            //if (type.IsEnum)
-                            //{
-                            //    Type enumType = Enum.GetUnderlyingType(type);
-
-                            //    //object underlyingValue = Convert.ChangeType(property.GetValue(this), Enum.GetUnderlyingType(property.GetValue(this).GetType()));
-                            //    _TypeCache.Add(new SQLParameter(index.Value, type, property.Name, Convert.ChangeType(property.GetValue(this), enumType)));
-
-                            //}
-                            //else
-                            //{
-                            _TypeCache.Add(new SQLData(index.Value, typeof(int), 1, property.Name));
-                            //}
-                        }
-                    }
-                    else
-                    {
-                        if (property.GetIndexParameters().Length > 0)
-                        {
-                            // The property is an indexer property of type byte
-                            // Get the values from the backing field
-                            Offset offset = (Offset)property.GetCustomAttribute(typeof(Offset));
-                            FieldInfo field = GetCachedField(offset.Value);
-
-                            // Create an array of the backing field to get the data length
-                            Array propertyArray = (Array)field.GetValue(this);
-
-                            _TypeCache.Add(new SQLData(index.Value, typeof(byte), propertyArray.Length, property.Name));
-                        }
-                        else
-                        {
-                            //// The property is of type byte
-                            //if (type.IsEnum)
-                            //{
-                            //    Type enumType = Enum.GetUnderlyingType(type);
-
-                            //    //object underlyingValue = Convert.ChangeType(property.GetValue(this), Enum.GetUnderlyingType(property.GetValue(this).GetType()));
-                            //    _TypeCache.Add(new SQLParameter(index.Value, type, property.Name, Convert.ChangeType(property.GetValue(this), enumType)));
-                            //}
-                            //else
-                            //{
-                            _TypeCache.Add(new SQLData(index.Value, typeof(byte), 1, property.Name));
-                            //}
-                        }
-                    }
-                }
-            }
-
-            _TypeCacheInitialized = true;
-        }
-
-        public List<SQLData> Parameters
-        {
-            get 
-            {
-                if (!_TypeCacheInitialized)
-                    InitializeParameterCache();
-
-                return _TypeCache; 
-            }
-        }
 
         public virtual void Truncate()
         {
@@ -1069,50 +736,16 @@ namespace Integra.Core
             if (GetType() != typeof(StudioSetMidi) && GetType() != typeof(StudioSet) && GetType() != typeof(StudioSetCommon) && GetType() != typeof(Session))
                 return;
 
-            PropertyInfo[] properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
-
-            foreach (var property in properties)
-            {
-                if (property.PropertyType.GetInterfaces().Contains(typeof(IIntegraDataClass)))
-                {
-
-                    ((IIntegraDataClass)GetType().GetProperty(property.Name).GetValue(this)).Truncate();
-                }
-            }
-
             DataAccess.Truncate(this);
         }
 
-        public virtual void Load(int id)
+        public virtual void Select(int id)
         {
             // TODO: Remove temporary exclude
             if (GetType() != typeof(StudioSetMidi) && GetType() != typeof(StudioSet) && GetType() != typeof(StudioSetCommon))
                 return;
 
-            PropertyInfo[] properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
-
-            foreach (var property in Parameters)
-            {
-                if (property.Type == typeof(IIntegraDataClass))
-                {
-                    
-                    ((IIntegraDataClass)GetType().GetProperty(property.Name).GetValue(this)).Load(id);
-                }
-            }
-
-
-            int rows = DataAccess.Load(this, id);
-
-            if (rows > 0)
-            {
-                foreach (var item in Parameters)
-                {
-                    if (item.Type != typeof(IIntegraDataClass))
-                    {
-                        GetType().GetProperty(item.Name).SetValue(this, item.Value);
-                    }
-                }
-            }
+            DataAccess.Select(this, id);
         }
         #endregion
     }

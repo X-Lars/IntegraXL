@@ -90,7 +90,7 @@ namespace Integra.Models
 
         public override void Initialize()
         {
-            DataAccess.Select(this, new IntegraTone()).ForEach(Collection.Add);
+            DataAccess.SelectAll(this, new IntegraTone()).ForEach(Collection.Add);
         }
 
         

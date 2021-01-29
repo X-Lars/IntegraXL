@@ -103,7 +103,7 @@ namespace Integra.Core
                 Debug.Print($"[{nameof(IntegraBaseToneBank)}.{nameof(Initialize)}] {GetType().Name}");
 
                 // Initialize the tone bank from the database.
-                DataAccess.Select(this, new IntegraTone()).ForEach(Collection.Add);
+                DataAccess.SelectAll(this, new IntegraTone()).ForEach(Collection.Add);
             }
         }
 
@@ -138,7 +138,7 @@ namespace Integra.Core
                         // Store the tone bank in the database
                         if (!_IsPersistent)
                         {
-                            DataAccess.BatchInsert(this, new IntegraTone());
+                            DataAccess.BatchInsert(this);
                         }
                     }
                     else

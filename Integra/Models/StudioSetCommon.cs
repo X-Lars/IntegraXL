@@ -580,27 +580,27 @@ namespace Integra.Models
 
         #region Enumerations
 
-        public List<string> VoiceReserveValues
+        public virtual List<string> VoiceReserveValues
         {
             get { return IntegraVoiceReserves.Values; }
         }
 
-        public List<string> SoloPartValues
+        public virtual List<string> SoloPartValues
         {
             get { return IntegraPartSelections.Values; }
         }
 
-        public IEnumerable<IntegraControlSources> ToneControlSourceValues
+        public virtual IEnumerable<IntegraControlSources> ToneControlSourceValues
         {
             get { return Enum.GetValues(typeof(IntegraControlSources)).Cast<IntegraControlSources>(); }
         }
 
-        public IEnumerable<IntegraParts> IntegraParts
+        public virtual IEnumerable<IntegraParts> IntegraParts
         {
             get { return Enum.GetValues(typeof(IntegraParts)).Cast<IntegraParts>(); }
         }
 
-        public IEnumerable<IntegraOutputAssigns> OutputAssigns
+        public virtual IEnumerable<IntegraOutputAssigns> OutputAssigns
         {
             get { return Enum.GetValues(typeof(IntegraOutputAssigns)).Cast<IntegraOutputAssigns>(); }
         }

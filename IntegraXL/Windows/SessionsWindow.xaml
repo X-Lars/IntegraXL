@@ -20,8 +20,8 @@
         <xl:FilteredDataGrid AutoGenerateColumns="False" 
                              Grid.Column="0"
                              IsReadOnly="True"
-                             ItemsSource="{Binding Session.Sessions}"
-                             SelectedIndex="{Binding Session.SessionID}"
+                             ItemsSource="{Binding Session.ID}"
+                             SelectedIndex="{Binding Session.ID}"
                              SelectionMode="Single"
                              VirtualizingPanel.IsVirtualizing="True"
                              VirtualizingPanel.VirtualizationMode="Recycling">

@@ -13,23 +13,18 @@ using System.Threading.Tasks;
 namespace Integra.Core
 {
     
-    public class Test : IntegraBaseBase<Test>
-    {
-        public Test()
-        {
-            //IntegraCache.Field(this, 0x1800).Initialize(new IntegraSystemExclusive(new MidiXL.SystemExclusiveMessage(new byte[] { })));
-                
-        }
-    }
-
+ 
     public class IntegraCache
     {
         // [IntegraBase<T> [0x0000, fieldinfo]]
         private static Dictionary<Type, Dictionary<ushort, FieldInfo>> _Fields = new Dictionary<Type, Dictionary<ushort, FieldInfo>>();
         // [IntegraBase<T> [0x0000, PropertyInfo]]
         private static Dictionary<Type, Dictionary<ushort, PropertyInfo>> _Properties = new Dictionary<Type, Dictionary<ushort, PropertyInfo>>();
-        // [IntegraDataTemplate<T> [Property.Name, Property.PropertyType]]
+        // [IntegraDataTemplate<T> [Property.Name, PropertyInfo]]
         private static Dictionary<Type, Dictionary<string, PropertyInfo>> _DataTemplates = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
+        // [IntegraBase<T> [Property.Name, PropertyInfo]
+        private static Dictionary<Type, Dictionary<string, IIntegraDataClass>> _References = new Dictionary<Type, Dictionary<string, IIntegraDataClass>>();
+
 
         // All offset decorated fields
         private static void InitializeFieldsCache<T>(IntegraBase<T> instance) where T : IntegraBase<T>
@@ -49,6 +44,25 @@ namespace Integra.Core
                 {
                     Debug.Print($"{offset.Value.ToString("X4")} {field.Name}");
                     _Fields[type].Add(offset.Value, field);
+                }
+            }
+        }
+
+        private static void InitializeReferenceCache<T>(IntegraBase<T> instance) where T: IntegraBase<T>
+        {
+            Debug.Print($"[{nameof(IntegraCache)}.{nameof(InitializeReferenceCache)}] {typeof(T).Name}");
+
+            Type type = instance.GetType();
+
+            _References.Add(type, new Dictionary<string, IIntegraDataClass>());
+
+            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var property in properties)
+            {
+                if (property.PropertyType.GetInterfaces().Contains(typeof(IIntegraDataClass)))
+                {
+                    _References[type].Add(property.Name, (IIntegraDataClass)property.GetValue(instance));
                 }
             }
         }
@@ -76,50 +90,32 @@ namespace Integra.Core
         }
 
         // All public non virtual properties of the data template
-        private static void InitializeDataTemplateCache<T>() where T: IntegraDataTemplate<T>
+        private static void InitializeDataTemplateCache<T>()
         {
             Debug.Print($"[{nameof(IntegraCache)}.{nameof(InitializeDataTemplateCache)}] {typeof(T).Name}");
 
             _DataTemplates.Add(typeof(T), new Dictionary<string, PropertyInfo>());
 
-            PropertyInfo[] properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+            PropertyInfo[] properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(p => !p.GetGetMethod().IsVirtual || p.GetGetMethod().IsFinal).ToArray();
 
             for (int i = 0; i < properties.Length; i++)
             {
                 _DataTemplates[typeof(T)].Add(properties[i].Name, properties[i]);
+                Debug.Print($"-{properties[i].Name}");
             }
         }
 
-        //public static Dictionary<string, PropertyInfo> GetTemplateProperties<T>() where T: IntegraDataTemplate<T>
-        //{
-        //    Debug.Print($"[{nameof(IntegraCache)}.{nameof(GetTemplateProperties)}] <{typeof(T).Name}>");
+        public static Dictionary<string, IIntegraDataClass> GetReferences<T>(IntegraBase<T> instance) where T: IntegraBase<T>
+        {
+            Debug.Print($"[{nameof(IntegraCache)}.{nameof(GetReferences)}] <{instance.GetType().Name}>");
+            if (!_References.ContainsKey(instance.GetType()))
+                InitializeReferenceCache(instance);
 
-        //    if (!_DataTemplates.ContainsKey(typeof(T)))
-        //        InitializeDataTemplateCache<T>();
+            return _References[instance.GetType()];
+        }
 
-        //    Dictionary<string, PropertyInfo> templateProperties = new Dictionary<string, PropertyInfo>();
-
-        //    foreach(var item in _DataTemplates[typeof(T)])
-        //    {
-        //        templateProperties.Add(item.Value.Name, item.Value);
-        //    }
-
-        //    return templateProperties;
-        //}
-
-        //public static PropertyInfo GetTemplateProperty<T>(string name) where T : IntegraDataTemplate<T>
-        //{
-        //    Debug.Print($"[{nameof(IntegraCache)}.{nameof(GetTemplateProperty)}] <{typeof(T).Name}> {name}");
-            
-        //    if (!_DataTemplates.ContainsKey(typeof(T)))
-        //        InitializeDataTemplateCache<T>();
-
-        //    return _DataTemplates[typeof(T)].Values.Where(n => n.Name == name).FirstOrDefault();
-        //}
-
-
-        public static Dictionary<string, PropertyInfo> GetTemplate<T>() where T: IntegraDataTemplate<T>
+        public static Dictionary<string, PropertyInfo> GetTemplate<T>()
         {
             Debug.Print($"[{nameof(IntegraCache)}.{nameof(GetTemplate)}] <{typeof(T).Name}>");
             if (!_DataTemplates.ContainsKey(typeof(T)))
@@ -128,10 +124,11 @@ namespace Integra.Core
             return _DataTemplates[typeof(T)];
         }
 
+
         // Datatable filled from collection 
         public static DataTable GetBatchData<T, U>(IntegraBaseCollection<T, U> collection) where T : IntegraBase<T> where U : IntegraDataTemplate<U>
         {
-            Debug.Print($"[{nameof(IntegraCache)}.{nameof(GetSQLParameters)}] {typeof(T).GetType().Name}<{typeof(U).Name}>");
+            Debug.Print($"[{nameof(IntegraCache)}.{nameof(GetBatchData)}] {typeof(T).GetType().Name}<{typeof(U).Name}>");
 
             if (!_DataTemplates.ContainsKey(typeof(U)))
                 InitializeDataTemplateCache<U>();
@@ -181,19 +178,35 @@ namespace Integra.Core
             return dataTable;
         }
 
-        // SQL parameters for all offset decorated properties
-        public static Dictionary<string, string> GetSQLParameters<T>(IntegraBase<T> instance) where T : IntegraBase<T>
+        // SQL parameters for all public non virtual properties
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="instance"></param>
+        /// <returns></returns>
+        public static Dictionary<string, string> GetSQLParameters<T>(IntegraBase<T> instance, string id = null) where T : IntegraBase<T>
         {
             Debug.Print($"[{nameof(IntegraCache)}.{nameof(GetSQLParameters)}] {instance.GetType().Name}");
 
-            if (!_Properties.ContainsKey(instance.GetType()))
-                InitializePropertiesCache(instance);
+            //if (!_Properties.ContainsKey(instance.GetType()))
+            //    InitializePropertiesCache(instance);
+
+            if (!_DataTemplates.ContainsKey(instance.GetType()))
+                InitializeDataTemplateCache<T>();
 
             Dictionary<string, string> parameters = new Dictionary<string, string>();
 
-            foreach (var property in _Properties[instance.GetType()].Values)
+            foreach (var property in _DataTemplates[instance.GetType()].Values)
             {
                 Type type = property.PropertyType;
+
+                // Reference type, replace null with session ID
+                if(type.GetInterfaces().Contains(typeof(IIntegraDataClass)))
+                {
+                    parameters.Add(property.Name, id);
+                    continue;
+                }
 
                 if (type.IsArray)
                 {
@@ -240,7 +253,8 @@ namespace Integra.Core
                 }
                 else if (type == typeof(string))
                 {
-                    parameters.Add(property.Name, $"'{property.GetValue(instance)}'");
+                    
+                    parameters.Add(property.Name, $"'{property.GetValue(instance).ToString().Replace("'", "''")}'");
                 }
             }
 

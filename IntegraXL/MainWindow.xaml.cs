@@ -20,8 +20,6 @@ namespace IntegraXL
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        private ObservableCollection<Tone> _FavoriteTones;//
-
         private ProgressDialog _Dialog;
         private MessageDialog _MessageDialog;
 
@@ -176,7 +174,7 @@ namespace IntegraXL
                 // TODO: Parameter to select type of data structure to load
                 // TODO: Parameter ID to load
                 // TODO: Remove temporary fixed parameter
-                Device.Session.Load(1);
+                Device.Session.Select(1);
             }
         }
 
@@ -186,7 +184,7 @@ namespace IntegraXL
 
             if(caller != null)
             {
-                Device.Session.Save();
+                Device.Session.Insert();
                 //caller.Integra.ses.Save();
             }
         }

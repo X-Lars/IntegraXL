@@ -37,7 +37,7 @@ namespace Integra.Models
 
         #region Properties
 
-        public IntegraParts Part
+        public virtual IntegraParts Part
         {
             get { return _Part; }
         }
