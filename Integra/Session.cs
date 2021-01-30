@@ -69,6 +69,10 @@ namespace Integra
                 DataAccess.Select(Device.Instance.StudioSet, ID);
             }
         }
+        public override void Update()
+        {
+            DataAccess.Update(this);
+        }
 
         public override void Insert()
         {

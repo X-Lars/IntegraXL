@@ -118,7 +118,7 @@ namespace Integra.Core
             foreach (var property in properties)
             {
                 // Exclude virtual references
-                if (!property.GetMethod.IsVirtual && property.GetMethod.IsFinal)
+                if (!property.GetMethod.IsVirtual || property.GetMethod.IsFinal)
                 {
                     if (property.PropertyType.GetInterfaces().Contains(typeof(IIntegraDataClass)))
                     {
@@ -215,6 +215,7 @@ namespace Integra.Core
 
             Debug.Write("\n");
 
+            // Generate table rows with values
             foreach (U item in collection)
             {
                 DataRow row = dataTable.NewRow();

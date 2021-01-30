@@ -1,0 +1,321 @@
+﻿<local:IntegraWindow x:Class="IntegraXL.Windows.StudioSetCommonWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IntegraXL.Windows"
+                     xmlns:xl="clr-namespace:ControlsXL;assembly=ControlsXL"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid DataContext="{Binding StudioSet}">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBox Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Text="{Binding Common.Name}"/>
+
+        <StackPanel Grid.Column="0" Grid.Row="1">
+
+            <GroupBox Header="General">
+
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Studio Set Tempo</Label>
+                    <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Drum Compressor + EQ Assing</Label>
+
+                    <xl:NumericTextBox Grid.Column="1" Grid.Row="0"
+                                       Value="{Binding Common.Tempo}" 
+                                       MinValue="20" MaxValue="250"/>
+
+                    <ComboBox Grid.Column="1" Grid.Row="1"
+                              ItemsSource="{Binding Common.IntegraParts}"
+                              SelectedItem="{Binding Common.DrumCompEQPart}"/>
+
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Grid.Row="1">
+
+            <GroupBox Header="Control">
+
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Tone Control Source 1</Label>
+                    <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Tone Control Source 2</Label>
+                    <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Tone Control Source 3</Label>
+                    <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">Tone Control Source 4</Label>
+
+                    <ComboBox Grid.Column="1" Grid.Row="0"
+                              ItemsSource="{Binding Common.ToneControlSourceValues}"
+                              SelectedItem="{Binding Common.ToneControlSource01}"/>
+
+                    <ComboBox Grid.Column="1" Grid.Row="1"
+                              ItemsSource="{Binding Common.ToneControlSourceValues}"
+                              SelectedItem="{Binding Common.ToneControlSource02}"/>
+
+                    <ComboBox Grid.Column="1" Grid.Row="2"
+                              ItemsSource="{Binding Common.ToneControlSourceValues}"
+                              SelectedItem="{Binding Common.ToneControlSource03}"/>
+
+                    <ComboBox Grid.Column="1" Grid.Row="3"
+                              ItemsSource="{Binding Common.ToneControlSourceValues}"
+                              SelectedItem="{Binding Common.ToneControlSource04}"/>
+
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2" Grid.Row="1" Grid.RowSpan="2">
+
+            <GroupBox Header="Voice Reserves">
+
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Voice Reserve Part 1</Label>
+                    <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Voice Reserve Part 2</Label>
+                    <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Voice Reserve Part 3</Label>
+                    <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">Voice Reserve Part 4</Label>
+                    <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center">Voice Reserve Part 5</Label>
+                    <Label Grid.Column="0" Grid.Row="5" VerticalAlignment="Center">Voice Reserve Part 6</Label>
+                    <Label Grid.Column="0" Grid.Row="6" VerticalAlignment="Center">Voice Reserve Part 7</Label>
+                    <Label Grid.Column="0" Grid.Row="7" VerticalAlignment="Center">Voice Reserve Part 8</Label>
+                    <Label Grid.Column="2" Grid.Row="0" VerticalAlignment="Center">Voice Reserve Part 9</Label>
+                    <Label Grid.Column="2" Grid.Row="1" VerticalAlignment="Center">Voice Reserve Part 10</Label>
+                    <Label Grid.Column="2" Grid.Row="2" VerticalAlignment="Center">Voice Reserve Part 11</Label>
+                    <Label Grid.Column="2" Grid.Row="3" VerticalAlignment="Center">Voice Reserve Part 12</Label>
+                    <Label Grid.Column="2" Grid.Row="4" VerticalAlignment="Center">Voice Reserve Part 13</Label>
+                    <Label Grid.Column="2" Grid.Row="5" VerticalAlignment="Center">Voice Reserve Part 14</Label>
+                    <Label Grid.Column="2" Grid.Row="6" VerticalAlignment="Center">Voice Reserve Part 15</Label>
+                    <Label Grid.Column="2" Grid.Row="7" VerticalAlignment="Center">Voice Reserve Part 16</Label>
+
+                    <ComboBox Grid.Column="1" Grid.Row="0"
+                              ItemsSource="{Binding Common.VoiceReserveValues}"
+                              SelectedIndex="{Binding Common.VoiceReserve01}"/>
+
+                    <ComboBox Grid.Column="1" Grid.Row="1"
+                              ItemsSource="{Binding Common.VoiceReserveValues}"
+                              SelectedIndex="{Binding Common.VoiceReserve02}"/>
+
+                    <ComboBox Grid.Column="1" Grid.Row="2"
+                              ItemsSource="{Binding Common.VoiceReserveValues}"
+                              SelectedIndex="{Binding Common.VoiceReserve03}"/>
+
+                    <ComboBox Grid.Column="1" Grid.Row="3"
+                              ItemsSource="{Binding Common.VoiceReserveValues}"
+                              SelectedIndex="{Binding Common.VoiceReserve04}"/>
+
+                    <ComboBox Grid.Column="1" Grid.Row="4"
+                              ItemsSource="{Binding Common.VoiceReserveValues}"
+                              SelectedIndex="{Binding Common.VoiceReserve05}"/>
+
+                    <ComboBox Grid.Column="1" Grid.Row="5"
+                              ItemsSource="{Binding Common.VoiceReserveValues}"
+                              SelectedIndex="{Binding Common.VoiceReserve06}"/>
+
+                    <ComboBox Grid.Column="1" Grid.Row="6"
+                              ItemsSource="{Binding Common.VoiceReserveValues}"
+                              SelectedIndex="{Binding Common.VoiceReserve07}"/>
+
+                    <ComboBox Grid.Column="1" Grid.Row="7"
+                              ItemsSource="{Binding Common.VoiceReserveValues}"
+                              SelectedIndex="{Binding Common.VoiceReserve08}"/>
+
+                    <ComboBox Grid.Column="3" Grid.Row="0"
+                              ItemsSource="{Binding Common.VoiceReserveValues}"
+                              SelectedIndex="{Binding Common.VoiceReserve09}"/>
+
+                    <ComboBox Grid.Column="3" Grid.Row="1"
+                              ItemsSource="{Binding Common.VoiceReserveValues}"
+                              SelectedIndex="{Binding Common.VoiceReserve10}"/>
+
+                    <ComboBox Grid.Column="3" Grid.Row="2"
+                              ItemsSource="{Binding Common.VoiceReserveValues}"
+                              SelectedIndex="{Binding Common.VoiceReserve11}"/>
+
+                    <ComboBox Grid.Column="3" Grid.Row="3"
+                              ItemsSource="{Binding Common.VoiceReserveValues}"
+                              SelectedIndex="{Binding Common.VoiceReserve12}"/>
+
+                    <ComboBox Grid.Column="3" Grid.Row="4"
+                              ItemsSource="{Binding Common.VoiceReserveValues}"
+                              SelectedIndex="{Binding Common.VoiceReserve13}"/>
+
+                    <ComboBox Grid.Column="3" Grid.Row="5"
+                              ItemsSource="{Binding Common.VoiceReserveValues}"
+                              SelectedIndex="{Binding Common.VoiceReserve14}"/>
+
+                    <ComboBox Grid.Column="3" Grid.Row="6"
+                              ItemsSource="{Binding Common.VoiceReserveValues}"
+                              SelectedIndex="{Binding Common.VoiceReserve15}"/>
+
+                    <ComboBox Grid.Column="3" Grid.Row="7"
+                              ItemsSource="{Binding Common.VoiceReserveValues}"
+                              SelectedIndex="{Binding Common.VoiceReserve16}"/>
+
+                </Grid>
+            </GroupBox>
+
+        </StackPanel>
+
+        <StackPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+
+            <GroupBox Header="Phase Lock">
+
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Channel 1" FontSize="10" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Grid.Row="0" Text="Channel 2" FontSize="10" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Grid.Row="0" Text="Channel 3" FontSize="10" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="3" Grid.Row="0" Text="Channel 4" FontSize="10" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="4" Grid.Row="0" Text="Channel 5" FontSize="10" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="5" Grid.Row="0" Text="Channel 6" FontSize="10" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="6" Grid.Row="0" Text="Channel 7" FontSize="10" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="7" Grid.Row="0" Text="Channel 8" FontSize="10" HorizontalAlignment="Center"/>
+
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Channel 9" FontSize="10" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Grid.Row="2" Text="Channel 10" FontSize="10" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Grid.Row="2" Text="Channel 11" FontSize="10" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="3" Grid.Row="2" Text="Channel 12" FontSize="10" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="4" Grid.Row="2" Text="Channel 13" FontSize="10" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="5" Grid.Row="2" Text="Channel 14" FontSize="10" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="6" Grid.Row="2" Text="Channel 15" FontSize="10" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="7" Grid.Row="2" Text="Channel 16" FontSize="10" HorizontalAlignment="Center"/>
+
+                    <CheckBox Grid.Column="0" Grid.Row="1" 
+                              IsChecked="{Binding MIDI[0].PhaseLock, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" 
+                              HorizontalAlignment="Center"/>
+
+                    <CheckBox Grid.Column="1" Grid.Row="1" 
+                              IsChecked="{Binding MIDI[1].PhaseLock}" 
+                              HorizontalAlignment="Center"/>
+
+                    <CheckBox Grid.Column="2" Grid.Row="1" 
+                              IsChecked="{Binding MIDI[2].PhaseLock}" 
+                              HorizontalAlignment="Center"/>
+
+                    <CheckBox Grid.Column="3" Grid.Row="1" 
+                              IsChecked="{Binding MIDI[3].PhaseLock}" 
+                              HorizontalAlignment="Center"/>
+
+                    <CheckBox Grid.Column="4" Grid.Row="1" 
+                              IsChecked="{Binding MIDI[4].PhaseLock}" 
+                              HorizontalAlignment="Center"/>
+
+                    <CheckBox Grid.Column="5" Grid.Row="1" 
+                              IsChecked="{Binding MIDI[5].PhaseLock}" 
+                              HorizontalAlignment="Center"/>
+
+                    <CheckBox Grid.Column="6" Grid.Row="1" 
+                              IsChecked="{Binding MIDI[6].PhaseLock}" 
+                              HorizontalAlignment="Center"/>
+
+                    <CheckBox Grid.Column="7" Grid.Row="1" 
+                              IsChecked="{Binding MIDI[7].PhaseLock}" 
+                              HorizontalAlignment="Center"/>
+
+                    <CheckBox Grid.Column="0" Grid.Row="3" 
+                              IsChecked="{Binding MIDI[8].PhaseLock}" 
+                              HorizontalAlignment="Center"/>
+
+                    <CheckBox Grid.Column="1" Grid.Row="3" 
+                              IsChecked="{Binding MIDI[9].PhaseLock}" 
+                              HorizontalAlignment="Center"/>
+
+                    <CheckBox Grid.Column="2" Grid.Row="3" 
+                              IsChecked="{Binding MIDI[10].PhaseLock}" 
+                              HorizontalAlignment="Center"/>
+
+                    <CheckBox Grid.Column="3" Grid.Row="3" 
+                              IsChecked="{Binding MIDI[11].PhaseLock}" 
+                              HorizontalAlignment="Center"/>
+
+                    <CheckBox Grid.Column="4" Grid.Row="3" 
+                              IsChecked="{Binding MIDI[12].PhaseLock}" 
+                              HorizontalAlignment="Center"/>
+
+                    <CheckBox Grid.Column="5" Grid.Row="3" 
+                              IsChecked="{Binding MIDI[13].PhaseLock}" 
+                              HorizontalAlignment="Center"/>
+
+                    <CheckBox Grid.Column="6" Grid.Row="3" 
+                              IsChecked="{Binding MIDI[14].PhaseLock}" 
+                              HorizontalAlignment="Center"/>
+
+                    <CheckBox Grid.Column="7" Grid.Row="3" 
+                              IsChecked="{Binding MIDI[15].PhaseLock}" 
+                              HorizontalAlignment="Center"/>
+
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
+</local:IntegraWindow>

@@ -516,13 +516,22 @@ namespace Integra.Core
                 if (syx.Data.Length == Requests[0].Size)
                 {
                     if (Initialize(syx.Data))
+                    {
+                        // Set the Part property for IIntegraPartial implementing classes which is only present after initialization
+                        if(typeof(T).GetInterfaces().Contains(typeof(IIntegraPartial)))
+                        {
+                            ((IIntegraPartial)this).Part = (IntegraParts)((Address & 0x00000F00) >> 8);
+                        }
+
                         Device.Instance.ReportProgress(this, new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
+                    }
                 }
                 else
                 {
                     InitializeField(syx);
                 }
             }
+            // TODO: Check MFX 0xFFFFFF00 won't catch 00 00 01 11 ?
             else if ((syx.Address & 0xFFFFFF00) == (Address & 0xFFFFFF00))
             {
                 InitializeField(syx);
@@ -635,16 +644,18 @@ namespace Integra.Core
 
         #endregion
 
-        public virtual void Delete()
+        
+
+        #region IIntegraDataClass
+
+        public virtual void Update()
         {
             if (GetType() != typeof(StudioSetMidi) && GetType() != typeof(StudioSet) && GetType() != typeof(StudioSetCommon))
                 return;
 
-            DataAccess.Delete(this);
-        }
+            DataAccess.Update(this);
 
-        #region Database
-        //TODO: Remove to data access layer
+        }
 
         public virtual void Insert()
         {
@@ -653,15 +664,22 @@ namespace Integra.Core
 
             DataAccess.Insert(this);
 
-            Dictionary<string, IIntegraDataClass> references = IntegraCache.GetReferences(this);
+            //Dictionary<string, IIntegraDataClass> references = IntegraCache.GetReferences(this);
 
-            foreach (var reference in references)
-            {
-                reference.Value.Insert();
-            }
+            //foreach (var reference in references)
+            //{
+            //    reference.Value.Insert();
+            //}
 
         }
 
+        public virtual void Delete()
+        {
+            if (GetType() != typeof(StudioSetMidi) && GetType() != typeof(StudioSet) && GetType() != typeof(StudioSetCommon))
+                return;
+
+            DataAccess.Delete(this);
+        }
 
         public virtual void Truncate()
         {

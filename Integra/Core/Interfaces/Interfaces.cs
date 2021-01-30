@@ -57,10 +57,15 @@ namespace Integra.Core.Interfaces
         void Select(int id);
 
         /// <summary>
-        /// Removes the instance with the specified <paramref name="id"/> from the database.
+        /// Removes the referenced instance from the database.
         /// </summary>
         /// <param name="id">The ID of the instance to delete.</param>
         void Delete();
+
+        /// <summary>
+        /// Updates the referenced instance in the database.
+        /// </summary>
+        void Update();
 
         /// <summary>
         /// Deletes all instances from the database.
@@ -74,7 +79,7 @@ namespace Integra.Core.Interfaces
     /// <remarks><i>Used by the data access layer load and save methods to dynamically add the partial column.</i></remarks>
     public interface IIntegraPartial
     {
-        IntegraParts Part { get; }
+        IntegraParts Part { get; set; }
     }
 
     public interface IIntegraAddressable

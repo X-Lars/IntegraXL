@@ -51,6 +51,7 @@ namespace IntegraXL
             CommandBindings.Add(new CommandBinding(_ShowIntegraToneWindowCommand, OnShowIntegraToneWindow, CanExecuteOnToneType));
             CommandBindings.Add(new CommandBinding(_LoadCommand, OnLoad, CanExecuteOnLoad));
             CommandBindings.Add(new CommandBinding(_SaveCommand, OnSave, CanExecuteOnSave));
+            CommandBindings.Add(new CommandBinding(_UpdateCommand, OnUpdate, CanExecuteUpdate));
             CommandBindings.Add(new CommandBinding(_TruncateCommand, OnTruncate));
             CommandBindings.Add(new CommandBinding(_AddFavoriteCommand, OnAddFavorite));
             Host.SelectionChanged += HostSelectionChanged;
@@ -62,6 +63,7 @@ namespace IntegraXL
         }
 
         
+       
 
         protected override void OnClosed(EventArgs e)
         {
@@ -91,6 +93,7 @@ namespace IntegraXL
         private static RoutedUICommand _LoadCommand = new RoutedUICommand(nameof(Load), nameof(Load), typeof(MainWindow));
         private static RoutedUICommand _SaveCommand = new RoutedUICommand(nameof(Save), nameof(Save), typeof(MainWindow));
         private static RoutedUICommand _TruncateCommand = new RoutedUICommand(nameof(Truncate), nameof(Truncate), typeof(MainWindow));
+        private static RoutedUICommand _UpdateCommand = new RoutedUICommand(nameof(Update), nameof(Update), typeof(MainWindow));
         private static RoutedUICommand _AddFavoriteCommand = new RoutedUICommand(nameof(AddFavorite), nameof(AddFavorite), typeof(MainWindow));
 
         /// <summary>
@@ -113,6 +116,10 @@ namespace IntegraXL
 
         #region Commands: Properties
 
+        public static ICommand Update
+        {
+            get { return _UpdateCommand; }
+        }
         public static ICommand Load
         {
             get { return _LoadCommand; }
@@ -164,6 +171,15 @@ namespace IntegraXL
         #endregion
 
         #region Commands: Handlers
+        private void OnUpdate(object sender, ExecutedRoutedEventArgs e)
+        {
+            MainWindow caller = sender as MainWindow;
+
+            if(caller != null)
+            {
+                Device.Session.Update();
+            }
+        }
 
         private void OnLoad(object sender, ExecutedRoutedEventArgs e)
         {
@@ -291,6 +307,13 @@ namespace IntegraXL
         {
             e.CanExecute = Integra.IsConnected;
         }
+
+        private void CanExecuteUpdate(object sender, CanExecuteRoutedEventArgs e)
+        {
+            // TODO: Can update?
+            e.CanExecute = true;
+        }
+
 
         private void CanExecuteOnLoad(object sender, CanExecuteRoutedEventArgs e)
         {

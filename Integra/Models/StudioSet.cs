@@ -4,99 +4,39 @@ using Integra.Database;
 using MidiXL;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Integra.Models
 {
-
-    // TODO: Make only the studio set report progress
+    /// <summary>
+    /// Defines the INTEGRA-7 studio set data structure.
+    /// </summary>
+    /// <remarks><i>Address: 18 00 20 00</i></remarks>
     public class StudioSet : IntegraBase<StudioSet>
     {
+        #region Fields
+
         private IntegraParts _SelectedPart = IntegraParts.Part01;
+        private IntegraToneTypes _ToneType = IntegraToneTypes.SuperNATURALAcousticTone;
 
-        IntegraBasePartial<StudioSetPart> _StudioSetParts = new IntegraBasePartial<StudioSetPart>(0x18002000, 0x00004D);
-        IntegraBasePartial<StudioSetMidi> _Midi = new IntegraBasePartial<StudioSetMidi>(0x18001000, 0x00000001);
-
+        private Tone _SelectedTone;
 
         StudioSetCommon _Common = new StudioSetCommon();
-
-
-        public delegate void PartChangeEventHandler(object sender, IntegraPartChangeEventArts e);
-
-        public event PartChangeEventHandler PartChanged;
-
-        public StudioSet() : base(0x18002000, 0x0000004D)
-        {
-        }
-
-        #region Properties
-
-        public StudioSetCommon Common
-        {
-            get { return _Common; }
-            //set
-            //{
-            //    if (_Common != value)
-            //    {
-            //        _Common = value;
-            //        NotifyPropertyChanged();
-            //    }
-            //}
-        }
-
-
-        public IntegraBasePartial<StudioSetMidi> MIDI
-        {
-            get { return _Midi; }
-            //set
-            //{
-            //    _Midi = value;
-            //    NotifyPropertyChanged();
-            //}
-        }
-
-        public IntegraBasePartial<StudioSetPart> Parts
-        {
-            get { return _StudioSetParts; }
-        }
+        IntegraBasePartial<StudioSetMidi> _Midi = new IntegraBasePartial<StudioSetMidi>(0x18001000, 0x00000001);
+        IntegraBasePartial<StudioSetPart> _StudioSetParts = new IntegraBasePartial<StudioSetPart>(0x18002000, 0x00004D);
 
         #endregion
 
-        protected override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
-        {
-            IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
-
-            // Studio Set Part
-            if ((syx.Address & 0xFFFFF000) == (Address & 0xFFFFF000))
-            {
-                //
-                if(((syx.Address & 0x00000F00) >> 8) == (uint)SelectedPart)
-                {
-                    Initialize(syx.Data);
-                    Console.WriteLine(syx);
-                }
-            }
-        }
+        #region Constructor
 
         /// <summary>
-        /// Override to only initialize the <see cref="Tone"/> property.
+        /// Creates and initializes a new connected <see cref="StudioSet"/> instance.
         /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        protected override bool Initialize(byte[] data)
-        {
-            if (!IsInitialized)
-            {
-                Tone = new Tone(data[6], data[7], data[8]);
+        public StudioSet() : base(0x18002000, 0x0000004D) { }
 
+        #endregion
 
-                IsInitialized = true;
-                //Save();
-            }
-
-            return IsInitialized;
-        }
-
-        private Tone _SelectedTone;
+        #region Properties
 
         public virtual Tone Tone
         {
@@ -118,7 +58,6 @@ namespace Integra.Models
                 }
             }
         }
-        private IntegraToneTypes _ToneType = IntegraToneTypes.SuperNATURALAcousticTone;
 
         public virtual IntegraToneTypes ToneType
         {
@@ -175,12 +114,18 @@ namespace Integra.Models
             }
         }
 
+        /// <summary>
+        /// Gets or sets the selected partial.
+        /// </summary>
         public virtual IntegraParts SelectedPart
         {
             get { return _SelectedPart; }
             set
             {
-                if(_SelectedPart != value)
+                // Change selected tone
+                // Change tone
+                // Change MFX
+                if (_SelectedPart != value)
                 {
                     _SelectedPart = value;
 
@@ -192,46 +137,89 @@ namespace Integra.Models
             }
         }
 
-        
+        #region Properties: Data Access
 
-        public override void Select(int id)
+        public StudioSetCommon Common
         {
-            // Temp for testing
-            //Device.ID = 1;
-
-            // Temporary fixed ID
-            base.Select(id);
-            
+            get { return _Common; }
         }
 
+        public IntegraBasePartial<StudioSetMidi> MIDI
+        {
+            get { return _Midi; }
+            set
+            {
+                if(_Midi != value)
+                {
+                    _Midi = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public IntegraBasePartial<StudioSetPart> Parts
+        {
+            get { return _StudioSetParts; }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Stores the currently selected tone into the database.
+        /// </summary>
         public void SaveFavorite()
         {
+            Debug.Print($"[{nameof(StudioSet)}.{nameof(SaveFavorite)}]");
 
-            Console.WriteLine($"StudioSet Save Tone!");
-            
             Tone.Insert();
         }
-        //public override void Save()
-        //{
-        //    Console.WriteLine("SAVE STUDIO SET CALLED");
-            
-        //    List<SQLParameter> parameters = new List<SQLParameter>();
 
-        //    // TODO: Remo
-        //    parameters.Add(new SQLParameter(0, typeof(int), nameof(StudioSetCommon), Device.Session.SessionID));
-        //    //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetCommonChorus",  Device.ID));
-        //    //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetCommonReverb",  Device.ID));
-        //    //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetCommonMotionalSurround",  Device.ID));
-        //    //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetMasterEQ",  Device.ID));
-        //    parameters.Add(new SQLParameter(0, typeof(int), nameof(StudioSetMidi), Device.Session.SessionID));
-        //    parameters.Add(new SQLParameter(0, typeof(int), nameof(StudioSetPart), Device.Session.SessionID));
-        //    //parameters.Add(new SQLParameter(0, typeof(int), "StudioSetPartEQ",  Device.ID));
+        #endregion
 
-        //    DataAccess.Save(this, parameters, false, false);
+        #region Overrides
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
+        {
+            IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
 
-        //    base.Save();
-            
-        //}
+            // Studio Set Part
+            if ((syx.Address & 0xFFFFF000) == (Address & 0xFFFFF000))
+            {
+                //
+                if(((syx.Address & 0x00000F00) >> 8) == (uint)SelectedPart)
+                {
+                    Initialize(syx.Data);
+                    Console.WriteLine(syx);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Override to only initialize the <see cref="Tone"/> property.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        protected override bool Initialize(byte[] data)
+        {
+            if (!IsInitialized)
+            {
+                Tone = new Tone(data[6], data[7], data[8]);
+
+                IsInitialized = true;
+            }
+
+            return IsInitialized;
+        }
+
+        #endregion
     }
 }

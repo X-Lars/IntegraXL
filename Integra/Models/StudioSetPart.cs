@@ -42,7 +42,7 @@ namespace Integra.Models
         public IntegraParts Part
         {
             get { return _Part; }
-            private set
+            set
             {
                 _Part = value;
                 NotifyPropertyChanged();

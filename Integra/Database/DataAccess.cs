@@ -403,77 +403,17 @@ namespace Integra.Database
                 return;
             }
 
-            Dictionary<int, string> keyColumns = GetIndex(instance);
 
+            //if(IntegraCache.GetSQLParameters(instance).Keys.Count == 0)
+            //    return;
 
-            
+            Dictionary<string, string> sqlp = IntegraCache.GetSQLParameters(instance, Device.Session.ID.ToString());
 
-            
-            //useSessionID = false;
-            //string columns = useSessionID == true ? "ID," : string.Empty;
-            //string values = useSessionID == true ? $"{Device.Session.ID}," : string.Empty;
+            if (sqlp.Count == 0)
+                return;
 
-            // Add the part parameter if the instance implements the IIntegraPartial interface
-            //if (instance.GetType().GetInterfaces().Contains(typeof(IIntegraPartial)))
-            //{
-            //    columns += "Part,";
-            //    values += $"{(byte)((IIntegraPartial)instance).Part},";
-            //}
-            //parameters = null;
-            //if (parameters != null)
-            //{
-            //    if (parameters.Count == 0)
-            //        return;
-
-            //    for (int i = 0; i < parameters.Count; i++)
-            //    {
-            //        columns += parameters[i].Name;
-            //        columns += ",";
-
-            //        if (parameters[i].Type == typeof(bool))
-            //        {
-            //            values += (bool)parameters[i].Value == true ? 1 : 0;
-            //        }
-            //        else if (parameters[i].Type == typeof(string))
-            //        {
-            //            values += $"'{parameters[i].Value}'";
-            //        }
-            //        else
-            //        {
-            //            values += parameters[i].Value.ToString();
-            //        }
-
-            //        values += ",";
-            //    }
-
-            //    // Remove trailing separators
-            //    if (columns.Length > 0)
-            //        columns = columns.Remove(columns.Length - 1);
-
-            //    if (values.Length > 0)
-            //        values = values.Remove(values.Length - 1);
-
-            //}
-            //else
-            //{
-                if(IntegraCache.GetSQLParameters(instance).Keys.Count == 0)
-                    return;
-
-                Dictionary<string, string> sqlp = IntegraCache.GetSQLParameters(instance, Device.Session.ID.ToString());
-                //List<string> keys = new List<string>(sqlp.Keys);
-
-                //foreach (var item in keys)
-                //{
-                //    if(sqlp[item] == null)
-                //    {
-                //        sqlp[item] = Device.Session.SessionID.ToString();
-                //        //IntegraCache.GetSQLParameters(instance)[item.Key] = Device.Session.SessionID.ToString();
-                //    }
-                //}
-
-                string columns = string.Join(",", sqlp.Keys);
-                string values = string.Join(",", sqlp.Values);
-            //}
+            string columns = string.Join(",", sqlp.Keys);
+            string values = string.Join(",", sqlp.Values);
 
 
             string sql = $"INSERT INTO {GetTableName(instance)} ({columns}) VALUES({values})";
@@ -492,7 +432,13 @@ namespace Integra.Database
                 CloseConnection(connection);
             }
 
-            
+            // Insert all referenced data structures
+            Dictionary<string, IIntegraDataClass> references = IntegraCache.GetReferences(instance);
+
+            foreach (var reference in references)
+            {
+                reference.Value.Insert();
+            }
         }
 
         /// <summary>
@@ -508,9 +454,85 @@ namespace Integra.Database
             return table == null ? instance.GetType().Name : table.Name;
         }
 
-        public static void Update<T>(IntegraBase<T> integraBase) where T: IntegraBase<T>
+        public static int Update<T>(IntegraBase<T> instance) where T: IntegraBase<T>
         {
+            int result = 0;
 
+            Debug.Print($"[{nameof(DataAccess)}.{nameof(Insert)}] {instance.GetType().Name}");
+
+            if (!Exists(instance))
+            {
+                Debug.Print($"[{nameof(DataAccess)}.{nameof(Insert)}] {instance.GetType().Name} No record found to update.");
+                //TODO: Insert?
+                return 0;
+            }
+
+            Dictionary<string, string> sqlp = IntegraCache.GetSQLParameters(instance, Device.Session.ID.ToString());
+
+            if (sqlp.Count == 0)
+                return 0;
+
+            string update = string.Join(",", sqlp.Select(x => x.Key + "=" + x.Value));
+
+            // Where clause
+            Dictionary<int, string> keyColumns = GetIndex(instance);
+
+            string[] value = new string[keyColumns.Count];
+
+            Dictionary<string, PropertyInfo> template = IntegraCache.GetDataTemplate<T>();
+
+            foreach (var item in keyColumns.OrderBy(i => i.Key))
+            {
+                PropertyInfo property = template[item.Value];
+
+                if (property.PropertyType.IsEnum)
+                {
+                    value[item.Key] = Convert.ToByte(property.GetValue(instance)).ToString();
+                }
+                else
+                    value[item.Key] = instance.GetType().GetProperty(item.Value).GetValue(instance).ToString();
+
+            }
+
+            string where = string.Empty;
+
+            foreach (var item in keyColumns.OrderBy(i => i.Key))
+            {
+                where += item.Value;
+                where += "=";
+                where += value[item.Key];
+
+                if (item.Key != keyColumns.Count - 1)
+                    where += " AND ";
+            }
+
+
+
+            string sql = $"UPDATE {GetTableName(instance)} SET {update} WHERE {where}";
+            Console.WriteLine(sql);
+            using (var connection = new SqlConnection(GetConnectionString()))
+            {
+                OpenConnection(connection);
+
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    result = command.ExecuteNonQuery();
+
+                    Debug.Print($"[{nameof(DataAccess)}.{nameof(Update)}<{instance.GetType().Name}>] Result: {result}");
+                }
+
+                CloseConnection(connection);
+            }
+
+            // Insert all referenced data structures
+            Dictionary<string, IIntegraDataClass> references = IntegraCache.GetReferences(instance);
+
+            foreach (var reference in references)
+            {
+                reference.Value.Insert();
+            }
+
+            return result;
         }
 
         public static void Delete<T>(IntegraBase<T> instance) where T: IntegraBase<T>

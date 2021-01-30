@@ -2,14 +2,15 @@
 using Integra.Core.Interfaces;
 using MidiXL;
 using System;
+using System.ComponentModel;
 
 namespace Integra.Models
 {
     /// <summary>
     /// Defines the INTEGRA-7 MIDI data structure.
     /// </summary>
-    /// <remarks><i>Address 01 00 00 00</i></remarks>
-    public class StudioSetMidi : IntegraBase<StudioSetMidi>, IIntegraPartial
+    /// <remarks><i>18 00 10 00 - 18 00 1F 00</i></remarks>
+    public class StudioSetMidi : IntegraBase<StudioSetMidi>, IIntegraPartial, INotifyPropertyChanged
     {
         #region Fields
 
@@ -17,34 +18,27 @@ namespace Integra.Models
 
         #endregion
 
-        private IntegraParts _Part;
-
         #region Constructor
 
         /// <summary>
-        /// Creates a new <see cref="StudioSetMidi"/> instance.
+        /// Creates a new disconnected <see cref="StudioSetMidi"/> instance.
         /// </summary>
         /// <remarks><i>Default constructor for dynamic instance creation.</i></remarks>
         public StudioSetMidi() { }
 
+        /// <summary>
+        /// Creates and initializes a new connected <see cref="StudioSetMidi"/> instance.
+        /// </summary>
+        /// <param name="address">The address of data structure.</param>
+        /// <param name="request">The request to initialize the data structure.</param>
         public StudioSetMidi(IntegraAddress address, IntegraRequest request) : base(address, request)
         {
-            _Part = (IntegraParts)((address & 0x00000F00) >> 8);
-            Initialize();
+            Part = (IntegraParts)((address & 0x00000F00) >> 8);
         }
 
         #endregion
 
         #region Properties
-
-        public IntegraParts Part
-        {
-            get { return _Part; }
-            set
-            {
-                _Part = value;
-            }
-        }
 
         #region Properties: INTEGRA-7
 
@@ -63,8 +57,19 @@ namespace Integra.Models
 
         #endregion
 
+        #region IIntegraPartial
+        
+        public IntegraParts Part { get; set; }
+
+        #endregion
+
         #region Overrides
 
+        /// <summary>
+        /// Overridden because the length of data is always one and the base skips exact matches when the data structure is already initialized.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">Event data.</param>
         protected override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
             IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
@@ -76,11 +81,11 @@ namespace Integra.Models
                 {
                     if (Initialize(syx.Data))
                     {
-                        Device.Instance.ReportProgress(this, new StatusMessage($"Initializing Studio Set MIDI {_Part}", "Initialized", 100, "Done"));
+                        Device.Instance.ReportProgress(this, new StatusMessage($"Initializing Studio Set MIDI {Part}", "Initialized", 100, "Done"));
                     }
                     else
                     {
-                        Device.Instance.ReportProgress(this, new StatusMessage($"Initializing Studio Set MIDI {_Part}", "Please wait...", 100, "Initializing"));
+                        Device.Instance.ReportProgress(this, new StatusMessage($"Initializing Studio Set MIDI {Part}", "Please wait...", 100, "Initializing"));
                     }
                 }
                 else
@@ -94,7 +99,7 @@ namespace Integra.Models
         {
             if (!IsInitialized)
             {
-                _Part = (IntegraParts)((Address & 0x00000F00) >> 8);
+                Part = (IntegraParts)((Address & 0x00000F00) >> 8);
 
                 _PhaseLock = Convert.ToBoolean(data[0x00]);
                 NotifyPropertyChanged(string.Empty);
@@ -106,5 +111,4 @@ namespace Integra.Models
 
         #endregion
     }
-
 }
