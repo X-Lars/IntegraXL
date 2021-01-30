@@ -173,7 +173,7 @@ namespace Integra.Models
 
         #region Overrides
 
-        internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
+        protected override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
             if (!IsInitialized)
             {
@@ -211,27 +211,27 @@ namespace Integra.Models
 
         public override void Insert()
         {
-            List<SQLParameter> parameters = new List<SQLParameter>();
+            //List<SQLParameter> parameters = new List<SQLParameter>();
 
-            parameters.Add(new SQLParameter(typeof(byte), nameof(MSB), MSB));
-            parameters.Add(new SQLParameter(typeof(byte), nameof(LSB), LSB));
-            parameters.Add(new SQLParameter(typeof(byte), nameof(PC), PC));
+            //parameters.Add(new SQLParameter(typeof(byte), nameof(MSB), MSB));
+            //parameters.Add(new SQLParameter(typeof(byte), nameof(LSB), LSB));
+            //parameters.Add(new SQLParameter(typeof(byte), nameof(PC), PC));
 
-            if (DataAccess.Exists(this))
-            {
-                Console.WriteLine("Tone already favorited");
-                return;
-            }
+            //if (DataAccess.Exists(this))
+            //{
+            //    Console.WriteLine("Tone already favorited");
+            //    return;
+            //}
 
-            parameters.Clear();
-            parameters.Add(new SQLParameter(typeof(int),    nameof(ID), ID));
-            parameters.Add(new SQLParameter(typeof(string), nameof(Name), $"{Name.Replace("'", "''")}"));
-            parameters.Add(new SQLParameter(typeof(byte),   nameof(MSB), MSB));
-            parameters.Add(new SQLParameter(typeof(byte),   nameof(LSB), LSB));
-            parameters.Add(new SQLParameter(typeof(byte),   nameof(PC), PC));
-            parameters.Add(new SQLParameter(typeof(byte),   nameof(Category), (byte)Category));
+            //parameters.Clear();
+            //parameters.Add(new SQLParameter(typeof(int),    nameof(ID), ID));
+            //parameters.Add(new SQLParameter(typeof(string), nameof(Name), $"{Name.Replace("'", "''")}"));
+            //parameters.Add(new SQLParameter(typeof(byte),   nameof(MSB), MSB));
+            //parameters.Add(new SQLParameter(typeof(byte),   nameof(LSB), LSB));
+            //parameters.Add(new SQLParameter(typeof(byte),   nameof(PC), PC));
+            //parameters.Add(new SQLParameter(typeof(byte),   nameof(Category), (byte)Category));
 
-            DataAccess.Insert(this, parameters, false);
+            DataAccess.Insert(this);
             
         }
 

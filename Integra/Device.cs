@@ -517,7 +517,7 @@ namespace Integra
 
         internal void SendSystemExclusive(IntegraSystemExclusive syx)
         {
-            Debug.Print($"[{nameof(Device)}.{nameof(SendSystemExclusive)}] {syx}");
+            //Debug.Print($"[{nameof(Device)}.{nameof(SendSystemExclusive)}] {syx}");
             lock (MidiOutputDevice)
             {
                 MidiOutputDevice.Send(new SystemExclusiveMessage(syx));

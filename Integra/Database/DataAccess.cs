@@ -148,7 +148,7 @@ namespace Integra.Database
 
             string sql = $"SELECT * FROM {GetTableName(instance)}";
 
-            Dictionary<string, PropertyInfo> templateCache = IntegraCache.GetTemplate<U>();
+            Dictionary<string, PropertyInfo> templateCache = IntegraCache.GetDataTemplate<U>();
 
             using (var connection = new SqlConnection(GetConnectionString()))
             {
@@ -203,7 +203,7 @@ namespace Integra.Database
             string sql = $"SELECT * FROM {GetTableName(instance)} WHERE ID = {id}";
 
             // Skip the ID column
-            int columnOffset = 1;
+            int columnOffset = 0;
 
             // Skip the Part column
             // Add the AND clause
@@ -233,7 +233,7 @@ namespace Integra.Database
                                 if (result == 1)
                                     throw new Exception("");
                                 
-                                Dictionary<string, PropertyInfo> parameters = IntegraCache.GetTemplate<T>();
+                                Dictionary<string, PropertyInfo> parameters = IntegraCache.GetDataTemplate<T>();
 
                                 foreach (var parameter in parameters)
                                 {
@@ -252,9 +252,15 @@ namespace Integra.Database
                                             offset++;
                                         }
                                     }
+                                    else if(parameter.Value.PropertyType.IsEnum)
+                                    {
+                                        parameter.Value.SetValue(instance, Enum.Parse(parameter.Value.PropertyType, reader.GetValue(reader.GetOrdinal(parameter.Key)).ToString()));
+                                    }
                                     else
                                     {
-                                        parameter.Value.SetValue(instance, reader.GetValue(offset + columnOffset));
+                                        
+                                        //parameter.Value.SetValue(instance, reader.GetValue(offset + columnOffset));
+                                        parameter.Value.SetValue(instance, reader.GetValue(reader.GetOrdinal(parameter.Key)));
                                         offset++;
 
                                         Debug.Print($"-{parameter.Value.Name, -20} = {parameter.Value.GetValue(instance)}");
@@ -327,12 +333,18 @@ namespace Integra.Database
 
             string[] value = new string[keyColumns.Count];
 
-            Dictionary<string, PropertyInfo> template = IntegraCache.GetTemplate<T>();
+            Dictionary<string, PropertyInfo> template = IntegraCache.GetDataTemplate<T>();
 
             foreach (var item in keyColumns.OrderBy(i => i.Key))
             {
-                //PropertyInfo property = template[item.Value];
-                value[item.Key] = instance.GetType().GetProperty(item.Value).GetValue(instance).ToString();
+                PropertyInfo property = template[item.Value];
+                
+                if(property.PropertyType.IsEnum)
+                {
+                    value[item.Key] = Convert.ToByte(property.GetValue(instance)).ToString();
+                }
+                else
+                    value[item.Key] = instance.GetType().GetProperty(item.Value).GetValue(instance).ToString();
                
             }
            
@@ -380,61 +392,70 @@ namespace Integra.Database
         /// <typeparam name="T">The instance type specifier.</typeparam>
         /// <param name="instance">The instance to store.</param>
         /// <param name="parameters"></param>
-        public static void Insert<T>(IntegraBase<T> instance, List<SQLParameter> parameters = null, bool useSessionID = true) where T: IntegraBase<T>
+        public static void Insert<T>(IntegraBase<T> instance) where T: IntegraBase<T>
         {
+            Debug.Print($"[{nameof(DataAccess)}.{nameof(Insert)}] {instance.GetType().Name}");
+
+            if (Exists(instance))
+            {
+                Debug.Print($"[{nameof(DataAccess)}.{nameof(Insert)}] {instance.GetType().Name} Already exists.");
+                //TODO: Update
+                return;
+            }
+
             Dictionary<int, string> keyColumns = GetIndex(instance);
 
-            if(Exists(instance))
-             GetIndex(instance);
 
-            Debug.Print($"[{nameof(DataAccess)}.{nameof(Insert)}] {instance.GetType().Name}");
-            useSessionID = false;
-            string columns = useSessionID == true ? "ID," : string.Empty;
-            string values = useSessionID == true ? $"{Device.Session.ID}," : string.Empty;
+            
+
+            
+            //useSessionID = false;
+            //string columns = useSessionID == true ? "ID," : string.Empty;
+            //string values = useSessionID == true ? $"{Device.Session.ID}," : string.Empty;
 
             // Add the part parameter if the instance implements the IIntegraPartial interface
-            if (instance.GetType().GetInterfaces().Contains(typeof(IIntegraPartial)))
-            {
-                columns += "Part,";
-                values += $"{(byte)((IIntegraPartial)instance).Part},";
-            }
-            parameters = null;
-            if (parameters != null)
-            {
-                if (parameters.Count == 0)
-                    return;
+            //if (instance.GetType().GetInterfaces().Contains(typeof(IIntegraPartial)))
+            //{
+            //    columns += "Part,";
+            //    values += $"{(byte)((IIntegraPartial)instance).Part},";
+            //}
+            //parameters = null;
+            //if (parameters != null)
+            //{
+            //    if (parameters.Count == 0)
+            //        return;
 
-                for (int i = 0; i < parameters.Count; i++)
-                {
-                    columns += parameters[i].Name;
-                    columns += ",";
+            //    for (int i = 0; i < parameters.Count; i++)
+            //    {
+            //        columns += parameters[i].Name;
+            //        columns += ",";
 
-                    if (parameters[i].Type == typeof(bool))
-                    {
-                        values += (bool)parameters[i].Value == true ? 1 : 0;
-                    }
-                    else if (parameters[i].Type == typeof(string))
-                    {
-                        values += $"'{parameters[i].Value}'";
-                    }
-                    else
-                    {
-                        values += parameters[i].Value.ToString();
-                    }
+            //        if (parameters[i].Type == typeof(bool))
+            //        {
+            //            values += (bool)parameters[i].Value == true ? 1 : 0;
+            //        }
+            //        else if (parameters[i].Type == typeof(string))
+            //        {
+            //            values += $"'{parameters[i].Value}'";
+            //        }
+            //        else
+            //        {
+            //            values += parameters[i].Value.ToString();
+            //        }
 
-                    values += ",";
-                }
+            //        values += ",";
+            //    }
 
-                // Remove trailing separators
-                if (columns.Length > 0)
-                    columns = columns.Remove(columns.Length - 1);
+            //    // Remove trailing separators
+            //    if (columns.Length > 0)
+            //        columns = columns.Remove(columns.Length - 1);
 
-                if (values.Length > 0)
-                    values = values.Remove(values.Length - 1);
+            //    if (values.Length > 0)
+            //        values = values.Remove(values.Length - 1);
 
-            }
-            else
-            {
+            //}
+            //else
+            //{
                 if(IntegraCache.GetSQLParameters(instance).Keys.Count == 0)
                     return;
 
@@ -450,9 +471,9 @@ namespace Integra.Database
                 //    }
                 //}
 
-                columns += string.Join(",", sqlp.Keys);
-                values += string.Join(",", sqlp.Values);
-            }
+                string columns = string.Join(",", sqlp.Keys);
+                string values = string.Join(",", sqlp.Values);
+            //}
 
 
             string sql = $"INSERT INTO {GetTableName(instance)} ({columns}) VALUES({values})";
@@ -500,7 +521,7 @@ namespace Integra.Database
 
             string[] value = new string[keyColumns.Count];
 
-            Dictionary<string, PropertyInfo> template = IntegraCache.GetTemplate<T>();
+            Dictionary<string, PropertyInfo> template = IntegraCache.GetDataTemplate<T>();
 
             foreach (var item in keyColumns.OrderBy(i => i.Key))
             {

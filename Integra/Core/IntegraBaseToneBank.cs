@@ -118,7 +118,7 @@ namespace Integra.Core
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
+        protected override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
             if (IsInitialized)
                 return;

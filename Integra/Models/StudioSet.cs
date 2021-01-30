@@ -61,7 +61,7 @@ namespace Integra.Models
 
         #endregion
 
-        internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
+        protected override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
             IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
 

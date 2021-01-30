@@ -20,7 +20,7 @@ namespace Integra.Models
         /// <summary>
         /// Stores the MFX model associated with the <see cref="Type"/>.
         /// </summary>
-        private IToneMFXModel _Model = new Thru();
+        private IToneMFXModel _MFXModel = new Thru();
 
         [Offset(0x0000)] private IntegraMFXTypes _Type;
         [Offset(0x0002)] private byte _ChorusSendLevel;
@@ -229,12 +229,12 @@ namespace Integra.Models
         {
             get
             {
-                return _Model.Get(index, _Parameters[index].ConvertFromIntegraParameter());
+                return _MFXModel.Get(index, _Parameters[index].ConvertFromIntegraParameter());
             }
 
             set
             {
-                _Parameters[index] = _Model.Set(index, value).ConvertToIntegraParameter();
+                _Parameters[index] = _MFXModel.Set(index, value).ConvertToIntegraParameter();
                 NotifyIndexerPropertyChanged(index);
             }
         }
@@ -251,9 +251,9 @@ namespace Integra.Models
         {
             switch (type)
             {
-                case IntegraMFXTypes.Equalizer: _Model = new Equalizer(); break;
+                case IntegraMFXTypes.Equalizer: _MFXModel = new Equalizer(); break;
                 default:
-                    _Model = new Thru();
+                    _MFXModel = new Thru();
                     break;
             }
         }
@@ -267,10 +267,10 @@ namespace Integra.Models
         /// </summary>
         /// <param name="sender">The <see cref="object"/> that raised the event.</param>
         /// <param name="e">A <see cref="SystemExclusiveMessageEventArgs"/> containing event data.</param>
-        internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
+        protected override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
             IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
-
+            
             if (!IsInitialized)
             {
                 if (syx.Address == Address)

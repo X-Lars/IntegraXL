@@ -37,9 +37,13 @@ namespace Integra.Models
 
         #region Properties
 
-        public virtual IntegraParts Part
+        public IntegraParts Part
         {
             get { return _Part; }
+            set
+            {
+                _Part = value;
+            }
         }
 
         #region Properties: INTEGRA-7
@@ -61,7 +65,7 @@ namespace Integra.Models
 
         #region Overrides
 
-        internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
+        protected override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
             IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
 

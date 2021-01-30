@@ -95,7 +95,7 @@ namespace Integra.Core
         public override bool IsInitialized
         {
             get { return base.IsInitialized; }
-            protected set
+            internal protected set
             {
                 base.IsInitialized = value;
 
@@ -120,7 +120,7 @@ namespace Integra.Core
 
         #region Overrides
 
-        internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
+        protected override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
             if (IsInitialized)
                 return;

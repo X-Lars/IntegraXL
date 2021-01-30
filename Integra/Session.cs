@@ -34,7 +34,7 @@ namespace Integra
 
             Sessions = DataAccess.SelectAll(this, new SessionData());
 
-            IntegraCache.GetTemplate<StudioSet>();
+            IntegraCache.GetDataTemplate<StudioSet>();
             //Sessions = DataAccess.Select<Session>();
         }
 
@@ -66,7 +66,7 @@ namespace Integra
             {
                 ID = id;
                 DebugPrint();
-                DataAccess.Select(Device.Instance.StudioSet, 11);
+                DataAccess.Select(Device.Instance.StudioSet, ID);
             }
         }
 

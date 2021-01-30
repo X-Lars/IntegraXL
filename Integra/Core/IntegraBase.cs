@@ -23,25 +23,10 @@ namespace Integra.Core
         #region Fields
 
         /// <summary>
-        /// Cache for fields decorated with the <see cref="Offset"/> attribute.
-        /// </summary>
-        private static Dictionary<ushort, FieldInfo> _FieldOffsetCache = new Dictionary<ushort, FieldInfo>();
-
-        /// <summary>
-        /// Cache for properties decorated with the <see cref="Offset"/> attribute.
-        /// </summary>
-        private static Dictionary<ushort, PropertyInfo> _PropertyOffsetCache = new Dictionary<ushort, PropertyInfo>();
-
-        /// <summary>
         /// Tracks whether the data structure is initialized.
         /// </summary>
         private bool _IsInitialized = false;
-
-        /// <summary>
-        /// Tracks whether the cache has been initialized.
-        /// </summary>
-        private static bool _IsCached = false;
-
+      
         #endregion
 
 
@@ -96,12 +81,17 @@ namespace Integra.Core
         #endregion
 
         #region Properties
+
         private int _ID;
 
+        /// <summary>
+        /// Gets the ID of the instance used for data storage.
+        /// </summary>
+        /// <remarks><i>Defaults to return the <see cref="Session.ID"/>.</i></remarks>
         public int ID 
         {
             get { return Device.Session.ID; }
-            set
+            internal set
             {
                 _ID = value;
                 NotifyPropertyChanged();
@@ -111,6 +101,7 @@ namespace Integra.Core
         /// <summary>
         /// Gets the name of the instance.
         /// </summary>
+        /// <remarks><i>Defaults to the instance type name.</i></remarks>
         public virtual string Name { get; protected set; }
 
         /// <summary>
@@ -129,14 +120,14 @@ namespace Integra.Core
         public virtual bool IsInitialized
         {
             get { return _IsInitialized; }
-            protected set
+            internal protected set
             {
-                if (_IsInitialized == value)
-                    return;
+                if (_IsInitialized != value)
+                {
+                    _IsInitialized = value;
 
-                _IsInitialized = value;
-
-                NotifyPropertyChanged();
+                    NotifyPropertyChanged();
+                }
             }
         }
         
@@ -145,22 +136,20 @@ namespace Integra.Core
         #region Methods
         
         /// <summary>
-        /// Initializes the instance by request from the INTEGRA-7.
+        /// Initializes the instance by hooking up to the device system exclusive event listener and request initialization from the INTEGRA-7.
         /// </summary>
         public virtual void Initialize()
         {
-            InitializeCache();
-
             if (Device._IsConnected)
             {
                 Device.Instance.MidiInputDevice.SystemExclusiveReceived += SystemExclusiveReceived;
 
-                // [NON BLOCKING]
+                // Non blocking initialization request
                 Task.Factory.StartNew(() => Device.Instance.Initialize(this), TaskCreationOptions.LongRunning);
             }
             else
             {
-                // Do initialization in the device connected event handler
+                // Do initialization in the device connected event handler to prevent long running tasks
                 Device.Connected += DeviceConnected;
             }
         }
@@ -174,11 +163,10 @@ namespace Integra.Core
         {
             if (!IsInitialized)
             {
-                int count = _FieldOffsetCache.Count;
-
-                foreach(KeyValuePair<ushort, FieldInfo> field in _FieldOffsetCache)
+                //foreach (var field in IntegraCache.GetFields(this))
+                foreach (var field in IntegraCache.GetFields<T>())
                 {
-                    if(field.Value.FieldType.IsArray)
+                    if (field.Value.FieldType.IsArray)
                     {
                         // Create an array from the field to be able to loop through the field elements
                         Array array = (Array)field.Value.GetValue(this);
@@ -186,7 +174,7 @@ namespace Integra.Core
                         // Get the type of elements in the array
                         Type arrayType = array.GetType().GetElementType();
 
-                        if(arrayType == typeof(byte))
+                        if (arrayType == typeof(byte))
                         {
                             for (int i = 0; i < array.Length; i++)
                             {
@@ -198,23 +186,19 @@ namespace Integra.Core
                         {
                             for (int i = 0; i < array.Length; i++)
                             {
-                                byte[] values = new byte[4];
+                                byte[] bytes = new byte[4];
 
                                 int offset = field.Key + (i * 4);
 
-                                //values[0] = (byte)((data[offset] >> 12) & 0x0F);
-                                //values[1] = (byte)((data[offset + 1] >> 8) & 0x0F);
-                                //values[2] = (byte)((data[offset + 2] >> 4) & 0x0F);
-                                //values[3] = (byte)((data[offset + 3]) & 0x0F);
-                                values[0] = (byte)((data[offset]) & 0x0F);
-                                values[1] = (byte)((data[offset + 1]) & 0x0F);
-                                values[2] = (byte)((data[offset + 2]) & 0x0F);
-                                values[3] = (byte)((data[offset + 3]) & 0x0F);
+                                bytes[0] = (byte)((data[offset]) & 0x0F);
+                                bytes[1] = (byte)((data[offset + 1]) & 0x0F);
+                                bytes[2] = (byte)((data[offset + 2]) & 0x0F);
+                                bytes[3] = (byte)((data[offset + 3]) & 0x0F);
 
                                 if (BitConverter.IsLittleEndian)
-                                    Array.Reverse(values);
+                                    Array.Reverse(bytes);
 
-                                array.SetValue(BitConverter.ToInt32(values, 0), i);
+                                array.SetValue(BitConverter.ToInt32(bytes, 0), i);
                             }
                         }
                         else
@@ -228,7 +212,7 @@ namespace Integra.Core
                     }
                     else if (field.Value.FieldType == typeof(int))
                     {
-                        byte[] values = new byte[4];
+                        byte[] bytes = new byte[4];
 
                         int key = field.Key;
 
@@ -244,19 +228,19 @@ namespace Integra.Core
                         //    key += 128;
                         //}
 
-                        for (int i = 0; i < values.Length; i++)
+                        for (int i = 0; i < bytes.Length; i++)
                         {
-                            
-                            
+
+
                             // data 145 key 257
                             //values[i] = data[field.Key + i];
-                            values[i] = data[key + i];
+                            bytes[i] = data[key + i];
                         }
 
                         if (BitConverter.IsLittleEndian)
-                            Array.Reverse(values);
+                            Array.Reverse(bytes);
 
-                        field.Value.SetValue(this, BitConverter.ToInt32(values, 0));
+                        field.Value.SetValue(this, BitConverter.ToInt32(bytes, 0));
                     }
                     else
                     {
@@ -274,7 +258,7 @@ namespace Integra.Core
         /// <summary>
         /// Reinitializes the data of the instance.
         /// </summary>
-        internal virtual void Reinitialize()
+        public virtual void Reinitialize()
         {
             Console.WriteLine($"[{GetType().Name}.{nameof(Reinitialize)}]");
             IsInitialized = false;
@@ -283,79 +267,7 @@ namespace Integra.Core
 
         #region Methods: Private
 
-        /// <summary>
-        /// Initalizes the field offset and property offset cache.
-        /// </summary>
-        private void InitializeCache()
-        {
-            if (_IsCached)
-                return;
 
-            // Get all private instance fields
-            FieldInfo[] fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
-
-            // If the field has an offset attribute, add it to the field cache
-            foreach (FieldInfo field in fields)
-            {
-                Offset attribute = field.GetCustomAttribute<Offset>(false);
-
-                if (attribute != null)
-                {
-                    if (_FieldOffsetCache.ContainsKey(attribute.Value))
-                        throw new Exception($"[{GetType().Name}.{nameof(InitializeCache)}] Duplicate field offset attribute 0x{attribute.Value.ToString("X4")}!");
-
-                    _FieldOffsetCache.Add(attribute.Value, field);
-                }
-            }
-
-            // Get all public instance properties
-            PropertyInfo[] properties = this.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
-
-            // If the property has an offset attribute, add it to the property cache
-            foreach (PropertyInfo property in properties)
-            {
-                Offset attribute = property.GetCustomAttribute<Offset>(false);
-
-                if (attribute != null)
-                {
-                    if (_PropertyOffsetCache.ContainsKey(attribute.Value))
-                        throw new Exception($"[{GetType().Name}.{nameof(InitializeCache)}] Duplicate property offset attribute 0x{attribute.Value.ToString("X4")}!");
-
-                    _PropertyOffsetCache.Add(attribute.Value, property);
-                }
-            }
-
-            _IsCached = true;
-        }
-
-        internal FieldInfo GetCachedField(ushort offset)
-        {
-            if (!_FieldOffsetCache.ContainsKey(offset))
-                return null;
-
-            return _FieldOffsetCache[offset];
-        }
-
-        internal PropertyInfo GetCachedProperty(ushort offset)
-        {
-            if (!_PropertyOffsetCache.ContainsKey(offset))
-                return null;
-
-            return _PropertyOffsetCache[offset];
-        }
-
-        internal Offset GetPropertyOffset(string propertyName)
-        {
-            foreach(var property in _PropertyOffsetCache)
-            {
-                if(property.Value.Name == propertyName)
-                {
-                    return new Offset(property.Key);
-                }
-            }
-
-            return null;
-        }
 
         /// <summary>
         /// Initializes one or more fields from a received system exclusive message.
@@ -373,9 +285,14 @@ namespace Integra.Core
 
             for (int fieldOffset = 0, propertyOffset = 0; fieldOffset < syx.Data.Length; fieldOffset++, propertyOffset++)
             {
-                FieldInfo field = GetCachedField((ushort)(offset + fieldOffset));
+                //FieldInfo field = IntegraCache.Field(this, (ushort)(offset + fieldOffset));
+                FieldInfo field = IntegraCache.Field<T>((ushort)(offset + fieldOffset));
+
+
+                //FieldInfo field = GetCachedField((ushort)(offset + fieldOffset));
 
                 // The field is not found, skip current iteration
+                // Field is not found when fields are non continuous, not all INTEGRA-7 parameters are used
                 if (field == null)
                     continue;
 
@@ -445,9 +362,10 @@ namespace Integra.Core
                 }
 
                 // Retrieve the accompanied property with the same offset to raise the NotifyPropertyChanged event
-                PropertyInfo property = GetCachedProperty((ushort)(offset + propertyOffset));
+                //PropertyInfo property = GetCachedProperty((ushort)(offset + propertyOffset));
+                PropertyInfo property = IntegraCache.Property<T>((ushort)(offset + propertyOffset));
 
-                if(property != null)
+                if (property != null)
                 {
                     // Check for indexer property
                     if (property.GetIndexParameters().Length == 0)
@@ -489,13 +407,20 @@ namespace Integra.Core
         /// <param name="index">The index of the property value.</param>
         private void TransmitIndexerProperty(string propertyName, int? index)
         {
-            Offset offset = GetPropertyOffset(propertyName);
+            //Offset offset = GetPropertyOffset(propertyName);
+            ushort offset = IntegraCache.PropertyOffset<T>(propertyName);
 
-            if(offset != null)
-            {
-                if (_FieldOffsetCache.ContainsKey(offset.Value))
+            //if (offset != null)
+            //{
+                //if(IntegraCache.Field(this, offset.Value) != null)
+                if (IntegraCache.Field<T>(offset) != null)
+                //if (_FieldOffsetCache.ContainsKey(offset.Value))
                 {
-                    FieldInfo field = _FieldOffsetCache[offset.Value];
+                    //FieldInfo field = IntegraCache.Field(this, offset.Value);
+                    FieldInfo field = IntegraCache.Field<T>(offset);
+
+
+                    //FieldInfo field = _FieldOffsetCache[offset.Value];
 
                     if (field.FieldType.IsArray)
                     {
@@ -509,7 +434,7 @@ namespace Integra.Core
                         {
                             byte[] array = (byte[])field.GetValue(this);
 
-                            TransmitProperty(offset.Value, array);
+                            TransmitProperty(offset, array);
                         }
                         else if (fieldArrayType == typeof(int))
                         {
@@ -525,18 +450,18 @@ namespace Integra.Core
                             if (BitConverter.IsLittleEndian)
                                 Array.Reverse(values);
 
-                            TransmitProperty((ushort)(offset.Value + (index * 4)), values);
+                            TransmitProperty((ushort)(offset + (index * 4)), values);
                         }
                     }
                     else if (field.FieldType == typeof(bool))
                     {
-                        TransmitProperty(offset.Value, new byte[] { (bool)field.GetValue(this) ? (byte)1 : (byte)0 });
+                        TransmitProperty(offset, new byte[] { (bool)field.GetValue(this) ? (byte)1 : (byte)0 });
                     }
                     else if (field.FieldType.IsEnum)
                     {
                         object enumValue = Convert.ChangeType(field.GetValue(this), Enum.GetUnderlyingType(field.FieldType));
 
-                        TransmitProperty(offset.Value, new byte[] { (byte)Convert.ChangeType(enumValue, TypeCode.Byte) });
+                        TransmitProperty(offset, new byte[] { (byte)Convert.ChangeType(enumValue, TypeCode.Byte) });
                     }
                     else if (field.FieldType == typeof(int))
                     {
@@ -545,14 +470,14 @@ namespace Integra.Core
                         if (BitConverter.IsLittleEndian)
                             Array.Reverse(values);
 
-                        TransmitProperty(offset.Value, new byte[] { values[0], values[1], values[2], values[3] });
+                        TransmitProperty(offset, new byte[] { values[0], values[1], values[2], values[3] });
                     }
                     else
                     {
-                        TransmitProperty(offset.Value, new byte[] { (byte)field.GetValue(this) });
+                        TransmitProperty(offset, new byte[] { (byte)field.GetValue(this) });
                     }
                 }
-            }
+            //}
         }
 
         #endregion
@@ -581,7 +506,7 @@ namespace Integra.Core
         /// <param name="sender">The <see cref="object"/> that raised the event.</param>
         /// <param name="e">A <see cref="SystemExclusiveMessageEventArgs"/> containing event data.</param>
         /// <remarks><i>The event handler is attached inside the <see cref="Device.Initialize{T}(IntegraBase{T})"/> method invoked by <see cref="Initialize"/>.</i></remarks>
-        internal virtual void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
+        protected virtual void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
             IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
 
@@ -727,6 +652,14 @@ namespace Integra.Core
                 return;
 
             DataAccess.Insert(this);
+
+            Dictionary<string, IIntegraDataClass> references = IntegraCache.GetReferences(this);
+
+            foreach (var reference in references)
+            {
+                reference.Value.Insert();
+            }
+
         }
 
 
