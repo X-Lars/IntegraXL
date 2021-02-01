@@ -23,6 +23,24 @@ namespace Integra.Core
         #region Fields
 
         /// <summary>
+        /// Stores all instance fields decorated with the <see cref="Offset"/> attribute.
+        /// </summary>
+        /// <remarks><i>[<see cref="IntegraBase{T}"/>, [<see cref="ushort"/>, <see cref="FieldInfo"/>]] where <see cref="ushort"/> is the offset address.</i></remarks>
+        private static Dictionary<ushort, FieldInfo> _Fields = new Dictionary<ushort, FieldInfo>();
+
+        /// <summary>
+        /// Stores all instance properties decorated with the <see cref="Offset"/> attribute.
+        /// </summary>
+        /// <remarks><i>[<see cref="IntegraBase{T}"/>, [<see cref="ushort"/>, <see cref="PropertyInfo"/>]] where <see cref="ushort"/> is the offset address.</i></remarks>
+        private static Dictionary<ushort, PropertyInfo> _Properties = new Dictionary<ushort, PropertyInfo>();
+
+        /// <summary>
+        /// Stores all non virtual instance references matching the database associated tables.
+        /// </summary>
+        /// <remarks><i>[<see cref="IntegraBase{T}"/>, [<see cref="string"/>, <see cref="IIntegraDataClass"/>]] where <see cref="string"/> is the property and table name.</i></remarks>
+        private static Dictionary<string, IIntegraDataClass> _References = new Dictionary<string, IIntegraDataClass>();
+
+        /// <summary>
         /// Tracks whether the data structure is initialized.
         /// </summary>
         private bool _IsInitialized = false;
@@ -67,7 +85,7 @@ namespace Integra.Core
         /// <remarks><i>Use for creation of a collection of instances.</i></remarks>
         public IntegraBase(IntegraAddress address, IntegraRequest[] requests)
         {
-            Debug.Print($"[{GetType().Name}]");
+            Debug.Print($"[{GetType().Name}] {address}");
 
             Address = address;
             Requests.AddRange(requests);
@@ -114,6 +132,7 @@ namespace Integra.Core
         /// </summary>
         internal protected List<IntegraRequest> Requests { get; private set; } = new List<IntegraRequest>();
 
+        private static bool _IsCached = false;
         /// <summary>
         /// Gets whether the instance is initialized with data.
         /// </summary>
@@ -130,16 +149,20 @@ namespace Integra.Core
                 }
             }
         }
-        
+
         #endregion
 
         #region Methods
-        
+
+
         /// <summary>
         /// Initializes the instance by hooking up to the device system exclusive event listener and request initialization from the INTEGRA-7.
         /// </summary>
         public virtual void Initialize()
         {
+            if(!_IsCached)
+                InitializeCache();
+
             if (Device._IsConnected)
             {
                 Device.Instance.MidiInputDevice.SystemExclusiveReceived += SystemExclusiveReceived;
@@ -163,8 +186,8 @@ namespace Integra.Core
         {
             if (!IsInitialized)
             {
-                //foreach (var field in IntegraCache.GetFields(this))
-                foreach (var field in IntegraCache.GetFields<T>())
+                foreach (var field in GetFields())
+                //foreach (var field in IntegraCache.GetFields<T>())
                 {
                     if (field.Value.FieldType.IsArray)
                     {
@@ -267,7 +290,120 @@ namespace Integra.Core
 
         #region Methods: Private
 
+        /// <summary>
+        /// Generates the cache for all non public <see cref="Offset"/> decorated fields of <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The <see cref="IntegraBase{T}"/> type specifier.</typeparam>
+        /// <remarks><i>Contains only fields associated with the INTEGRA-7.</i></remarks>
+        private void InitializeCache()
+        {
+            if (_IsCached)
+                return;
 
+            Debug.Print($"[{GetType().Name}.{nameof(InitializeCache)}] {typeof(T).Name}");
+
+            FieldInfo[] fields = typeof(T).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+
+            foreach (var field in fields)
+            {
+                Offset offset = field.GetCustomAttribute<Offset>(false);
+
+                if (offset != null)
+                {
+                    _Fields.Add(offset.Value, field);
+                }
+            }
+
+            PropertyInfo[] properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var property in properties)
+            {
+                Offset offset = property.GetCustomAttribute<Offset>(false);
+
+                if (offset != null)
+                {
+                    _Properties.Add(offset.Value, property);
+                }
+            }
+
+            _IsCached = true;
+        }
+
+        private List<IIntegraDataClass> GetReferences()
+        {
+            List<IIntegraDataClass> references = new List<IIntegraDataClass>();
+
+            PropertyInfo[] properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var property in properties)
+            {
+                // Exclude virtual references
+                if (!property.GetMethod.IsVirtual || property.GetMethod.IsFinal)
+                {
+                    if (property.PropertyType.GetInterfaces().Contains(typeof(IIntegraDataClass)))
+                    {
+                        references.Add((IIntegraDataClass)property.GetValue(this));
+                    }
+                }
+            }
+
+            return references;
+        }
+
+
+        /// <summary>
+        /// Gets the property with the specified offset.
+        /// </summary>
+        /// <typeparam name="T">The instance type specifier.</typeparam>
+        /// <param name="offset">The offset associated to the property.</param>
+        /// <returns>The property at the specified offset.</returns>
+        private static PropertyInfo Property(ushort offset)
+        {
+            return _Properties.ContainsKey(offset) ? _Properties[offset] : null;
+        }
+
+        /// <summary>
+        /// Gets the offset of the specified property.
+        /// </summary>
+        /// <typeparam name="T">The instance type specifier.</typeparam>
+        /// <param name="name">The property name.</param>
+        /// <returns>The offset of the property.</returns>
+        private static ushort PropertyOffset(string name)
+        {
+            return _Properties.Where(v => v.Value.Name == name).FirstOrDefault().Key;
+        }
+
+        private static bool IsIntegraProperty(string name)
+        {
+            foreach(var property in _Properties.Values)
+            {
+                if (property.Name == name)
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the field with the specified offset.
+        /// </summary>
+        /// <typeparam name="T">The instance type specifier.</typeparam>
+        /// <param name="offset">The offset associated to the field.</param>
+        /// <returns>The field at the specified offset.</returns>
+        public static FieldInfo Field(ushort offset)
+        {
+            return _Fields.ContainsKey(offset) ? _Fields[offset] : null;
+        }
+
+        /// <summary>
+        /// Gets the field cache of the specified type <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The instance type specifier.</typeparam>
+        /// <returns>The cache associated to <typeparamref name="T"/>.</returns>
+        public static Dictionary<ushort, FieldInfo> GetFields()
+        {
+            return _Fields;
+        }
 
         /// <summary>
         /// Initializes one or more fields from a received system exclusive message.
@@ -285,8 +421,8 @@ namespace Integra.Core
 
             for (int fieldOffset = 0, propertyOffset = 0; fieldOffset < syx.Data.Length; fieldOffset++, propertyOffset++)
             {
-                //FieldInfo field = IntegraCache.Field(this, (ushort)(offset + fieldOffset));
-                FieldInfo field = IntegraCache.Field<T>((ushort)(offset + fieldOffset));
+                FieldInfo field = Field((ushort)(offset + fieldOffset));
+                //FieldInfo field = IntegraCache.Field<T>((ushort)(offset + fieldOffset));
 
 
                 //FieldInfo field = GetCachedField((ushort)(offset + fieldOffset));
@@ -362,8 +498,8 @@ namespace Integra.Core
                 }
 
                 // Retrieve the accompanied property with the same offset to raise the NotifyPropertyChanged event
-                //PropertyInfo property = GetCachedProperty((ushort)(offset + propertyOffset));
-                PropertyInfo property = IntegraCache.Property<T>((ushort)(offset + propertyOffset));
+                PropertyInfo property = Property((ushort)(offset + propertyOffset));
+                //PropertyInfo property = IntegraCache.Property<T>((ushort)(offset + propertyOffset));
 
                 if (property != null)
                 {
@@ -408,16 +544,17 @@ namespace Integra.Core
         private void TransmitIndexerProperty(string propertyName, int? index)
         {
             //Offset offset = GetPropertyOffset(propertyName);
-            ushort offset = IntegraCache.PropertyOffset<T>(propertyName);
+            ushort offset = PropertyOffset(propertyName);
+            //ushort offset = IntegraCache.PropertyOffset<T>(propertyName);
 
             //if (offset != null)
             //{
-                //if(IntegraCache.Field(this, offset.Value) != null)
-                if (IntegraCache.Field<T>(offset) != null)
+                if(Field(offset) != null)
+                //if (IntegraCache.Field<T>(offset) != null)
                 //if (_FieldOffsetCache.ContainsKey(offset.Value))
                 {
-                    //FieldInfo field = IntegraCache.Field(this, offset.Value);
-                    FieldInfo field = IntegraCache.Field<T>(offset);
+                    FieldInfo field = Field(offset);
+                    //FieldInfo field = IntegraCache.Field<T>(offset);
 
 
                     //FieldInfo field = _FieldOffsetCache[offset.Value];
@@ -494,9 +631,8 @@ namespace Integra.Core
         private void DeviceConnected(object sender, EventArgs e)
         {
             Device.Connected -= DeviceConnected;
-
+            //Initialize();
             Device.Instance.MidiInputDevice.SystemExclusiveReceived += SystemExclusiveReceived;
-
             Task.Factory.StartNew(() => Device.Instance.Initialize(this), TaskCreationOptions.LongRunning);
         }
 
@@ -510,32 +646,67 @@ namespace Integra.Core
         {
             IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
 
-            if(syx.Address == Address)
-            {
-                // Exact match
-                if (syx.Data.Length == Requests[0].Size)
-                {
-                    if (Initialize(syx.Data))
-                    {
-                        // Set the Part property for IIntegraPartial implementing classes which is only present after initialization
-                        if(typeof(T).GetInterfaces().Contains(typeof(IIntegraPartial)))
-                        {
-                            ((IIntegraPartial)this).Part = (IntegraParts)((Address & 0x00000F00) >> 8);
-                        }
 
-                        Device.Instance.ReportProgress(this, new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
+
+            if(!IsInitialized)
+            {
+                if (syx.Address == Address)
+                {
+                    // Exact match
+                    if (syx.Data.Length == Requests[0].Size)
+                    {
+                        if (Initialize(syx.Data))
+                        {
+                            // Set the Part property for IIntegraPartial implementing classes which is only present after initialization
+                            if (typeof(T).GetInterfaces().Contains(typeof(IIntegraPartial)))
+                            {
+                                ((IIntegraPartial)this).Part = (IntegraParts)((Address & 0x00000F00) >> 8);
+                            }
+
+                            Device.Instance.ReportProgress(this, new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
+                        }
+                    }
+                    else
+                    {
+                        InitializeField(syx);
                     }
                 }
-                else
+            }
+            else
+            {
+                //TODO: Check MFX 0xFFFFFF00 won't catch 00 00 01 11 ? or is it catched because of receiving a complete array
+                if ((syx.Address & 0xFFFFFF00) == (Address & 0xFFFFFF00))
                 {
                     InitializeField(syx);
                 }
             }
-            // TODO: Check MFX 0xFFFFFF00 won't catch 00 00 01 11 ?
-            else if ((syx.Address & 0xFFFFFF00) == (Address & 0xFFFFFF00))
-            {
-                InitializeField(syx);
-            }
+
+            //if(syx.Address == Address)
+            //{
+            //    // Exact match
+            //    if (syx.Data.Length == Requests[0].Size)
+            //    {
+            //        if (Initialize(syx.Data))
+            //        {
+            //            // Set the Part property for IIntegraPartial implementing classes which is only present after initialization
+            //            if(typeof(T).GetInterfaces().Contains(typeof(IIntegraPartial)))
+            //            {
+            //                ((IIntegraPartial)this).Part = (IntegraParts)((Address & 0x00000F00) >> 8);
+            //            }
+
+            //            Device.Instance.ReportProgress(this, new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
+            //        }
+            //    }
+            //    else
+            //    {
+            //        InitializeField(syx);
+            //    }
+            //}
+            //// TODO: Check MFX 0xFFFFFF00 won't catch 00 00 01 11 ?
+            //else if ((syx.Address & 0xFFFFFF00) == (Address & 0xFFFFFF00))
+            //{
+            //    InitializeField(syx);
+            //}
         }
 
         #endregion
@@ -557,14 +728,17 @@ namespace Integra.Core
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-            if(transmit)
-            {
-                if(IsInitialized)
+            if (!IsIntegraProperty(propertyName))
+                return;
+
+            //if (transmit)
+            //{
+                if (IsInitialized)
                 {
-                    if(!string.IsNullOrEmpty(propertyName))
+                    if (!string.IsNullOrEmpty(propertyName))
                         TransmitIndexerProperty(propertyName, null);
                 }
-            }
+            //}
         }
 
         /// <summary>
@@ -576,13 +750,16 @@ namespace Integra.Core
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
 
-            if (transmit)
-            {
+            if (!IsIntegraProperty("Item"))
+                return;
+
+            //if (transmit)
+            //{
                 if (IsInitialized)
                 {
                     TransmitIndexerProperty("Item", index);
                 }
-            }
+            //}
         }
 
         #endregion
@@ -644,14 +821,31 @@ namespace Integra.Core
 
         #endregion
 
-        
+
 
         #region IIntegraDataClass
 
+        // TODO: Remove temporary exclude
+        private static Type[] _Types = new Type[]
+        {
+            typeof(StudioSet),
+            typeof(StudioSetCommon),
+            typeof(StudioSetMidi),
+            typeof(StudioSetPart),
+            typeof(StudioSetPartEQ),
+            typeof(TemporaryTone)
+        };
+
         public virtual void Update()
         {
-            if (GetType() != typeof(StudioSetMidi) && GetType() != typeof(StudioSet) && GetType() != typeof(StudioSetCommon))
+            // TODO: Remove temporary exclude
+            if (!_Types.Contains(GetType()))
                 return;
+
+            foreach (var reference in GetReferences())
+            {
+                reference.Update();
+            }
 
             DataAccess.Update(this);
 
@@ -659,24 +853,28 @@ namespace Integra.Core
 
         public virtual void Insert()
         {
-            if (GetType() != typeof(StudioSetMidi) && GetType() != typeof(StudioSet) && GetType() != typeof(StudioSetCommon))
+            // TODO: Remove temporary exclude
+            if (!_Types.Contains(GetType()))
                 return;
 
+            foreach (var reference in GetReferences())
+            {
+                reference.Insert();
+            }
+
             DataAccess.Insert(this);
-
-            //Dictionary<string, IIntegraDataClass> references = IntegraCache.GetReferences(this);
-
-            //foreach (var reference in references)
-            //{
-            //    reference.Value.Insert();
-            //}
-
         }
 
         public virtual void Delete()
         {
-            if (GetType() != typeof(StudioSetMidi) && GetType() != typeof(StudioSet) && GetType() != typeof(StudioSetCommon))
+            // TODO: Remove temporary exclude
+            if (!_Types.Contains(GetType()))
                 return;
+
+            foreach (var reference in GetReferences())
+            {
+                reference.Delete();
+            }
 
             DataAccess.Delete(this);
         }
@@ -684,8 +882,13 @@ namespace Integra.Core
         public virtual void Truncate()
         {
             // TODO: Remove temporary exclusion
-            if (GetType() != typeof(StudioSetMidi) && GetType() != typeof(StudioSet) && GetType() != typeof(StudioSetCommon) && GetType() != typeof(Session))
+            if (!_Types.Contains(GetType()))
                 return;
+
+            foreach (var reference in GetReferences())
+            {
+                reference.Truncate();
+            }
 
             DataAccess.Truncate(this);
         }
@@ -693,7 +896,7 @@ namespace Integra.Core
         public virtual void Select(int id)
         {
             // TODO: Remove temporary exclude
-            if (GetType() != typeof(StudioSetMidi) && GetType() != typeof(StudioSet) && GetType() != typeof(StudioSetCommon))
+            if (!_Types.Contains(GetType()))
                 return;
 
             DataAccess.Select(this, id);

@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 
 namespace Integra.Models
 {
-    public class PCMSynthTone : IntegraBase<PCMSynthTone>, IToneMFX
+    public class PCMSynthTone : IntegraBase<PCMSynthTone>//, IToneMFX
     {
-        private ToneMFX _MFX;
+        //private ToneMFX _MFX;
 
         public PCMSynthTone(IntegraAddress address) : base(address)
         {
             Name = "PCM Synth Tone";
-            _MFX = new ToneMFX(address);
+            //_MFX = new ToneMFX(address);
         }
 
-        public ToneMFX MFX
-        {
-            get { return _MFX; }
-        }
+        //public ToneMFX MFX
+        //{
+        //    get { return _MFX; }
+        //}
     }
 }

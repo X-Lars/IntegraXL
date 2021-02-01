@@ -22,8 +22,8 @@ namespace IntegraXL
     {
         private ProgressDialog _Dialog;
         private MessageDialog _MessageDialog;
-
         private static readonly object _Lock = new object();
+
         #region Constructor
         
         /// <summary>
@@ -43,8 +43,7 @@ namespace IntegraXL
             Device.OperationStart    += IntegraOperationStart;
             Device.OperationProgress += IntegraOperationProgress;
             Device.OperationComplete += IntegraOperationComplete;
-
-
+            CommandBindings.Add(new CommandBinding(_TestCommand, OnTest));
             CommandBindings.Add(new CommandBinding(_ShowWindowCommand, OnShowWindow));
             CommandBindings.Add(new CommandBinding(_ShowIntegraWindowCommand, OnShowIntegraWindow, CanExecuteOnConnection));
             CommandBindings.Add(new CommandBinding(_ShowIntegraMFXWindowCommand, OnShowIntegraMFXWindow));
@@ -53,6 +52,7 @@ namespace IntegraXL
             CommandBindings.Add(new CommandBinding(_SaveCommand, OnSave, CanExecuteOnSave));
             CommandBindings.Add(new CommandBinding(_UpdateCommand, OnUpdate, CanExecuteUpdate));
             CommandBindings.Add(new CommandBinding(_TruncateCommand, OnTruncate));
+            CommandBindings.Add(new CommandBinding(_DeleteCommand, OnDelete, CanExecuteDelete));
             CommandBindings.Add(new CommandBinding(_AddFavoriteCommand, OnAddFavorite));
             Host.SelectionChanged += HostSelectionChanged;
 
@@ -62,8 +62,29 @@ namespace IntegraXL
 
         }
 
-        
-       
+        private void CanExecuteDelete(object sender, CanExecuteRoutedEventArgs e)
+        {
+            // TODO: Temp value
+            e.CanExecute = true;
+        }
+
+        private void OnDelete(object sender, ExecutedRoutedEventArgs e)
+        {
+            MainWindow caller = sender as MainWindow;
+
+            if (caller != null)
+            {
+                Device.Session.Delete();
+            }
+        }
+
+        private void OnTest(object sender, ExecutedRoutedEventArgs e)
+        {
+            string testString = "TEST";
+            DataAccess.Test(Integra.StudioSet.MIDI);
+            DataAccess.Test(Integra.StudioSet);
+            DataAccess.Test(testString);
+        }
 
         protected override void OnClosed(EventArgs e)
         {
@@ -89,7 +110,8 @@ namespace IntegraXL
 
         #region Commands: Registration
 
-
+        private static RoutedUICommand _TestCommand = new RoutedUICommand(nameof(Test), nameof(Test), typeof(MainWindow));
+        private static RoutedUICommand _DeleteCommand = new RoutedUICommand(nameof(Delete), nameof(Delete), typeof(MainWindow));
         private static RoutedUICommand _LoadCommand = new RoutedUICommand(nameof(Load), nameof(Load), typeof(MainWindow));
         private static RoutedUICommand _SaveCommand = new RoutedUICommand(nameof(Save), nameof(Save), typeof(MainWindow));
         private static RoutedUICommand _TruncateCommand = new RoutedUICommand(nameof(Truncate), nameof(Truncate), typeof(MainWindow));
@@ -115,7 +137,14 @@ namespace IntegraXL
         #endregion
 
         #region Commands: Properties
-
+        public static ICommand Test
+        {
+            get { return _TestCommand; }
+        }
+        public static ICommand Delete
+        {
+            get { return _DeleteCommand; }
+        }
         public static ICommand Update
         {
             get { return _UpdateCommand; }
@@ -201,7 +230,6 @@ namespace IntegraXL
             if(caller != null)
             {
                 Device.Session.Insert();
-                //caller.Integra.ses.Save();
             }
         }
 

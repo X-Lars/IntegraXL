@@ -8,26 +8,28 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
                     Title="Sessions">
-    <local:CommonWindow.Resources>
-        
-    </local:CommonWindow.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
             
-        <xl:FilteredDataGrid AutoGenerateColumns="False" 
+        <xl:FilteredDataGrid x:Name="Sessions" 
+                             AutoGenerateColumns="False" 
+                             DataContext="{Binding DeviceContext}"
                              Grid.Column="0"
                              IsReadOnly="True"
-                             ItemsSource="{Binding Session.ID}"
-                             SelectedIndex="{Binding Session.ID}"
+                             ItemsSource="{Binding Session.Sessions}"
+                             SelectedValue="{Binding Session.ID}"
+                             SelectedValuePath="ID"
                              SelectionMode="Single"
                              VirtualizingPanel.IsVirtualizing="True"
                              VirtualizingPanel.VirtualizationMode="Recycling">
 
             <xl:FilteredDataGrid.Columns>
                 
+                <!-- TODO: Remove testing purpose -->
                 <xl:FilteredDataGridTextColumn Binding="{Binding Path=ID, StringFormat='0000'}"
                                                Filter="False"
                                                Header="ID"
@@ -36,7 +38,8 @@
                 <xl:FilteredDataGridTextColumn Binding="{Binding Path=Name}"
                                                Filter="True"
                                                Header="Name"
-                                               MinWidth="200"/>
+                                               MinWidth="200"
+                                               SortDirection="Ascending"/>
 
                 <xl:FilteredDataGridTextColumn Binding="{Binding Path=Type}"
                                                Filter="True"
@@ -57,7 +60,7 @@
             
             <StackPanel>
                 
-                <Button Content="Load"
+                <Button Command="{Binding Load}" Content="Load"
                         MinWidth="50"/>
                 <Button Content="Delete"
                         MinWidth="50"/>

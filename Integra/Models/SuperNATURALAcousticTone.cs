@@ -9,18 +9,17 @@ using System.Threading.Tasks;
 
 namespace Integra.Models
 {
-    public class SuperNATURALAcousticTone : IntegraBase<SuperNATURALAcousticTone>, IToneMFX
+    public class SuperNATURALAcousticTone : IntegraBase<SuperNATURALAcousticTone>//, IToneMFX
     {
         private SuperNATURALAcousticToneCommon _Common;
-        private ToneMFX _MFX;
+        //private ToneMFX _MFX;
 
         public SuperNATURALAcousticTone(IntegraAddress address) : base(address)
         {
             Name = "SuperNATURAL Acoustic Tone";
-            Console.WriteLine($"[{nameof(SuperNATURALAcousticTone)}] {Address}");
 
             _Common = new SuperNATURALAcousticToneCommon(address);
-            _MFX = new ToneMFX(address);
+            //_MFX = new ToneMFX(address);
         }
 
         public SuperNATURALAcousticToneCommon Common
@@ -28,18 +27,18 @@ namespace Integra.Models
             get { return _Common; }
         }
 
-        public ToneMFX MFX
-        {
-            get { return _MFX; }
-            //set
-            //{
-            //    if(_MFX != value)
-            //    {
-            //        _MFX = value;
-            //        NotifyPropertyChanged();
-            //    }
-            //}
-        }
+        //public ToneMFX MFX
+        //{
+        //    get { return _MFX; }
+        //    //set
+        //    //{
+        //    //    if(_MFX != value)
+        //    //    {
+        //    //        _MFX = value;
+        //    //        NotifyPropertyChanged();
+        //    //    }
+        //    //}
+        //}
 
         //internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         //{

@@ -65,6 +65,8 @@
                                            Content="Test Truncate"/>
                             <xl:LinkButton Command="{Binding Update, RelativeSource={RelativeSource AncestorType=Window}}"
                                            Content="Test Update"/>
+                            <xl:LinkButton Command="{Binding Delete, RelativeSource={RelativeSource AncestorType=Window}}"
+                                           Content="Test Delete"/>
 
                         </StackPanel>
                     </xl:SidebarSection>

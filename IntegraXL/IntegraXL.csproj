@@ -59,7 +59,7 @@
   <ItemGroup>
     <Reference Include="ControlsXL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ControlsXL\ControlsXL\ControlsXL\bin\Debug\ControlsXL.dll</HintPath>
+      <HintPath>..\..\..\ControlsXL\ControlsXL\ControlsXL\bin\Release\ControlsXL.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -98,6 +98,9 @@
     </Compile>
     <Compile Include="UserControls\MFX\Equalizer.xaml.cs">
       <DependentUpon>Equalizer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MFX\Spectrum.xaml.cs">
+      <DependentUpon>Spectrum.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\MFX\Thru.xaml.cs">
       <DependentUpon>Thru.xaml</DependentUpon>
@@ -151,6 +154,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\MFX\Equalizer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MFX\Spectrum.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

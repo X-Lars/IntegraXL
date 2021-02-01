@@ -15,7 +15,6 @@ namespace Integra.Models
         public SuperNATURALAcousticToneMFX(IntegraAddress address) : base(address + 0x00000200, 0x00000111)
         {
             Name = "SuperNATURAL Acoustic Tone MFX";
-            Console.WriteLine($"[{nameof(SuperNATURALAcousticToneMFX)}] {Address}");
         }
 
         [Offset(0x0000)]

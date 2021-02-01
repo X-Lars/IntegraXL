@@ -11,7 +11,7 @@ namespace Integra.Models
     /// <summary>
     /// 
     /// </summary>
-    [Table("Favorites")]
+    //[Table("Favorites")]
     public class Tone : IntegraBase<Tone>, IIntegraDataClass, IIntegraAddressable
     {
         #region Fields
@@ -26,7 +26,10 @@ namespace Integra.Models
         #endregion
 
         #region Constructor
+        public Tone()
+        {
 
+        }
         public Tone(byte msb, byte lsb, byte pc) : base(0x0F000402)
         {
             ID = ((lsb % 64) * 128) + pc + 1;
@@ -34,7 +37,7 @@ namespace Integra.Models
             LSB = lsb;
             PC = pc;
 
-            ToneBank = this.ToneBank();
+            //ToneBank = this.ToneBank();
             IsUserTone = this.IsUserTone();
             IsExpansion = this.IsExpansion();
 
@@ -51,7 +54,7 @@ namespace Integra.Models
             PC = tone.PC;
             Category = tone.Category;
             Name = tone.Name;
-            ToneBank = this.ToneBank();
+            //ToneBank = this.ToneBank();
             IsUserTone = this.IsUserTone();
             IsExpansion = this.IsExpansion();
             Requests.Add(new IntegraRequest(MSB, LSB, PC, 0x01));
@@ -153,7 +156,10 @@ namespace Integra.Models
             }
         }
 
-        public virtual IntegraToneBanks ToneBank { get; set; }
+        public virtual IntegraToneBanks ToneBank
+        {
+            get { return this.ToneBank(); }
+        }
 
         public virtual bool IsUserTone { get; set; }
         public virtual bool IsExpansion { get; set; }

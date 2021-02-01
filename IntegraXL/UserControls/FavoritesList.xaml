@@ -14,24 +14,7 @@
         <converters:ExpansionConverter x:Key="ExpansionConverter"/>
         
     </ItemsControl.Resources>
-    <!--<ItemsControl.ContextMenu>
-        <ContextMenu Opened="ContextMenuOpened">
-            <MenuItem Header="Remove"
-                      Command="{Binding Remove}"
-                      CommandParameter="{Binding ElementName=b}"
-                      CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"/>
-        </ContextMenu>
-    </ItemsControl.ContextMenu>-->
-    <!--<StackPanel>
-        <ItemsControl x:Name="List" ItemsSource="{Binding Favorites}"
-                      MaxHeight="200">-->
-            <!--<ItemsControl.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Remove" 
-                              Command="{Binding DataContext.Remove}"/>
-                </ContextMenu>
-            </ItemsControl.ContextMenu>-->
-            
+    
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Button x:Name="b" 

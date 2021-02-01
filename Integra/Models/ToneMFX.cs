@@ -47,12 +47,7 @@ namespace Integra.Models
         /// Creates and initializes a new <see cref="ToneMFX"/> instance.
         /// </summary>
         /// <param name="address">The <see cref="IntegraAddress"/> of the parent INTEGRA-7 tone structure.</param>
-        public ToneMFX(IntegraAddress address) : base(address + 0x00000200, 0x00000111)
-        {
-            Debug.Print($"[{nameof(ToneMFX)}] {Address}");
-
-            Name = "Tone MFX";
-        }
+        public ToneMFX(IntegraAddress address) : base(address + 0x00000200, 0x00000111) { }
 
         #endregion
 
@@ -252,6 +247,7 @@ namespace Integra.Models
             switch (type)
             {
                 case IntegraMFXTypes.Equalizer: _MFXModel = new Equalizer(); break;
+                case IntegraMFXTypes.Spectrum:  _MFXModel = new Spectrum();  break;
                 default:
                     _MFXModel = new Thru();
                     break;
@@ -301,7 +297,6 @@ namespace Integra.Models
             if (!IsInitialized)
             {
                 base.Initialize(data);
-
                 SetValidationModel(Type);
             }
 

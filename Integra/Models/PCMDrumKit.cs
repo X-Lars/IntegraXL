@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace Integra.Models
 {
-    public class PCMDrumKit : IntegraBase<PCMDrumKit>, IToneMFX
+    public class PCMDrumKit : IntegraBase<PCMDrumKit>//, IToneMFX
     {
-        private ToneMFX _MFX;
+        //private ToneMFX _MFX;
 
         public PCMDrumKit(IntegraAddress address) : base(address)
         {
             Name = "PCM Drum Kit";
 
-            _MFX = new ToneMFX(address);
+            //_MFX = new ToneMFX(address);
         }
 
-        public ToneMFX MFX
-        {
-            get { return _MFX; }
-        }
+        //public ToneMFX MFX
+        //{
+        //    get { return _MFX; }
+        //}
     }
 }

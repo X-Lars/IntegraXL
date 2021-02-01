@@ -42,6 +42,7 @@ namespace IntegraXL.Windows
         private void MFXTypeChanged(object sender, SelectionChangedEventArgs e)
         {
             InitializeControl();
+            //MFXContext.MFX.Reinitialize();
         }
 
         #endregion
@@ -67,8 +68,7 @@ namespace IntegraXL.Windows
             }
         }
 
-
-       
+        
 
         private UserControl _MFXControl;
         /// <summary>
@@ -103,6 +103,7 @@ namespace IntegraXL.Windows
             switch (MFXType)
             {
                 case IntegraMFXTypes.Equalizer: mfxType = typeof(Equalizer); break;
+                case IntegraMFXTypes.Spectrum: mfxType = typeof(Spectrum); break;
             }
 
             MFXControl = (UserControl)Activator.CreateInstance(mfxType);

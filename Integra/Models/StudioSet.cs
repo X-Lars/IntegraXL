@@ -1,9 +1,7 @@
 ﻿using Integra.Core;
 using Integra.Core.Interfaces;
-using Integra.Database;
 using MidiXL;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Integra.Models
@@ -24,6 +22,7 @@ namespace Integra.Models
         StudioSetCommon _Common = new StudioSetCommon();
         IntegraBasePartial<StudioSetMidi> _Midi = new IntegraBasePartial<StudioSetMidi>(0x18001000, 0x00000001);
         IntegraBasePartial<StudioSetPart> _StudioSetParts = new IntegraBasePartial<StudioSetPart>(0x18002000, 0x00004D);
+        IntegraBasePartial<StudioSetPartEQ> _PartsEQ = new IntegraBasePartial<StudioSetPartEQ>(0x18005000, 0x00000008);
 
         #endregion
 
@@ -32,6 +31,7 @@ namespace Integra.Models
         /// <summary>
         /// Creates and initializes a new connected <see cref="StudioSet"/> instance.
         /// </summary>
+        /// <remarks><i>Studio set listens for studio set part 1 to initialize the selected tone property.</i></remarks>
         public StudioSet() : base(0x18002000, 0x0000004D) { }
 
         #endregion
@@ -91,26 +91,27 @@ namespace Integra.Models
         {
             get
             {
-                switch (ToneType)
-                {
-                    case IntegraToneTypes.SuperNATURALAcousticTone:
-                        return Parts[(int)SelectedPart].SuperNATURALAcousticTone;
+                return Parts[(int)SelectedPart].TemporaryTone;
+                //switch (ToneType)
+                //{
+                //    case IntegraToneTypes.SuperNATURALAcousticTone:
+                //        return Parts[(int)SelectedPart].SuperNATURALAcousticTone;
 
-                    case IntegraToneTypes.SuperNATURALSynthTone:
-                        return Parts[(int)SelectedPart].SuperNATURALSynthTone;
+                //    case IntegraToneTypes.SuperNATURALSynthTone:
+                //        return Parts[(int)SelectedPart].SuperNATURALSynthTone;
 
-                    case IntegraToneTypes.SuperNATURALDrumkit:
-                        return Parts[(int)SelectedPart].SuperNATURALDrumKit;
+                //    case IntegraToneTypes.SuperNATURALDrumkit:
+                //        return Parts[(int)SelectedPart].SuperNATURALDrumKit;
 
-                    case IntegraToneTypes.PCMSynthTone:
-                        return Parts[(int)SelectedPart].PCMSynthTone;
+                //    case IntegraToneTypes.PCMSynthTone:
+                //        return Parts[(int)SelectedPart].PCMSynthTone;
 
-                    case IntegraToneTypes.PCMDrumkit:
-                        return Parts[(int)SelectedPart].PCMDrumKit;
+                //    case IntegraToneTypes.PCMDrumkit:
+                //        return Parts[(int)SelectedPart].PCMDrumKit;
 
-                    default:
-                        return null;
-                }
+                //    default:
+                //        return null;
+                //}
             }
         }
 
@@ -137,7 +138,7 @@ namespace Integra.Models
             }
         }
 
-        #region Properties: Data Access
+        #region Properties
 
         public StudioSetCommon Common
         {
@@ -147,19 +148,16 @@ namespace Integra.Models
         public IntegraBasePartial<StudioSetMidi> MIDI
         {
             get { return _Midi; }
-            set
-            {
-                if(_Midi != value)
-                {
-                    _Midi = value;
-                    NotifyPropertyChanged();
-                }
-            }
         }
 
         public IntegraBasePartial<StudioSetPart> Parts
         {
             get { return _StudioSetParts; }
+        }
+
+        public IntegraBasePartial<StudioSetPartEQ> PartsEQ
+        {
+            get { return _PartsEQ; }
         }
 
         #endregion
@@ -176,6 +174,7 @@ namespace Integra.Models
             Debug.Print($"[{nameof(StudioSet)}.{nameof(SaveFavorite)}]");
 
             Tone.Insert();
+            NotifyPropertyChanged(nameof(Tone));
         }
 
         #endregion
@@ -189,16 +188,19 @@ namespace Integra.Models
         /// <param name="e"></param>
         protected override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
         {
-            IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
-
-            // Studio Set Part
-            if ((syx.Address & 0xFFFFF000) == (Address & 0xFFFFF000))
+            if (!IsInitialized)
             {
-                //
-                if(((syx.Address & 0x00000F00) >> 8) == (uint)SelectedPart)
+                IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
+
+                // Studio Set Part
+                if ((syx.Address & 0xFFFFF000) == (Address & 0xFFFFF000))
                 {
-                    Initialize(syx.Data);
-                    Console.WriteLine(syx);
+                    // Partial
+                    if (((syx.Address & 0x00000F00) >> 8) == (uint)SelectedPart)
+                    {
+                        Initialize(syx.Data);
+                        Console.WriteLine(syx);
+                    }
                 }
             }
         }
@@ -215,6 +217,8 @@ namespace Integra.Models
                 Tone = new Tone(data[6], data[7], data[8]);
 
                 IsInitialized = true;
+
+                Device.Instance.MidiInputDevice.SystemExclusiveReceived -= SystemExclusiveReceived;
             }
 
             return IsInitialized;

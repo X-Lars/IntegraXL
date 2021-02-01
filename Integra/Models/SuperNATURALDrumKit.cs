@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 
 namespace Integra.Models
 {
-    public class SuperNATURALDrumKit : IntegraBase<SuperNATURALDrumKit>, IToneMFX
+    public class SuperNATURALDrumKit : IntegraBase<SuperNATURALDrumKit>//, IToneMFX
     {
-        private ToneMFX _MFX;
+        //private ToneMFX _MFX;
 
         public SuperNATURALDrumKit(IntegraAddress address) : base(address)
         {
             Name = "SuperNATURAL Drum Kit";
-            _MFX = new ToneMFX(address);
+            //_MFX = new ToneMFX(address);
         }
 
-        public ToneMFX MFX
-        {
-            get { return _MFX; }
-        }
+        //public ToneMFX MFX
+        //{
+        //    get { return _MFX; }
+        //}
     }
 }

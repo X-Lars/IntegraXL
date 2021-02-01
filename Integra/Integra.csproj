@@ -76,7 +76,6 @@
     <Compile Include="Core\IntegraAttributes.cs" />
     <Compile Include="Core\IntegraBase.cs" />
     <Compile Include="Core\IntegraBaseCollection.cs" />
-    <Compile Include="Core\IntegraCache.cs" />
     <Compile Include="Core\IntegraDataTemplate.cs" />
     <Compile Include="Core\IntegraBasePartial.cs" />
     <Compile Include="Core\IntegraBaseToneBank.cs" />
@@ -104,6 +103,7 @@
     <Compile Include="Database\SQLParameter.cs" />
     <Compile Include="Database\SQLData.cs" />
     <Compile Include="Device.cs" />
+    <Compile Include="Models\MFX\Spectrum.cs" />
     <Compile Include="Models\MFX\Equalizer.cs" />
     <Compile Include="Models\MFX\Thru.cs" />
     <Compile Include="Models\PCMDrumKit.cs" />
@@ -113,6 +113,7 @@
     <Compile Include="Models\StudioSetCommon.cs" />
     <Compile Include="Models\StudioSetMidi.cs" />
     <Compile Include="Models\StudioSetPart.cs" />
+    <Compile Include="Models\StudioSetPartEQ.cs" />
     <Compile Include="Models\StudioSets.cs" />
     <Compile Include="Models\SuperNATURALAcousticTone.cs" />
     <Compile Include="Models\SuperNATURALAcousticToneCommon.cs" />

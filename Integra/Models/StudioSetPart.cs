@@ -1,5 +1,6 @@
 ﻿using Integra.Core;
 using Integra.Core.Interfaces;
+using MidiXL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,19 +9,15 @@ using System.Threading.Tasks;
 
 namespace Integra.Models
 {
-    public sealed class StudioSetPart : IntegraBase<StudioSetPart>, IIntegraPartial
+    public class StudioSetPart : IntegraBase<StudioSetPart>, IIntegraPartial
     {
         private IntegraParts _Part;
         
-        private IntegraToneTypes _ToneType = IntegraToneTypes.SuperNATURALAcousticTone;
+        private IntegraToneTypes _Type = IntegraToneTypes.SuperNATURALAcousticTone;
 
         private TemporaryTone _TemporaryTone;
 
-        private SuperNATURALAcousticTone _SuperNaturalAcousticTone;
-        private SuperNATURALSynthTone _SuperNaturalSynthTone;
-        private SuperNATURALDrumKit _SuperNaturalDrumKit;
-        private PCMSynthTone _PCMSynthTone;
-        private PCMDrumKit _PCMDrumKit;
+        
 
         [Offset(0x0000)] private byte _ReceiveChannel;
         [Offset(0x0001)] private byte _ReceiveSwitch;
@@ -30,13 +27,17 @@ namespace Integra.Models
 
         public StudioSetPart()
         {
-
         }
 
-        public StudioSetPart(IntegraParts part) : base(new IntegraAddress(0x18, 0x00, (byte)(0x20 + part), 0x00), new IntegraRequest(0x00, 0x00, 0x00, 0x4D))
+        public StudioSetPart(IntegraParts part)// : base(new IntegraAddress(0x18, 0x00, (byte)(0x20 + part), 0x00), new IntegraRequest(0x00, 0x00, 0x00, 0x4D))
         {
             Name = $"Studio Set Part {(int)part + 1}";
             Part = part;
+
+            Address = new IntegraAddress(0x18, 0x00, (byte)(0x20 + part), 0x00);
+            Requests.Add(new IntegraRequest(0x0000004D));
+
+            Initialize();
         }
 
         public IntegraParts Part
@@ -49,12 +50,12 @@ namespace Integra.Models
             }
         }
 
-        public IntegraToneTypes ToneType
+        public IntegraToneTypes Type
         {
-            get { return _ToneType; }
+            get { return _Type; }
             set
             {
-                _ToneType = value;
+                _Type = value;
                 NotifyPropertyChanged();
             }
         }
@@ -72,55 +73,7 @@ namespace Integra.Models
             }
         }
 
-        public SuperNATURALAcousticTone SuperNATURALAcousticTone
-        {
-            get { return _SuperNaturalAcousticTone; }
-            private set
-            {
-                _SuperNaturalAcousticTone = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        public SuperNATURALSynthTone SuperNATURALSynthTone
-        {
-            get { return _SuperNaturalSynthTone; }
-            private set
-            {
-                _SuperNaturalSynthTone = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        public SuperNATURALDrumKit SuperNATURALDrumKit
-        {
-            get { return _SuperNaturalDrumKit; }
-            private set
-            {
-                _SuperNaturalDrumKit = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        public PCMSynthTone PCMSynthTone
-        {
-            get { return _PCMSynthTone; }
-            private set
-            {
-                _PCMSynthTone = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        public PCMDrumKit PCMDrumKit
-        {
-            get { return _PCMDrumKit; }
-            private set
-            {
-                _PCMDrumKit = value;
-                NotifyPropertyChanged();
-            }
-        }
+        
 
         [Offset(0x0000)]
         public IntegraChannels ReceiveChannel
@@ -151,7 +104,6 @@ namespace Integra.Models
             set
             {
                 _ToneBankSelectMSB = value;
-                //_Tone.MSB = value;
                 NotifyPropertyChanged();
             }
         }
@@ -163,7 +115,6 @@ namespace Integra.Models
             set
             {
                 _ToneBankSelectLSB = value;
-                //_Tone.LSB = value;
                 NotifyPropertyChanged();
             }
         }
@@ -175,47 +126,54 @@ namespace Integra.Models
             set
             {
                 _ToneProgramNumber = value;
-                //_Tone.PC = value;
                 NotifyPropertyChanged();
             }
         }
+
+        #region Overrides
+
+        
 
         protected override bool Initialize(byte[] data)
         {
             if(!IsInitialized)
             {
-                Part = (IntegraParts)((Address & 0x00000F00) >> 8);
+                //Part = (IntegraParts)((Address & 0x00000F00) >> 8);
 
                 base.Initialize(data);
 
-                ToneType = IntegraToneExtensions.Type(ToneBankSelectMSB);
+                Type = IntegraToneExtensions.Type(ToneBankSelectMSB);
 
-                TemporaryTone = new TemporaryTone(Part, ToneType);
+                TemporaryTone = new TemporaryTone(Part, Type);
 
-                switch(ToneType)
-                {
-                    case IntegraToneTypes.SuperNATURALAcousticTone:
-                        SuperNATURALAcousticTone = new SuperNATURALAcousticTone(TemporaryTone.Address);
-                        break;
-                    case IntegraToneTypes.SuperNATURALSynthTone:
-                        SuperNATURALSynthTone = new SuperNATURALSynthTone(TemporaryTone.Address);
-                        break;
-                    case IntegraToneTypes.SuperNATURALDrumkit:
-                        SuperNATURALDrumKit = new SuperNATURALDrumKit(TemporaryTone.Address);
-                        break;
-                    case IntegraToneTypes.PCMSynthTone:
-                        PCMSynthTone = new PCMSynthTone(TemporaryTone.Address);
-                        break;
-                    case IntegraToneTypes.PCMDrumkit:
-                        PCMDrumKit = new PCMDrumKit(TemporaryTone.Address);
-                        break;
-                }
+                //switch(Type)
+                //{
+                //    case IntegraToneTypes.SuperNATURALAcousticTone:
+                //        SuperNATURALAcousticTone = new SuperNATURALAcousticTone(TemporaryTone.Address);
+                //        break;
+                //    case IntegraToneTypes.SuperNATURALSynthTone:
+                //        SuperNATURALSynthTone = new SuperNATURALSynthTone(TemporaryTone.Address);
+                //        break;
+                //    case IntegraToneTypes.SuperNATURALDrumkit:
+                //        SuperNATURALDrumKit = new SuperNATURALDrumKit(TemporaryTone.Address);
+                //        break;
+                //    case IntegraToneTypes.PCMSynthTone:
+                //        PCMSynthTone = new PCMSynthTone(TemporaryTone.Address);
+                //        break;
+                //    case IntegraToneTypes.PCMDrumkit:
+                //        PCMDrumKit = new PCMDrumKit(TemporaryTone.Address);
+                //        break;
+                //}
 
-                NotifyPropertyChanged(string.Empty, false);
+                NotifyPropertyChanged(nameof(Part), false);
+                NotifyPropertyChanged(nameof(Type), false);
                 IsInitialized = true;
             }
 
             return IsInitialized;
         }
+
+        
+        #endregion
     }
 }

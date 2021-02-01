@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
@@ -67,6 +68,6 @@ namespace Integra.Common
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        
+       
     }
 }

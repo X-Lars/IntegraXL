@@ -1,11 +1,10 @@
 ﻿using Integra.Core;
 using Integra.Database;
-using Integra.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 
 namespace Integra
 {
@@ -16,98 +15,107 @@ namespace Integra
         MFX       = 0x02
     }
 
-    public class SessionData : IntegraDataTemplate<SessionData>
-    {
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public SessionTypes Type { get; set; }
-        public string Description { get; set; }
-    }
+    //public class SessionData : IntegraDataTemplate<SessionData>
+    //{
+    //    public int ID { get; set; }
+    //    public string Name { get; set; }
+    //    public SessionTypes Type { get; set; }
+    //    public string Description { get; set; }
+    //}
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class Session : IntegraBase<Session>
     {
         public Session() 
         {
             ID = DataAccess.GetNextID(this);
 
-            Debug.Print($"[{nameof(Session)}] ID: {ID}");
-
-            Sessions = DataAccess.SelectAll(this, new SessionData());
-
-            IntegraCache.GetDataTemplate<StudioSet>();
-            //Sessions = DataAccess.Select<Session>();
+            Debug.Print($"[{nameof(Session)}] {ID}");
         }
-
-        private List<SessionData> _Data;
-
-        public virtual List<SessionData> Sessions 
+        private ObservableCollection<Session> _Sessions = new ObservableCollection<Session>();
+        public virtual ObservableCollection<Session> Sessions
         {
-            get { return _Data; }
-
-            private set
+            get { return DataAccess.SelectAll<Session>(); ; }
+            set
             {
-                _Data = value;
+                _Sessions = value;
                 NotifyPropertyChanged();
             }
         }
 
         // TODO: Associate virtual slots used by the session
+        private int _ID;
 
-        public new int ID { get; set; }
+        public new int ID
+        {
+            get { return _ID; }
+            set 
+            {
+                if (_ID != value)
+                {
+                    if (value < 0)
+                        _ID = DataAccess.GetNextID(this);
+                    else
+                        _ID = value;
+
+                    NotifyPropertyChanged();
+                    Debug.Print($"[{nameof(Session)}] ID: {_ID}");
+                }
+            }
+        }
+
         public new string Name { get; set; } = string.Empty;
         public SessionTypes Type { get; private set; } = SessionTypes.StudioSet;
         public string Description { get; set; } = string.Empty;
 
         public override void Select(int id)
         {
-            int result = DataAccess.Select(this, 1);
+            int result = DataAccess.Select(this, id);
 
             if (result != 0)
             {
                 ID = id;
-                DebugPrint();
+                //DebugPrint();
                 DataAccess.Select(Device.Instance.StudioSet, ID);
             }
         }
+
         public override void Update()
         {
-            DataAccess.Update(this);
+            //DataAccess.Update(this);
+            DataAccess.Update(Device.Instance.StudioSet);
         }
 
         public override void Insert()
         {
-            // TODO: Overwrite or new session ID
-            //List<SQLParameter> parameters = new List<SQLParameter>();
-
-            //parameters.Add(new SQLParameter(typeof(string), nameof(Name), Name));
-            //parameters.Add(new SQLParameter(typeof(byte), nameof(Type), (byte)Type));
-            //parameters.Add(new SQLParameter(typeof(string), nameof(Description), Description));
-
             DataAccess.Insert(this);
-
             Device.Instance.StudioSet.Insert();
 
             ID = DataAccess.GetNextID(this);
+
+            NotifyPropertyChanged(nameof(Sessions));
         }
 
         public override void Delete()
         {
             DataAccess.Delete(this);
             Device.Instance.StudioSet.Delete();
+
             ID = DataAccess.GetNextID(this);
 
-            DebugPrint();
+            NotifyPropertyChanged(nameof(Sessions));
         }
 
         public override void Truncate()
         {
             DataAccess.Truncate(this);
-
             Device.Instance.StudioSet.Truncate();
 
             ID = DataAccess.GetNextID(this);
 
-            DebugPrint();
+            NotifyPropertyChanged(nameof(Sessions));
         }
 
         public virtual IEnumerable<SessionTypes> SessionType
@@ -115,5 +123,4 @@ namespace Integra
             get { return Enum.GetValues(typeof(SessionTypes)).Cast<SessionTypes>(); }
         }
     }
-
 }

@@ -509,6 +509,7 @@ namespace Integra
             //IntegraSystemExclusiveReceived?.Invoke(this, new IntegraSystemExclusiveEventArgs(new IntegraSystemExclusive(e.Message)));
             _UIContext.Send(o => IntegraSystemExclusiveReceived?.Invoke(this, new IntegraSystemExclusiveEventArgs(new IntegraSystemExclusive(e.Message))), null);
             //IntegraSystemExclusiveReceived?.Invoke(this, new IntegraSystemExclusiveEventArgs(new IntegraSystemExclusive(e.Message)));
+            Debug.Print($"RX {new IntegraSystemExclusive(e.Message)}");
         }
 
         #endregion
@@ -517,9 +518,9 @@ namespace Integra
 
         internal void SendSystemExclusive(IntegraSystemExclusive syx)
         {
-            //Debug.Print($"[{nameof(Device)}.{nameof(SendSystemExclusive)}] {syx}");
             lock (MidiOutputDevice)
             {
+                Debug.Print($"SX {syx}");
                 MidiOutputDevice.Send(new SystemExclusiveMessage(syx));
                 Thread.Sleep(DEVICE_LATENCY);
                 
@@ -540,7 +541,7 @@ namespace Integra
         public static Session Session
         {
             get { return _Session; }
-            internal set { _Session = value; }
+            set { _Session = value; }
         }
 
         /// <summary>
@@ -725,6 +726,7 @@ namespace Integra
             // Ensure the INTEGRA-7 is connected before starting initialization
             // MOVED TO: IntegraBase
 
+            Debug.Print($"Initializing {dataStructure.GetType().Name}");
             await Task.Factory.StartNew(() =>
             {
                 ReportInit(this, new StatusMessage($"Initializing {dataStructure.Name}", "Please wait...", 100, "Initializing"));
@@ -751,6 +753,8 @@ namespace Integra
                 ReportComplete(this, new StatusMessage($"Initializing {dataStructure.Name}", "Complete", 100, "Done"));
 
             }, TaskCreationOptions.LongRunning);
+
+            Debug.Print($"Done initializing {dataStructure.GetType().Name}");
         }
 
        

@@ -235,6 +235,6 @@
 
             </Grid>
         </xl:Expander>
-        
+        <xl:LinkButton Command="{Binding Test, RelativeSource={RelativeSource AncestorType=Window}}">TEST</xl:LinkButton>
     </StackPanel>
 </local:Widget>

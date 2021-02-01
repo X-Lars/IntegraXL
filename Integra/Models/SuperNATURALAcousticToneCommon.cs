@@ -12,7 +12,6 @@ namespace Integra.Models
         public SuperNATURALAcousticToneCommon(IntegraAddress address) : base(address, 0x00000046)
         {
             Name = "SuperNATURAL Acoustic Tone Common";
-            Console.WriteLine($"[{nameof(SuperNATURALAcousticToneCommon)}] {Address}");
         }
 
     }

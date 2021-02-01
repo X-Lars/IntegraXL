@@ -29,16 +29,13 @@ namespace Integra.Core
 
                 item.Address = (uint)address + (uint)(i << 8);
                 item.Requests.Add(request);
-
+                item.Part = (IntegraParts)i;
                 item.Initialize();
 
                 Add(item);
 
-                //Debug.Print($"[{nameof(IntegraBasePartial<T>)}] New: {typeof(T).Name}[{item.Address.ToString()}]");
-
             }
         }
-
       
         #endregion
 
@@ -134,7 +131,6 @@ namespace Integra.Core
         {
             for (int i = 0; i < Items.Count; i++)
             {
-                // TODO: Call Save
                 Items[i].Insert();
             }
         }

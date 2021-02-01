@@ -102,7 +102,7 @@ namespace Integra.Models
                 Part = (IntegraParts)((Address & 0x00000F00) >> 8);
 
                 _PhaseLock = Convert.ToBoolean(data[0x00]);
-                NotifyPropertyChanged(string.Empty);
+                //NotifyPropertyChanged(string.Empty, false);
                 IsInitialized = true;
             }
 
