@@ -696,10 +696,28 @@ namespace Integra.Database
                                     }
                                     else
                                     {
-                                        parameter.Value.SetValue(instance, reader.GetValue(reader.GetOrdinal(parameter.Key)));
-                                        offset++;
+                                        if (parameter.Value.GetIndexParameters().Length != 0)
+                                        {
+                                            Offset attribute = parameter.Value.GetCustomAttribute<Offset>(false);
 
-                                        Debug.Print($"-{parameter.Value.Name, -20} = {parameter.Value.GetValue(instance)}");
+                                            FieldInfo field = IntegraBase<T>.Field(attribute.Value);
+
+                                            Array propertyArray = (Array)field.GetValue(instance);
+
+                                            for (int i = 0; i < propertyArray.Length; i++)
+                                            {
+                                                // Property name is "Item#" where '#' is the index
+                                                parameter.Value.SetValue(instance, reader.GetValue(reader.GetOrdinal(parameter.Key + (i))), new object[] { i });
+                                                offset++;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            parameter.Value.SetValue(instance, reader.GetValue(reader.GetOrdinal(parameter.Key)));
+                                            offset++;
+                                        }
+
+                                        //Debug.Print($"-{parameter.Value.Name, -20} = {parameter.Value.GetValue(instance)}");
                                     }
                                 }
 

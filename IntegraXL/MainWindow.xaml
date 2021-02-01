@@ -34,14 +34,18 @@
                                            Content="Studio Set Common"/>
                             <xl:LinkButton>Compressor + EQ Output</xl:LinkButton>
                             <TreeViewItem Header="Effects" IsExpanded="True">
-                                <xl:LinkButton>Master EQ</xl:LinkButton>
+                                <xl:LinkButton Command="{Binding ShowIntegraWindow, RelativeSource={RelativeSource AncestorType=Window}}"
+                                               CommandParameter="{x:Type win:StudioSetMasterEQWindow}"
+                                               Content="Master EQ"/>
                                 <xl:LinkButton>Chorus</xl:LinkButton>
                                 <xl:LinkButton>Reverb</xl:LinkButton>
                             </TreeViewItem>
                             <xl:LinkButton>Motional Surround</xl:LinkButton>
                             <TreeViewItem Header="Part" IsExpanded="True">
                                 <xl:LinkButton>View</xl:LinkButton>
-                                <xl:LinkButton>Equalizer</xl:LinkButton>
+                                <xl:LinkButton Command="{Binding ShowIntegraWindow, RelativeSource={RelativeSource AncestorType=Window}}"
+                                               CommandParameter="{x:Type win:StudioSetPartEQWindow}"
+                                               Content="Equalizer"/>
                             </TreeViewItem>
                         </StackPanel>
                     </xl:SidebarSection>

@@ -24,10 +24,6 @@ namespace Integra.Models
 
         #region Constructor
 
-        //public TemporaryTone()
-        //{
-
-        //}
         public TemporaryTone(IntegraParts part, IntegraToneTypes type) : base(0x19000000)
         {
             // Offset the base address with the selected part
@@ -43,30 +39,7 @@ namespace Integra.Models
             Part = part;
             Type = type;
 
-            //Requests.Add(new IntegraRequest(0x00000000));
-            //switch(Type)
-            //{
-            //    case IntegraToneTypes.PCMSynthTone:
-            //        Requests.Add(new IntegraRequest());
-            //        break;
-            //    case IntegraToneTypes.SuperNATURALAcousticTone:
-            //        Requests.Add(new IntegraRequest());
-            //        break;
-            //    case IntegraToneTypes.SuperNATURALSynthTone:
-            //        Requests.Add(new IntegraRequest());
-            //        break;
-            //    case IntegraToneTypes.SuperNATURALDrumkit:
-            //        Requests.Add(new IntegraRequest());
-            //        break;
-            //    case IntegraToneTypes.PCMDrumkit:
-            //        Requests.Add(new IntegraRequest());
-            //        break;
-            //}
-            //Initialize();
-
-            MFX = new ToneMFX(Address);
-
-            
+            MFX = new ToneMFX(Address, part);
 
             Console.WriteLine($"[{nameof(TemporaryTone)}] {Address} - {Type}");
         }

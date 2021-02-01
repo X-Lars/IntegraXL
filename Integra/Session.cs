@@ -15,14 +15,6 @@ namespace Integra
         MFX       = 0x02
     }
 
-    //public class SessionData : IntegraDataTemplate<SessionData>
-    //{
-    //    public int ID { get; set; }
-    //    public string Name { get; set; }
-    //    public SessionTypes Type { get; set; }
-    //    public string Description { get; set; }
-    //}
-
     /// <summary>
     /// 
     /// </summary>
@@ -85,7 +77,7 @@ namespace Integra
         public override void Update()
         {
             //DataAccess.Update(this);
-            DataAccess.Update(Device.Instance.StudioSet);
+            Device.Instance.StudioSet.Update();
         }
 
         public override void Insert()

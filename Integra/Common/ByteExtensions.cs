@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Integra.Common
+{
+    public static class ByteExtensions
+    {
+        /// <summary>
+        /// Applies an offset to the <see cref="byte"/>.
+        /// </summary>
+        /// <param name="value">The value to offset.</param>
+        /// <param name="offset">The offset to apply.</param>
+        /// <returns></returns>
+        public static byte Offset(this byte value, int offset)
+        {
+            return (byte)(value + offset);
+        }
+    }
+}

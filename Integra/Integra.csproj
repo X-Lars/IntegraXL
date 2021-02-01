@@ -68,6 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ByteExtensions.cs" />
     <Compile Include="Common\Commands.cs" />
     <Compile Include="Common\EnumerationExtensions.cs" />
     <Compile Include="Common\IntegerExtensions.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="Models\Setup.cs" />
     <Compile Include="Models\StudioSet.cs" />
     <Compile Include="Models\StudioSetCommon.cs" />
+    <Compile Include="Models\StudioSetMasterEQ.cs" />
     <Compile Include="Models\StudioSetMidi.cs" />
     <Compile Include="Models\StudioSetPart.cs" />
     <Compile Include="Models\StudioSetPartEQ.cs" />

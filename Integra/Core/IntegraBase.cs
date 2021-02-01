@@ -833,7 +833,9 @@ namespace Integra.Core
             typeof(StudioSetMidi),
             typeof(StudioSetPart),
             typeof(StudioSetPartEQ),
-            typeof(TemporaryTone)
+            typeof(TemporaryTone),
+            typeof(ToneMFX),
+            typeof(StudioSetMasterEQ)
         };
 
         public virtual void Update()

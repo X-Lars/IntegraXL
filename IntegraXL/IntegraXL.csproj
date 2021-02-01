@@ -131,6 +131,12 @@
     <Compile Include="Windows\StudioSetCommonWindow.xaml.cs">
       <DependentUpon>StudioSetCommonWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\StudioSetMasterEQWindow.xaml.cs">
+      <DependentUpon>StudioSetMasterEQWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\StudioSetPartEQWindow.xaml.cs">
+      <DependentUpon>StudioSetPartEQWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\SystemExclusivesWindow.xaml.cs">
       <DependentUpon>SystemExclusivesWindow.xaml</DependentUpon>
     </Compile>
@@ -194,6 +200,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\StudioSetCommonWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\StudioSetMasterEQWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\StudioSetPartEQWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

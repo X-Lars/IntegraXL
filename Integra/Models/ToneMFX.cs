@@ -13,7 +13,7 @@ namespace Integra.Models
     /// <summary>
     /// Defines the tone MFX structure for all INTEGRA-7 tone types.
     /// </summary>
-    public sealed class ToneMFX : IntegraBase<ToneMFX>
+    public sealed class ToneMFX : IntegraBase<ToneMFX>, IIntegraPartial
     {
         #region Fields
 
@@ -21,6 +21,7 @@ namespace Integra.Models
         /// Stores the MFX model associated with the <see cref="Type"/>.
         /// </summary>
         private IToneMFXModel _MFXModel = new Thru();
+        private IntegraParts _part;
 
         [Offset(0x0000)] private IntegraMFXTypes _Type;
         [Offset(0x0002)] private byte _ChorusSendLevel;
@@ -47,10 +48,18 @@ namespace Integra.Models
         /// Creates and initializes a new <see cref="ToneMFX"/> instance.
         /// </summary>
         /// <param name="address">The <see cref="IntegraAddress"/> of the parent INTEGRA-7 tone structure.</param>
-        public ToneMFX(IntegraAddress address) : base(address + 0x00000200, 0x00000111) { }
+        public ToneMFX(IntegraAddress address, IntegraParts part) : base(address + 0x00000200, 0x00000111) 
+        {
+            Part = part;
+        }
 
         #endregion
 
+        public IntegraParts Part
+        {
+            get { return _part; }
+            set { _part = value; }
+        }
         #region Properties : INTEGRA-7
 
         [Offset(0x0000)]

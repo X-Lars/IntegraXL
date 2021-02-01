@@ -1,5 +1,4 @@
-﻿using Integra.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,11 +16,11 @@ using System.Windows.Shapes;
 namespace IntegraXL.Windows
 {
     /// <summary>
-    /// Interaction logic for StudioSetCommonWindow.xaml
+    /// Interaction logic for StudioSetMasterEQWindow.xaml
     /// </summary>
-    public partial class StudioSetCommonWindow : IntegraWindow
+    public partial class StudioSetMasterEQWindow : IntegraWindow
     {
-        public StudioSetCommonWindow()
+        public StudioSetMasterEQWindow()
         {
             InitializeComponent();
         }

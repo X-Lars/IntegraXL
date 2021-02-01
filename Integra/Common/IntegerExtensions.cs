@@ -23,6 +23,7 @@ namespace Integra.Common
 
     public static class IntExtensions
     {
+
         /// <summary>
         /// Gets the parameter value without the INTEGRA-7 parameter prefix.
         /// </summary>
