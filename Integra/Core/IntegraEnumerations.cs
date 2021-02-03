@@ -8,7 +8,34 @@ using System.Threading.Tasks;
 
 namespace Integra.Core
 {
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraNoteRates : byte
+    {
+        [Description("\uE014\uEB9E\U0000E833")] _164T = 0x00,
+        [Description("")]  _164  = 0x01,
+        [Description("r£")] _132T = 0x02,
+        [Description("r")]  _132  = 0x03,
+        [Description("x£")] _116T = 0x04,
+        [Description("r.")]  _132D = 0x05,
+        [Description("x")]  _116  = 0x06,
+        [Description("e£")] _18T  = 0x07,
+        [Description("x.")]  _116D = 0x08,
+        [Description("e")]  _18   = 0x09,
+        [Description("q£")] _14T  = 0x0A,
+        [Description("e.")]  _18D  = 0x0B,
+        [Description("q")]  _14   = 0x0C,
+        [Description("h£")] _12T  = 0x0D,
+        [Description("q.")]  _14D  = 0x0E,
+        [Description("h")]  _12   = 0x0F,
+        [Description("w£")] _1T   = 0x10,
+        [Description("h.")]  _12D  = 0x11,
+        [Description("w")]  _1    = 0x12,
+        [Description("W£")] _2T   = 0x13,
+        [Description("w.")]  _1D   = 0x14,
+        [Description("W")]  _2    = 0x15,
+    }
 
+   
     #region Custom Build Enumerations
 
     public class IntegraVoiceReserves : Enumeration
@@ -31,6 +58,7 @@ namespace Integra.Core
         }
     }
 
+  
     public class IntegraPartSelections : Enumeration
     {
         public new static List<string> Values
@@ -44,6 +72,38 @@ namespace Integra.Core
                 for (int i = 1; i < 17; i++)
                 {
                     values.Add($"Part {i.ToString("00")}");
+                }
+
+                return values;
+            }
+        }
+    }
+
+    public class IntegraPreDelay : Enumeration
+    {
+        public new static List<string> Values
+        {
+            get
+            {
+                List<string> values = new List<string>();
+
+                for (int i = 0; i < 50; i++)
+                {
+                    values.Add((((double)i / 10)).ToString("0.0 [ms]"));
+                }
+
+                for (int i = 0; i < 10; i++)
+                {
+                    values.Add((5.0 + i * 0.5).ToString("0.0 [ms]"));
+                }
+
+                for (int i = 0; i < 40; i++)
+                {
+                    values.Add((10.0 + i).ToString("0.0 [ms]"));
+                }
+                for (int i = 0; i < 26; i++)
+                {
+                    values.Add((50.0 + (i * 2)).ToString("0.0 [ms]"));
                 }
 
                 return values;
@@ -78,6 +138,28 @@ namespace Integra.Core
         [Description("Channel 14")] Channel14 = 0x0D,
         [Description("Channel 15")] Channel15 = 0x0E,
         [Description("Channel 16")] Channel16 = 0x0F
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraControlChannels : byte
+    {
+        [Description("01")]  Channel01,
+        [Description("02")]  Channel02,
+        [Description("03")]  Channel03,
+        [Description("04")]  Channel04,
+        [Description("05")]  Channel05,
+        [Description("06")]  Channel06,
+        [Description("07")]  Channel07,
+        [Description("08")]  Channel08,
+        [Description("09")]  Channel09,
+        [Description("10")]  Channel10,
+        [Description("11")]  Channel11,
+        [Description("12")]  Channel12,
+        [Description("13")]  Channel13,
+        [Description("14")]  Channel14,
+        [Description("15")]  Channel15,
+        [Description("16")]  Channel16,
+        [Description("Off")] Off
     }
 
     [TypeConverter(typeof(DescriptionConverter))]
@@ -687,5 +769,90 @@ namespace Integra.Core
         [Description("2000 [Hz]")] hz2000,
         [Description("4000 [Hz]")] Hz4000,
         [Description("8000 [Hz]")] Hz8000
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraChorusTypes : byte
+    {
+        [Description("Off")]        Off       = 0x00,
+        [Description("Chorus")]     Chorus    = 0x01,
+        [Description("Delay")]      Delay     = 0x02,
+        [Description("GM2 Chorus")] GM2Chorus = 0x03
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraStudioSetCommonOutputAssigns : byte
+    {
+        A = 0x00,
+        B = 0x01,
+        C = 0x02,
+        D = 0x03
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraChorusOutputSelections : byte
+    {
+        [Description("Main")]          Main       = 0x00,
+        [Description("Reverb")]        Reverb     = 0x01,
+        [Description("Main + Reverb")] MainReverb = 0x02
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraChorusFilterTypes : byte
+    {
+        [Description("Off")] Off = 0x00,
+        [Description("LPF")] LPF = 0x01,
+        [Description("HPF")] HPF = 0x02
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraDelayHFDamps : byte
+    {
+        [Description("200 [Hz]")]  Hz200  = 0x00,
+        [Description("250 [Hz]")]  Hz250  = 0x01,
+        [Description("315 [Hz]")]  Hz315  = 0x02,
+        [Description("400 [Hz]")]  Hz400  = 0x03,
+        [Description("500 [Hz]")]  Hz500  = 0x04,
+        [Description("630 [Hz]")]  Hz630  = 0x05,
+        [Description("800 [Hz]")]  Hz800  = 0x06,
+        [Description("1000 [Hz]")] Hz1000 = 0x07,
+        [Description("1250 [Hz]")] Hz1250 = 0x08,
+        [Description("1600 [Hz]")] Hz1600 = 0x09,
+        [Description("2000 [Hz]")] hz2000 = 0x0A,
+        [Description("2500 [Hz]")] Hz2500 = 0x0B,
+        [Description("3150 [Hz]")] Hz3150 = 0x0C,
+        [Description("4000 [Hz]")] Hz4000 = 0x0D,
+        [Description("5000 [Hz]")] Hz5000 = 0x0E,
+        [Description("6300 [Hz]")] Hz6300 = 0x0F,
+        [Description("8000 [Hz]")] Hz8000 = 0x10,
+        [Description("Bypass")]    Bypass = 0x11
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraReverbTypes : byte
+    {
+        [Description("Off")]        Off   = 0x00,
+        [Description("Room 1")]     Room1 = 0x01,
+        [Description("Room 2")]     Room2 = 0x02,
+        [Description("Hall 1")]     Hall1 = 0x03,
+        [Description("Hall 2")]     Hall2 = 0x04,
+        [Description("Plate")]      Plate = 0x05,
+        [Description("GM2 Reverb")] GM2   = 0x06
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraRoomTypes : byte
+    {
+        [Description("Room 1")] Room01 = 0x00,
+        [Description("Room 2")] Room02 = 0x01,
+        [Description("Hall 1")] Hall01 = 0x02,
+        [Description("Hall 2")] Hall02 = 0x03
+    }
+
+    public enum IntegraRoomSizes
+    {
+        Small  = 0,
+        Medium = 1,
+        Large  = 2,
     }
 }

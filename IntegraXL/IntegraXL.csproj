@@ -96,6 +96,24 @@
     <Compile Include="UserControls\FavoritesList.xaml.cs">
       <DependentUpon>FavoritesList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\MFX\CommonChorus.xaml.cs">
+      <DependentUpon>CommonChorus.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MFX\CommonChorusDelay.xaml.cs">
+      <DependentUpon>CommonChorusDelay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MFX\CommonChorusGM2.xaml.cs">
+      <DependentUpon>CommonChorusGM2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MFX\CommonOff.xaml.cs">
+      <DependentUpon>CommonOff.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MFX\CommonReverbGM2.xaml.cs">
+      <DependentUpon>CommonReverbGM2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MFX\CommonReverb.xaml.cs">
+      <DependentUpon>CommonReverb.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\MFX\Equalizer.xaml.cs">
       <DependentUpon>Equalizer.xaml</DependentUpon>
     </Compile>
@@ -128,6 +146,15 @@
     <Compile Include="Windows\SessionsWindow.xaml.cs">
       <DependentUpon>SessionsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\StudioSetCommonChorusWindow.xaml.cs">
+      <DependentUpon>StudioSetCommonChorusWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\StudioSetCommonMotionalSurroundWindow.xaml.cs">
+      <DependentUpon>StudioSetCommonMotionalSurroundWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\StudioSetCommonReverbWindow.xaml.cs">
+      <DependentUpon>StudioSetCommonReverbWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\StudioSetCommonWindow.xaml.cs">
       <DependentUpon>StudioSetCommonWindow.xaml</DependentUpon>
     </Compile>
@@ -156,6 +183,30 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="UserControls\FavoritesList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MFX\CommonChorus.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MFX\CommonChorusDelay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MFX\CommonChorusGM2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MFX\CommonOff.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MFX\CommonReverbGM2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MFX\CommonReverb.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -199,6 +250,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\StudioSetCommonChorusWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\StudioSetCommonMotionalSurroundWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\StudioSetCommonReverbWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\StudioSetCommonWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -238,6 +301,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="Resources\BravuraText.otf" />
+    <Resource Include="Resources\Notes.ttf" />
+    <Resource Include="Resources\LelandText.otf" />
+    <Resource Include="Resources\Bravura.otf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

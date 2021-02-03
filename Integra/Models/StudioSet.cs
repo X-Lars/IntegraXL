@@ -21,7 +21,9 @@ namespace Integra.Models
 
         StudioSetCommon _Common = new StudioSetCommon();
         StudioSetMasterEQ _MasterEQ = new StudioSetMasterEQ();
-
+        StudioSetCommonChorus _CommonChorus = new StudioSetCommonChorus();
+        StudioSetCommonReverb _CommonReverb = new StudioSetCommonReverb();
+        StudioSetCommonMotionalSurround _CommonMotionalSurround = new StudioSetCommonMotionalSurround();
         IntegraBasePartial<StudioSetMidi> _Midi = new IntegraBasePartial<StudioSetMidi>(0x18001000, 0x00000001);
         IntegraBasePartial<StudioSetPart> _StudioSetParts = new IntegraBasePartial<StudioSetPart>(0x18002000, 0x00004D);
         IntegraBasePartial<StudioSetPartEQ> _PartsEQ = new IntegraBasePartial<StudioSetPartEQ>(0x18005000, 0x00000008);
@@ -145,6 +147,22 @@ namespace Integra.Models
         public StudioSetCommon Common
         {
             get { return _Common; }
+        }
+
+        public StudioSetCommonChorus CommonChorus
+        {
+            get { return _CommonChorus; }
+        }
+
+        // TODO: Temporary virtual
+        public StudioSetCommonReverb CommonReverb
+        {
+            get { return _CommonReverb; }
+        }
+
+        public StudioSetCommonMotionalSurround CommonMotionalSurround
+        {
+            get { return _CommonMotionalSurround; }
         }
 
         public StudioSetMasterEQ MasterEQ

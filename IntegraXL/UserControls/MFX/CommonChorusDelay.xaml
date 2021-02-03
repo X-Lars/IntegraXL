@@ -1,0 +1,240 @@
+﻿<UserControl x:Class="IntegraXL.UserControls.MFX.CommonDelay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xl="clr-namespace:ControlsXL;assembly=ControlsXL"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <StackPanel Orientation="Horizontal">
+
+        <GroupBox Header="Left">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Switch</Label>
+                <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Delay</Label>
+                <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Level</Label>
+
+                <xl:NumericTextBox x:Name="LeftSwitch" 
+                                   Grid.Column="1" Grid.Row="0"
+                                   MinValue="0" MaxValue="1"
+                                   Value="{Binding CommonChorus[0]}"/>
+
+                <xl:NumericTextBox Grid.Column="1" Grid.Row="1"
+                                   MinValue="0" MaxValue="1000" 
+                                   Value="{Binding CommonChorus[1]}" 
+                                   Suffix="ms">
+
+                    <xl:NumericTextBox.Style>
+                        <Style TargetType="{x:Type xl:NumericTextBox}">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=LeftSwitch, Path=Value}" Value="1">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </xl:NumericTextBox.Style>
+                </xl:NumericTextBox>
+
+                <ComboBox FontFamily="/IntegraXL;component/Resources/#BravuraText" FontSize="14"
+                          Grid.Column="1" Grid.Row="1"
+                          ItemsSource="{Binding CommonChorus.NoteRates}"
+                          SelectedIndex="{Binding CommonChorus[2]}">
+
+                    <ComboBox.Style>
+                        <Style TargetType="{x:Type ComboBox}">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=LeftSwitch, Path=Value}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.Style>
+
+                </ComboBox>
+
+                <xl:NumericTextBox Grid.Column="1" Grid.Row="2"
+                                   Value="{Binding CommonChorus[11]}" 
+                                   MinValue="0" MaxValue="127"/>
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Center">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Switch</Label>
+                <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Delay</Label>
+                <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Level</Label>
+
+                <xl:NumericTextBox x:Name="CenterSwitch" 
+                                   Grid.Column="1" Grid.Row="0"
+                                   MinValue="0" MaxValue="1"
+                                   Value="{Binding CommonChorus[6]}"/>
+
+                <xl:NumericTextBox Grid.Column="1" Grid.Row="1"
+                                   MinValue="0" MaxValue="1000" 
+                                   Value="{Binding CommonChorus[7]}" 
+                                   Suffix="ms">
+
+                    <xl:NumericTextBox.Style>
+                        <Style TargetType="{x:Type xl:NumericTextBox}">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=CenterSwitch, Path=Value}" Value="1">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </xl:NumericTextBox.Style>
+                </xl:NumericTextBox>
+
+                <ComboBox FontFamily="/IntegraXL;component/Resources/#Notes" FontSize="14"
+                          Grid.Column="1" Grid.Row="1"
+                          ItemsSource="{Binding CommonChorus.NoteRates}"
+                          SelectedIndex="{Binding CommonChorus[8]}">
+
+                    <ComboBox.Style>
+                        <Style TargetType="{x:Type ComboBox}">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=CenterSwitch, Path=Value}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.Style>
+                </ComboBox>
+
+                <xl:NumericTextBox Grid.Column="1" Grid.Row="2"
+                                   MinValue="0" MaxValue="127"
+                                   Value="{Binding CommonChorus[13]}"/>
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Right">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Switch</Label>
+                <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Delay</Label>
+                <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Level</Label>
+
+                <xl:NumericTextBox x:Name="RightSwitch"
+                                   Grid.Column="1" Grid.Row="0"
+                                   MinValue="0" MaxValue="1"
+                                   Value="{Binding CommonChorus[3]}"/>
+
+                <xl:NumericTextBox Grid.Column="1" Grid.Row="1"
+                                   MinValue="0" MaxValue="1000" 
+                                   Value="{Binding CommonChorus[4]}" 
+                                   Suffix="ms">
+                    
+                    <xl:NumericTextBox.Style>
+                        <Style TargetType="{x:Type xl:NumericTextBox}">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=RightSwitch, Path=Value}" Value="1">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </xl:NumericTextBox.Style>
+
+                </xl:NumericTextBox>
+
+                <ComboBox FontFamily="/IntegraXL;component/Resources/#Notes" FontSize="14"
+                          Grid.Column="1" Grid.Row="1"
+                          ItemsSource="{Binding CommonChorus.NoteRates}"
+                          SelectedIndex="{Binding CommonChorus[5]}">
+
+                    <ComboBox.Style>
+                        <Style TargetType="{x:Type ComboBox}">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=RightSwitch, Path=Value}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.Style>
+                </ComboBox>
+                
+                <xl:NumericTextBox Grid.Column="1" Grid.Row="2"
+                                   MinValue="0" MaxValue="127"
+                                   Value="{Binding CommonChorus[12]}"/>
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Delay Common">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Feedback</Label>
+                <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">HF Damp</Label>
+
+                <xl:NumericTextBox Grid.Column="1" Grid.Row="0"
+                                   Interval="2"
+                                   MinValue="-98" MaxValue="98" 
+                                   Value="{Binding CommonChorus[9]}" 
+                                   Suffix="%"/>
+
+                <ComboBox Grid.Column="1" Grid.Row="1"
+                          ItemsSource="{Binding CommonChorus.HFDamps}"
+                          SelectedIndex="{Binding CommonChorus[10]}"
+                          HorizontalContentAlignment="Right"/>
+
+            </Grid>
+        </GroupBox>
+    </StackPanel>
+</UserControl>

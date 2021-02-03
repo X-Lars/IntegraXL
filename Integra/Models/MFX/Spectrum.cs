@@ -21,7 +21,7 @@ namespace Integra.Models.MFX
     /// </remarks>
     public class Spectrum : IToneMFXModel
     {
-        public int Get(int index, int value)
+        public double Get(int index, double value)
         {
             switch (index)
             {
@@ -40,7 +40,7 @@ namespace Integra.Models.MFX
             }
         }
 
-        public int Set(int index, int value)
+        public int Set(int index, double value)
         {
             switch (index)
             {
@@ -61,7 +61,7 @@ namespace Integra.Models.MFX
                     return value.InvalidateRange(0, 127);
 
                 default:
-                    return value;
+                    return (int)value;
             }
         }
     }

@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Integra.Models
 {
+    /// <summary>
+    /// Defines the data structure of the INTEGRA-7 studio set master EQ.
+    /// </summary>
     public class StudioSetMasterEQ : IntegraBase<StudioSetMasterEQ>
     {
         #region Fields
@@ -21,7 +24,14 @@ namespace Integra.Models
         [Offset(0x0006)] private byte _EQHighGain;
 
         #endregion
+
+        #region Constructor
+
         public StudioSetMasterEQ() : base(0x18000900, 0x00000007) { }
+
+        #endregion
+
+        #region Properties
 
         [Offset(0x0000)]
         public IntegraLowFrequencies EQLowFreq
@@ -99,6 +109,8 @@ namespace Integra.Models
                 NotifyPropertyChanged();
             }
         }
+
+        #endregion
 
         public virtual IEnumerable<IntegraLowFrequencies> LowFrequencyValues
         {

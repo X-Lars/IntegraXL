@@ -34,13 +34,25 @@
                                            Content="Studio Set Common"/>
                             <xl:LinkButton>Compressor + EQ Output</xl:LinkButton>
                             <TreeViewItem Header="Effects" IsExpanded="True">
+                                
                                 <xl:LinkButton Command="{Binding ShowIntegraWindow, RelativeSource={RelativeSource AncestorType=Window}}"
                                                CommandParameter="{x:Type win:StudioSetMasterEQWindow}"
                                                Content="Master EQ"/>
-                                <xl:LinkButton>Chorus</xl:LinkButton>
-                                <xl:LinkButton>Reverb</xl:LinkButton>
+                                
+                                <xl:LinkButton Command="{Binding ShowIntegraWindow, RelativeSource={RelativeSource AncestorType=Window}}"
+                                               CommandParameter="{x:Type win:StudioSetCommonChorusWindow}"
+                                               Content="Chorus"/>
+                                
+                                <xl:LinkButton Command="{Binding ShowIntegraWindow, RelativeSource={RelativeSource AncestorType=Window}}"
+                                               CommandParameter="{x:Type win:StudioSetCommonReverbWindow}"
+                                               Content="Reverb"/>
+                                
                             </TreeViewItem>
-                            <xl:LinkButton>Motional Surround</xl:LinkButton>
+
+                            <xl:LinkButton Command="{Binding ShowIntegraWindow, RelativeSource={RelativeSource AncestorType=Window}}"
+                                           CommandParameter="{x:Type win:StudioSetCommonMotionalSurroundWindow}"
+                                           Content="Motional Surround"/>
+
                             <TreeViewItem Header="Part" IsExpanded="True">
                                 <xl:LinkButton>View</xl:LinkButton>
                                 <xl:LinkButton Command="{Binding ShowIntegraWindow, RelativeSource={RelativeSource AncestorType=Window}}"

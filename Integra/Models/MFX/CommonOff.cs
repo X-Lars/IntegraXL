@@ -3,9 +3,9 @@
 namespace Integra.Models.MFX
 {
     /// <summary>
-    /// Defines the default MFX setting.
+    /// Defines the default common MFX setting.
     /// </summary>
-    public class Thru : IToneMFXModel
+    public class CommonOff : IToneMFXModel
     {
         public double Get(int index, double value)
         {

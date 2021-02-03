@@ -13,7 +13,7 @@ namespace Integra.Models
     /// <summary>
     /// Defines the tone MFX structure for all INTEGRA-7 tone types.
     /// </summary>
-    public sealed class ToneMFX : IntegraBase<ToneMFX>, IIntegraPartial
+    public class ToneMFX : IntegraBase<ToneMFX>, IIntegraPartial
     {
         #region Fields
 
@@ -229,7 +229,7 @@ namespace Integra.Models
         }
 
         [Offset(0x0011)]
-        public int this[int index]
+        public double this[int index]
         {
             get
             {
@@ -316,7 +316,7 @@ namespace Integra.Models
 
         #region Enumerations
 
-        public IEnumerable<IntegraMFXTypes> MFXTypes
+        public virtual IEnumerable<IntegraMFXTypes> MFXTypes
         {
             get { return Enum.GetValues(typeof(IntegraMFXTypes)).Cast<IntegraMFXTypes>(); }
         }

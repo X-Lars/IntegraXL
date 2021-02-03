@@ -1,0 +1,68 @@
+﻿<local:IntegraWindow x:Class="IntegraXL.Windows.StudioSetCommonChorusWindow"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                     xmlns:xl="clr-namespace:ControlsXL;assembly=ControlsXL"
+                     xmlns:local="clr-namespace:IntegraXL.Windows"
+                     mc:Ignorable="d" 
+                     d:DesignHeight="450" d:DesignWidth="800"
+                     Title="Studio Set: Common Chorus">
+    <Grid >
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <!-- COMMON CHORUS: TYPE -->
+        <ComboBox Grid.Column="0" Grid.Row="0" 
+                  ItemsSource="{Binding CommonChorus.ChorusTypes}"
+                  SelectedItem="{Binding CommonChorus.Type}"
+                  SelectionChanged="ChorusTypeChanged"/>
+
+        <!-- COMMON CHORUS: SETTINGS -->
+        <StackPanel Grid.Column="0" Grid.Row="1">
+            
+            <GroupBox Header="Common">
+                
+                <StackPanel>
+
+                    <xl:NumericTextBox MinValue="0" MaxValue="127"
+                                       Value="{Binding CommonChorus.ChorusLevel}"/>
+
+                    <ComboBox x:Name="OutputAssign" 
+                              ItemsSource="{Binding CommonChorus.OutputAssigns}"
+                              SelectedItem="{Binding CommonChorus.OutputAssign}">
+
+                        <ComboBox.Style>
+                            <Style TargetType="{x:Type ComboBox}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=OutputSelect, Path=SelectedIndex}" Value="1">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.Style>
+                    </ComboBox>
+
+                    <ComboBox x:Name="OutputSelect" 
+                              ItemsSource="{Binding CommonChorus.ChorusOutputs}"
+                              SelectedItem="{Binding CommonChorus.OutputSelect}"/>
+
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+
+        <!-- COMMON CHORUS: CHORUS PARAMETERS -->
+        <ContentPresenter Content="{Binding ChorusControl}"
+                          Grid.Column="1" Grid.Row="1"/>
+        
+    </Grid>
+</local:IntegraWindow>

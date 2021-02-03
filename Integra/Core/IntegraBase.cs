@@ -419,18 +419,60 @@ namespace Integra.Core
             // ______________________ -
             // 0x00, 0x00, 0x00, 0x02 [offset]
 
-            for (int fieldOffset = 0, propertyOffset = 0; fieldOffset < syx.Data.Length; fieldOffset++, propertyOffset++)
+            for (int syxOffset = 0/*, propertyOffset = 0*/; syxOffset < syx.Data.Length; syxOffset++/*, propertyOffset++*/)
             {
-                FieldInfo field = Field((ushort)(offset + fieldOffset));
-                //FieldInfo field = IntegraCache.Field<T>((ushort)(offset + fieldOffset));
-
-
-                //FieldInfo field = GetCachedField((ushort)(offset + fieldOffset));
-
-                // The field is not found, skip current iteration
-                // Field is not found when fields are non continuous, not all INTEGRA-7 parameters are used
+                FieldInfo field = Field((ushort)(offset + syxOffset));
+                
+                // Field not found, field is INTEGRA-7 reserved or item in an array
                 if (field == null)
+                {
+                    // Get the nearest lower neighbour offset decorated field
+                    field = _Fields.Where(v => v.Key < offset).OrderByDescending(k => k.Key).FirstOrDefault().Value;
+
+                    // TODO: Multiple values from halfway the array
+                    // TODO: Byte array?
+                    if(field != null)
+                    {
+                        if(field.FieldType.IsArray)
+                        {
+                            // Nearest lower neighbour field is array
+                            Array array = (Array)field.GetValue(this);
+                            Type arrayType = array.GetType().GetElementType();
+
+                            int arrayOffset = field.GetCustomAttribute<Offset>().Value;
+                            // 00 04
+                            if (arrayType == typeof(int))
+                            {
+                                // is in range of field array offset
+                                if ((ushort)(offset) < arrayOffset + (array.Length * 4))
+                                {
+                                    // off 3
+                                    Console.WriteLine((ushort)((offset - arrayOffset) / 4));
+
+                                    byte[] values = new byte[4];
+
+                                    //int p = (syx.Data.Length - fieldOffset) / 4;
+
+                                    //// Working on
+                                    //int l = syx.Data.Length - fieldOffset;
+                                    Array.Copy(syx.Data, syxOffset, values, 0, 4);
+                                        
+
+                                    if (BitConverter.IsLittleEndian)
+                                        Array.Reverse(values);
+
+                                    array.SetValue(BitConverter.ToInt32(values, 0), (offset - arrayOffset) / 4);
+                                    syxOffset += 4;
+                                    NotifyPropertyChanged("Item[]", false);
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Field is not found, INTEGRA-7 reserved
                     continue;
+                }
 
                 // The field is an array of bytes
                 if (field.FieldType.IsArray)
@@ -446,30 +488,30 @@ namespace Integra.Core
                         for (int i = 0; i < array.Length; i++)
                         {
                             // Set the value of the selected index
-                            array.SetValue(syx.Data[fieldOffset], i);
+                            array.SetValue(syx.Data[syxOffset], i);
 
                             // Increment the field offset to the next system exclusive byte
-                            fieldOffset++;
+                            syxOffset++;
                         }
                     }
                     else if (arrayType == typeof(int))
                     {
                         byte[] values = new byte[4];
 
-                        int p = (syx.Data.Length - fieldOffset) / 4;
+                        int p = (syx.Data.Length - syxOffset) / 4;
 
                         // Working on
-                        int l = syx.Data.Length - fieldOffset;
+                        int l = syx.Data.Length - syxOffset;
 
                         for (int i = 0; i < p; i++)
                         {
-                            Array.Copy(syx.Data, fieldOffset, values, 0, 4);
+                            Array.Copy(syx.Data, syxOffset, values, 0, 4);
 
                             if (BitConverter.IsLittleEndian)
                                 Array.Reverse(values);
 
                             array.SetValue(BitConverter.ToInt32(values, 0), i);
-                            fieldOffset += 4;
+                            syxOffset += 4;
                         }
                     }
                     else
@@ -479,7 +521,7 @@ namespace Integra.Core
                 }
                 else if (field.FieldType == typeof(bool))
                 {
-                    field.SetValue(this, Convert.ToBoolean(syx.Data[fieldOffset]));
+                    field.SetValue(this, Convert.ToBoolean(syx.Data[syxOffset]));
                 }
                 else if (field.FieldType == typeof(int))
                 {
@@ -490,16 +532,16 @@ namespace Integra.Core
                         Array.Reverse(values);
 
                     field.SetValue(this, BitConverter.ToInt32(values, 0));
-                    fieldOffset += 4;
+                    syxOffset += 4;
                 }
                 else
                 {
-                    field.SetValue(this, syx.Data[fieldOffset]);
+                    field.SetValue(this, syx.Data[syxOffset]);
                 }
 
                 // Retrieve the accompanied property with the same offset to raise the NotifyPropertyChanged event
-                PropertyInfo property = Property((ushort)(offset + propertyOffset));
-                //PropertyInfo property = IntegraCache.Property<T>((ushort)(offset + propertyOffset));
+                //PropertyInfo property = Property((ushort)(offset + propertyOffset));
+                PropertyInfo property = Property((ushort)offset);
 
                 if (property != null)
                 {
@@ -517,7 +559,7 @@ namespace Integra.Core
                 }
 
                 // Property offset has to be realigned in case the field is an array
-                propertyOffset = fieldOffset;
+                //propertyOffset = syxOffset;
             }
         }
 
@@ -731,14 +773,14 @@ namespace Integra.Core
             if (!IsIntegraProperty(propertyName))
                 return;
 
-            //if (transmit)
-            //{
+            if (transmit)
+            {
                 if (IsInitialized)
                 {
                     if (!string.IsNullOrEmpty(propertyName))
                         TransmitIndexerProperty(propertyName, null);
                 }
-            //}
+            }
         }
 
         /// <summary>
@@ -753,13 +795,13 @@ namespace Integra.Core
             if (!IsIntegraProperty("Item"))
                 return;
 
-            //if (transmit)
-            //{
+            if (transmit)
+            {
                 if (IsInitialized)
                 {
                     TransmitIndexerProperty("Item", index);
                 }
-            //}
+            }
         }
 
         #endregion
@@ -835,7 +877,8 @@ namespace Integra.Core
             typeof(StudioSetPartEQ),
             typeof(TemporaryTone),
             typeof(ToneMFX),
-            typeof(StudioSetMasterEQ)
+            typeof(StudioSetMasterEQ),
+            typeof(StudioSetCommonChorus)
         };
 
         public virtual void Update()

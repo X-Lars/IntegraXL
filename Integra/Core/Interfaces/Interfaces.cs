@@ -27,7 +27,7 @@ namespace Integra.Core.Interfaces
         /// <param name="index">The index of the value in the <see cref="ToneMFX._Parameters"/> array.</param>
         /// <param name="value">The value to convert.</param>
         /// <returns>The converted <paramref name="value"/>.</returns>
-        int Get(int index, int value);
+        double Get(int index, double value);
 
         /// <summary>
         /// Converts an <see cref="int"/> value to an INTEGRA-7 parameter value.
@@ -35,7 +35,7 @@ namespace Integra.Core.Interfaces
         /// <param name="index">The index of the value in the <see cref="ToneMFX._Parameters"/> array.</param>
         /// <param name="value">The value to convert.</param>
         /// <returns>The converted <paramref name="value"/>.</returns>
-        int Set(int index, int value);
+        int Set(int index, double value);
     }
 
     /// <summary>

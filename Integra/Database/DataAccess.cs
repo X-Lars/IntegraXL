@@ -30,12 +30,6 @@ namespace Integra.Database
         /// <remarks><i>[<see cref="IntegraBase{T}"/>, [<see cref="string"/>, <see cref="PropertyInfo"/>]] where <see cref="string"/> is the property and field name.</i></remarks>
         private static Dictionary<Type, Dictionary<string, PropertyInfo>> _DataTemplates = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
 
-        ///// <summary>
-        ///// Stores all non virtual instance references matching the database associated tables.
-        ///// </summary>
-        ///// <remarks><i>[<see cref="IntegraBase{T}"/>, [<see cref="string"/>, <see cref="IIntegraDataClass"/>]] where <see cref="string"/> is the property and table name.</i></remarks>
-        //private static Dictionary<Type, Dictionary<string, IIntegraDataClass>> _References = new Dictionary<Type, Dictionary<string, IIntegraDataClass>>();
-
         #endregion
 
         #region Methods: Private
@@ -83,35 +77,6 @@ namespace Integra.Database
             return table == null ? instance.GetType().Name : table.Name;
         }
 
-        ///// <summary>
-        ///// Generates the cache for all public non virtual reference properties of the <paramref name="instance"/>.
-        ///// </summary>
-        ///// <typeparam name="T">The instance type specifier.</typeparam>
-        ///// <param name="instance">The instance containing the reference(s).</param>
-        ///// <remarks><i>References are used for recursive data loading by the data access layer simulating foreign key constraints.</i></remarks>
-        //private static void InitializeReferenceCache<T>(IntegraBase<T> instance) where T : IntegraBase<T>
-        //{
-        //    Debug.Print($"[{nameof(DataAccess)}.{nameof(InitializeReferenceCache)}] {typeof(T).Name}");
-
-        //    Type type = instance.GetType();
-
-        //    _References.Add(type, new Dictionary<string, IIntegraDataClass>());
-
-        //    PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-        //    foreach (var property in properties)
-        //    {
-        //        // Exclude virtual references
-        //        if (!property.GetMethod.IsVirtual || property.GetMethod.IsFinal)
-        //        {
-        //            if (property.PropertyType.GetInterfaces().Contains(typeof(IIntegraDataClass)))
-        //            {
-        //                _References[type].Add(property.Name, (IIntegraDataClass)property.GetValue(instance));
-        //            }
-        //        }
-        //    }
-        //}
-
         /// <summary>
         /// Generates the cache of properties matching the fields of the specified <typeparamref name="T"/> associated dtatabase table.
         /// </summary>
@@ -131,23 +96,6 @@ namespace Integra.Database
                 Debug.Print($"-{properties[i].Name}");
             }
         }
-
-        ///// <summary>
-        ///// Gets the cache of references for the specified <paramref name="instance"/> of type <typeparamref name="T"/>.
-        ///// </summary>
-        ///// <typeparam name="T">The instance type specifier.</typeparam>
-        ///// <param name="instance">The instance.</param>
-        ///// <returns>The reference cache for the specified <paramref name="instance"/>.</returns>
-        //private static Dictionary<string, IIntegraDataClass> GetReferences<T>(IntegraBase<T> instance) where T : IntegraBase<T>
-        //{
-        //    Debug.Print($"[{nameof(DataAccess)}.{nameof(GetReferences)}] <{instance.GetType().Name}>");
-
-        //    if (!_References.ContainsKey(instance.GetType()))
-        //        InitializeReferenceCache(instance);
-
-        //    return _References[instance.GetType()];
-        //}
-
 
         /// <summary>
         /// Gets the data template containing the database fields of <typeparamref name="T"/>'s associated table.
@@ -344,10 +292,6 @@ namespace Integra.Database
         }
 
         #endregion
-
-
-
-
 
         public static void Test<T>(T instance)
         {
@@ -707,7 +651,16 @@ namespace Integra.Database
                                             for (int i = 0; i < propertyArray.Length; i++)
                                             {
                                                 // Property name is "Item#" where '#' is the index
-                                                parameter.Value.SetValue(instance, reader.GetValue(reader.GetOrdinal(parameter.Key + (i))), new object[] { i });
+
+                                                if (reader.GetValue(reader.GetOrdinal(parameter.Key + (i))).GetType() == typeof(DBNull))
+                                                {
+                                                    parameter.Value.SetValue(instance, 0, new object[] { i });
+                                                }
+                                                else
+                                                {
+                                                    parameter.Value.SetValue(instance, reader.GetValue(reader.GetOrdinal(parameter.Key + (i))), new object[] { i });
+                                                }
+
                                                 offset++;
                                             }
                                         }
@@ -716,8 +669,6 @@ namespace Integra.Database
                                             parameter.Value.SetValue(instance, reader.GetValue(reader.GetOrdinal(parameter.Key)));
                                             offset++;
                                         }
-
-                                        //Debug.Print($"-{parameter.Value.Name, -20} = {parameter.Value.GetValue(instance)}");
                                     }
                                 }
 
@@ -747,14 +698,7 @@ namespace Integra.Database
 
                 using (var command = new SqlCommand(sql, connection))
                 {
-                    //foreach (var reference in GetReferences(integraBase))
-                    //{
-                    //    reference.Value.Truncate();
-                    //}
-
                     var res = command.ExecuteNonQuery();
-
-
                 }
 
                 CloseConnection(connection);
@@ -781,10 +725,6 @@ namespace Integra.Database
                 }
                 else
                     value[item.Key] = instance.GetType().GetProperty(item.Value).GetValue(instance).ToString();
-
-
-
-
             }
 
 
@@ -816,14 +756,6 @@ namespace Integra.Database
 
                 CloseConnection(connection);
             }
-
-            //// Insert all referenced data structures
-            //Dictionary<string, IIntegraDataClass> references = GetReferences(instance);
-
-            //foreach (var reference in references)
-            //{
-            //    reference.Value.Delete();
-            //}
         }
 
         /// <summary>
@@ -871,14 +803,6 @@ namespace Integra.Database
 
                 CloseConnection(connection);
             }
-
-            //// Insert all referenced data structures
-            //Dictionary<string, IIntegraDataClass> references = GetReferences(instance);
-
-            //foreach (var reference in references)
-            //{
-            //    reference.Value.Insert();
-            //}
         }
 
         public static int Update<T>(IntegraBase<T> instance) where T : IntegraBase<T>
@@ -950,14 +874,6 @@ namespace Integra.Database
 
                 CloseConnection(connection);
             }
-
-            //// Insert all referenced data structures
-            //Dictionary<string, IIntegraDataClass> references = GetReferences(instance);
-
-            //foreach (var reference in references)
-            //{
-            //    reference.Value.Update();
-            //}
 
             return result;
         }
@@ -1031,17 +947,5 @@ namespace Integra.Database
 
             return result;
         }
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
     }
 }

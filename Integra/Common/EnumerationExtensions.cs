@@ -11,10 +11,16 @@ namespace Integra.Common
     {
         List<string> Values { get; }
     }
+
     public abstract class Enumeration : IEnumeration
     {
-        public int Value { get; set; }
+        
+
         public List<string> Values { get; }
+
+    
+        public int Value { get; set; }
+
         public override string ToString()
         {
             return Values[Value];
@@ -67,7 +73,5 @@ namespace Integra.Common
 
             return base.ConvertTo(context, culture, value, destinationType);
         }
-
-       
     }
 }

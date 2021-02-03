@@ -1,0 +1,208 @@
+﻿<local:IntegraWindow x:Class="IntegraXL.Windows.StudioSetCommonMotionalSurroundWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IntegraXL.Windows"
+                     xmlns:xl="clr-namespace:ControlsXL;assembly=ControlsXL"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" Width="800">
+    <Grid DataContext="{Binding StudioSet.CommonMotionalSurround}">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0">
+
+            <GroupBox Header="General">
+
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" VerticalAlignment="Center">Motional Surround Switch</Label>
+
+                    <xl:NumericTextBox Grid.Column="1" Grid.Row="0"
+                                       MinValue="0" MaxValue="1"
+                                       Value="{Binding MotionalSurroundSwitch}"/>
+
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <GroupBox Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="1" 
+                              Header="Room">
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Room Type</Label>
+                        <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Room Size</Label>
+
+                        <ComboBox Grid.Column="1" Grid.Row="0"
+                                  ItemsSource="{Binding RoomTypes}"
+                                  SelectedItem="{Binding RoomType}"
+                                  HorizontalContentAlignment="Right"/>
+
+                        <ComboBox Grid.Column="1" Grid.Row="1"
+                                      ItemsSource="{Binding RoomSizes}"
+                                      SelectedItem="{Binding RoomSize}"
+                                      HorizontalContentAlignment="Right"/>
+
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Grid.Column="2" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="1" 
+                              Header="Ambience">
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Level</Label>
+                        <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Time</Label>
+                        <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Density</Label>
+                        <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">HF Damp</Label>
+
+                        <xl:NumericTextBox Grid.Column="1" Grid.Row="0"
+                                               Value="{Binding AmbienceLevel}" 
+                                               MinValue="0" MaxValue="127"/>
+
+                        <xl:NumericTextBox Grid.Column="1" Grid.Row="1"
+                                               Value="{Binding AmbienceTime}" 
+                                               MinValue="0" MaxValue="100"/>
+
+                        <xl:NumericTextBox Grid.Column="1" Grid.Row="2"
+                                               Value="{Binding AmbienceDensity}" 
+                                               MinValue="0" MaxValue="100"/>
+
+                        <xl:NumericTextBox Grid.Column="1" Grid.Row="3"
+                                               Value="{Binding AmbienceHFDamp}" 
+                                               MinValue="0" MaxValue="100"/>
+
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Grid.Column="4" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="1" 
+                              Header="Motional Surround">
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Depth</Label>
+
+                        <xl:NumericTextBox Grid.Column="1" Grid.Row="0"
+                                               Value="{Binding MotionalSurroundDepth}" 
+                                               MinValue="0" MaxValue="100"/>
+
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="1" 
+                              Header="External Part">
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Left / Right</Label>
+                        <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Front / Left</Label>
+                        <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Width</Label>
+                        <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">Ambience Send Level</Label>
+                        <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center">Control Channel</Label>
+
+                        <xl:NumericTextBox Grid.Column="1" Grid.Row="0"
+                                               Value="{Binding ExtPartLR}" 
+                                               MinValue="-64" MaxValue="63"/>
+
+                        <xl:NumericTextBox Grid.Column="1" Grid.Row="1"
+                                               Value="{Binding ExtPartFB}" 
+                                               MinValue="-64" MaxValue="63"/>
+
+                        <xl:NumericTextBox Grid.Column="1" Grid.Row="2"
+                                               Value="{Binding ExtPartWidth}" 
+                                               MinValue="0" MaxValue="32"/>
+
+                        <xl:NumericTextBox Grid.Column="1" Grid.Row="3"
+                                               Value="{Binding ExtPartAmbienceSendLevel}" 
+                                               MinValue="0" MaxValue="100"/>
+
+                        <ComboBox Grid.Column="1" Grid.Row="4"
+                                      ItemsSource="{Binding ControlChannels}"
+                                      SelectedItem="{Binding ExtPartControlChannel}"
+                                      HorizontalContentAlignment="Right"/>
+
+                    </Grid>
+                </GroupBox>
+
+
+            </Grid>
+        </StackPanel>
+    </Grid>
+</local:IntegraWindow>

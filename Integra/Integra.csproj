@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="Common\ByteExtensions.cs" />
     <Compile Include="Common\Commands.cs" />
+    <Compile Include="Common\DoubleExtensions.cs" />
     <Compile Include="Common\EnumerationExtensions.cs" />
     <Compile Include="Common\IntegerExtensions.cs" />
     <Compile Include="Common\StringExtensions.cs" />
@@ -104,6 +105,12 @@
     <Compile Include="Database\SQLParameter.cs" />
     <Compile Include="Database\SQLData.cs" />
     <Compile Include="Device.cs" />
+    <Compile Include="Models\MFX\CommonChorus.cs" />
+    <Compile Include="Models\MFX\CommonChorusDelay.cs" />
+    <Compile Include="Models\MFX\CommonChorusGM2.cs" />
+    <Compile Include="Models\MFX\CommonOff.cs" />
+    <Compile Include="Models\MFX\CommonReverbGM2.cs" />
+    <Compile Include="Models\MFX\CommonReverb.cs" />
     <Compile Include="Models\MFX\Spectrum.cs" />
     <Compile Include="Models\MFX\Equalizer.cs" />
     <Compile Include="Models\MFX\Thru.cs" />
@@ -112,6 +119,9 @@
     <Compile Include="Models\Setup.cs" />
     <Compile Include="Models\StudioSet.cs" />
     <Compile Include="Models\StudioSetCommon.cs" />
+    <Compile Include="Models\StudioSetCommonChorus.cs" />
+    <Compile Include="Models\StudioSetCommonMotionalSurround.cs" />
+    <Compile Include="Models\StudioSetCommonReverb.cs" />
     <Compile Include="Models\StudioSetMasterEQ.cs" />
     <Compile Include="Models\StudioSetMidi.cs" />
     <Compile Include="Models\StudioSetPart.cs" />
