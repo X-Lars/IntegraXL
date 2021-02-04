@@ -1,7 +1,6 @@
 ﻿using Integra.Core;
 using Integra.Core.Interfaces;
 using Integra.Database;
-using MidiXL;
 using System;
 
 namespace Integra.Models
@@ -24,7 +23,7 @@ namespace Integra.Models
         #endregion
 
         #region Constructor
-
+        private TemporaryTone() { }
         public TemporaryTone(IntegraParts part, IntegraToneTypes type) : base(0x19000000)
         {
             // Offset the base address with the selected part
@@ -48,93 +47,29 @@ namespace Integra.Models
             {
                 case IntegraToneTypes.SuperNATURALAcousticTone:
                     SuperNATURALAcousticTone = new SuperNATURALAcousticTone(Address, Part);
-                    //SuperNATURALAcousticTone.Initialize();
                     break;
+
                 case IntegraToneTypes.SuperNATURALSynthTone:
-                    SuperNATURALSynthTone = new SuperNATURALSynthTone(Address);
-                    //SuperNATURALSynthTone.Initialize();
+                    SuperNATURALSynthTone = new SuperNATURALSynthTone(Address, Part);
                     break;
+
                 case IntegraToneTypes.SuperNATURALDrumkit:
                     SuperNATURALDrumKit = new SuperNATURALDrumKit(Address);
-                    //SuperNATURALDrumKit.Initialize();
                     break;
+
                 case IntegraToneTypes.PCMSynthTone:
                     PCMSynthTone = new PCMSynthTone(Address);
-                    //PCMSynthTone.Initialize();
                     break;
+
                 case IntegraToneTypes.PCMDrumkit:
                     PCMDrumKit = new PCMDrumKit(Address);
-                    //PCMDrumKit.Initialize();
                     break;
             }
         }
 
         #endregion
 
-        protected override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
-        {
-            IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
-
-            if (!IsInitialized)
-            {
-                if (syx.Address == Address)
-                {
-                    Console.WriteLine(syx.Address);
-                    // Exact match
-                    if (Initialize(syx.Data))
-                    {
-                        Device.Instance.ReportProgress(this, new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
-                    }
-                    else
-                    {
-                        InitializeField(syx);
-                    }
-                }
-                else if ((syx.Address & 0xFFFFFF00) == (Address & 0xFFFFFF00))
-                {
-                    InitializeField(syx);
-                }
-            }
-        }
-
-        protected override bool Initialize(byte[] data)
-        {
-            if (!IsInitialized)
-            {
-                //base.Initialize(data);
-
-                switch (Type)
-                {
-                    case IntegraToneTypes.SuperNATURALAcousticTone:
-                        SuperNATURALAcousticTone = new SuperNATURALAcousticTone(Address, Part);
-                        //SuperNATURALAcousticTone.Initialize();
-                        break;
-                    case IntegraToneTypes.SuperNATURALSynthTone:
-                        SuperNATURALSynthTone = new SuperNATURALSynthTone(Address);
-                        //SuperNATURALSynthTone.Initialize();
-                        break;
-                    case IntegraToneTypes.SuperNATURALDrumkit:
-                        SuperNATURALDrumKit = new SuperNATURALDrumKit(Address);
-                        //SuperNATURALDrumKit.Initialize();
-                        break;
-                    case IntegraToneTypes.PCMSynthTone:
-                        PCMSynthTone = new PCMSynthTone(Address);
-                        //PCMSynthTone.Initialize();
-                        break;
-                    case IntegraToneTypes.PCMDrumkit:
-                        PCMDrumKit = new PCMDrumKit(Address);
-                        //PCMDrumKit.Initialize();
-                        break;
-                }
-
-                NotifyPropertyChanged(string.Empty, false);
-                IsInitialized = true;
-
-                Console.WriteLine($"[{nameof(TemporaryTone)}] {Address} - {Type} [Initialized]");
-            }
-
-            return IsInitialized;
-        }
+    
 
         public IntegraParts Part
         {
@@ -182,7 +117,7 @@ namespace Integra.Models
             }
         }
 
-        public virtual SuperNATURALSynthTone SuperNATURALSynthTone
+        public SuperNATURALSynthTone SuperNATURALSynthTone
         {
             get { return _SuperNaturalSynthTone; }
             private set
@@ -231,6 +166,9 @@ namespace Integra.Models
                 case IntegraToneTypes.SuperNATURALAcousticTone:
                     SuperNATURALAcousticTone.Insert();
                     break;
+                case IntegraToneTypes.SuperNATURALSynthTone:
+                    SuperNATURALSynthTone.Insert();
+                    break;
             }
         }
 
@@ -242,6 +180,9 @@ namespace Integra.Models
                 case IntegraToneTypes.SuperNATURALAcousticTone:
                     SuperNATURALAcousticTone.Select(id);
                     break;
+                case IntegraToneTypes.SuperNATURALSynthTone:
+                    SuperNATURALSynthTone.Select(id);
+                    break;
             }
         }
 
@@ -252,6 +193,9 @@ namespace Integra.Models
             {
                 case IntegraToneTypes.SuperNATURALAcousticTone:
                     SuperNATURALAcousticTone.Update();
+                    break;
+                case IntegraToneTypes.SuperNATURALSynthTone:
+                    SuperNATURALSynthTone.Update();
                     break;
             }
         }
@@ -265,6 +209,9 @@ namespace Integra.Models
                 case IntegraToneTypes.SuperNATURALAcousticTone:
                     SuperNATURALAcousticTone.Delete();
                     break;
+                case IntegraToneTypes.SuperNATURALSynthTone:
+                    SuperNATURALSynthTone.Delete();
+                    break;
             }
         }
 
@@ -272,10 +219,15 @@ namespace Integra.Models
         {
             DataAccess.Truncate(this);
 
+            //DataAccess.Truncate<SuperNATURALAcousticTone>();
+
             switch(Type)
             {
                 case IntegraToneTypes.SuperNATURALAcousticTone:
                     SuperNATURALAcousticTone.Truncate();
+                    break;
+                case IntegraToneTypes.SuperNATURALSynthTone:
+                    SuperNATURALSynthTone.Truncate();
                     break;
             }
         }

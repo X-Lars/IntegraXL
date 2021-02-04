@@ -887,7 +887,9 @@ namespace Integra.Core
             typeof(StudioSetCommonReverb),
             typeof(StudioSetCommonMotionalSurround),
             typeof(SuperNATURALAcousticTone),
-            typeof(SuperNATURALAcousticToneCommon)
+            typeof(SuperNATURALAcousticToneCommon),
+            typeof(SuperNATURALSynthTone),
+            typeof(SuperNATURALSynthToneCommon)
         };
 
         public virtual void Update()

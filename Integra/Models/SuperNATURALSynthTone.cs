@@ -1,26 +1,43 @@
 ﻿using Integra.Core;
-using Integra.Core.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Integra.Models
 {
-    public class SuperNATURALSynthTone : IntegraBase<SuperNATURALSynthTone>//, IToneMFX
+    public class SuperNATURALSynthTone : IntegraBase<SuperNATURALSynthTone>
     {
-        //private ToneMFX _MFX;
-
-        public SuperNATURALSynthTone(IntegraAddress address) : base(address)
+        private IntegraParts _Part;
+        private SuperNATURALSynthToneCommon _Common;
+        public SuperNATURALSynthTone(IntegraAddress address, IntegraParts part) : base(address)
         {
             Name = "SuperNATURAL Synth Tone";
-            //_MFX = new ToneMFX(address);
+            Part = part;
+
+            Common = new SuperNATURALSynthToneCommon(address, part);
         }
 
-        //public ToneMFX MFX
-        //{
-        //    get { return _MFX; }
-        //}
+        public IntegraParts Part
+        {
+            get { return _Part; }
+            set
+            {
+                if(_Part != value)
+                {
+                    _Part = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public SuperNATURALSynthToneCommon Common
+        {
+            get { return _Common; }
+            set
+            {
+                if(_Common != value)
+                {
+                    _Common = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
     }
 }

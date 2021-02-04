@@ -129,9 +129,9 @@
     <Compile Include="Models\StudioSets.cs" />
     <Compile Include="Models\SuperNATURALAcousticTone.cs" />
     <Compile Include="Models\SuperNATURALAcousticToneCommon.cs" />
-    <Compile Include="Models\SuperNATURALAcousticToneMFX.cs" />
     <Compile Include="Models\SuperNATURALDrumKit.cs" />
     <Compile Include="Models\SuperNATURALSynthTone.cs" />
+    <Compile Include="Models\SuperNATURALSynthToneCommon.cs" />
     <Compile Include="Models\TemporaryTone.cs" />
     <Compile Include="Models\Tone.cs" />
     <Compile Include="Models\ToneBanks.cs" />

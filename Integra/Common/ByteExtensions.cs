@@ -21,7 +21,10 @@ namespace Integra.Common
 
         public static short GetShort(this byte[] value)
         {
+            // TODO: Check Result
             return (short)((value[0] & 0x0F) << 4 | (value[1] & 0x0F));
         }
+
+       
     }
 }

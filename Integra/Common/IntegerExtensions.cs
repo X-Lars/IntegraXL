@@ -99,5 +99,32 @@ namespace Integra.Common
 
             return value;
         }
+
+        public static int GetIntegraValue(this int value)
+        {
+            // TODO: Check Results
+            byte[] values = BitConverter.GetBytes(value);
+
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(values);
+
+
+            return ((values[0] & 0x0F) << 12 | (values[1] & 0x0F) << 8 | (values[2] & 0x0F) << 4 | (values[3] & 0x0F));
+        }
+
+        public static int SetIntegraValue(this int value)
+        {
+            byte[] result = new byte[4];
+
+            result[0] = (byte)((value >> 12) & 0x0F);
+            result[1] = (byte)((value >> 8) & 0x0F);
+            result[2] = (byte)((value >> 4) & 0x0F);
+            result[3] = (byte)((value & 0x0F));
+
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(result);
+
+            return BitConverter.ToInt32(result, 0);
+        }
     }
 }

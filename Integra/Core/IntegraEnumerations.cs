@@ -915,4 +915,18 @@ namespace Integra.Core
         Off  = 0x00,
         Mute = 0x01
     }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraRingSwitch : byte
+    {
+        [Description("Off")] Off   = 0x00,
+        [Description("---")] Empty = 0x01,
+        [Description("On")]  On    = 0x02,
+    }
+
+    public enum IntegraPortamentoMode : byte
+    {
+        Normal = 0x00,
+        Legato = 0x01
+    }
 }

@@ -30,7 +30,7 @@ namespace Integra.Models
             get { return _Part; }
             set
             {
-                if(Part != value)
+                if(_Part != value)
                 {
                     _Part = value;
                     NotifyPropertyChanged();

@@ -683,11 +683,12 @@ namespace Integra.Database
             return result;
         }
 
+        // TODO: Remove instance to be able to truncate table based on type only
         public static void Truncate<T>(IntegraBase<T> integraBase) where T : IntegraBase<T>
         {
             Debug.Print($"[{nameof(DataAccess)}.{nameof(Truncate)}<{integraBase.GetType().Name}>]");
 
-            string sql = $"TRUNCATE TABLE {integraBase.GetType().Name}";
+            string sql = $"TRUNCATE TABLE {typeof(T).Name}";
 
             Debug.Print(sql);
 
