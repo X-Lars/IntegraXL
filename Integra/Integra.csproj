@@ -115,7 +115,9 @@
     <Compile Include="Models\MFX\Equalizer.cs" />
     <Compile Include="Models\MFX\Thru.cs" />
     <Compile Include="Models\PCMDrumKit.cs" />
+    <Compile Include="Models\PCMDrumKitCommon.cs" />
     <Compile Include="Models\PCMSynthTone.cs" />
+    <Compile Include="Models\PCMSynthToneCommon.cs" />
     <Compile Include="Models\Setup.cs" />
     <Compile Include="Models\StudioSet.cs" />
     <Compile Include="Models\StudioSetCommon.cs" />

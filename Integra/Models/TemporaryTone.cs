@@ -46,23 +46,23 @@ namespace Integra.Models
             switch (Type)
             {
                 case IntegraToneTypes.SuperNATURALAcousticTone:
-                    SuperNATURALAcousticTone = new SuperNATURALAcousticTone(Address, Part);
+                    SuperNATURALAcousticTone = new SuperNATURALAcousticTone(Address, part);
                     break;
 
                 case IntegraToneTypes.SuperNATURALSynthTone:
-                    SuperNATURALSynthTone = new SuperNATURALSynthTone(Address, Part);
+                    SuperNATURALSynthTone = new SuperNATURALSynthTone(Address, part);
                     break;
 
                 case IntegraToneTypes.SuperNATURALDrumkit:
-                    SuperNATURALDrumKit = new SuperNATURALDrumKit(Address, Part);
+                    SuperNATURALDrumKit = new SuperNATURALDrumKit(Address, part);
                     break;
 
                 case IntegraToneTypes.PCMSynthTone:
-                    PCMSynthTone = new PCMSynthTone(Address);
+                    PCMSynthTone = new PCMSynthTone(Address, part);
                     break;
 
                 case IntegraToneTypes.PCMDrumkit:
-                    PCMDrumKit = new PCMDrumKit(Address);
+                    PCMDrumKit = new PCMDrumKit(Address, part);
                     break;
             }
         }
@@ -137,7 +137,7 @@ namespace Integra.Models
             }
         }
 
-        public virtual PCMSynthTone PCMSynthTone
+        public PCMSynthTone PCMSynthTone
         {
             get { return _PCMSynthTone; }
             private set
@@ -147,7 +147,7 @@ namespace Integra.Models
             }
         }
 
-        public virtual PCMDrumKit PCMDrumKit
+        public PCMDrumKit PCMDrumKit
         {
             get { return _PCMDrumKit; }
             private set
@@ -161,6 +161,8 @@ namespace Integra.Models
 
         public override void Insert()
         {
+            DataAccess.Insert(this);
+
             switch (Type)
             {
                 case IntegraToneTypes.SuperNATURALAcousticTone:
@@ -172,11 +174,19 @@ namespace Integra.Models
                 case IntegraToneTypes.SuperNATURALDrumkit:
                     SuperNATURALDrumKit.Insert();
                     break;
+                case IntegraToneTypes.PCMSynthTone:
+                    PCMSynthTone.Insert();
+                    break;
+                case IntegraToneTypes.PCMDrumkit:
+                    PCMDrumKit.Insert();
+                    break;
             }
         }
 
         public override void Select(int id)
         {
+            DataAccess.Select(this, id);
+
             // TODO: Select change tone type
             switch(Type)
             {
@@ -189,11 +199,19 @@ namespace Integra.Models
                 case IntegraToneTypes.SuperNATURALDrumkit:
                     SuperNATURALDrumKit.Select(id);
                     break;
+                case IntegraToneTypes.PCMSynthTone:
+                    PCMSynthTone.Select(id);
+                    break;
+                case IntegraToneTypes.PCMDrumkit:
+                    PCMDrumKit.Select(id);
+                    break;
             }
         }
 
         public override void Update()
         {
+            DataAccess.Update(this);
+
             // TODO: Update when tone type is changed, delete old tone type insert new tone type
             switch(Type)
             {
@@ -205,6 +223,12 @@ namespace Integra.Models
                     break;
                 case IntegraToneTypes.SuperNATURALDrumkit:
                     SuperNATURALDrumKit.Update();
+                    break;
+                case IntegraToneTypes.PCMSynthTone:
+                    PCMSynthTone.Update();
+                    break;
+                case IntegraToneTypes.PCMDrumkit:
+                    PCMDrumKit.Update();
                     break;
             }
         }
@@ -223,6 +247,12 @@ namespace Integra.Models
                     break;
                 case IntegraToneTypes.SuperNATURALDrumkit:
                     SuperNATURALDrumKit.Delete();
+                    break;
+                case IntegraToneTypes.PCMSynthTone:
+                    PCMSynthTone.Delete();
+                    break;
+                case IntegraToneTypes.PCMDrumkit:
+                    PCMDrumKit.Delete();
                     break;
             }
         }
@@ -243,6 +273,12 @@ namespace Integra.Models
                     break;
                 case IntegraToneTypes.SuperNATURALDrumkit:
                     SuperNATURALDrumKit.Truncate();
+                    break;
+                case IntegraToneTypes.PCMSynthTone:
+                    PCMSynthTone.Truncate();
+                    break;
+                case IntegraToneTypes.PCMDrumkit:
+                    PCMDrumKit.Truncate();
                     break;
             }
         }

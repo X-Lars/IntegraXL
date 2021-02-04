@@ -891,7 +891,11 @@ namespace Integra.Core
             typeof(SuperNATURALSynthTone),
             typeof(SuperNATURALSynthToneCommon),
             typeof(SuperNATURALDrumKit),
-            typeof(SuperNATURALDrumKitCommon)
+            typeof(SuperNATURALDrumKitCommon),
+            typeof(PCMSynthTone),
+            typeof(PCMSynthToneCommon),
+            typeof(PCMDrumKit),
+            typeof(PCMDrumKitCommon)
         };
 
         public virtual void Update()

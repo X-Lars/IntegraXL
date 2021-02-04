@@ -701,7 +701,212 @@ namespace Integra.Core
         Aft = 97
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraMatrixControlSource : byte
+    {
+        [Description("Off")]
+        Off = 0,
+        [Description("CC01: Modulation")]
+        CC01 = 1,
+        [Description("CC02: Breath")]
+        CC02 = 2,
+        CC03 = 3,
+        [Description("CC04: Foot Type")]
+        CC04 = 4,
+        [Description("CC05: Portamento Time")]
+        CC05 = 5,
+        [Description("CC06: Data Entry")]
+        CC06 = 6,
+        [Description("CC07: Volume")]
+        CC07 = 7,
+        CC08 = 8,
+        CC09 = 9,
+        [Description("CC10: Panpot")]
+        CC10 = 10,
+        [Description("CC11: Expression")]
+        CC11 = 11,
+        [Description("CC12: Motional Surround Control 1")]
+        CC12 = 12,
+        [Description("CC13: Motional Surround Control 2")]
+        CC13 = 13,
+        [Description("CC14: Motional Surround Control 3")]
+        CC14 = 14,
+        CC15 = 15,
+        [Description("CC16: General Purpose Controller 1 (Tone Modify 1)")]
+        CC16 = 16,
+        [Description("CC17: General Purpose Controller 2 (Tone Modify 2)")]
+        CC17 = 17,
+        [Description("CC18: General Purpose Controller 3 (Tone Modify 3)")]
+        CC18 = 18,
+        [Description("CC19: General Purpose Controller 4 (Tone Modify 4)")]
+        CC19 = 19,
+        CC20 = 20,
+        CC21 = 21,
+        CC22 = 22,
+        CC23 = 23,
+        CC24 = 24,
+        CC25 = 25,
+        CC26 = 26,
+        CC27 = 27,
+        [Description("CC28: Motional Surround External Part Control 1")]
+        CC28 = 28,
+        [Description("CC29: Motional Surround External Part Control 2")]
+        CC29 = 29,
+        [Description("CC30: Motional Surround External Part Control 3")]
+        CC30 = 30,
+        CC31 = 31,
+        CC33 = 33,
+        CC34 = 34,
+        CC35 = 35,
+        CC36 = 36,
+        CC37 = 37,
+        [Description("CC38: Data Entry")]
+        CC38 = 38,
+        CC39 = 39,
+        CC40 = 40,
+        CC41 = 41,
+        CC42 = 42,
+        CC43 = 43,
+        CC44 = 44,
+        CC45 = 45,
+        CC46 = 46,
+        CC47 = 47,
+        CC48 = 48,
+        CC49 = 49,
+        CC50 = 50,
+        CC51 = 51,
+        CC52 = 52,
+        CC53 = 53,
+        CC54 = 54,
+        CC55 = 55,
+        CC56 = 56,
+        CC57 = 57,
+        CC58 = 58,
+        CC59 = 59,
+        CC60 = 60,
+        CC61 = 61,
+        CC62 = 62,
+        CC63 = 63,
+        [Description("CC64: Hold 1")]
+        CC64 = 64,
+        [Description("CC65: Portamento")]
+        CC65 = 65,
+        [Description("CC66: Sostenuto")]
+        CC66 = 66,
+        [Description("CC67: Soft")]
+        CC67 = 67,
+        [Description("CC68: Legato Foot Switch")]
+        CC68 = 68,
+        [Description("CC69: Hold 2")]
+        CC69 = 69,
+        CC70 = 70,
+        [Description("CC71: Resonance")]
+        CC71 = 71,
+        [Description("CC72: Release Time")]
+        CC72 = 72,
+        [Description("CC73: Attack Time")]
+        CC73 = 73,
+        [Description("CC74: Cutoff")]
+        CC74 = 74,
+        [Description("CC75: Decay Time")]
+        CC75 = 75,
+        [Description("CC76: Vibrato Rate")]
+        CC76 = 76,
+        [Description("CC77: Vibrato Depth")]
+        CC77 = 77,
+        [Description("CC78: Vibrato Delay")]
+        CC78 = 78,
+        CC79 = 79,
+        [Description("CC80: General Purpose Controller 5 (Tone Variation 1)")]
+        CC80 = 80,
+        [Description("CC81: General Purpose Controller 6 (Tone Variation 2)")]
+        CC81 = 81,
+        [Description("CC82: General Purpose Controller 7 (Tone Variation 3)")]
+        CC82 = 82,
+        [Description("CC83: General Purpose Controller 8 (Tone Variation 4)")]
+        CC83 = 83,
+        [Description("CC84: Portamento Control")]
+        CC84 = 84,
+        CC85 = 85,
+        CC86 = 86,
+        CC87 = 87,
+        CC88 = 88,
+        CC89 = 89,
+        CC90 = 90,
+        [Description("CC91: General Purpose Effect 1 (Reverb Send Level)")]
+        CC91 = 91,
+        CC92 = 92,
+        [Description("CC93: General Purpose Effect 3 (Chorus Send Level)")]
+        CC93 = 93,
+        CC94 = 94,
+        CC95 = 95,
+        [Description("Pitch Bend")]
+        Bend = 96,
+        [Description("Aftertouch")]
+        Aft = 97,
+        [Description("System Control 1")]
+        Sys01 = 98,
+        [Description("System Control 2")]
+        Sys02 = 99,
+        [Description("System Control 3")]
+        Sys03 = 100,
+        [Description("System Control 4")]
+        Sys04 = 101,
+        Velocity = 102,
+        [Description("Key Follow")]
+        KeyFollow = 103,
+        Tempo = 104,
+        [Description("LFO 1")]
+        LFO01 = 105,
+        [Description("LFO 2")]
+        LFO02 = 106,
+        [Description("Pitch Envelope")]
+        Pitch = 107,
+        [Description("TVF Envelope")]
+        TVF = 108,
+        [Description("TVA Envelope")]
+        TVA = 109,
+    }
 
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraMatrixControlDestination : byte
+    {
+        Off = 0,
+        PCH = 1,
+        CUT = 2,
+        RES = 3,
+        LEV = 4,
+        PAN = 5,
+        DRY = 6,
+        CHO = 7,
+        REV = 8,
+        PITLFO1 = 9,
+        PITLFO2 = 10,
+        TVFLFO1 = 11,
+        TVFLFO2 = 12,
+        TVALFO1 = 13,
+        TFALFO2 = 14,
+        PANLFO1 = 15,
+        PANLFO2 = 16,
+        RATELFO1 = 17,
+        RATELFO2 = 18,
+        PITATK = 19,
+        PITDCY = 20,
+        PITREL = 21,
+        TVFATK = 22,
+        TVFDCY = 23,
+        TVFREL = 24,
+        TVAATK = 25,
+        TVADCY = 26,
+        TVAREL = 27,
+        PMT =  28,
+        FXM = 29,
+        RES01 = 30,
+        RES02 = 31,
+        RES03 = 32,
+        RES04 = 33
+    }
+    
     [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraMFXControlAssigns : byte
     {
@@ -928,5 +1133,32 @@ namespace Integra.Core
     {
         Normal = 0x00,
         Legato = 0x01
+    }
+
+    public enum IntegraPortamentoType : byte
+    {
+        Rate = 0x00,
+        Time = 0x01
+    }
+
+    public enum IntegraPortamentoStart : byte
+    {
+        Pitch = 0x00,
+        Note  = 0x01
+    }
+
+    public enum IntegraTonePriority : byte
+    {
+        Last    = 0x00,
+        Loudest = 0x01
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraStretchTuneDepth : byte
+    {
+        [Description("Off")] Off     = 0x00,
+        [Description("1")]   Depth01 = 0x01,
+        [Description("2")]   Depth02 = 0x02,
+        [Description("3")]   Depth03 = 0x03
     }
 }

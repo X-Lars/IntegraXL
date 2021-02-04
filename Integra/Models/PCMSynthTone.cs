@@ -1,26 +1,44 @@
 ﻿using Integra.Core;
-using Integra.Core.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Integra.Models
 {
-    public class PCMSynthTone : IntegraBase<PCMSynthTone>//, IToneMFX
+    public class PCMSynthTone : IntegraBase<PCMSynthTone>
     {
-        //private ToneMFX _MFX;
+        private IntegraParts _Part;
 
-        public PCMSynthTone(IntegraAddress address) : base(address)
+        private PCMSynthToneCommon _Common;
+
+        public PCMSynthTone(IntegraAddress address, IntegraParts part) : base(address)
         {
             Name = "PCM Synth Tone";
-            //_MFX = new ToneMFX(address);
+            Part = part;
+            Common = new PCMSynthToneCommon(address, part);
         }
 
-        //public ToneMFX MFX
-        //{
-        //    get { return _MFX; }
-        //}
+        public IntegraParts Part
+        {
+            get { return _Part; }
+            set
+            {
+                if(_Part != value)
+                {
+                    _Part = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public PCMSynthToneCommon Common
+        {
+            get { return _Common; }
+            set
+            {
+                if(_Common != value)
+                {
+                    _Common = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
     }
 }
