@@ -18,5 +18,10 @@ namespace Integra.Common
         {
             return (byte)(value + offset);
         }
+
+        public static short GetShort(this byte[] value)
+        {
+            return (short)((value[0] & 0x0F) << 4 | (value[1] & 0x0F));
+        }
     }
 }

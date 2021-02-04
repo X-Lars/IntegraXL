@@ -883,7 +883,11 @@ namespace Integra.Core
             typeof(TemporaryTone),
             typeof(ToneMFX),
             typeof(StudioSetMasterEQ),
-            typeof(StudioSetCommonChorus)
+            typeof(StudioSetCommonChorus),
+            typeof(StudioSetCommonReverb),
+            typeof(StudioSetCommonMotionalSurround),
+            typeof(SuperNATURALAcousticTone),
+            typeof(SuperNATURALAcousticToneCommon)
         };
 
         public virtual void Update()

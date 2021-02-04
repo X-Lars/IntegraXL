@@ -1,5 +1,6 @@
 ﻿using Integra.Core;
 using Integra.Core.Interfaces;
+using Integra.Database;
 using MidiXL;
 using System;
 
@@ -42,6 +43,30 @@ namespace Integra.Models
             MFX = new ToneMFX(Address, part);
 
             Console.WriteLine($"[{nameof(TemporaryTone)}] {Address} - {Type}");
+
+            switch (Type)
+            {
+                case IntegraToneTypes.SuperNATURALAcousticTone:
+                    SuperNATURALAcousticTone = new SuperNATURALAcousticTone(Address, Part);
+                    //SuperNATURALAcousticTone.Initialize();
+                    break;
+                case IntegraToneTypes.SuperNATURALSynthTone:
+                    SuperNATURALSynthTone = new SuperNATURALSynthTone(Address);
+                    //SuperNATURALSynthTone.Initialize();
+                    break;
+                case IntegraToneTypes.SuperNATURALDrumkit:
+                    SuperNATURALDrumKit = new SuperNATURALDrumKit(Address);
+                    //SuperNATURALDrumKit.Initialize();
+                    break;
+                case IntegraToneTypes.PCMSynthTone:
+                    PCMSynthTone = new PCMSynthTone(Address);
+                    //PCMSynthTone.Initialize();
+                    break;
+                case IntegraToneTypes.PCMDrumkit:
+                    PCMDrumKit = new PCMDrumKit(Address);
+                    //PCMDrumKit.Initialize();
+                    break;
+            }
         }
 
         #endregion
@@ -81,7 +106,7 @@ namespace Integra.Models
                 switch (Type)
                 {
                     case IntegraToneTypes.SuperNATURALAcousticTone:
-                        SuperNATURALAcousticTone = new SuperNATURALAcousticTone(Address);
+                        SuperNATURALAcousticTone = new SuperNATURALAcousticTone(Address, Part);
                         //SuperNATURALAcousticTone.Initialize();
                         break;
                     case IntegraToneTypes.SuperNATURALSynthTone:
@@ -147,7 +172,7 @@ namespace Integra.Models
             }
         }
 
-        public virtual SuperNATURALAcousticTone SuperNATURALAcousticTone
+        public SuperNATURALAcousticTone SuperNATURALAcousticTone
         {
             get { return _SuperNaturalAcousticTone; }
             private set
@@ -196,5 +221,65 @@ namespace Integra.Models
                 NotifyPropertyChanged();
             }
         }
+
+        #region IIntegraDataClass
+
+        public override void Insert()
+        {
+            switch (Type)
+            {
+                case IntegraToneTypes.SuperNATURALAcousticTone:
+                    SuperNATURALAcousticTone.Insert();
+                    break;
+            }
+        }
+
+        public override void Select(int id)
+        {
+            // TODO: Select change tone type
+            switch(Type)
+            {
+                case IntegraToneTypes.SuperNATURALAcousticTone:
+                    SuperNATURALAcousticTone.Select(id);
+                    break;
+            }
+        }
+
+        public override void Update()
+        {
+            // TODO: Update when tone type is changed, delete old tone type insert new tone type
+            switch(Type)
+            {
+                case IntegraToneTypes.SuperNATURALAcousticTone:
+                    SuperNATURALAcousticTone.Update();
+                    break;
+            }
+        }
+
+        public override void Delete()
+        {
+            DataAccess.Delete(this);
+
+            switch(Type)
+            {
+                case IntegraToneTypes.SuperNATURALAcousticTone:
+                    SuperNATURALAcousticTone.Delete();
+                    break;
+            }
+        }
+
+        public override void Truncate()
+        {
+            DataAccess.Truncate(this);
+
+            switch(Type)
+            {
+                case IntegraToneTypes.SuperNATURALAcousticTone:
+                    SuperNATURALAcousticTone.Truncate();
+                    break;
+            }
+        }
+
+        #endregion
     }
 }

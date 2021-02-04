@@ -84,7 +84,7 @@ namespace IntegraXL
             //DataAccess.Test(Integra.StudioSet.MIDI);
             //DataAccess.Test(Integra.StudioSet);
 
-            DataAccess.Load(Integra.StudioSet.Common, 1);
+            //DataAccess.Load(Integra.StudioSet.Common, 1);
         }
 
         protected override void OnClosed(EventArgs e)

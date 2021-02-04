@@ -7,56 +7,50 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+// TODO: Parameter context based on tone category (See Roland parameter reference)
 namespace Integra.Models
 {
     public class SuperNATURALAcousticTone : IntegraBase<SuperNATURALAcousticTone>//, IToneMFX
     {
-        private SuperNATURALAcousticToneCommon _Common;
-        //private ToneMFX _MFX;
+        private IntegraParts _Part;
 
-        public SuperNATURALAcousticTone(IntegraAddress address) : base(address)
+        private SuperNATURALAcousticToneCommon _Common;
+
+        public SuperNATURALAcousticTone(IntegraAddress address, IntegraParts part) : base(address)
         {
             Name = "SuperNATURAL Acoustic Tone";
 
-            _Common = new SuperNATURALAcousticToneCommon(address);
-            //_MFX = new ToneMFX(address);
+            Part = part;
+            Common = new SuperNATURALAcousticToneCommon(address, part);
+        }
+
+        public IntegraParts Part
+        {
+            get { return _Part; }
+            set
+            {
+                if(Part != value)
+                {
+                    _Part = value;
+                    NotifyPropertyChanged();
+                }
+            }
         }
 
         public SuperNATURALAcousticToneCommon Common
         {
             get { return _Common; }
+            set
+            {
+                if(Common != value)
+                {
+                    _Common = value;
+                    NotifyPropertyChanged();
+                }
+            }
         }
 
-        //public ToneMFX MFX
-        //{
-        //    get { return _MFX; }
-        //    //set
-        //    //{
-        //    //    if(_MFX != value)
-        //    //    {
-        //    //        _MFX = value;
-        //    //        NotifyPropertyChanged();
-        //    //    }
-        //    //}
-        //}
-
-        //internal override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
-        //{
-        //    IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
-
-        //    if(!IsInitialized)
-        //    {
-        //        if(syx.Address == Address)
-        //        {
-        //            if (Initialize(syx.Data))
-        //                Device.Instance.ReportProgress(new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
-        //        }
-        //        else if((syx.Address & 0xFFFF0000) == (Address & 0xFFFF0000))
-        //        {
-        //            InitializeField(syx);
-        //        }
-
-        //    }
-        //}
+        
     }
 }

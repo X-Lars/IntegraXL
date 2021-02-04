@@ -73,6 +73,7 @@
     <Compile Include="Common\DoubleExtensions.cs" />
     <Compile Include="Common\EnumerationExtensions.cs" />
     <Compile Include="Common\IntegerExtensions.cs" />
+    <Compile Include="Common\ShortExtensions.cs" />
     <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="Core\IntegraAddress.cs" />
     <Compile Include="Core\IntegraAttributes.cs" />
@@ -83,7 +84,6 @@
     <Compile Include="Core\IntegraBaseToneBank.cs" />
     <Compile Include="Core\IntegraConfiguration.cs" />
     <Compile Include="Core\IntegraConstants.cs" />
-    <Compile Include="Core\IntegraDataTypes.cs" />
     <Compile Include="Core\IntegraEnumerations.cs" />
     <Compile Include="Core\IntegraEventArgs.cs" />
     <Compile Include="Core\IntegraExceptions.cs" />
@@ -166,9 +166,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Database\Conventions.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

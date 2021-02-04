@@ -849,10 +849,70 @@ namespace Integra.Core
         [Description("Hall 2")] Hall02 = 0x03
     }
 
-    public enum IntegraRoomSizes
+    public enum IntegraRoomSizes : byte
     {
-        Small  = 0,
-        Medium = 1,
-        Large  = 2,
+        Small  = 0x00,
+        Medium = 0x01,
+        Large  = 0x02,
+    }
+    public enum IntegraMonyPolySwitch : byte
+    {
+        Mono = 0x00,
+        Poly = 0x01,
+        Tone = 0x02
+    }
+
+    public enum IntegraToneSwitch : byte
+    {
+        Off  = 0x00,
+        On   = 0x01,
+        Tone = 0x02
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraVelocityCurveTypes : byte
+    {
+        [Description("Off")] Off  = 0x00,
+        [Description("1")]   VC01 = 0x01,
+        [Description("2")]   VC02 = 0x02,
+        [Description("3")]   VC03 = 0x03,
+        [Description("4")]   VC04 = 0x04
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraScaleTuneTypes : byte
+    {
+        [Description("Custom Individually")]                Custom      = 0x00,
+        [Description("Equal Temprament")]                   Equal       = 0x01,
+        [Description("Just Intonation (Major)")]            JustMaj     = 0x02,
+        [Description("Just Intonation (Minor)")]            JustMin     = 0x03,
+        [Description("Pythagorean Tuning")]                 Pythagore   = 0x04,
+        [Description("Kirnberger (Type 3)")]                Kirnberge   = 0x05,
+        [Description("Meantone Temprament")]                MeanTone    = 0x06,
+        [Description("Werckmeister (Type 1, Number 3)")]    Werckmeis   = 0x07,
+        [Description("Arabic Scale")]                       Arabic      = 0x08
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraScaleTuneKeys : byte
+    {
+        [Description("C")]  C       = 0x00,
+        [Description("C#")] CSharp  = 0x01,
+        [Description("D")]  D       = 0x02,
+        [Description("D#")] DSharp  = 0x03,
+        [Description("E")]  E       = 0x04,
+        [Description("F")]  F       = 0x05,
+        [Description("F#")] FSharp  = 0x06,
+        [Description("G")]  G       = 0x07,
+        [Description("G#")] GSharp  = 0x08,
+        [Description("A")]  A       = 0x09,
+        [Description("A#")] ASharp  = 0x0A,
+        [Description("B")]  B       = 0x0B
+    }
+
+    public enum IntegraMuteSwitch : byte
+    {
+        Off  = 0x00,
+        Mute = 0x01
     }
 }
