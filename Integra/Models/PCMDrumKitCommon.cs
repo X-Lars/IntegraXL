@@ -1,4 +1,5 @@
 ﻿using Integra.Core;
+using Integra.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Integra.Models
 {
-    public class PCMDrumKitCommon : IntegraBase<PCMDrumKitCommon>
+    public class PCMDrumKitCommon : IntegraBase<PCMDrumKitCommon>, IIntegraPartial
     {
         private IntegraParts _Part;
 

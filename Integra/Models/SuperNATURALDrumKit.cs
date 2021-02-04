@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Integra.Models
 {
-    public class SuperNATURALDrumKit : IntegraBase<SuperNATURALDrumKit>
+    public class SuperNATURALDrumKit : IntegraBase<SuperNATURALDrumKit>, IIntegraPartial
     {
         private IntegraParts _Part;
         private SuperNATURALDrumKitCommon _Common;

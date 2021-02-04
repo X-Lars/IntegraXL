@@ -1,18 +1,21 @@
 ﻿using Integra.Core;
+using Integra.Core.Interfaces;
 
 namespace Integra.Models
 {
-    public class PCMSynthTone : IntegraBase<PCMSynthTone>
+    public class PCMSynthTone : IntegraBase<PCMSynthTone>, IIntegraPartial
     {
         private IntegraParts _Part;
 
         private PCMSynthToneCommon _Common;
+        private PCMSynthToneCommon02 _Common02;
 
-        public PCMSynthTone(IntegraAddress address, IntegraParts part) : base(address)
+        public PCMSynthTone(IntegraAddress address, IntegraParts part) : base(address + 0x00003000, 0x0000003C)
         {
             Name = "PCM Synth Tone";
             Part = part;
             Common = new PCMSynthToneCommon(address, part);
+            Common02 = new PCMSynthToneCommon02(address, part);
         }
 
         public IntegraParts Part
@@ -36,6 +39,19 @@ namespace Integra.Models
                 if(_Common != value)
                 {
                     _Common = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public PCMSynthToneCommon02 Common02
+        {
+            get { return _Common02; }
+            set
+            {
+                if(_Common02 != value)
+                {
+                    _Common02 = value;
                     NotifyPropertyChanged();
                 }
             }

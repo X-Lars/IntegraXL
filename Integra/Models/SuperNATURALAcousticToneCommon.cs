@@ -2,10 +2,11 @@
 using Integra.Common;
 using System;
 using System.Text;
+using Integra.Core.Interfaces;
 
 namespace Integra.Models
 {
-    public class SuperNATURALAcousticToneCommon : IntegraBase<SuperNATURALAcousticToneCommon>
+    public class SuperNATURALAcousticToneCommon : IntegraBase<SuperNATURALAcousticToneCommon>, IIntegraPartial
     {
         private IntegraParts _Part;
 

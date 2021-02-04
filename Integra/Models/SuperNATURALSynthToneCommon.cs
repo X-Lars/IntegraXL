@@ -6,10 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Integra.Core.Interfaces;
 
 namespace Integra.Models
 {
-    public class SuperNATURALSynthToneCommon : IntegraBase<SuperNATURALSynthToneCommon>
+    public class SuperNATURALSynthToneCommon : IntegraBase<SuperNATURALSynthToneCommon>, IIntegraPartial
     {
         private IntegraParts _Part;
 

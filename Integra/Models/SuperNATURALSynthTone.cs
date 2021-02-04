@@ -1,8 +1,9 @@
 ﻿using Integra.Core;
+using Integra.Core.Interfaces;
 
 namespace Integra.Models
 {
-    public class SuperNATURALSynthTone : IntegraBase<SuperNATURALSynthTone>
+    public class SuperNATURALSynthTone : IntegraBase<SuperNATURALSynthTone>, IIntegraPartial
     {
         private IntegraParts _Part;
         private SuperNATURALSynthToneCommon _Common;

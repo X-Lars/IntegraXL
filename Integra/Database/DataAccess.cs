@@ -620,7 +620,10 @@ namespace Integra.Database
                                 {
                                     if(parameter.Value.PropertyType.GetInterfaces().Contains(typeof(IIntegraDataClass)))
                                     {
-                                        ((IIntegraDataClass)parameter.Value.GetValue(instance)).Select(id);
+                                        // Reference parameters can be null
+                                        if(parameter.Value.GetValue(instance)!= null)
+                                            ((IIntegraDataClass)parameter.Value.GetValue(instance)).Select(id);
+                                        
                                         offset++;
                                     }
                                     else if(parameter.Value.PropertyType.IsArray)

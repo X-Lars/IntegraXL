@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 // TODO: Parameter context based on tone category (See Roland parameter reference)
 namespace Integra.Models
 {
-    public class SuperNATURALAcousticTone : IntegraBase<SuperNATURALAcousticTone>//, IToneMFX
+    public class SuperNATURALAcousticTone : IntegraBase<SuperNATURALAcousticTone>, IIntegraPartial
     {
         private IntegraParts _Part;
 

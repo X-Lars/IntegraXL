@@ -1,9 +1,10 @@
 ﻿using Integra.Core;
+using Integra.Core.Interfaces;
 using System.Text;
 
 namespace Integra.Models
 {
-    public class SuperNATURALDrumKitCommon :IntegraBase<SuperNATURALDrumKitCommon>
+    public class SuperNATURALDrumKitCommon :IntegraBase<SuperNATURALDrumKitCommon>, IIntegraPartial
     {
         private IntegraParts _Part;
 

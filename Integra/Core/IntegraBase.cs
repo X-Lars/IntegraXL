@@ -894,6 +894,7 @@ namespace Integra.Core
             typeof(SuperNATURALDrumKitCommon),
             typeof(PCMSynthTone),
             typeof(PCMSynthToneCommon),
+            typeof(PCMSynthToneCommon02),
             typeof(PCMDrumKit),
             typeof(PCMDrumKitCommon)
         };

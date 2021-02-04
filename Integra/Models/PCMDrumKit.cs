@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Integra.Models
 {
-    public class PCMDrumKit : IntegraBase<PCMDrumKit>
+    public class PCMDrumKit : IntegraBase<PCMDrumKit>, IIntegraPartial
     {
         private IntegraParts _Part;
         private PCMDrumKitCommon _Common;
