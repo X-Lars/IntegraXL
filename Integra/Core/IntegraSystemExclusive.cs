@@ -204,6 +204,7 @@ namespace Integra.Core
         /// <returns>A <see cref="string"/> containing a hexadecimal representation of the system exclusive message.</returns>
         public override string ToString()
         {
+            // TODO: Remove temp
             return string.Join(" ", ((byte[])this).Select(x => string.Format("{0:X2}", x)));
         }
 

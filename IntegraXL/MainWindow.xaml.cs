@@ -80,10 +80,11 @@ namespace IntegraXL
 
         private void OnTest(object sender, ExecutedRoutedEventArgs e)
         {
-            string testString = "TEST";
-            DataAccess.Test(Integra.StudioSet.MIDI);
-            DataAccess.Test(Integra.StudioSet);
-            DataAccess.Test(testString);
+            //string testString = "TEST";
+            //DataAccess.Test(Integra.StudioSet.MIDI);
+            //DataAccess.Test(Integra.StudioSet);
+
+            DataAccess.Load(Integra.StudioSet.Common, 1);
         }
 
         protected override void OnClosed(EventArgs e)

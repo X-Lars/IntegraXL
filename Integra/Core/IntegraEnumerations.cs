@@ -539,7 +539,7 @@ namespace Integra.Core
     }
 
     [TypeConverter(typeof(DescriptionConverter))]
-    public enum IntegraOutputAssigns : ushort
+    public enum IntegraOutputAssigns : byte
     {
         [Description("Part")] OutputPart,
         [Description("A")] OutputA,
@@ -703,7 +703,7 @@ namespace Integra.Core
 
 
     [TypeConverter(typeof(DescriptionConverter))]
-    public enum IntegraMFXControlAssigns
+    public enum IntegraMFXControlAssigns : byte
     {
         [Description("Off")] Off,
         [Description("01")]  Channel1,

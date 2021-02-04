@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace Integra.Database
 {
@@ -567,8 +568,6 @@ namespace Integra.Database
 
             return result;
         }
-
-
 
         /// <summary>
         /// Gets the <paramref name="instance"/> with the specified <paramref name="id"/> from the database.

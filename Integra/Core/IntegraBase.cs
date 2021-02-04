@@ -357,7 +357,7 @@ namespace Integra.Core
         /// <typeparam name="T">The instance type specifier.</typeparam>
         /// <param name="offset">The offset associated to the property.</param>
         /// <returns>The property at the specified offset.</returns>
-        private static PropertyInfo Property(ushort offset)
+        public static PropertyInfo Property(ushort offset)
         {
             return _Properties.ContainsKey(offset) ? _Properties[offset] : null;
         }
@@ -403,6 +403,11 @@ namespace Integra.Core
         public static Dictionary<ushort, FieldInfo> GetFields()
         {
             return _Fields;
+        }
+
+        public static Dictionary<ushort, PropertyInfo> GetProperties()
+        {
+            return _Properties;
         }
 
         /// <summary>
@@ -944,9 +949,103 @@ namespace Integra.Core
             if (!_Types.Contains(GetType()))
                 return;
 
-            DataAccess.Select(this, id);
+
+            // Prevent property transmission
+            IsInitialized = false;
+
+            int result = DataAccess.Select(this, id);
+
+            if(result == 1)
+            {
+
+                byte[] data = GetUpdateData();
+
+                if(data != null)
+                    Device.Instance.SendSystemExclusive(new IntegraSystemExclusive(Address, 0, GetUpdateData()));
+
+                IsInitialized = true;
+                NotifyPropertyChanged(string.Empty, false);
+            }
         }
         #endregion
+
+        public byte[] GetUpdateData()
+        {
+            if (Requests.Count != 1)
+                return null;
+
+            byte[] bytes = new byte[Requests[0]];
+
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                FieldInfo field = Field((ushort)i);
+
+                if (field != null)
+                {
+                    if (field.FieldType.IsArray)
+                    {
+                        Array array = (Array)field.GetValue(this);
+                        Type arrayType = array.GetType().GetElementType();
+
+                        if (arrayType == typeof(int))
+                        {
+                            int[] intArray = (int[])field.GetValue(this);
+
+                            for (int j = 0; j < intArray.Length; j++)
+                            {
+                                byte[] values = new byte[4];
+                                values = BitConverter.GetBytes(intArray[j]);
+
+                                if (BitConverter.IsLittleEndian)
+                                    Array.Reverse(values);
+
+                                Array.Copy(values, 0, bytes, i, 4);
+                                i += 4;
+                            }
+                        }
+                        else if (arrayType == typeof(byte))
+                        {
+                            byte[] byteArray = (byte[])field.GetValue(this);
+
+                            for (int j = 0; j < byteArray.Length; j++)
+                            {
+                                bytes[i] = byteArray[j];
+                                i++;
+                            }
+                        }
+                    }
+                    else if (field.FieldType == typeof(bool))
+                    {
+                        bytes[i] = ((bool)field.GetValue(this)) == true ? (byte)1 : (byte)0;
+                    }
+                    else if (field.FieldType.IsEnum)
+                    {
+                        bytes[i] = (byte)field.GetValue(this);
+                    }
+                    else if (field.FieldType == typeof(int))
+                    {
+                        byte[] values = BitConverter.GetBytes((int)field.GetValue(this));
+
+                        if (BitConverter.IsLittleEndian)
+                            Array.Reverse(values);
+
+                        Array.Copy(values, 0, bytes, i, 4);
+                        i += 4;
+
+                    }
+                    else
+                    {
+                        bytes[i] = (byte)field.GetValue(this);
+                    }
+                }
+                else
+                {
+                    bytes[i] = 0;
+                }
+            }
+
+            return bytes;
+        }
     }
 
 }
