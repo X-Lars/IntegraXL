@@ -130,6 +130,7 @@
     <Compile Include="Models\SuperNATURALAcousticTone.cs" />
     <Compile Include="Models\SuperNATURALAcousticToneCommon.cs" />
     <Compile Include="Models\SuperNATURALDrumKit.cs" />
+    <Compile Include="Models\SuperNATURALDrumKitCommon.cs" />
     <Compile Include="Models\SuperNATURALSynthTone.cs" />
     <Compile Include="Models\SuperNATURALSynthToneCommon.cs" />
     <Compile Include="Models\TemporaryTone.cs" />

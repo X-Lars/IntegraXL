@@ -54,7 +54,7 @@ namespace Integra.Models
                     break;
 
                 case IntegraToneTypes.SuperNATURALDrumkit:
-                    SuperNATURALDrumKit = new SuperNATURALDrumKit(Address);
+                    SuperNATURALDrumKit = new SuperNATURALDrumKit(Address, Part);
                     break;
 
                 case IntegraToneTypes.PCMSynthTone:
@@ -127,7 +127,7 @@ namespace Integra.Models
             }
         }
 
-        public virtual SuperNATURALDrumKit SuperNATURALDrumKit
+        public SuperNATURALDrumKit SuperNATURALDrumKit
         {
             get { return _SuperNaturalDrumKit; }
             private set
@@ -169,6 +169,9 @@ namespace Integra.Models
                 case IntegraToneTypes.SuperNATURALSynthTone:
                     SuperNATURALSynthTone.Insert();
                     break;
+                case IntegraToneTypes.SuperNATURALDrumkit:
+                    SuperNATURALDrumKit.Insert();
+                    break;
             }
         }
 
@@ -182,6 +185,9 @@ namespace Integra.Models
                     break;
                 case IntegraToneTypes.SuperNATURALSynthTone:
                     SuperNATURALSynthTone.Select(id);
+                    break;
+                case IntegraToneTypes.SuperNATURALDrumkit:
+                    SuperNATURALDrumKit.Select(id);
                     break;
             }
         }
@@ -197,6 +203,9 @@ namespace Integra.Models
                 case IntegraToneTypes.SuperNATURALSynthTone:
                     SuperNATURALSynthTone.Update();
                     break;
+                case IntegraToneTypes.SuperNATURALDrumkit:
+                    SuperNATURALDrumKit.Update();
+                    break;
             }
         }
 
@@ -211,6 +220,9 @@ namespace Integra.Models
                     break;
                 case IntegraToneTypes.SuperNATURALSynthTone:
                     SuperNATURALSynthTone.Delete();
+                    break;
+                case IntegraToneTypes.SuperNATURALDrumkit:
+                    SuperNATURALDrumKit.Delete();
                     break;
             }
         }
@@ -228,6 +240,9 @@ namespace Integra.Models
                     break;
                 case IntegraToneTypes.SuperNATURALSynthTone:
                     SuperNATURALSynthTone.Truncate();
+                    break;
+                case IntegraToneTypes.SuperNATURALDrumkit:
+                    SuperNATURALDrumKit.Truncate();
                     break;
             }
         }
