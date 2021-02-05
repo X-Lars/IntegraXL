@@ -40,8 +40,6 @@ namespace Integra.Core
         public byte PC { get; set; }
         public IntegraToneCategories Category { get; set; }
 
-        // TODO: Batch insert exclude virtual properties
-
         public virtual IntegraToneBanks ToneBank
         {
             get { return this.ToneBank(); }

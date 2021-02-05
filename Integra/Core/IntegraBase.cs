@@ -901,7 +901,8 @@ namespace Integra.Core
             typeof(PCMSynthTonePartial),
             typeof(PCMSynthToneCommon02),
             typeof(PCMDrumKit),
-            typeof(PCMDrumKitCommon)
+            typeof(PCMDrumKitCommon),
+            typeof(PCMDrumKitCommonCompEQ)
         };
 
         public virtual void Update()

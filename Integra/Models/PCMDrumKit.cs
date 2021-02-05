@@ -1,23 +1,21 @@
 ﻿using Integra.Core;
 using Integra.Core.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Integra.Models
 {
     public class PCMDrumKit : IntegraBase<PCMDrumKit>, IIntegraPartial
     {
         private IntegraParts _Part;
+
         private PCMDrumKitCommon _Common;
+        private PCMDrumKitCommonCompEQ _CompEQ;
 
         public PCMDrumKit(IntegraAddress address, IntegraParts part) : base(address)
         {
             Name = "PCM Drum Kit";
             Part = part;
             Common = new PCMDrumKitCommon(address, part);
+            CompEQ = new PCMDrumKitCommonCompEQ(address, Part);
         }
 
         public IntegraParts Part
@@ -46,5 +44,17 @@ namespace Integra.Models
             }
         }
         
+        public PCMDrumKitCommonCompEQ CompEQ
+        {
+            get { return _CompEQ; }
+            set
+            {
+                if(_CompEQ != value)
+                {
+                    _CompEQ = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
     }
 }

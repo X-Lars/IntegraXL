@@ -7,12 +7,12 @@ namespace Integra.Models
     public class StudioSetPart : IntegraBase<StudioSetPart>, IIntegraPartial
     {
         private IntegraParts _Part;
-        
+
         private IntegraToneTypes _Type = IntegraToneTypes.SuperNATURALAcousticTone;
 
         private TemporaryTone _TemporaryTone;
 
-        
+
 
         [Offset(0x0000)] private byte _ReceiveChannel;
         [Offset(0x0001)] private byte _ReceiveSwitch;
@@ -127,7 +127,7 @@ namespace Integra.Models
             get { return _TemporaryTone; }
             set
             {
-                if(_TemporaryTone != value)
+                if (_TemporaryTone != value)
                 {
                     _TemporaryTone = value;
                     NotifyPropertyChanged();
@@ -135,7 +135,7 @@ namespace Integra.Models
             }
         }
 
-        
+
 
         [Offset(0x0000)]
         public IntegraChannels ReceiveChannel
@@ -401,11 +401,28 @@ namespace Integra.Models
             }
         }
 
-        // TODO: Keyboard ranges
-        //[Offset(0x001D)] 
-        //public byte _KeyboardRangeLower;
-        //[Offset(0x001E)] 
-        //public byte _KeyboardRangeUpper;
+        [Offset(0x001D)]
+        public byte KeyboardRangeLower
+        {
+            get { return _KeyboardRangeLower; }
+            set
+            {
+                _KeyboardRangeLower = value;
+                NotifyPropertyChanged();
+
+            }
+        }
+
+        [Offset(0x001E)]
+        public byte KeyboardRangeUpper
+        {
+            get { return _KeyboardRangeUpper; }
+            set
+            {
+                _KeyboardRangeUpper = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         [Offset(0x001F)]
         public byte KeyboardFadeWidthLower
@@ -428,11 +445,28 @@ namespace Integra.Models
                 NotifyPropertyChanged();
             }
         }
-        // TODO: Velocity ranges
-        //[Offset(0x0021)] 
-        //public byte _VelocityRangeLower;
-        //[Offset(0x0022)] 
-        //public byte _VelocityRangeUpper;
+
+        [Offset(0x0021)]
+        public byte VelocityRangeLower
+        {
+            get { return _VelocityRangeLower; }
+            set
+            {
+                _VelocityRangeLower = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        [Offset(0x0022)]
+        public byte VelocityRangeUpper
+        {
+            get { return _VelocityRangeUpper; }
+            set
+            {
+                _VelocityRangeUpper = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         [Offset(0x0023)]
         public byte VelocityFadeWidthLower
