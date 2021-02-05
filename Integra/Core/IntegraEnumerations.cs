@@ -1161,4 +1161,82 @@ namespace Integra.Core
         [Description("2")]   Depth02 = 0x02,
         [Description("3")]   Depth03 = 0x03
     }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraNoteVariation : byte
+    {
+        // TODO: Enumeration descriptions
+        [Description("Off")] Off  = 0x00,
+        [Description("1")] Flam01 = 0x01,
+        [Description("2")] Flam02 = 0x02,
+        [Description("3")] Flam03 = 0x03,
+        [Description("1")] Buzz01 = 0x04,
+        [Description("2")] Buzz02 = 0x05,
+        [Description("3")] Buzz03 = 0x06,
+        [Description("3")] Roll   = 0x07,
+
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraNoteOutputAssign : byte
+    {
+        // TODO: Enumeration descriptions
+        [Description("Off")] Part = 0x00,
+        [Description("1")] CompEQ01 = 0x01,
+        [Description("2")] CompEQ02 = 0x02,
+        [Description("3")] CompEQ03 = 0x03,
+        [Description("1")] CompEQ04 = 0x04,
+        [Description("2")] CompEQ05 = 0x05,
+        [Description("3")] CompEQ06 = 0x06,
+    }
+
+    public class IntegraKeyboardRange : Enumeration
+    {
+        public static new List<string> Values
+        {
+            get
+            {
+                List<string> values = new List<string>();
+
+                int counter;
+                string suffix;
+
+                for (int i = 0; i < 128; i++)
+                {
+                    counter = (int)Math.Floor(i / 12d);
+
+                    if (counter == 0)
+                        suffix = "-";
+                    else
+                        suffix = (counter - 1).ToString();
+
+                    switch (i % 12)
+                    {
+                        case 0: values.Add("C " + suffix); break;
+                        case 1: values.Add("C#" + suffix); break;
+                        case 2: values.Add("D " + suffix); break;
+                        case 3: values.Add("Eb" + suffix); break;
+                        case 4: values.Add("E " + suffix); break;
+                        case 5: values.Add("F " + suffix); break;
+                        case 6: values.Add("F#" + suffix); break;
+                        case 7: values.Add("G " + suffix); break;
+                        case 8: values.Add("G#" + suffix); break;
+                        case 9: values.Add("A " + suffix); break;
+                        case 10: values.Add("Bb" + suffix); break;
+                        case 11: values.Add("B " + suffix); break;
+                    }
+                }
+
+                return values;
+            }
+        }
+    }
+
+    public enum IntegraVelocityControl : byte
+    {
+        Off    = 0x00,
+        On     = 0x01,
+        Random = 0x02,
+        Cycle  = 0x03
+    }
 }

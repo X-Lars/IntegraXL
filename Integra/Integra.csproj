@@ -93,6 +93,8 @@
     <Compile Include="Core\IntegraTone.cs" />
     <Compile Include="Core\IntegraToneExtensions.cs" />
     <Compile Include="Core\Interfaces\Interfaces.cs" />
+    <Compile Include="Models\PCMSynthTonePMT.cs" />
+    <Compile Include="Models\SuperNATURALDrumKitNote.cs" />
     <Compile Include="Database\DataAccess.cs" />
     <Compile Include="Database\IntegraDataSet.cs">
       <DependentUpon>IntegraDataSet.xsd</DependentUpon>

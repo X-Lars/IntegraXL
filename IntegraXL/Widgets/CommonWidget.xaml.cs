@@ -24,5 +24,6 @@ namespace IntegraXL.Widgets
         {
             InitializeComponent();
         }
+
     }
 }
