@@ -183,6 +183,14 @@ namespace Integra.Core
         [Description("Part 16")] Part16 = 0x0F
     }
 
+    public enum IntegraSynthTonePartials : byte
+    {
+        Partial01 = 0x00,
+        Partial02 = 0x01,
+        Partial03 = 0x02,
+        Partial04 = 0x03
+    }
+
     public enum IntegraSoundModes : byte
     {
         Studio  = 0x01,
@@ -1239,4 +1247,92 @@ namespace Integra.Core
         Random = 0x02,
         Cycle  = 0x03
     }
+
+    #region PCM Synth Tone Partial
+
+    public enum IntegraEnvelopeMode : byte
+    {
+        NoSustain = 0x00,
+        Sustain   = 0x01
+    }
+
+    public enum IntegraDelayMode : byte
+    {
+        Normal       = 0x00,
+        Hold         = 0x01,
+        KeyOffNormal = 0x02,
+        KeyOffDecay  = 0x03
+    }
+
+    public enum IntegraControlSwitch : byte
+    {
+        Off     = 0x00,
+        On      = 0x01,
+        Reverse = 0x02
+    }
+
+    public enum IntegraWaveGroupType : byte
+    {
+        INT        = 0x00,
+        SRX        = 0x01,
+        Reserved01 = 0x02,
+        Reserved02 = 0x03
+    }
+
+    public enum IntegraTVFFilterType : byte
+    {
+        OFF   = 0x00,
+        LPF   = 0x01,
+        BPF   = 0x02,
+        HPF   = 0x03,
+        PKG   = 0x04,
+        LPF02 = 0x05,
+        LPF03 = 0x06
+    }
+
+    public enum IntegraVelocityCurve : byte
+    {
+        Fixed   = 0x00,
+        Curve01 = 0x01,
+        Curve02 = 0x02,
+        Curve03 = 0x03,
+        Curve04 = 0x04,
+        Curve05 = 0x05,
+        Curve06 = 0x06,
+        Curve07 = 0x07,
+    }
+
+    public enum IntegraBiasDirection : byte
+    {
+        Lower      = 0x00,
+        Upper      = 0x01,
+        LowerUpper = 0x02,
+        All        = 0x03
+    }
+
+    public enum IntegraLFOWaveform : byte
+    {
+        SIN         = 0x00,
+        TRI         = 0x01,
+        SAWUP       = 0x02,
+        SAWDOWN     = 0x03,
+        SQR         = 0x04,
+        RND         = 0x05,
+        BENDUP      = 0x06,
+        BENDDOWN    = 0x07,
+        TRP         = 0x08,
+        SH          = 0x09,
+        CHS         = 0x0A,
+        VSIN        = 0x0B,
+        STEP        = 0x0C
+    }
+
+    public enum IntegraLFOFadeMode : byte
+    {
+        ONIN    = 0x00,
+        ONOUT   = 0x01,
+        OFFIN   = 0x02,
+        OFFOUT  = 0x03
+    }
+    #endregion
 }

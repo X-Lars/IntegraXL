@@ -594,6 +594,12 @@ namespace Integra.Database
                 columnOffset += 1;
             }
 
+            if(instance.GetType().GetInterfaces().Contains(typeof(IIntegraSynthTonePartial)))
+            {
+                sql += $" AND Partial = {(byte)((IIntegraSynthTonePartial)instance).Partial}";
+                columnOffset += 1;
+            }
+
             Console.WriteLine(sql);
 
             using (var connection = new SqlConnection(GetConnectionString()))

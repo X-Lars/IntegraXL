@@ -36,7 +36,7 @@ namespace Integra.Models
 
             Address += (uint)type;
 
-            Part = part;
+            _Part = part;
             Type = type;
 
             MFX = new ToneMFX(Address, part);
@@ -58,7 +58,7 @@ namespace Integra.Models
                     break;
 
                 case IntegraToneTypes.PCMSynthTone:
-                    PCMSynthTone = new PCMSynthTone(Address, part);
+                    PCMSynthTone = new PCMSynthTone(Address, Part);
                     break;
 
                 case IntegraToneTypes.PCMDrumkit:

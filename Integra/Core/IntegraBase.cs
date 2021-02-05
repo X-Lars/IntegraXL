@@ -267,7 +267,9 @@ namespace Integra.Core
                     }
                     else
                     {
-                        field.Value.SetValue(this, data[field.Key]);
+                        int key = field.Key;
+                        key = (((key & 0xFF00) >> 8) * 128) + (key & 0x00FF);
+                        field.Value.SetValue(this, data[key]);
                     }
                 }
 
@@ -704,6 +706,7 @@ namespace Integra.Core
                     {
                         if (Initialize(syx.Data))
                         {
+                            // TODO: Remove from Base to Partial collection class
                             // Set the Part property for IIntegraPartial implementing classes which is only present after initialization
                             if (typeof(T).GetInterfaces().Contains(typeof(IIntegraPartial)))
                             {
@@ -895,6 +898,7 @@ namespace Integra.Core
             typeof(PCMSynthTone),
             typeof(PCMSynthToneCommon),
             typeof(PCMSynthTonePMT),
+            typeof(PCMSynthTonePartial),
             typeof(PCMSynthToneCommon02),
             typeof(PCMDrumKit),
             typeof(PCMDrumKitCommon)

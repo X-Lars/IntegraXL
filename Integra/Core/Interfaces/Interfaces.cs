@@ -76,10 +76,19 @@ namespace Integra.Core.Interfaces
     /// <summary>
     /// Defines an interface for classes that are instantiated per part.
     /// </summary>
-    /// <remarks><i>Used by the data access layer load and save methods to dynamically add the partial column.</i></remarks>
+    /// <remarks><i>Used by the data access layer insert and select methods to dynamically add the part column.</i></remarks>
     public interface IIntegraPartial
     {
         IntegraParts Part { get; set; }
+    }
+
+    /// <summary>
+    /// Defines an interface for classes that are associated with a synth tone partial.
+    /// </summary>
+    /// <remarks><i>Used by the data access layer insert and select methods to dynamically add the partial column.</i></remarks>
+    public interface IIntegraSynthTonePartial
+    {
+        IntegraSynthTonePartials Partial { get; set; }
     }
 
     public interface IIntegraAddressable

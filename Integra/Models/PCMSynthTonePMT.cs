@@ -3,6 +3,7 @@ using Integra.Core.Interfaces;
 
 namespace Integra.Models
 {
+    // TODO: PMT Keyboard / Velocity Range intersection validation
     public class PCMSynthTonePMT : IntegraBase<PCMSynthTonePMT>, IIntegraPartial
     {
         private IntegraParts _Part;
