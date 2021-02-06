@@ -600,6 +600,12 @@ namespace Integra.Database
                 columnOffset += 1;
             }
 
+            if (instance.GetType().GetInterfaces().Contains(typeof(IIntegraDrumKitPartial)))
+            {
+                sql += $" AND Note = {(byte)((IIntegraDrumKitPartial)instance).Note}";
+                columnOffset += 1;
+            }
+
             Console.WriteLine(sql);
 
             using (var connection = new SqlConnection(GetConnectionString()))

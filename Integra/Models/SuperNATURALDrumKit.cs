@@ -1,10 +1,5 @@
 ﻿using Integra.Core;
 using Integra.Core.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Integra.Models
 {
@@ -12,13 +7,16 @@ namespace Integra.Models
     {
         private IntegraParts _Part;
         private SuperNATURALDrumKitCommon _Common;
-
+        private DrumKitCommonCompEQ _CompEQ;
+        private IntegraBaseSuperNATURALDrumKitNotes<SuperNATURALDrumKitNote> _Notes;
         public SuperNATURALDrumKit(IntegraAddress address, IntegraParts part) : base(address)
         {
             Name = "SuperNATURAL Drum Kit";
             Part = part;
 
             Common = new SuperNATURALDrumKitCommon(address, part);
+            CompEQ = new DrumKitCommonCompEQ(address, part);
+            _Notes = new IntegraBaseSuperNATURALDrumKitNotes<SuperNATURALDrumKitNote>(address, part);
         }
 
         public IntegraParts Part
@@ -42,6 +40,24 @@ namespace Integra.Models
                 _Common = value;
                 NotifyPropertyChanged();
             }
+        }
+
+        public DrumKitCommonCompEQ CompEQ
+        {
+            get { return _CompEQ; }
+            set
+            {
+                if (_CompEQ != value)
+                {
+                    _CompEQ = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public IntegraBaseSuperNATURALDrumKitNotes<SuperNATURALDrumKitNote> Notes
+        {
+            get { return _Notes; }
         }
     }
 }

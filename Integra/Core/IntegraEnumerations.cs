@@ -1334,5 +1334,50 @@ namespace Integra.Core
         OFFIN   = 0x02,
         OFFOUT  = 0x03
     }
+
+    #endregion
+
+    #region SuperNATURAL Synth Tone Partial
+
+    public enum IntegraOSCWave : byte
+    {
+        SAW      = 0x00,
+        SQR      = 0x01,
+        PWSQR    = 0x02,
+        TRI      = 0x03,
+        SINE     = 0x04,
+        NOISE    = 0x05,
+        SUPERSAW = 0x06,
+        PCM      = 0x07
+    }
+
+    public enum IntegraOSCWaveVariation : byte
+    {
+        A = 0x00,
+        B = 0x01,
+        C = 0x02
+    }
+
+    public enum IntegraFilterMode : byte
+    {
+        BYPASS      = 0x00,
+        LPF         = 0x01,
+        HPF         = 0x02,
+        BPF         = 0x03,
+        PKG         = 0x04,
+        LPF02       = 0x05,
+        LPF03       = 0x06,
+        LPF04       = 0x07
+    }
+
+    public enum IntegraLFOShape : byte
+    {
+        TRI     = 0x00,
+        SIN     = 0x01,
+        SAW     = 0x02,
+        SQR     = 0x03,
+        SH      = 0x04,
+        RND     = 0x05
+    }
     #endregion
 }

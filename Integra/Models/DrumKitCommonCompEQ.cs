@@ -4,7 +4,7 @@ using MidiXL;
 
 namespace Integra.Models
 {
-    public class PCMDrumKitCommonCompEQ : IntegraBase<PCMDrumKitCommonCompEQ>, IIntegraPartial
+    public class DrumKitCommonCompEQ : IntegraBase<DrumKitCommonCompEQ>, IIntegraPartial
     {
         #region Fields
 
@@ -128,7 +128,7 @@ namespace Integra.Models
 
         #region Constructor
 
-        public PCMDrumKitCommonCompEQ(IntegraAddress address, IntegraParts part) : base(address + 0x00000800, 0x00000054)
+        public DrumKitCommonCompEQ(IntegraAddress address, IntegraParts part) : base(address + 0x00000800, 0x00000054)
         {
             Name = "PCM Drum Kit Common Compressor/EQ";
             Part = part;

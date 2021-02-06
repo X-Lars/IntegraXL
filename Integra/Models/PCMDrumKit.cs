@@ -8,14 +8,16 @@ namespace Integra.Models
         private IntegraParts _Part;
 
         private PCMDrumKitCommon _Common;
-        private PCMDrumKitCommonCompEQ _CompEQ;
+        private DrumKitCommonCompEQ _CompEQ;
+        private PCMDrumKitCommon02 _Common02;
 
         public PCMDrumKit(IntegraAddress address, IntegraParts part) : base(address)
         {
             Name = "PCM Drum Kit";
             Part = part;
             Common = new PCMDrumKitCommon(address, part);
-            CompEQ = new PCMDrumKitCommonCompEQ(address, Part);
+            CompEQ = new DrumKitCommonCompEQ(address, part);
+            Common02 = new PCMDrumKitCommon02(address, part);
         }
 
         public IntegraParts Part
@@ -44,7 +46,7 @@ namespace Integra.Models
             }
         }
         
-        public PCMDrumKitCommonCompEQ CompEQ
+        public DrumKitCommonCompEQ CompEQ
         {
             get { return _CompEQ; }
             set
@@ -52,6 +54,19 @@ namespace Integra.Models
                 if(_CompEQ != value)
                 {
                     _CompEQ = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public PCMDrumKitCommon02 Common02
+        {
+            get { return _Common02; }
+            set
+            {
+                if(_Common02 != value)
+                {
+                    _Common02 = value;
                     NotifyPropertyChanged();
                 }
             }

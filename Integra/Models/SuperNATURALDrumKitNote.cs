@@ -1,10 +1,15 @@
 ﻿using Integra.Common;
 using Integra.Core;
+using Integra.Core.Interfaces;
+using MidiXL;
 
 namespace Integra.Models
 {
-    public class SuperNATURALDrumKitNote : IntegraBase<SuperNATURALDrumKitNote>
+    public class SuperNATURALDrumKitNote : IntegraBase<SuperNATURALDrumKitNote>, IIntegraPartial, IIntegraDrumKitPartial
     {
+        private IntegraParts _Part;
+        private int _Note;
+
         [Offset(0x0000)] int _InstNumber;
         [Offset(0x0004)] byte _NoteLevel;
         [Offset(0x0005)] byte _Pan;
@@ -22,6 +27,29 @@ namespace Integra.Models
         public SuperNATURALDrumKitNote()
         {
 
+        }
+
+        public IntegraParts Part
+        {
+            get { return _Part; }
+            set
+            {
+                if (_Part != value)
+                {
+                    _Part = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public int Note
+        {
+            get { return _Note; }
+            set
+            {
+                _Note = value;
+                NotifyPropertyChanged();
+            }
         }
 
         [Offset(0x0000)]
@@ -165,6 +193,41 @@ namespace Integra.Models
             {
                 _OutputAssign = value;
                 NotifyPropertyChanged();
+            }
+        }
+
+        // TODO: Remove temporary iintegrapartial issue
+        protected override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
+        {
+            IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
+
+
+
+            if (!IsInitialized)
+            {
+                if (syx.Address == Address)
+                {
+                    // Exact match
+                    if (syx.Data.Length == Requests[0].Size)
+                    {
+                        if (Initialize(syx.Data))
+                        {
+                            Device.Instance.ReportProgress(this, new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
+                        }
+                    }
+                    else
+                    {
+                        InitializeField(syx);
+                    }
+                }
+            }
+            else
+            {
+                //TODO: Check MFX 0xFFFFFF00 won't catch 00 00 01 11 ? or is it catched because of receiving a complete array
+                if ((syx.Address & 0xFFFFFF00) == (Address & 0xFFFFFF00))
+                {
+                    InitializeField(syx);
+                }
             }
         }
     }

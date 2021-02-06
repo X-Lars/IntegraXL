@@ -10,7 +10,7 @@ namespace Integra.Models
         private PCMSynthToneCommon _Common;
         private PCMSynthTonePMT _PMT;
         private PCMSynthToneCommon02 _Common02;
-        private IntegraBaseSynthTonePartial<PCMSynthTonePartial> _Partials;
+        private IntegraBasePCMSynthTonePartial<PCMSynthTonePartial> _Partials;
 
         public PCMSynthTone(IntegraAddress address, IntegraParts part) : base(address + 0x00003000, 0x0000003C)
         {
@@ -18,7 +18,7 @@ namespace Integra.Models
             _Part = part;
             Common = new PCMSynthToneCommon(address, part);
             PMT = new PCMSynthTonePMT(address, part);
-            _Partials = new IntegraBaseSynthTonePartial<PCMSynthTonePartial>(address, Part);
+            _Partials = new IntegraBasePCMSynthTonePartial<PCMSynthTonePartial>(address, Part);
             Common02 = new PCMSynthToneCommon02(address, part);
         }
 
@@ -61,7 +61,7 @@ namespace Integra.Models
             }
         }
 
-        public IntegraBaseSynthTonePartial<PCMSynthTonePartial> Partials
+        public IntegraBasePCMSynthTonePartial<PCMSynthTonePartial> Partials
         {
             get { return _Partials; }
         }

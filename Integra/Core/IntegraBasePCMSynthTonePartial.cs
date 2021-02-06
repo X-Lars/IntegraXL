@@ -13,14 +13,14 @@ namespace Integra.Core
     /// Base collection for INTEGRA-7 synth tone partial data structures.
     /// </summary>
     /// <typeparam name="T">The type contained by the collection.</typeparam>
-    public class IntegraBaseSynthTonePartial<T> : ObservableCollection<T>, IIntegraDataClass  where T : IntegraBase<T>, IIntegraPartial, IIntegraSynthTonePartial, INotifyPropertyChanged
+    public class IntegraBasePCMSynthTonePartial<T> : ObservableCollection<T>, IIntegraDataClass  where T : IntegraBase<T>, IIntegraPartial, IIntegraSynthTonePartial, INotifyPropertyChanged
     {
         private IntegraParts _Part;
         private readonly SynchronizationContext _Context;
 
         #region Constructor
 
-        public IntegraBaseSynthTonePartial(IntegraAddress address, IntegraParts part)
+        public IntegraBasePCMSynthTonePartial(IntegraAddress address, IntegraParts part)
         {
 
             _Context = Device.UIContext;
@@ -29,7 +29,7 @@ namespace Integra.Core
 
             for (int i = 0; i < 4; i++)
             {
-                Debug.Print($"[{nameof(IntegraBaseSynthTonePartial<T>)}] {_Part}");
+                Debug.Print($"[{nameof(IntegraBasePCMSynthTonePartial<T>)}] {_Part}");
                 T item = Activator.CreateInstance<T>();
 
                 item.Address = (uint)address + 0x00002000 + (uint)((i * 2) << 8);

@@ -91,6 +91,11 @@ namespace Integra.Core.Interfaces
         IntegraSynthTonePartials Partial { get; set; }
     }
 
+    public interface IIntegraDrumKitPartial
+    {
+        int Note { get; set; }
+    }
+
     public interface IIntegraAddressable
     {
         byte MSB { get; }

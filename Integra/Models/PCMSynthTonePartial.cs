@@ -210,7 +210,7 @@ namespace Integra.Models
         public PCMSynthTonePartial(IntegraAddress address, IntegraParts part, IntegraSynthTonePartials partial) : base(address, 0x0000011A)
         {
             Name = "PCM Synth Tone Partial";
-            _Part = part;
+            Part = part;
             Partial = partial;
         }
 

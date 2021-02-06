@@ -79,7 +79,9 @@
     <Compile Include="Core\IntegraAttributes.cs" />
     <Compile Include="Core\IntegraBase.cs" />
     <Compile Include="Core\IntegraBaseCollection.cs" />
-    <Compile Include="Core\IntegraBaseSynthTonePartial.cs" />
+    <Compile Include="Core\IntegraBaseSuperNATURALDrumKitNotes.cs" />
+    <Compile Include="Core\IntegraBasePCMSynthTonePartial.cs" />
+    <Compile Include="Core\IntegraBaseSuperNATURALSynthTonePartial.cs" />
     <Compile Include="Core\IntegraDataTemplate.cs" />
     <Compile Include="Core\IntegraBasePartial.cs" />
     <Compile Include="Core\IntegraBaseToneBank.cs" />
@@ -94,7 +96,8 @@
     <Compile Include="Core\IntegraTone.cs" />
     <Compile Include="Core\IntegraToneExtensions.cs" />
     <Compile Include="Core\Interfaces\Interfaces.cs" />
-    <Compile Include="Models\PCMDrumKitCommonCompEQ.cs" />
+    <Compile Include="Models\DrumKitCommonCompEQ.cs" />
+    <Compile Include="Models\PCMDrumKitCommon02.cs" />
     <Compile Include="Models\PCMSynthTonePartial.cs" />
     <Compile Include="Models\PCMSynthTonePMT.cs" />
     <Compile Include="Models\SuperNATURALDrumKitNote.cs" />
@@ -141,6 +144,7 @@
     <Compile Include="Models\SuperNATURALDrumKitCommon.cs" />
     <Compile Include="Models\SuperNATURALSynthTone.cs" />
     <Compile Include="Models\SuperNATURALSynthToneCommon.cs" />
+    <Compile Include="Models\SuperNATURALSynthTonePartial.cs" />
     <Compile Include="Models\TemporaryTone.cs" />
     <Compile Include="Models\Tone.cs" />
     <Compile Include="Models\ToneBanks.cs" />

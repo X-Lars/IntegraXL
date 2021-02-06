@@ -58,7 +58,7 @@ namespace Integra.Models
                     break;
 
                 case IntegraToneTypes.PCMSynthTone:
-                    PCMSynthTone = new PCMSynthTone(Address, Part);
+                    PCMSynthTone = new PCMSynthTone(Address, part);
                     break;
 
                 case IntegraToneTypes.PCMDrumkit:

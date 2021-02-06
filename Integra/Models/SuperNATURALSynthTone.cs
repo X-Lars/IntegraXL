@@ -7,12 +7,15 @@ namespace Integra.Models
     {
         private IntegraParts _Part;
         private SuperNATURALSynthToneCommon _Common;
+        private IntegraBaseSuperNATURALSynthTonePartial<SuperNATURALSynthTonePartial> _Partials;
+
         public SuperNATURALSynthTone(IntegraAddress address, IntegraParts part) : base(address)
         {
             Name = "SuperNATURAL Synth Tone";
             Part = part;
 
             Common = new SuperNATURALSynthToneCommon(address, part);
+            _Partials = new IntegraBaseSuperNATURALSynthTonePartial<SuperNATURALSynthTonePartial>(address, part);
         }
 
         public IntegraParts Part
@@ -39,6 +42,11 @@ namespace Integra.Models
                     NotifyPropertyChanged();
                 }
             }
+        }
+
+        public IntegraBaseSuperNATURALSynthTonePartial<SuperNATURALSynthTonePartial> Partials
+        {
+            get { return _Partials; }
         }
     }
 }
