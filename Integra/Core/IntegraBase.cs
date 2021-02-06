@@ -905,6 +905,7 @@ namespace Integra.Core
             typeof(PCMDrumKit),
             typeof(PCMDrumKitCommon),
             typeof(DrumKitCommonCompEQ),
+            typeof(PCMDrumKitPartial),
             typeof(PCMDrumKitCommon02)
         };
 

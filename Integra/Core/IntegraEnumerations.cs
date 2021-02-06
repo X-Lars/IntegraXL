@@ -1379,5 +1379,34 @@ namespace Integra.Core
         SH      = 0x04,
         RND     = 0x05
     }
+
+    #endregion
+
+    #region PCM Drum Kit Partial
+
+    public enum IntegraAssignType : byte
+    {
+        Multi   = 0x00,
+        Single  = 0x01
+    }
+
+    public enum IntegraPartialOutputAssign : byte
+    {
+        Part     = 0x00,
+        CompEQ01 = 0x01,
+        CompEQ02 = 0x02,
+        CompEQ03 = 0x03,
+        CompEQ04 = 0x04,
+        CompEQ05 = 0x05,
+        CompEQ06 = 0x06
+    }
+
+    public enum IntegraPartialVelocityControl : byte
+    {
+        Off    = 0x00,
+        On     = 0x01,
+        Random = 0x02,
+    }
+
     #endregion
 }

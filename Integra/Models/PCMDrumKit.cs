@@ -9,6 +9,7 @@ namespace Integra.Models
 
         private PCMDrumKitCommon _Common;
         private DrumKitCommonCompEQ _CompEQ;
+        private IntegraBasePCMDrumKitPartial<PCMDrumKitPartial> _Partials;
         private PCMDrumKitCommon02 _Common02;
 
         public PCMDrumKit(IntegraAddress address, IntegraParts part) : base(address)
@@ -17,6 +18,7 @@ namespace Integra.Models
             Part = part;
             Common = new PCMDrumKitCommon(address, part);
             CompEQ = new DrumKitCommonCompEQ(address, part);
+            _Partials = new IntegraBasePCMDrumKitPartial<PCMDrumKitPartial>(address, part);
             Common02 = new PCMDrumKitCommon02(address, part);
         }
 
@@ -57,6 +59,11 @@ namespace Integra.Models
                     NotifyPropertyChanged();
                 }
             }
+        }
+
+        public IntegraBasePCMDrumKitPartial<PCMDrumKitPartial> Partials
+        {
+            get { return _Partials; }
         }
 
         public PCMDrumKitCommon02 Common02
