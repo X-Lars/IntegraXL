@@ -10,7 +10,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     
-    <Grid DataContext="{Binding MFXContext}">
+    <Grid DataContext="{Binding MFX}">
 
         <StackPanel Orientation="Horizontal">
 
@@ -39,38 +39,38 @@
 
                         <xl:NumericTextBox Interval="1" 
                                        MinValue="-15" MaxValue="15" 
-                                       Value="{Binding MFX[0]}"/>
+                                       Value="{Binding [0]}"/>
 
                         <xl:NumericTextBox Interval="1" 
                                        MinValue="-15" MaxValue="15" 
-                                       Value="{Binding MFX[1]}"/>
+                                       Value="{Binding [1]}"/>
 
                         <xl:NumericTextBox Interval="1" 
                                        MinValue="-15" MaxValue="15" 
-                                       Value="{Binding MFX[2]}"/>
+                                       Value="{Binding [2]}"/>
 
                         <xl:NumericTextBox Interval="1" 
                                        MinValue="-15" MaxValue="15" 
-                                       Value="{Binding MFX[3]}"/>
+                                       Value="{Binding [3]}"/>
 
                         <xl:NumericTextBox Interval="1" 
                                        MinValue="-15" MaxValue="15" 
-                                       Value="{Binding MFX[4]}"/>
+                                       Value="{Binding [4]}"/>
 
                         <xl:NumericTextBox Interval="1" 
                                        MinValue="-15" MaxValue="15" 
-                                       Value="{Binding MFX[5]}"/>
+                                       Value="{Binding [5]}"/>
 
                         <xl:NumericTextBox Interval="1" 
                                        MinValue="-15" MaxValue="15" 
-                                       Value="{Binding MFX[6]}"/>
+                                       Value="{Binding [6]}"/>
 
                         <xl:NumericTextBox Interval="1" 
                                        MinValue="-15" MaxValue="15" 
-                                       Value="{Binding MFX[7]}"/>
+                                       Value="{Binding [7]}"/>
 
                         <ComboBox ItemsSource="{Binding Source={common:EnumerationBindingSource {x:Type core:IntegraMidQs}}}"
-                                  SelectedIndex="{Binding MFX[8]}"/>
+                                  SelectedIndex="{Binding [8]}"/>
 
                     </StackPanel>
                 </Grid>
@@ -83,7 +83,7 @@
 
                     <xl:NumericTextBox Interval="1" 
                                        MinValue="0" MaxValue="127" 
-                                       Value="{Binding MFX[9], NotifyOnSourceUpdated=True}"/>
+                                       Value="{Binding [9]}"/>
 
                 </StackPanel>
             </GroupBox>

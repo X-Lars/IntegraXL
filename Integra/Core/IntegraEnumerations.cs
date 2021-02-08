@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace Integra.Core
 {
+    
+
     [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraNoteRates : byte
     {
@@ -36,6 +38,24 @@ namespace Integra.Core
     }
 
    
+    public enum IntegraWaveFormType : int
+    {
+        INT = 0,
+        SRX01 = 1,
+        SRX02 = 2,
+        SRX03 = 3,
+        SRX04 = 4,
+        SRX05 = 5,
+        SRX06 = 6,
+        SRX07 = 7,
+        SRX08 = 8,
+        SRX09 = 9,
+        SRX10 = 10,
+        SRX11 = 11,
+        SRX12 = 12,
+        SNS = 20
+
+    }
     #region Custom Build Enumerations
 
     public class IntegraVoiceReserves : Enumeration

@@ -35,7 +35,7 @@ namespace Integra.Core
                 item.Requests.Add(0x00000143);
                 item.Part = _Part;
                 item.Note = i;
-                item.Initialize();
+                //item.Initialize();
 
                 Add(item);
             }

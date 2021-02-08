@@ -1,50 +1,76 @@
 ﻿using Integra.Core.Interfaces;
+using MidiXL;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace Integra.Core
 {
-    public class IntegraBaseSuperNATURALDrumKitNotes<T> : ObservableCollection<T>, IIntegraDataClass where T: IntegraBase<T>, IIntegraPartial, IIntegraDrumKitPartial, INotifyPropertyChanged
+    public abstract class IntegraObservableCollection<T> : ObservableCollection<T>, IIntegraDataClass, INotifyPropertyChanged where T: IntegraBase<T>
     {
-        private IntegraParts _Part;
+        private bool _IsInitialized = false;
 
-        public IntegraBaseSuperNATURALDrumKitNotes(IntegraAddress address, IntegraParts part)
+        public IntegraObservableCollection(IntegraAddress address, IntegraRequest request)
         {
-            Part = part;
-            address += 0x00001000;
+            Name = typeof(T).Name;
 
-            for (int i = 0; i < 61; i++)
+            Address = address;
+            Request = request;
+
+            //Initialize();
+        }
+
+        protected void Initialize()
+        {
+            if (Device._IsConnected)
             {
-                T item = Activator.CreateInstance<T>();
-
-                item.Address = (uint)address + (uint)((i) << 8);
-                item.Requests.Add(0x00000013);
-                item.Part = _Part;
-                item.Note = i;
-                //item.Initialize();
-
-                Add(item);
+                Device.Instance.MidiInputDevice.SystemExclusiveReceived += SystemExclusiveReceived;
+                Task.Factory.StartNew(() => Device.Instance.Initialize(this), TaskCreationOptions.LongRunning);
+            }
+            else
+            {
+                Device.Connected += DeviceConnected;
             }
         }
 
-        public IntegraParts Part
+        private void DeviceConnected(object sender, EventArgs e)
         {
-            get { return _Part; }
-            set
+            Device.Connected -= DeviceConnected;
+            Device.Instance.MidiInputDevice.SystemExclusiveReceived += SystemExclusiveReceived;
+            Task.Factory.StartNew(() => Device.Instance.Initialize(this), TaskCreationOptions.LongRunning);
+        }
+
+        /// <summary>
+        /// Gets whether the collection items are initialized with data.
+        /// </summary>
+        public virtual bool IsInitialized
+        {
+            get { return _IsInitialized; }
+            internal protected set
             {
-                if (_Part != value)
+                if (_IsInitialized != value)
                 {
-                    // TODO: NotifyPropertyChanged() ?
-                    _Part = value;
+                    _IsInitialized = value;
+
+                    NotifyPropertyChanged();
+
+                    InitializationCounter = 0;
                 }
             }
         }
+
+        public string Name { get; protected set; }
+        public IntegraAddress Address { get; protected set; }
+        public IntegraRequest Request { get; protected set; }
+        protected abstract void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e);
+        protected int InitializationCounter { get; set; } = 0;
+        /// <summary>
+        /// Gets the progress of the initialization.
+        /// </summary>
+        
         /// <summary>
         /// Override to bind collection items to notify property changed event.
         /// </summary>
@@ -69,6 +95,7 @@ namespace Integra.Core
                     foreach (INotifyPropertyChanged item in e.NewItems)
                     {
                         item.PropertyChanged += ItemChanged;
+                        
                     }
                 }
             }
@@ -103,7 +130,6 @@ namespace Integra.Core
         {
             base.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
-
 
         #region IIntegraDataClass
 
@@ -152,6 +178,26 @@ namespace Integra.Core
 
         #endregion
 
+        #region INotifyPropertyChanged
 
+        /// <summary>
+        /// Event raised when a property value is changed.
+        /// </summary>
+        
+
+        protected override event PropertyChangedEventHandler PropertyChanged;
+        
+        /// <summary>
+        /// Raises the <see cref="PropertyChanged"/> event for the specified property.
+        /// </summary>
+        /// <param name="propertyName">A <see cref="string"/> containing the name of the property that is changed.</param>
+        /// <param name="transmit">A <see cref="bool"/> to determin if the property has to be transmitted.</param>
+        /// <remarks><i>If no property name is specified, the actual name of the property in code is used.</i></remarks>
+        internal void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
     }
 }

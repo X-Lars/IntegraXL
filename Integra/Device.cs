@@ -44,7 +44,7 @@ namespace Integra
         /// Defines the aproximate MIDI latency in milliseconds.
         /// </summary>
         /// <remarks><b><i>Important! Lower values can cause application locking.</i></b></remarks>
-        private const int DEVICE_LATENCY = 100;
+        private const int DEVICE_LATENCY = 150;
         // TODO: Request larger (complete) structures cq complete parts.
 
         #endregion
@@ -716,6 +716,38 @@ namespace Integra
             return IsConnected;
         }
 
+        internal async Task Initialize<T>(IntegraObservableCollection<T> collection) where T : IntegraBase<T>
+        {
+            // Ensure the INTEGRA-7 is connected before starting initialization
+            // MOVED TO: IntegraBase
+
+            Debug.Print($"Initializing {collection.Name}");
+            await Task.Factory.StartNew(() =>
+            {
+                ReportInit(this, new StatusMessage($"Initializing {collection.Name}", "Please wait...", 100, "Initializing"));
+
+                // Hookup the system exclusive event handler to the INTEGRA-7 data structure
+                // MOVED TO: IntegraBase
+
+                // Send all requests contained inside the data structure
+                
+                SendSystemExclusive(new IntegraSystemExclusive(collection.Address, collection.Request));
+                
+
+                while (!collection.IsInitialized)
+                {
+                    // Allow the data struture to report progress
+                    Thread.Sleep(DEVICE_LATENCY);
+                }
+
+                ReportComplete(this, new StatusMessage($"Initializing {collection.Name}", "Complete", 100, "Done"));
+
+            }, TaskCreationOptions.LongRunning);
+
+            Debug.Print($"Done initializing {collection.Name}");
+        }
+
+
         /// <summary>
         /// Request initialization for an INTEGRA-7 data structure
         /// </summary>
@@ -735,13 +767,13 @@ namespace Integra
                 // MOVED TO: IntegraBase
 
                 // Send all requests contained inside the data structure
-                lock (MidiOutputDevice)
-                {
+                //lock (MidiOutputDevice)
+                //{
                     for (int i = 0; i < dataStructure.Requests.Count; i++)
                     {
                         SendSystemExclusive(new IntegraSystemExclusive(dataStructure.Address, dataStructure.Requests[i]));
                     }
-                }
+                //}
             
 
                 while (!dataStructure.IsInitialized)

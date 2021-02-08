@@ -7,6 +7,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -15,6 +16,89 @@ namespace Integra.Database
 {
     public class DataAccess
     {
+
+        public static void InsertWaveForms()
+        {
+            int result;
+            string sql = $"SELECT COUNT(ID) FROM WaveForms";
+
+            using (var connection = new SqlConnection(GetConnectionString()))
+            {
+                OpenConnection(connection);
+
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    var count = command.ExecuteScalar();
+
+                    // Check for DBNull when the table is empty
+                    if (count.GetType() == typeof(DBNull))
+                    {
+                        result = 0;
+                    }
+                    else
+                    {
+                        result = Convert.ToInt32(count);
+                    }
+                }
+
+                CloseConnection(connection);
+
+            }
+
+            if (result == 7500)
+            {
+                Console.WriteLine("Waveforms already inserted!");
+                return;
+            }
+            DataTable data = new DataTable();
+
+            data.Columns.Add();
+            data.Columns.Add();
+            data.Columns.Add();
+
+            using (StreamReader reader = new StreamReader(@"Resources\WaveForms.csv"))
+            {
+                while (!reader.EndOfStream)
+                {
+                    string[] values = reader.ReadLine().Split(new char[] { ';' });
+                    data.Rows.Add(values);
+                    Console.WriteLine(values);
+                }
+            }
+
+            using (var connection = new SqlConnection(GetConnectionString()))
+            {
+                connection.Open();
+
+                using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
+                {
+                    using (SqlBulkCopy batch = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
+                    {
+
+                        batch.DestinationTableName = "WaveForms";
+                        batch.BatchSize = 4000;
+
+                        try
+                        {
+                            batch.WriteToServer(data);
+                            transaction.Commit();
+
+                            Debug.Print($"[{nameof(DataAccess)}.{nameof(BatchInsert)}] Successful");
+                        }
+                        catch (Exception exception)
+                        {
+                            transaction.Rollback();
+                            connection.Close();
+
+                            Debug.Print($"[{nameof(DataAccess)}.{nameof(BatchInsert)}] {exception.Message}");
+                        }
+                    }
+                }
+
+                connection.Close();
+            }
+        }
+
         #region Constants
 
         private const string SQL_SCHEMA_INDEXES = "IndexColumns";

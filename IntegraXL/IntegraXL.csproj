@@ -123,6 +123,9 @@
     <Compile Include="UserControls\MFX\Thru.xaml.cs">
       <DependentUpon>Thru.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\PartSelectButtons.xaml.cs">
+      <DependentUpon>PartSelectButtons.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ToneBankTree.xaml.cs">
       <DependentUpon>ToneBankTree.xaml</DependentUpon>
     </Compile>
@@ -166,6 +169,9 @@
     </Compile>
     <Compile Include="Windows\SystemExclusivesWindow.xaml.cs">
       <DependentUpon>SystemExclusivesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\TestWindow.xaml.cs">
+      <DependentUpon>TestWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ToneBankWindow.xaml.cs">
       <DependentUpon>ToneBankWindow.xaml</DependentUpon>
@@ -222,6 +228,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\PartSelectButtons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\ToneBankTree.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -275,6 +285,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\SystemExclusivesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\TestWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

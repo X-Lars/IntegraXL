@@ -95,7 +95,7 @@ namespace Integra.Models
             }
         }
 
-        protected override bool Initialize(byte[] data)
+        internal override bool Initialize(byte[] data)
         {
             if (!IsInitialized)
             {

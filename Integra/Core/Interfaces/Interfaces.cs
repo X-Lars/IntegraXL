@@ -73,6 +73,8 @@ namespace Integra.Core.Interfaces
         void Truncate();
     }
 
+ 
+
     /// <summary>
     /// Defines an interface for classes that are instantiated per part.
     /// </summary>

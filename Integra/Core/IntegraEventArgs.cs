@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Integra.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -75,9 +76,9 @@ namespace Integra.Core
         }
     }
 
-    public class IntegraPartChangeEventArts : EventArgs
+    public class IntegraPartChangeEventArgs : EventArgs
     {
-        public IntegraPartChangeEventArts(IntegraParts oldPart, IntegraParts newPart)
+        public IntegraPartChangeEventArgs(IntegraParts oldPart, IntegraParts newPart)
         {
             OldPart = oldPart;
             NewPart = newPart;
@@ -85,5 +86,17 @@ namespace Integra.Core
 
         public IntegraParts OldPart { get; }
         public IntegraParts NewPart { get; }
+    }
+
+    public class IntegraToneChangedEventArgs : EventArgs
+    {
+        public IntegraToneChangedEventArgs(Tone oldTone, Tone newTone)
+        {
+            OldTone = oldTone;
+            NewTone = newTone;
+        }
+
+        public Tone OldTone { get; }
+        public Tone NewTone { get; }
     }
 }

@@ -28,6 +28,12 @@ namespace Integra.Models
         IntegraBasePartial<StudioSetPart> _StudioSetParts = new IntegraBasePartial<StudioSetPart>(0x18002000, 0x00004D);
         IntegraBasePartial<StudioSetPartEQ> _PartsEQ = new IntegraBasePartial<StudioSetPartEQ>(0x18005000, 0x00000008);
 
+        public delegate void PartChangedEventHandler(object sender, IntegraPartChangeEventArgs e);
+        public delegate void ToneChangedEventHandler(object sender, IntegraToneChangedEventArgs e);
+        
+        public event PartChangedEventHandler PartChanged;
+        public event ToneChangedEventHandler ToneChanged;
+
         #endregion
 
         #region Constructor
@@ -49,16 +55,18 @@ namespace Integra.Models
             {
                 if (_SelectedTone != value)
                 {
-                    _SelectedTone = value;
+                    ToneChanged?.Invoke(this, new IntegraToneChangedEventArgs(_SelectedTone, value));
 
+                    _SelectedTone = value;
+                    
                     Parts[(int)SelectedPart].ToneBankSelectMSB = value.MSB;
                     Parts[(int)SelectedPart].ToneBankSelectLSB = value.LSB;
                     Parts[(int)SelectedPart].ToneProgramNumber = value.PC;
-
+                    Parts[(int)SelectedPart].Reinitialize();
+                    
                     ToneType = IntegraToneExtensions.Type(value.MSB);
 
                     NotifyPropertyChanged();
-
                 }
             }
         }
@@ -91,31 +99,17 @@ namespace Integra.Models
             }
         }
 
+        public virtual ToneMFX MFXContext
+        {
+            get { return Parts[(int)SelectedPart].TemporaryTone.MFX; }
+
+        }
+
         public virtual IToneMFX MFXDataContext
         {
             get
             {
                 return Parts[(int)SelectedPart].TemporaryTone;
-                //switch (ToneType)
-                //{
-                //    case IntegraToneTypes.SuperNATURALAcousticTone:
-                //        return Parts[(int)SelectedPart].SuperNATURALAcousticTone;
-
-                //    case IntegraToneTypes.SuperNATURALSynthTone:
-                //        return Parts[(int)SelectedPart].SuperNATURALSynthTone;
-
-                //    case IntegraToneTypes.SuperNATURALDrumkit:
-                //        return Parts[(int)SelectedPart].SuperNATURALDrumKit;
-
-                //    case IntegraToneTypes.PCMSynthTone:
-                //        return Parts[(int)SelectedPart].PCMSynthTone;
-
-                //    case IntegraToneTypes.PCMDrumkit:
-                //        return Parts[(int)SelectedPart].PCMDrumKit;
-
-                //    default:
-                //        return null;
-                //}
             }
         }
 
@@ -132,11 +126,13 @@ namespace Integra.Models
                 // Change MFX
                 if (_SelectedPart != value)
                 {
+                    PartChanged?.Invoke(this, new IntegraPartChangeEventArgs(_SelectedPart, value));
+
                     _SelectedPart = value;
 
                     Tone = new Tone(Parts[(int)value].ToneBankSelectMSB, Parts[(int)value].ToneBankSelectLSB, Parts[(int)value].ToneProgramNumber);
 
-                    NotifyPropertyChanged(nameof(MFXDataContext));
+                    //NotifyPropertyChanged(nameof(MFXDataContext));
                     NotifyPropertyChanged();
                 }
             }
@@ -235,7 +231,7 @@ namespace Integra.Models
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        protected override bool Initialize(byte[] data)
+        internal override bool Initialize(byte[] data)
         {
             if (!IsInitialized)
             {

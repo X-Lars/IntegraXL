@@ -54,7 +54,11 @@ namespace Integra.Core
         /// Creates a new <see cref="IntegraBase{T}"/> instance.
         /// </summary>
         /// <remarks><i>Default constructor for dynamic instance creation by reflection.</i></remarks>
-        public IntegraBase() { }
+        public IntegraBase() 
+        {
+            if (!_IsCached)
+                InitializeCache();
+        }
 
         /// <summary>
         /// Creates and initializes new unconnected <see cref="IntegraBase{T}"/> instance.
@@ -182,7 +186,7 @@ namespace Integra.Core
         /// </summary>
         /// <param name="data">The system exclusive data part.</param>
         /// <returns>True if the class is completely initialized.</returns>
-        protected virtual bool Initialize(byte[] data)
+        internal virtual bool Initialize(byte[] data)
         {
             if (!IsInitialized)
             {
@@ -416,7 +420,7 @@ namespace Integra.Core
         /// Initializes one or more fields from a received system exclusive message.
         /// </summary>
         /// <param name="syx">The received system exclusive message.</param>
-        protected void InitializeField(IntegraSystemExclusive syx)
+        internal void InitializeField(IntegraSystemExclusive syx)
         {
             // The offset of the property to set
             uint offset = syx.Address - Address;
@@ -708,10 +712,10 @@ namespace Integra.Core
                         {
                             // TODO: Remove from Base to Partial collection class
                             // Set the Part property for IIntegraPartial implementing classes which is only present after initialization
-                            if (typeof(T).GetInterfaces().Contains(typeof(IIntegraPartial)))
-                            {
-                                ((IIntegraPartial)this).Part = (IntegraParts)((Address & 0x00000F00) >> 8);
-                            }
+                            //if (typeof(T).GetInterfaces().Contains(typeof(IIntegraPartial)))
+                            //{
+                            //    ((IIntegraPartial)this).Part = (IntegraParts)((Address & 0x00000F00) >> 8);
+                            //}
 
                             Device.Instance.ReportProgress(this, new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
                         }

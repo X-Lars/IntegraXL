@@ -58,8 +58,7 @@ namespace IntegraXL
 
             Loaded += MainWindowLoaded;
             //Config<IntegraConfiguration>.Print();
-
-
+            DataAccess.InsertWaveForms();
         }
 
         private void CanExecuteDelete(object sender, CanExecuteRoutedEventArgs e)
@@ -608,7 +607,7 @@ namespace IntegraXL
                 if (child.GetType() == typeof(MFXWindow))
                 {
                     // TODO: Remove child
-                    ((MFXWindow)child).MFXType = type;
+                    //((MFXWindow)child).MFXType = type;
                     
                     return;
                     //if (((MFXWindow)child).ToneBank.GetType() == type)

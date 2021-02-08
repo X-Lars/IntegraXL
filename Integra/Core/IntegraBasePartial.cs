@@ -1,4 +1,6 @@
 ﻿using Integra.Core.Interfaces;
+using Integra.Models;
+using MidiXL;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -8,6 +10,68 @@ using System.Threading;
 
 namespace Integra.Core
 {
+    public class StudioSetPartial<T> : IntegraObservableCollection<T>, IIntegraDataClass where T : IntegraBase<T>, IIntegraPartial
+    {
+        private const int PARTIAL_COUNT = 16;
+
+        public StudioSetPartial(IntegraAddress baseAddress) : base(baseAddress, 0x00001000)
+        {
+            for (int i = 0; i < PARTIAL_COUNT; i++)
+            {
+               
+                T item = Activator.CreateInstance<T>();
+
+                item.Address = (uint)(baseAddress + (i << 8));
+                item.Part = (IntegraParts)i;
+                //item.Initialize();
+
+                Add(item);
+            }
+
+            Initialize();
+        }
+
+        public double Progress
+        {
+            get { return (100d / PARTIAL_COUNT * InitializationCounter); }
+        }
+
+        protected override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
+        {
+            IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
+
+            if(!IsInitialized)
+            {
+                if((syx.Address & 0xFFFFF000) == (Address & 0xFFFFF000))
+                {
+                    int item = (int)((syx.Address & 0x00000F00) >> 8);
+
+                    if(Items[item].Initialize(syx.Data))
+                    {
+                        InitializationCounter++;
+
+                        if (InitializationCounter == PARTIAL_COUNT)
+                        {
+                            Device.Instance.ReportProgress(this, new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
+                            IsInitialized = true;
+                        }
+                        else
+                            Device.Instance.ReportProgress(this, new StatusMessage($"Initializing {Name}", "Please wait...", Progress, $"{InitializationCounter} of {PARTIAL_COUNT}"));
+                    }
+                }
+            }
+            else
+            {
+                if ((syx.Address & 0xFFFFF000) == (Address & 0xFFFFF000))
+                {
+                    int item = (int)((syx.Address & 0x00000F00) >> 8);
+
+                    Items[item].InitializeField(syx);
+                }
+            }
+        }
+    }
+
     /// <summary>
     /// Base collection for INTEGRA-7 per part data structures.
     /// </summary>
@@ -98,7 +162,7 @@ namespace Integra.Core
             base.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
-       
+               
         #region IIntegraDataClass
 
         public int ID { get; }

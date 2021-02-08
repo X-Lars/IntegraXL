@@ -301,7 +301,7 @@ namespace Integra.Models
         /// </summary>
         /// <param name="data">A <see cref="byte"/>[] containing the <see cref="IntegraSystemExclusive.Data"/> to initialize the data structure.</param>
         /// <returns>A <see cref="bool"/> containing true if the data structure is initialized.</returns>
-        protected override bool Initialize(byte[] data)
+        internal override bool Initialize(byte[] data)
         {
             if (!IsInitialized)
             {

@@ -1,4 +1,5 @@
-﻿using Integra.Core;
+﻿using Integra;
+using Integra.Core;
 using Integra.Core.Interfaces;
 using Integra.Models;
 using IntegraXL.UserControls.MFX;
@@ -14,6 +15,9 @@ namespace IntegraXL.Windows
     /// </summary>
     public partial class MFXWindow : IntegraWindow
     {
+
+        private UserControl _MFXControl;
+
         #region Constructor
 
         /// <summary>
@@ -28,49 +32,36 @@ namespace IntegraXL.Windows
 
             InitializeControl();
 
-            DeviceContext.StudioSet.PropertyChanged += StudioSetPropertyChanged;
+            DeviceContext.StudioSet.PartChanged += StudioSetPartChanged;
+            DeviceContext.StudioSet.ToneChanged += StudioSetToneChanged;
         }
 
-        private void StudioSetPropertyChanged(object sender, PropertyChangedEventArgs e)
+        
+        private void StudioSetToneChanged(object sender, IntegraToneChangedEventArgs e)
         {
-            if(e.PropertyName == nameof(StudioSet.MFXDataContext))
-            {
-                NotifyPropertyChanged(nameof(MFXContext));
-            }
+            InitializeControl();
+        }
+
+        private void StudioSetPartChanged(object sender, IntegraPartChangeEventArgs e)
+        {
+            InitializeControl();
         }
 
         private void MFXTypeChanged(object sender, SelectionChangedEventArgs e)
         {
             InitializeControl();
-            //MFXContext.MFX.Reinitialize();
         }
 
         #endregion
 
         #region Properties
 
-        public IntegraMFXTypes MFXType 
-        { 
-            get
-            {
-                return MFXContext.MFX.Type;
-            }
-
-            set
-            {
-                if (MFXContext.MFX.Type != value)
-                {
-                    MFXContext.MFX.Type = value;
-
-                    NotifyPropertyChanged();
-                    InitializeControl();
-                }
-            }
+        public ToneMFX MFX
+        {
+            get { return StudioSetContext.Parts[(int)StudioSetContext.SelectedPart].TemporaryTone.MFX; }
         }
 
-        
 
-        private UserControl _MFXControl;
         /// <summary>
         /// Gets or sets the MFX control for the <see cref="MFXWindow"/>.
         /// </summary>
@@ -84,36 +75,26 @@ namespace IntegraXL.Windows
             }
         }
 
-        /// <summary>
-        /// Gets the MFX data context for the MFX control.
-        /// </summary>
-        public IToneMFX MFXContext
-        {
-            get { return DeviceContext.StudioSet.MFXDataContext; }
-        }
-
+      
         #endregion
 
         #region Methods
 
         private void InitializeControl()
         {
-            Type mfxType = typeof(Thru);
+            Type type = typeof(Thru);
 
-            switch (MFXType)
+            switch (MFX.Type)
             {
-                case IntegraMFXTypes.Equalizer: mfxType = typeof(Equalizer); break;
-                case IntegraMFXTypes.Spectrum: mfxType = typeof(Spectrum); break;
+                case IntegraMFXTypes.Equalizer: type = typeof(Equalizer); break;
+                case IntegraMFXTypes.Spectrum: type = typeof(Spectrum); break;
             }
 
-            MFXControl = (UserControl)Activator.CreateInstance(mfxType);
+            MFXControl = (UserControl)Activator.CreateInstance(type);
+            NotifyPropertyChanged(nameof(MFX));
         }
 
         #endregion
 
-        #region Overrides
-
-       
-        #endregion
     }
 }

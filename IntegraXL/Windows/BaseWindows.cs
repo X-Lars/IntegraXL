@@ -1,12 +1,8 @@
 ﻿using ControlsXL;
 using Integra;
-using System;
-using System.Collections.Generic;
+using Integra.Models;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace IntegraXL.Windows
@@ -57,6 +53,11 @@ namespace IntegraXL.Windows
         public Device DeviceContext
         {
             get { return ApplicationContext.Integra; }
+        }
+
+        public StudioSet StudioSetContext
+        {
+            get { return DeviceContext.StudioSet; }
         }
     }
 }

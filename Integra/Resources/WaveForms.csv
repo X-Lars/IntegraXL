@@ -1,0 +1,7500 @@
+1;0;StGrand pA L
+2;0;StGrand pA R
+3;0;StGrand pB L
+4;0;StGrand pB R
+5;0;StGrand pC L
+6;0;StGrand pC R
+7;0;StGrand fA L
+8;0;StGrand fA R
+9;0;StGrand fB L
+10;0;StGrand fB R
+11;0;StGrand fC L
+12;0;StGrand fC R
+13;0;Ac Piano2 pA
+14;0;Ac Piano2 pB
+15;0;Ac Piano2 pC
+16;0;Ac Piano2 fA
+17;0;Ac Piano2 fB
+18;0;Ac Piano2 fC
+19;0;Ac Piano1 A
+20;0;Ac Piano1 B
+21;0;Ac Piano1 C
+22;0;Piano Thump
+23;0;Piano Up TH
+24;0;Piano Atk
+25;0;MKS-20 P3 A
+26;0;MKS-20 P3 B
+27;0;MKS-20 P3 C
+28;0;SA Rhodes 1A
+29;0;SA Rhodes 1B
+30;0;SA Rhodes 1C
+31;0;SA Rhodes 2A
+32;0;SA Rhodes 2B
+33;0;SA Rhodes 2C
+34;0;Dyn Rhd mp A
+35;0;Dyn Rhd mp B
+36;0;Dyn Rhd mp C
+37;0;Dyn Rhd mf A
+38;0;Dyn Rhd mf B
+39;0;Dyn Rhd mf C
+40;0;Dyn Rhd ff A
+41;0;Dyn Rhd ff B
+42;0;Dyn Rhd ff C
+43;0;Wurly soft A
+44;0;Wurly soft B
+45;0;Wurly soft C
+46;0;Wurly hard A
+47;0;Wurly hard B
+48;0;Wurly hard C
+49;0;E.Piano 1A
+50;0;E.Piano 1B
+51;0;E.Piano 1C
+52;0;E.Piano 2A
+53;0;E.Piano 2B
+54;0;E.Piano 2C
+55;0;E.Piano 3A
+56;0;E.Piano 3B
+57;0;E.Piano 3C
+58;0;MK-80 EP A
+59;0;MK-80 EP B
+60;0;MK-80 EP C
+61;0;EP Hard
+62;0;EP Distone
+63;0;Clear Keys
+64;0;D-50 EP A
+65;0;D-50 EP B
+66;0;D-50 EP C
+67;0;Celesta
+68;0;Music Box
+69;0;Music Box 2
+70;0;Clav 1A
+71;0;Clav 1B
+72;0;Clav 1C
+73;0;Clav 2A
+74;0;Clav 2B
+75;0;Clav 2C
+76;0;Clav 3A
+77;0;Clav 3B
+78;0;Clav 3C
+79;0;Clav 4A
+80;0;Clav 4B
+81;0;Clav 4C
+82;0;Clav Wave
+83;0;MIDI Clav
+84;0;HarpsiWave A
+85;0;HarpsiWave B
+86;0;HarpsiWave C
+87;0;Jazz Organ 1
+88;0;Jazz Organ 2
+89;0;Organ 1
+90;0;Organ 2
+91;0;Organ 3
+92;0;Organ 4
+93;0;60's Organ1
+94;0;60's Organ2
+95;0;60's Organ3
+96;0;60's Organ4
+97;0;Full Organ
+98;0;Full Draw
+99;0;Rock Organ
+100;0;RockOrg1 A L
+101;0;RockOrg1 A R
+102;0;RockOrg1 B L
+103;0;RockOrg1 B R
+104;0;RockOrg1 C L
+105;0;RockOrg1 C R
+106;0;RockOrg2 A L
+107;0;RockOrg2 A R
+108;0;RockOrg2 B L
+109;0;RockOrg2 B R
+110;0;RockOrg2 C L
+111;0;RockOrg2 C R
+112;0;RockOrg3 A L
+113;0;RockOrg3 A R
+114;0;RockOrg3 B L
+115;0;RockOrg3 B R
+116;0;RockOrg3 C L
+117;0;RockOrg3 C R
+118;0;Dist. Organ
+119;0;Rot.Org Slw
+120;0;Rot.Org Fst
+121;0;Pipe Organ
+122;0;Soft Nylon A
+123;0;Soft Nylon B
+124;0;Soft Nylon C
+125;0;Nylon Gtr A
+126;0;Nylon Gtr B
+127;0;Nylon Gtr C
+128;0;Nylon Str
+129;0;6-Str Gtr A
+130;0;6-Str Gtr B
+131;0;6-Str Gtr C
+132;0;StlGtr mp A
+133;0;StlGtr mp B
+134;0;StlGtr mp C
+135;0;StlGtr mf A
+136;0;StlGtr mf B
+137;0;StlGtr mf C
+138;0;StlGtr ff A
+139;0;StlGtr ff B
+140;0;StlGtr ff C
+141;0;StlGtr sld A
+142;0;StlGtr sld B
+143;0;StlGtr sld C
+144;0;StlGtr Hrm A
+145;0;StlGtr Hrm B
+146;0;StlGtr Hrm C
+147;0;Gtr Harm A
+148;0;Gtr Harm B
+149;0;Gtr Harm C
+150;0;Jazz Gtr A
+151;0;Jazz Gtr B
+152;0;Jazz Gtr C
+153;0;LP Rear A
+154;0;LP Rear B
+155;0;LP Rear C
+156;0;Rock lead 1
+157;0;Rock lead 2
+158;0;Comp Gtr A
+159;0;Comp Gtr B
+160;0;Comp Gtr C
+161;0;Comp Gtr A+
+162;0;Mute Gtr 1
+163;0;Mute Gtr 2A
+164;0;Mute Gtr 2B
+165;0;Mute Gtr 2C
+166;0;Muters
+167;0;Pop Strat A
+168;0;Pop Strat B
+169;0;Pop Strat C
+170;0;JC Strat A
+171;0;JC Strat B
+172;0;JC Strat C
+173;0;JC Strat A+
+174;0;JC Strat B+
+175;0;JC Strat C+
+176;0;Clean Gtr A
+177;0;Clean Gtr B
+178;0;Clean Gtr C
+179;0;Stratus A
+180;0;Stratus B
+181;0;Stratus C
+182;0;Scrape Gut
+183;0;Strat Sust
+184;0;Strat Atk
+185;0;OD Gtr A
+186;0;OD Gtr B
+187;0;OD Gtr C
+188;0;OD Gtr A+
+189;0;Heavy Gtr A
+190;0;Heavy Gtr B
+191;0;Heavy Gtr C
+192;0;Heavy Gtr A+
+193;0;Heavy Gtr B+
+194;0;Heavy Gtr C+
+195;0;PowerChord A
+196;0;PowerChord B
+197;0;PowerChord C
+198;0;EG Harm
+199;0;Gt.FretNoise
+200;0;Syn Gtr A
+201;0;Syn Gtr B
+202;0;Syn Gtr C
+203;0;Harp 1A
+204;0;Harp 1B
+205;0;Harp 1C
+206;0;Harp Harm
+207;0;Pluck Harp
+208;0;Banjo A
+209;0;Banjo B
+210;0;Banjo C
+211;0;Sitar A
+212;0;Sitar B
+213;0;Sitar C
+214;0;E.Sitar A
+215;0;E.Sitar B
+216;0;E.Sitar C
+217;0;Santur A
+218;0;Santur B
+219;0;Santur C
+220;0;Dulcimer A
+221;0;Dulcimer B
+222;0;Dulcimer C
+223;0;Shamisen A
+224;0;Shamisen B
+225;0;Shamisen C
+226;0;Koto A
+227;0;Koto B
+228;0;Koto C
+229;0;Taishokoto A
+230;0;Taishokoto B
+231;0;Taishokoto C
+232;0;Pick Bass A
+233;0;Pick Bass B
+234;0;Pick Bass C
+235;0;Fingerd Bs A
+236;0;Fingerd Bs B
+237;0;Fingerd Bs C
+238;0;E.Bass
+239;0;P.Bass 1
+240;0;P.Bass 2
+241;0;Stick
+242;0;Fretless A
+243;0;Fretless B
+244;0;Fretless C
+245;0;Fretless 2A
+246;0;Fretless 2B
+247;0;Fretless 2C
+248;0;UprightBs 1
+249;0;UprightBs 2A
+250;0;UprightBs 2B
+251;0;UprightBs 2C
+252;0;Ac.Bass A
+253;0;Ac.Bass B
+254;0;Ac.Bass C
+255;0;Slap Bass 1
+256;0;Slap & Pop
+257;0;Slap Bass 2
+258;0;Slap Bass 3
+259;0;Jz.Bs Thumb
+260;0;Jz.Bs Slap 1
+261;0;Jz.Bs Slap 2
+262;0;Jz.Bs Slap 3
+263;0;Jz.Bs Pop
+264;0;Funk Bass1
+265;0;Funk Bass2
+266;0;Syn Bass A
+267;0;Syn Bass C
+268;0;Syn Bass
+269;0;Syn Bass 2 A
+270;0;Syn Bass 2 B
+271;0;Syn Bass 2 C
+272;0;Mini Bs 1A
+273;0;Mini Bs 1B
+274;0;Mini Bs 1C
+275;0;Mini Bs 2
+276;0;Mini Bs 2+
+277;0;MC-202 Bs A
+278;0;MC-202 Bs B
+279;0;MC-202 Bs C
+280;0;Hollow Bs
+281;0;Flute 1A
+282;0;Flute 1B
+283;0;Flute 1C
+284;0;Jazz Flute A
+285;0;Jazz Flute B
+286;0;Jazz Flute C
+287;0;Flute Tone
+288;0;Piccolo A
+289;0;Piccolo B
+290;0;Piccolo C
+291;0;Blow Pipe
+292;0;Pan Pipe
+293;0;BottleBlow
+294;0;Rad Hose
+295;0;Shakuhachi
+296;0;Shaku Atk
+297;0;Flute Push
+298;0;Clarinet A
+299;0;Clarinet B
+300;0;Clarinet C
+301;0;Oboe mf A
+302;0;Oboe mf B
+303;0;Oboe mf C
+304;0;Oboe f A
+305;0;Oboe f B
+306;0;Oboe f C
+307;0;E.Horn A
+308;0;E.Horn B
+309;0;E.Horn C
+310;0;Bassoon A
+311;0;Bassoon B
+312;0;Bassoon C
+313;0;T_Recorder A
+314;0;T_Recorder B
+315;0;T_Recorder C
+316;0;Sop.Sax A
+317;0;Sop.Sax B
+318;0;Sop.Sax C
+319;0;Sop.Sax mf A
+320;0;Sop.Sax mf B
+321;0;Sop.Sax mf C
+322;0;Alto mp A
+323;0;Alto mp B
+324;0;Alto mp C
+325;0;Alto Sax 1A
+326;0;Alto Sax 1B
+327;0;Alto Sax 1C
+328;0;T.Breathy A
+329;0;T.Breathy B
+330;0;T.Breathy C
+331;0;SoloSax A
+332;0;SoloSax B
+333;0;SoloSax C
+334;0;Tenor Sax A
+335;0;Tenor Sax B
+336;0;Tenor Sax C
+337;0;T.Sax mf A
+338;0;T.Sax mf B
+339;0;T.Sax mf C
+340;0;Bari.Sax f A
+341;0;Bari.Sax f B
+342;0;Bari.Sax f C
+343;0;Bari.Sax A
+344;0;Bari.Sax B
+345;0;Bari.Sax C
+346;0;Syn Sax
+347;0;Chanter
+348;0;Harmonica A
+349;0;Harmonica B
+350;0;Harmonica C
+351;0;OrcUnisonA L
+352;0;OrcUnisonA R
+353;0;OrcUnisonB L
+354;0;OrcUnisonB R
+355;0;OrcUnisonC L
+356;0;OrcUnisonC R
+357;0;BrassSectA L
+358;0;BrassSectA R
+359;0;BrassSectB L
+360;0;BrassSectB R
+361;0;BrassSectC L
+362;0;BrassSectC R
+363;0;Tpt Sect. A
+364;0;Tpt Sect. B
+365;0;Tpt Sect. C
+366;0;Tb Sect A
+367;0;Tb Sect B
+368;0;Tb Sect C
+369;0;T.Sax Sect A
+370;0;T.Sax Sect B
+371;0;T.Sax Sect C
+372;0;Flugel A
+373;0;Flugel B
+374;0;Flugel C
+375;0;FlugelWave
+376;0;Trumpet 1A
+377;0;Trumpet 1B
+378;0;Trumpet 1C
+379;0;Trumpet 2A
+380;0;Trumpet 2B
+381;0;Trumpet 2C
+382;0;HarmonMute1A
+383;0;HarmonMute1B
+384;0;HarmonMute1C
+385;0;Trombone 1
+386;0;Trombone 2 A
+387;0;Trombone 2 B
+388;0;Trombone 2 C
+389;0;Tuba A
+390;0;Tuba B
+391;0;Tuba C
+392;0;French 1A
+393;0;French 1C
+394;0;F.Horns A
+395;0;F.Horns B
+396;0;F.Horns C
+397;0;Violin A
+398;0;Violin B
+399;0;Violin C
+400;0;Violin 2 A
+401;0;Violin 2 B
+402;0;Violin 2 C
+403;0;Cello A
+404;0;Cello B
+405;0;Cello C
+406;0;Cello 2 A
+407;0;Cello 2 B
+408;0;Cello 2 C
+409;0;Cello Wave
+410;0;Pizz
+411;0;STR Attack A
+412;0;STR Attack B
+413;0;STR Attack C
+414;0;DolceStr.A L
+415;0;DolceStr.A R
+416;0;DolceStr.B L
+417;0;DolceStr.B R
+418;0;DolceStr.C L
+419;0;DolceStr.C R
+420;0;JV Strings L
+421;0;JV Strings R
+422;0;JV Strings A
+423;0;JV Strings C
+424;0;JP Strings1A
+425;0;JP Strings1B
+426;0;JP Strings1C
+427;0;JP Strings2A
+428;0;JP Strings2B
+429;0;JP Strings2C
+430;0;PWM
+431;0;Pulse Mod
+432;0;Soft Pad A
+433;0;Soft Pad B
+434;0;Soft Pad C
+435;0;Fantasynth A
+436;0;Fantasynth B
+437;0;Fantasynth C
+438;0;D-50 HeavenA
+439;0;D-50 HeavenB
+440;0;D-50 HeavenC
+441;0;Fine Wine
+442;0;D-50 Brass A
+443;0;D-50 Brass B
+444;0;D-50 Brass C
+445;0;D-50 BrassA+
+446;0;Doo
+447;0;Pop Voice
+448;0;Syn Vox 1
+449;0;Syn Vox 2
+450;0;Voice Aahs A
+451;0;Voice Aahs B
+452;0;Voice Aahs C
+453;0;Voice Oohs1A
+454;0;Voice Oohs1B
+455;0;Voice Oohs1C
+456;0;Voice Oohs2A
+457;0;Voice Oohs2B
+458;0;Voice Oohs2C
+459;0;Choir 1A
+460;0;Choir 1B
+461;0;Choir 1C
+462;0;Oohs Chord L
+463;0;Oohs Chord R
+464;0;Male Ooh A
+465;0;Male Ooh B
+466;0;Male Ooh C
+467;0;Org Vox A
+468;0;Org Vox B
+469;0;Org Vox C
+470;0;Org Vox
+471;0;ZZZ Vox
+472;0;Bell VOX
+473;0;Kalimba
+474;0;JD Kalimba
+475;0;Klmba Atk
+476;0;Wood Crak
+477;0;Block
+478;0;Gamelan 1
+479;0;Gamelan 2
+480;0;Gamelan 3
+481;0;Log Drum
+482;0;Hooky
+483;0;Tabla
+484;0;Marimba Wave
+485;0;Xylo
+486;0;Xylophone
+487;0;Vibes
+488;0;Bottle Hit
+489;0;Glockenspiel
+490;0;Tubular
+491;0;Steel Drums
+492;0;Pole lp
+493;0;Fanta Bell A
+494;0;Fanta Bell B
+495;0;Fanta Bell C
+496;0;FantaBell A+
+497;0;Org Bell
+498;0;AgogoBells
+499;0;FingerBell
+500;0;DIGI Bell 1
+501;0;DIGI Bell 1+
+502;0;JD Cowbell
+503;0;Bell Wave
+504;0;Chime
+505;0;Crystal
+506;0;2.2 Bellwave
+507;0;2.2 Vibwave
+508;0;Digiwave
+509;0;DIGI Chime
+510;0;JD DIGIChime
+511;0;BrightDigi
+512;0;Can Wave 1
+513;0;Can Wave 2
+514;0;Vocal Wave
+515;0;Wally Wave
+516;0;Brusky lp
+517;0;Wave Scan
+518;0;Wire String
+519;0;Nasty
+520;0;Wave Table
+521;0;Klack Wave
+522;0;Spark VOX
+523;0;JD Spark VOX
+524;0;Cutters
+525;0;EML 5th
+526;0;MMM VOX
+527;0;Lead Wave
+528;0;Synth Reed
+529;0;Synth Saw 1
+530;0;Synth Saw 2
+531;0;Syn Saw 2inv
+532;0;Synth Saw 3
+533;0;JD Syn Saw 2
+534;0;FAT Saw
+535;0;JP-8 Saw A
+536;0;JP-8 Saw B
+537;0;JP-8 Saw C
+538;0;P5 Saw A
+539;0;P5 Saw B
+540;0;P5 Saw C
+541;0;P5 Saw2 A
+542;0;P5 Saw2 B
+543;0;P5 Saw2 C
+544;0;D-50 Saw A
+545;0;D-50 Saw B
+546;0;D-50 Saw C
+547;0;Synth Square
+548;0;JP-8 SquareA
+549;0;JP-8 SquareB
+550;0;JP-8 SquareC
+551;0;DualSquare A
+552;0;DualSquare C
+553;0;DualSquareA+
+554;0;JD SynPulse1
+555;0;JD SynPulse2
+556;0;JD SynPulse3
+557;0;JD SynPulse4
+558;0;Synth Pulse1
+559;0;Synth Pulse2
+560;0;JD SynPulse5
+561;0;Sync Sweep
+562;0;Triangle
+563;0;JD Triangle
+564;0;Sine
+565;0;Metal Wind
+566;0;Wind Agogo
+567;0;Feedbackwave
+568;0;Spectrum
+569;0;CrunchWind
+570;0;ThroatWind
+571;0;Pitch Wind
+572;0;JD Vox Noise
+573;0;Vox Noise
+574;0;BreathNoise
+575;0;Voice Breath
+576;0;White Noise
+577;0;Pink Noise
+578;0;Rattles
+579;0;Ice Rain
+580;0;Tin Wave
+581;0;Anklungs
+582;0;Wind Chimes
+583;0;Orch. Hit
+584;0;Tekno Hit
+585;0;Back Hit
+586;0;Philly Hit
+587;0;Scratch 1
+588;0;Scratch 2
+589;0;Scratch 3
+590;0;Shami
+591;0;Org Atk 1
+592;0;Org Atk 2
+593;0;Sm Metal
+594;0;StrikePole
+595;0;Thrill
+596;0;Switch
+597;0;Tuba Slap
+598;0;Plink
+599;0;Plunk
+600;0;EP Atk
+601;0;TVF_Trig
+602;0;Org Click
+603;0;Cut Noiz
+604;0;Bass Body
+605;0;Flute Click
+606;0;Gt&BsNz MENU
+607;0;Ac.BassNz 1
+608;0;Ac.BassNz 2
+609;0;El.BassNz 1
+610;0;El.BassNz 2
+611;0;DistGtrNz 1
+612;0;DistGtrNz 2
+613;0;DistGtrNz 3
+614;0;DistGtrNz 4
+615;0;SteelGtrNz 1
+616;0;SteelGtrNz 2
+617;0;SteelGtrNz 3
+618;0;SteelGtrNz 4
+619;0;SteelGtrNz 5
+620;0;SteelGtrNz 6
+621;0;SteelGtrNz 7
+622;0;Sea
+623;0;Thunder
+624;0;Windy
+625;0;Stream
+626;0;Bubble
+627;0;Bird
+628;0;Dog Bark
+629;0;Horse
+630;0;Telephone 1
+631;0;Telephone 2
+632;0;Creak
+633;0;Door Slam
+634;0;Engine
+635;0;Car Stop
+636;0;Car Pass
+637;0;Crash
+638;0;Gun Shot
+639;0;Siren
+640;0;Train
+641;0;Jetplane
+642;0;Starship
+643;0;Breath
+644;0;Laugh
+645;0;Scream
+646;0;Punch
+647;0;Heart
+648;0;Steps
+649;0;Machine Gun
+650;0;Laser
+651;0;Thunder 2
+652;0;AmbientSN pL
+653;0;AmbientSN pR
+654;0;AmbientSN fL
+655;0;AmbientSN fR
+656;0;Wet SN p L
+657;0;Wet SN p R
+658;0;Wet SN f L
+659;0;Wet SN f R
+660;0;Dry SN p
+661;0;Dry SN f
+662;0;Sharp SN
+663;0;Piccolo SN
+664;0;Maple SN
+665;0;Old Fill SN
+666;0;70s SN
+667;0;SN Roll
+668;0;Natural SN1
+669;0;Natural SN2
+670;0;Ballad SN
+671;0;Rock SN p L
+672;0;Rock SN p R
+673;0;Rock SN mf L
+674;0;Rock SN mf R
+675;0;Rock SN f L
+676;0;Rock SN f R
+677;0;Rock Rim p L
+678;0;Rock Rim p R
+679;0;Rock Rim mfL
+680;0;Rock Rim mfR
+681;0;Rock Rim f L
+682;0;Rock Rim f R
+683;0;Rock Gst L
+684;0;Rock Gst R
+685;0;Snare Ghost
+686;0;Jazz SN p L
+687;0;Jazz SN p R
+688;0;Jazz SN mf L
+689;0;Jazz SN mf R
+690;0;Jazz SN f L
+691;0;Jazz SN f R
+692;0;Jazz SN ff L
+693;0;Jazz SN ff R
+694;0;Jazz Rim p L
+695;0;Jazz Rim p R
+696;0;Jazz Rim mfL
+697;0;Jazz Rim mfR
+698;0;Jazz Rim f L
+699;0;Jazz Rim f R
+700;0;Jazz Rim ffL
+701;0;Jazz Rim ffR
+702;0;Brush Slap
+703;0;Brush Swish
+704;0;Jazz Swish p
+705;0;Jazz Swish f
+706;0;909 SN 1
+707;0;909 SN 2
+708;0;808 SN
+709;0;Rock Roll L
+710;0;Rock Roll R
+711;0;Jazz Roll
+712;0;Brush Roll
+713;0;Dry Stick
+714;0;Dry Stick 2
+715;0;Side Stick
+716;0;Woody Stick
+717;0;RockStick pL
+718;0;RockStick pR
+719;0;RockStick fL
+720;0;RockStick fR
+721;0;Dry Kick
+722;0;Maple Kick
+723;0;Rock Kick p
+724;0;Rock Kick mf
+725;0;Rock Kick f
+726;0;Jazz Kick p
+727;0;Jazz Kick mf
+728;0;Jazz Kick f
+729;0;Jazz Kick
+730;0;Pillow Kick
+731;0;JazzDry Kick
+732;0;Lite Kick
+733;0;Old Kick
+734;0;Hybrid Kick
+735;0;Hybrid Kick2
+736;0;Verb Kick
+737;0;Round Kick
+738;0;MplLmtr Kick
+739;0;70s Kick 1
+740;0;70s Kick 2
+741;0;Dance Kick
+742;0;808 Kick
+743;0;909 Kick 1
+744;0;909 Kick 2
+745;0;Rock TomL1 p
+746;0;Rock TomL2 p
+747;0;Rock Tom M p
+748;0;Rock Tom H p
+749;0;Rock TomL1 f
+750;0;Rock TomL2 f
+751;0;Rock Tom M f
+752;0;Rock Tom H f
+753;0;Rock Flm L1
+754;0;Rock Flm L2
+755;0;Rock Flm M
+756;0;Rock Flm H
+757;0;Jazz Tom L p
+758;0;Jazz Tom M p
+759;0;Jazz Tom H p
+760;0;Jazz Tom L f
+761;0;Jazz Tom M f
+762;0;Jazz Tom H f
+763;0;Jazz Flm L
+764;0;Jazz Flm M
+765;0;Jazz Flm H
+766;0;Maple Tom 1
+767;0;Maple Tom 2
+768;0;Maple Tom 3
+769;0;Maple Tom 4
+770;0;808 Tom
+771;0;Verb Tom Hi
+772;0;Verb Tom Lo
+773;0;Dry Tom Hi
+774;0;Dry Tom Lo
+775;0;Rock ClHH1 p
+776;0;Rock ClHH1mf
+777;0;Rock ClHH1 f
+778;0;Rock ClHH2 p
+779;0;Rock ClHH2mf
+780;0;Rock ClHH2 f
+781;0;Jazz ClHH1 p
+782;0;Jazz ClHH1mf
+783;0;Jazz ClHH1 f
+784;0;Jazz ClHH2 p
+785;0;Jazz ClHH2mf
+786;0;Jazz ClHH2 f
+787;0;Cl HiHat 1
+788;0;Cl HiHat 2
+789;0;Cl HiHat 3
+790;0;Cl HiHat 4
+791;0;Cl HiHat 5
+792;0;Rock OpHH p
+793;0;Rock OpHH f
+794;0;Jazz OpHH p
+795;0;Jazz OpHH mf
+796;0;Jazz OpHH f
+797;0;Op HiHat
+798;0;Op HiHat 2
+799;0;Rock PdHH p
+800;0;Rock PdHH f
+801;0;Jazz PdHH p
+802;0;Jazz PdHH f
+803;0;Pedal HiHat
+804;0;Pedal HiHat2
+805;0;Dance Cl HH
+806;0;909 NZ HiHat
+807;0;70s Cl HiHat
+808;0;70s Op HiHat
+809;0;606 Cl HiHat
+810;0;606 Op HiHat
+811;0;909 Cl HiHat
+812;0;909 Op HiHat
+813;0;808 Claps
+814;0;HumanClapsEQ
+815;0;Tight Claps
+816;0;Hand Claps
+817;0;Finger Snaps
+818;0;Rock RdCym1p
+819;0;Rock RdCym1f
+820;0;Rock RdCym2p
+821;0;Rock RdCym2f
+822;0;Jazz RdCym p
+823;0;Jazz RdCymmf
+824;0;Jazz RdCym f
+825;0;Ride 1
+826;0;Ride 2
+827;0;Ride Bell
+828;0;Rock CrCym1p
+829;0;Rock CrCym1f
+830;0;Rock CrCym2p
+831;0;Rock CrCym2f
+832;0;Rock Splash
+833;0;Jazz CrCym p
+834;0;Jazz CrCym f
+835;0;Crash Cymbal
+836;0;Crash 1
+837;0;Rock China
+838;0;China Cym
+839;0;Cowbell
+840;0;Wood Block
+841;0;Claves
+842;0;Bongo Hi
+843;0;Bongo Lo
+844;0;Cga Open Hi
+845;0;Cga Open Lo
+846;0;Cga Mute Hi
+847;0;Cga Mute Lo
+848;0;Cga Slap
+849;0;Timbale
+850;0;Cabasa Up
+851;0;Cabasa Down
+852;0;Cabasa Cut
+853;0;Maracas
+854;0;Long Guiro
+855;0;Tambourine 1
+856;0;Tambourine 2
+857;0;Open Triangl
+858;0;Cuica
+859;0;Vibraslap
+860;0;Timpani
+861;0;Timp3 pp
+862;0;Timp3 mp
+863;0;Applause
+864;0;Syn FX Loop
+865;0;Loop 1
+866;0;Loop 2
+867;0;Loop 3
+868;0;Loop 4
+869;0;Loop 5
+870;0;Loop 6
+871;0;Loop 7
+872;0;R8 Click
+873;0;Metronome 1
+874;0;Metronome 2
+875;0;MC500 Beep 1
+876;0;MC500 Beep 2
+877;0;Low Saw
+878;0;Low Saw inv
+879;0;Low P5 Saw
+880;0;Low Pulse 1
+881;0;Low Pulse 2
+882;0;Low Square
+883;0;Low Sine
+884;0;Low Triangle
+885;0;Low White NZ
+886;0;Low Pink NZ
+887;0;DC
+888;0;REV Orch.Hit
+889;0;REV TeknoHit
+890;0;REV Back Hit
+891;0;REV PhillHit
+892;0;REV Steel DR
+893;0;REV Tin Wave
+894;0;REV AmbiSNpL
+895;0;REV AmbiSNpR
+896;0;REV AmbiSNfL
+897;0;REV AmbiSNfR
+898;0;REV Wet SNpL
+899;0;REV Wet SNpR
+900;0;REV Wet SNfL
+901;0;REV Wet SNfR
+902;0;REV Dry SN
+903;0;REV PiccloSN
+904;0;REV Maple SN
+905;0;REV OldFilSN
+906;0;REV 70s SN
+907;0;REV SN Roll
+908;0;REV NatrlSN1
+909;0;REV NatrlSN2
+910;0;REV BalladSN
+911;0;REV RkSNpL
+912;0;REV RkSNpR
+913;0;REV RkSNmfL
+914;0;REV RkSNmfR
+915;0;REV RkSNfL
+916;0;REV RkSNfR
+917;0;REV RkRimpL
+918;0;REV RkRimpR
+919;0;REV RkRimmfL
+920;0;REV RkRimmfR
+921;0;REV RkRimfL
+922;0;REV RkRimfR
+923;0;REV RkGstL
+924;0;REV RkGstR
+925;0;REV SnareGst
+926;0;REV JzSNpL
+927;0;REV JzSNpR
+928;0;REV JzSNmfL
+929;0;REV JzSNmfR
+930;0;REV JzSNfL
+931;0;REV JzSNfR
+932;0;REV JzSNffL
+933;0;REV JzSNffR
+934;0;REV JzRimpL
+935;0;REV JzRimpR
+936;0;REV JzRimmfL
+937;0;REV JzRimmfR
+938;0;REV JzRimfL
+939;0;REV JzRimfR
+940;0;REV JzRimffL
+941;0;REV JzRimffR
+942;0;REV Brush 1
+943;0;REV Brush 2
+944;0;REV Brush 3
+945;0;REV JzSwish1
+946;0;REV JzSwish2
+947;0;REV 909 SN 1
+948;0;REV 909 SN 2
+949;0;REV RkRoll L
+950;0;REV RkRoll R
+951;0;REV JzRoll
+952;0;REV Dry Stk
+953;0;REV DrySick
+954;0;REV Side Stk
+955;0;REV Wdy Stk
+956;0;REV RkStk1L
+957;0;REV RkStk1R
+958;0;REV RkStk2L
+959;0;REV RkStk2R
+960;0;REV Thrill
+961;0;REV Dry Kick
+962;0;REV Mpl Kick
+963;0;REV RkKik p
+964;0;REV RkKik mf
+965;0;REV RkKik f
+966;0;REV JzKik p
+967;0;REV JzKik mf
+968;0;REV JzKik f
+969;0;REV Jaz Kick
+970;0;REV Pillow K
+971;0;REV Jz Dry K
+972;0;REV LiteKick
+973;0;REV Old Kick
+974;0;REV Hybrid K
+975;0;REV HybridK2
+976;0;REV 70s K 1
+977;0;REV 70s K 2
+978;0;REV Dance K
+979;0;REV 909 K 2
+980;0;REV RkTomL1p
+981;0;REV RkTomL2p
+982;0;REV RkTomM p
+983;0;REV RkTomH p
+984;0;REV RkTomL1f
+985;0;REV RkTomL2f
+986;0;REV RkTomM f
+987;0;REV RkTomH f
+988;0;REV RkFlmL1
+989;0;REV RkFlmL2
+990;0;REV RkFlm M
+991;0;REV RkFlm H
+992;0;REV JzTomL p
+993;0;REV JzTomM p
+994;0;REV JzTomH p
+995;0;REV JzTomL f
+996;0;REV JzTomM f
+997;0;REV JzTomH f
+998;0;REV JzFlm L
+999;0;REV JzFlm M
+1000;0;REV JzFlm H
+1001;0;REV MplTom2
+1002;0;REV MplTom4
+1003;0;REV 808Tom
+1004;0;REV VerbTomH
+1005;0;REV VerbTomL
+1006;0;REV DryTom H
+1007;0;REV DryTom M
+1008;0;REV RkClH1 p
+1009;0;REV RkClH1mf
+1010;0;REV RkClH1 f
+1011;0;REV RkClH2 p
+1012;0;REV RkClH2mf
+1013;0;REV RkClH2 f
+1014;0;REV JzClH1 p
+1015;0;REV JzClH1mf
+1016;0;REV JzClH1 f
+1017;0;REV JzClH2 p
+1018;0;REV JzClH2mf
+1019;0;REV JzClH2 f
+1020;0;REV Cl HH 1
+1021;0;REV Cl HH 2
+1022;0;REV Cl HH 3
+1023;0;REV Cl HH 4
+1024;0;REV Cl HH 5
+1025;0;REV RkOpHH p
+1026;0;REV RkOpHH f
+1027;0;REV JzOpHH p
+1028;0;REV JzOpHHmf
+1029;0;REV JzOpHH f
+1030;0;REV Op HiHat
+1031;0;REV OpHiHat2
+1032;0;REV RkPdHH p
+1033;0;REV RkPdHH f
+1034;0;REV JzPdHH p
+1035;0;REV JzPdHH f
+1036;0;REV PedalHH
+1037;0;REV PedalHH2
+1038;0;REV Dance HH
+1039;0;REV 70s ClHH
+1040;0;REV 70s OpHH
+1041;0;REV 606 ClHH
+1042;0;REV 606 OpHH
+1043;0;REV 909 NZHH
+1044;0;REV 909 OpHH
+1045;0;REV HClapsEQ
+1046;0;REV TghtClps
+1047;0;REV FingSnap
+1048;0;REV RealCLP
+1049;0;REV RkRCym1p
+1050;0;REV RkRCym1f
+1051;0;REV RkRCym2p
+1052;0;REV RkRCym2f
+1053;0;REV JzRCym p
+1054;0;REV JzRCymmf
+1055;0;REV JzRCym f
+1056;0;REV Ride 1
+1057;0;REV Ride 2
+1058;0;REV RideBell
+1059;0;REV RkCCym1p
+1060;0;REV RkCCym1f
+1061;0;REV RkCCym2p
+1062;0;REV RkCCym2f
+1063;0;REV RkSplash
+1064;0;REV JzCCym p
+1065;0;REV JzCCym f
+1066;0;REV CrashCym
+1067;0;REV Crash 1
+1068;0;REV RkChina
+1069;0;REV China
+1070;0;REV Cowbell
+1071;0;REV WoodBlck
+1072;0;REV Claves
+1073;0;REV Conga
+1074;0;REV Timbale
+1075;0;REV Maracas
+1076;0;REV Guiro
+1077;0;REV Tamb 1
+1078;0;REV Tamb 2
+1079;0;REV Cuica
+1080;0;REV Timpani
+1081;0;REV Timp3 pp
+1082;0;REV Timp3 mp
+1083;0;REV Metro
+1;1;Kick 1 Menu
+2;1;Kick 2 MenuL
+3;1;Kick 2 MenuR
+4;1;Kick 3 MenuL
+5;1;Kick 3 MenuR
+6;1;Kick 4 Menu
+7;1;Latin K sft
+8;1;Latin K med
+9;1;Latin K hrd
+10;1;ColDwnK sft
+11;1;ColDwnK med
+12;1;ColDwnK hrd
+13;1;70NtrlK sft
+14;1;70NtrlK hrd
+15;1;70PhnqK sft
+16;1;70PhnqK hrd
+17;1;Disco K sft
+18;1;Disco K hrd
+19;1;OldFnkK sft
+20;1;OldFnkK hrd
+21;1;StudioK sftL
+22;1;StudioK sftR
+23;1;StudioK medL
+24;1;StudioK medR
+25;1;StudioK hrdL
+26;1;StudioK hrdR
+27;1;StdRckK sftL
+28;1;StdRckK sftR
+29;1;StdRckK hrdL
+30;1;StdRckK hrdR
+31;1;StreetK sftL
+32;1;StreetK sftR
+33;1;StreetK hrdL
+34;1;StreetK hrdR
+35;1;OhBabyK sftL
+36;1;OhBabyK sftR
+37;1;OhBabyK hrdL
+38;1;OhBabyK hrdR
+39;1;PwrBldK sftL
+40;1;PwrBldK sftR
+41;1;PwrBldK medL
+42;1;PwrBldK medR
+43;1;PwrBldK hrdL
+44;1;PwrBldK hrdR
+45;1;B.DeepK sftL
+46;1;B.DeepK sftR
+47;1;B.DeepK hrdL
+48;1;B.DeepK hrdR
+49;1;BigRckK sftL
+50;1;BigRckK sftR
+51;1;BigRckK hrdL
+52;1;BigRckK hrdR
+53;1;WhamBmK sftL
+54;1;WhamBmK sftR
+55;1;WhamBmK hrdL
+56;1;WhamBmK hrdR
+57;1;StdJazK sft
+58;1;StdJazK hrd
+59;1;OldJazK sft
+60;1;OldJazK hrd
+61;1;RoomJzK sft
+62;1;RoomJzK hrd
+63;1;JzSoulK sft
+64;1;JzSoulK hrd
+65;1;OldFnkSMenu
+66;1;Latin SMenu
+67;1;HiPiccSMenuL
+68;1;HiPiccSMenuR
+69;1;Tight SMenuL
+70;1;Tight SMenuR
+71;1;StdRk1SMenuL
+72;1;StdRk1SMenuR
+73;1;StdRk2SMenuL
+74;1;StdRk2SMenuR
+75;1;OhBabySMenuL
+76;1;OhBabySMenuR
+77;1;PoppinSMenuL
+78;1;PoppinSMenuR
+79;1;StdFatSMenuL
+80;1;StdFatSMenuR
+81;1;JazStkSMenuL
+82;1;JazStkSMenuR
+83;1;StdJazSMenuL
+84;1;StdJazSMenuR
+85;1;BalladSMenuL
+86;1;BalladSMenuR
+87;1;PwrBldSMenuL
+88;1;PwrBldSMenuR
+89;1;AlBeefSMenuL
+90;1;AlBeefSMenuR
+91;1;BigRckSMenuL
+92;1;BigRckSMenuR
+93;1;70BrshSMenu
+94;1;JzBrshSMenuL
+95;1;JzBrshSMenuR
+96;1;CrsStk MenuL
+97;1;CrsStk MenuR
+98;1;OldFnkS sft
+99;1;OldFnkS hrd
+100;1;OldFnkS rim1
+101;1;OldFnkS rim2
+102;1;OldFnkS flm
+103;1;OldFnkS buz
+104;1;OldFnkS stk1
+105;1;OldFnkS stk2
+106;1;Latin S sft
+107;1;Latin S med
+108;1;Latin S hrd1
+109;1;Latin S hrd2
+110;1;Latin S rim1
+111;1;Latin S rim2
+112;1;Latin S flm
+113;1;Latin S buz
+114;1;Latin S stk1
+115;1;Latin S stk2
+116;1;HiPiccSsft1L
+117;1;HiPiccSsft1R
+118;1;HiPiccSsft2L
+119;1;HiPiccSsft2R
+120;1;HiPiccShrd1L
+121;1;HiPiccShrd1R
+122;1;HiPiccShrd2L
+123;1;HiPiccShrd2R
+124;1;HiPiccSrim1L
+125;1;HiPiccSrim1R
+126;1;HiPiccSrim2L
+127;1;HiPiccSrim2R
+128;1;HiPiccSrim3L
+129;1;HiPiccSrim3R
+130;1;HiPiccSrim4L
+131;1;HiPiccSrim4R
+132;1;HiPiccSflm L
+133;1;HiPiccSflm R
+134;1;HiPiccSbuz1L
+135;1;HiPiccSbuz1R
+136;1;HiPiccSbuz2L
+137;1;HiPiccSbuz2R
+138;1;HiPiccSstk1L
+139;1;HiPiccSstk1R
+140;1;HiPiccSstk2L
+141;1;HiPiccSstk2R
+142;1;Tight Ssft L
+143;1;Tight Ssft R
+144;1;Tight Smed L
+145;1;Tight Smed R
+146;1;Tight Shrd1L
+147;1;Tight Shrd1R
+148;1;Tight Shrd2L
+149;1;Tight Shrd2R
+150;1;Tight Srim1L
+151;1;Tight Srim1R
+152;1;Tight Srim2L
+153;1;Tight Srim2R
+154;1;Tight Sflm1L
+155;1;Tight Sflm1R
+156;1;Tight Sflm2L
+157;1;Tight Sflm2R
+158;1;StdRk1Ssft L
+159;1;StdRk1Ssft R
+160;1;StdRk1Smed L
+161;1;StdRk1Smed R
+162;1;StdRk1Shrd1L
+163;1;StdRk1Shrd1R
+164;1;StdRk1Shrd2L
+165;1;StdRk1Shrd2R
+166;1;StdRk1Srim L
+167;1;StdRk1Srim R
+168;1;StdRk1Sflm L
+169;1;StdRk1Sflm R
+170;1;StdRk1Sbuz1L
+171;1;StdRk1Sbuz1R
+172;1;StdRk1Sbuz2L
+173;1;StdRk1Sbuz2R
+174;1;StdRk2Ssft L
+175;1;StdRk2Ssft R
+176;1;StdRk2Smed L
+177;1;StdRk2Smed R
+178;1;StdRk2Shrd L
+179;1;StdRk2Shrd R
+180;1;StdRk2Srim1L
+181;1;StdRk2Srim1R
+182;1;StdRk2Srim2L
+183;1;StdRk2Srim2R
+184;1;StdRk2Sflm L
+185;1;StdRk2Sflm R
+186;1;StdRk2Sbuz1L
+187;1;StdRk2Sbuz1R
+188;1;StdRk2Sbuz2L
+189;1;StdRk2Sbuz2R
+190;1;StdRk2Sstk L
+191;1;StdRk2Sstk R
+192;1;OhBabySsft L
+193;1;OhBabySsft R
+194;1;OhBabySmed1L
+195;1;OhBabySmed1R
+196;1;OhBabySmed2L
+197;1;OhBabySmed2R
+198;1;OhBabyShrd1L
+199;1;OhBabyShrd1R
+200;1;OhBabyShrd2L
+201;1;OhBabyShrd2R
+202;1;OhBabySrim L
+203;1;OhBabySrim R
+204;1;OhBabySflm L
+205;1;OhBabySflm R
+206;1;OhBabySbuz1L
+207;1;OhBabySbuz1R
+208;1;OhBabySbuz2L
+209;1;OhBabySbuz2R
+210;1;OhBabySstk1L
+211;1;OhBabySstk1R
+212;1;OhBabySstk2L
+213;1;OhBabySstk2R
+214;1;PoppinSsft L
+215;1;PoppinSsft R
+216;1;PoppinSmed L
+217;1;PoppinSmed R
+218;1;PoppinShrd L
+219;1;PoppinShrd R
+220;1;PoppinSrim1L
+221;1;PoppinSrim1R
+222;1;PoppinSrim2L
+223;1;PoppinSrim2R
+224;1;PoppinSflm L
+225;1;PoppinSflm R
+226;1;PoppinSbuz1L
+227;1;PoppinSbuz1R
+228;1;PoppinSbuz2L
+229;1;PoppinSbuz2R
+230;1;PoppinSstk1L
+231;1;PoppinSstk1R
+232;1;PoppinSstk2L
+233;1;PoppinSstk2R
+234;1;StdFatSsft L
+235;1;StdFatSsft R
+236;1;StdFatSmed1L
+237;1;StdFatSmed1R
+238;1;StdFatSmed2L
+239;1;StdFatSmed2R
+240;1;StdFatShrd1L
+241;1;StdFatShrd1R
+242;1;StdFatShrd2L
+243;1;StdFatShrd2R
+244;1;StdFatSrim1L
+245;1;StdFatSrim1R
+246;1;StdFatSrim2L
+247;1;StdFatSrim2R
+248;1;StdFatSflm L
+249;1;StdFatSflm R
+250;1;StdFatSbuz1L
+251;1;StdFatSbuz1R
+252;1;StdFatSbuz2L
+253;1;StdFatSbuz2R
+254;1;StdFatSstk1L
+255;1;StdFatSstk1R
+256;1;StdFatSstk2L
+257;1;StdFatSstk2R
+258;1;JazStkSsft L
+259;1;JazStkSsft R
+260;1;JazStkSmed1L
+261;1;JazStkSmed1R
+262;1;JazStkSmed2L
+263;1;JazStkSmed2R
+264;1;JazStkShrd1L
+265;1;JazStkShrd1R
+266;1;JazStkShrd2L
+267;1;JazStkShrd2R
+268;1;JazStkSrim L
+269;1;JazStkSrim R
+270;1;JazStkSflm L
+271;1;JazStkSflm R
+272;1;JazStkSbuz1L
+273;1;JazStkSbuz1R
+274;1;JazStkSbuz2L
+275;1;JazStkSbuz2R
+276;1;JazStkSstk1L
+277;1;JazStkSstk1R
+278;1;JazStkSstk2L
+279;1;JazStkSstk2R
+280;1;StdJazSsft L
+281;1;StdJazSsft R
+282;1;StdJazSmed1L
+283;1;StdJazSmed1R
+284;1;StdJazSmed2L
+285;1;StdJazSmed2R
+286;1;StdJazShrd L
+287;1;StdJazShrd R
+288;1;StdJazSrim L
+289;1;StdJazSrim R
+290;1;StdJazSflm L
+291;1;StdJazSflm R
+292;1;StdJazSbuz1L
+293;1;StdJazSbuz1R
+294;1;StdJazSbuz2L
+295;1;StdJazSbuz2R
+296;1;StdJazSstk1L
+297;1;StdJazSstk1R
+298;1;StdJazSstk2L
+299;1;StdJazSstk2R
+300;1;BalladSsft L
+301;1;BalladSsft R
+302;1;BalladSmed1L
+303;1;BalladSmed1R
+304;1;BalladSmed2L
+305;1;BalladSmed2R
+306;1;BalladShrd L
+307;1;BalladShrd R
+308;1;BalladSrim1L
+309;1;BalladSrim1R
+310;1;BalladSrim2L
+311;1;BalladSrim2R
+312;1;BalladSflm L
+313;1;BalladSflm R
+314;1;BalladSbuz1L
+315;1;BalladSbuz1R
+316;1;BalladSbuz2L
+317;1;BalladSbuz2R
+318;1;BalladSstk1L
+319;1;BalladSstk1R
+320;1;BalladSstk2L
+321;1;BalladSstk2R
+322;1;PwrBldSsft1L
+323;1;PwrBldSsft1R
+324;1;PwrBldSsft2L
+325;1;PwrBldSsft2R
+326;1;PwrBldSmed1L
+327;1;PwrBldSmed1R
+328;1;PwrBldSmed2L
+329;1;PwrBldSmed2R
+330;1;PwrBldShrd1L
+331;1;PwrBldShrd1R
+332;1;PwrBldShrd2L
+333;1;PwrBldShrd2R
+334;1;PwrBldSflm L
+335;1;PwrBldSflm R
+336;1;PwrBldSbuz1L
+337;1;PwrBldSbuz1R
+338;1;PwrBldSbuz2L
+339;1;PwrBldSbuz2R
+340;1;PwrBldSstk1L
+341;1;PwrBldSstk1R
+342;1;PwrBldSstk2L
+343;1;PwrBldSstk2R
+344;1;AlBeefSsft L
+345;1;AlBeefSsft R
+346;1;AlBeefShrd L
+347;1;AlBeefShrd R
+348;1;AlBeefSrim1L
+349;1;AlBeefSrim1R
+350;1;AlBeefSrim2L
+351;1;AlBeefSrim2R
+352;1;AlBeefSflm L
+353;1;AlBeefSflm R
+354;1;AlBeefSbuz1L
+355;1;AlBeefSbuz1R
+356;1;AlBeefSbuz2L
+357;1;AlBeefSbuz2R
+358;1;AlBeefSstk1L
+359;1;AlBeefSstk1R
+360;1;AlBeefSstk2L
+361;1;AlBeefSstk2R
+362;1;BigRckSsft L
+363;1;BigRckSsft R
+364;1;BigRckSmed L
+365;1;BigRckSmed R
+366;1;BigRckShrd L
+367;1;BigRckShrd R
+368;1;BigRckSflm1L
+369;1;BigRckSflm1R
+370;1;BigRckSflm2L
+371;1;BigRckSflm2R
+372;1;BigRckSbuz L
+373;1;BigRckSbuz R
+374;1;BigRckSstk L
+375;1;BigRckSstk R
+376;1;70BrshS tap1
+377;1;70BrshS tap2
+378;1;70BrshS tap3
+379;1;70BrshS tap4
+380;1;70BrshSswsh1
+381;1;70BrshSswsh2
+382;1;70BrshSswsh3
+383;1;70BrshSsweep
+384;1;JzBrshStap1L
+385;1;JzBrshStap1R
+386;1;JzBrshStap2L
+387;1;JzBrshStap2R
+388;1;JzBrshStap3L
+389;1;JzBrshStap3R
+390;1;JzBrshStap4L
+391;1;JzBrshStap4R
+392;1;JzBrshSsws1L
+393;1;JzBrshSsws1R
+394;1;JzBrshSsws2L
+395;1;JzBrshSsws2R
+396;1;JzBrshSsws3L
+397;1;JzBrshSsws3R
+398;1;JzBrshSswepL
+399;1;JzBrshSswepR
+400;1;70PhunqStk L
+401;1;70PhunqStk R
+402;1;PwrAmb Stk1L
+403;1;PwrAmb Stk1R
+404;1;PwrAmb Stk2L
+405;1;PwrAmb Stk2R
+406;1;Latin TMenuL
+407;1;Latin TMenuR
+408;1;Tight TMenuL
+409;1;Tight TMenuR
+410;1;JazStkTMenuL
+411;1;JazStkTMenuR
+412;1;OldFnkTMenu
+413;1;OhBabyTMenuL
+414;1;OhBabyTMenuR
+415;1;PwrBldTMenuL
+416;1;PwrBldTMenuR
+417;1;BigRckTMenuL
+418;1;BigRckTMenuR
+419;1;OldBrsTMenu
+420;1;Latin T1sftL
+421;1;Latin T1sftR
+422;1;Latin T1medL
+423;1;Latin T1medR
+424;1;Latin T1hrdL
+425;1;Latin T1hrdR
+426;1;Latin T1flmL
+427;1;Latin T1flmR
+428;1;Latin T2sftL
+429;1;Latin T2sftR
+430;1;Latin T2medL
+431;1;Latin T2medR
+432;1;Latin T2hrdL
+433;1;Latin T2hrdR
+434;1;Latin T2flmL
+435;1;Latin T2flmR
+436;1;Latin T3sftL
+437;1;Latin T3sftR
+438;1;Latin T3medL
+439;1;Latin T3medR
+440;1;Latin T3hrdL
+441;1;Latin T3hrdR
+442;1;Latin T3flmL
+443;1;Latin T3flmR
+444;1;Latin T4sftL
+445;1;Latin T4sftR
+446;1;Latin T4medL
+447;1;Latin T4medR
+448;1;Latin T4hrdL
+449;1;Latin T4hrdR
+450;1;Latin T4flmL
+451;1;Latin T4flmR
+452;1;Tight T1sftL
+453;1;Tight T1sftR
+454;1;Tight T1hrdL
+455;1;Tight T1hrdR
+456;1;Tight T1flmL
+457;1;Tight T1flmR
+458;1;Tight T2sftL
+459;1;Tight T2sftR
+460;1;Tight T2hrdL
+461;1;Tight T2hrdR
+462;1;Tight T2flmL
+463;1;Tight T2flmR
+464;1;Tight T3sftL
+465;1;Tight T3sftR
+466;1;Tight T3hrdL
+467;1;Tight T3hrdR
+468;1;Tight T3flmL
+469;1;Tight T3flmR
+470;1;Tight T4sftL
+471;1;Tight T4sftR
+472;1;Tight T4hrdL
+473;1;Tight T4hrdR
+474;1;Tight T4flmL
+475;1;Tight T4flmR
+476;1;JazStkT1sftL
+477;1;JazStkT1sftR
+478;1;JazStkT1medL
+479;1;JazStkT1medR
+480;1;JazStkT1hrdL
+481;1;JazStkT1hrdR
+482;1;JazStkT1flmL
+483;1;JazStkT1flmR
+484;1;JazStkT2sftL
+485;1;JazStkT2sftR
+486;1;JazStkT2medL
+487;1;JazStkT2medR
+488;1;JazStkT2hrdL
+489;1;JazStkT2hrdR
+490;1;JazStkT2flmL
+491;1;JazStkT2flmR
+492;1;JazStkT3sftL
+493;1;JazStkT3sftR
+494;1;JazStkT3medL
+495;1;JazStkT3medR
+496;1;JazStkT3hrdL
+497;1;JazStkT3hrdR
+498;1;JazStkT3flmL
+499;1;JazStkT3flmR
+500;1;OldFnkT1sft
+501;1;OldFnkT1hrd
+502;1;OldFnkT2sft
+503;1;OldFnkT2hrd
+504;1;OldFnkT3sft
+505;1;OldFnkT3hrd
+506;1;OhBabyT1sftL
+507;1;OhBabyT1sftR
+508;1;OhBabyT1hrdL
+509;1;OhBabyT1hrdR
+510;1;OhBabyT1flmL
+511;1;OhBabyT1flmR
+512;1;OhBabyT2sftL
+513;1;OhBabyT2sftR
+514;1;OhBabyT2hrdL
+515;1;OhBabyT2hrdR
+516;1;OhBabyT2flmL
+517;1;OhBabyT2flmR
+518;1;OhBabyT3sftL
+519;1;OhBabyT3sftR
+520;1;OhBabyT3hrdL
+521;1;OhBabyT3hrdR
+522;1;OhBabyT3flmL
+523;1;OhBabyT3flmR
+524;1;OhBabyT4sftL
+525;1;OhBabyT4sftR
+526;1;OhBabyT4hrdL
+527;1;OhBabyT4hrdR
+528;1;OhBabyT4flmL
+529;1;OhBabyT4flmR
+530;1;PwrBldT1sftL
+531;1;PwrBldT1sftR
+532;1;PwrBldT1hrdL
+533;1;PwrBldT1hrdR
+534;1;PwrBldT1flmL
+535;1;PwrBldT1flmR
+536;1;PwrBldT2sftL
+537;1;PwrBldT2sftR
+538;1;PwrBldT2hrdL
+539;1;PwrBldT2hrdR
+540;1;PwrBldT2flmL
+541;1;PwrBldT2flmR
+542;1;PwrBldT3sftL
+543;1;PwrBldT3sftR
+544;1;PwrBldT3hrdL
+545;1;PwrBldT3hrdR
+546;1;PwrBldT3flmL
+547;1;PwrBldT3flmR
+548;1;PwrBldT4sftL
+549;1;PwrBldT4sftR
+550;1;PwrBldT4hrdL
+551;1;PwrBldT4hrdR
+552;1;PwrBldT4flmL
+553;1;PwrBldT4flmR
+554;1;BigRckT1sftL
+555;1;BigRckT1sftR
+556;1;BigRckT1medL
+557;1;BigRckT1medR
+558;1;BigRckT1hrdL
+559;1;BigRckT1hrdR
+560;1;BigRckT1flmL
+561;1;BigRckT1flmR
+562;1;BigRckT2sftL
+563;1;BigRckT2sftR
+564;1;BigRckT2medL
+565;1;BigRckT2medR
+566;1;BigRckT2hrdL
+567;1;BigRckT2hrdR
+568;1;BigRckT2flmL
+569;1;BigRckT2flmR
+570;1;BigRckT3sftL
+571;1;BigRckT3sftR
+572;1;BigRckT3medL
+573;1;BigRckT3medR
+574;1;BigRckT3hrdL
+575;1;BigRckT3hrdR
+576;1;BigRckT3flmL
+577;1;BigRckT3flmR
+578;1;OldBrsT1sft
+579;1;OldBrsT1med
+580;1;OldBrsT1hrd
+581;1;OldBrsT2sft
+582;1;OldBrsT2med
+583;1;OldBrsT2hrd
+584;1;OhBabyHMenu
+585;1;JazStkHMenu
+586;1;Latin HMenu
+587;1;Disco HMenu
+588;1;OldFnkHMenu
+589;1;StreetHMenuL
+590;1;StreetHMenuR
+591;1;BigRckHMenuL
+592;1;BigRckHMenuR
+593;1;OldBrsHMenu
+594;1;OhBabyH cl1
+595;1;OhBabyH cl2
+596;1;OhBabyH cl3
+597;1;OhBabyH cl4
+598;1;OhBabyH cl5
+599;1;OhBabyH cl6
+600;1;OhBabyHhcl1
+601;1;OhBabyHhcl2
+602;1;OhBabyHhcl3
+603;1;OhBabyHhop
+604;1;OhBabyH op
+605;1;OhBabyHpdl1
+606;1;OhBabyHpdl2
+607;1;JazStkH cl1
+608;1;JazStkH cl2
+609;1;JazStkHhcl1
+610;1;JazStkHhcl2
+611;1;JazStkHhop
+612;1;JazStkH op
+613;1;JazStkHpdl
+614;1;Latin H cl1
+615;1;Latin H cl2
+616;1;Latin Hhcl
+617;1;Latin Hhop
+618;1;Latin H op
+619;1;Latin Hpdl
+620;1;Disco H cl1
+621;1;Disco H cl2
+622;1;Disco Hhcl
+623;1;Disco H op
+624;1;Disco Hpdl
+625;1;OldFnkH cl1
+626;1;OldFnkH cl2
+627;1;OldFnkHhcl
+628;1;OldFnkHhop
+629;1;OldFnkH op
+630;1;OldFnkHpdl
+631;1;StreetH cl1L
+632;1;StreetH cl1R
+633;1;StreetH cl2L
+634;1;StreetH cl2R
+635;1;StreetHhcl L
+636;1;StreetHhcl R
+637;1;StreetHhop L
+638;1;StreetHhop R
+639;1;StreetH op L
+640;1;StreetH op R
+641;1;StreetHpdl L
+642;1;StreetHpdl R
+643;1;BigRckH cl1L
+644;1;BigRckH cl1R
+645;1;BigRckH cl2L
+646;1;BigRckH cl2R
+647;1;BigRckHhcl L
+648;1;BigRckHhcl R
+649;1;BigRckHhop L
+650;1;BigRckHhop R
+651;1;BigRckH op L
+652;1;BigRckH op R
+653;1;OldBrsH cl1
+654;1;OldBrsH cl2
+655;1;OldBrsH cl3
+656;1;OldBrsH cl4
+657;1;OldBrsHhop
+658;1;OldBrsH op
+659;1;OldBrsHpdl
+660;1;Crash MenuL
+661;1;Crash MenuR
+662;1;Ride MenuL
+663;1;Ride MenuR
+664;1;OthrCymMenuL
+665;1;OthrCymMenuR
+666;1;StreetCr L
+667;1;StreetCr R
+668;1;BalladCrSftL
+669;1;BalladCrSftR
+670;1;BalladCrHrdL
+671;1;BalladCrHrdR
+672;1;BigRckCrSftL
+673;1;BigRckCrSftR
+674;1;BigRckCrHrdL
+675;1;BigRckCrHrdR
+676;1;JazStkCrSftL
+677;1;JazStkCrSftR
+678;1;JazStkCrHrdL
+679;1;JazStkCrHrdR
+680;1;OldBrsh Cr L
+681;1;OldBrsh Cr R
+682;1;Latin RdSftL
+683;1;Latin RdSftR
+684;1;Latin RdMedL
+685;1;Latin RdMedR
+686;1;Latin RdHrdL
+687;1;Latin RdHrdR
+688;1;Latin RdBelL
+689;1;Latin RdBelR
+690;1;BalladRdSftL
+691;1;BalladRdSftR
+692;1;BalladRdHrdL
+693;1;BalladRdHrdR
+694;1;BalladRdBelL
+695;1;BalladRdBelR
+696;1;BigRckRdSftL
+697;1;BigRckRdSftR
+698;1;BigRckRdHrdL
+699;1;BigRckRdHrdR
+700;1;BigRckRdBelL
+701;1;BigRckRdBelR
+702;1;JazStkRd L
+703;1;JazStkRd R
+704;1;JazStkRdBelL
+705;1;JazStkRdBelR
+706;1;SizzleRd L
+707;1;SizzleRd R
+708;1;SizzleRdBelL
+709;1;SizzleRdBelR
+710;1;OldBrsRd L
+711;1;OldBrsRd R
+712;1;OldBrsRdBelL
+713;1;OldBrsRdBelR
+714;1;Light SplshL
+715;1;Light SplshR
+716;1;BalladSplshL
+717;1;BalladSplshR
+718;1;YoMamaChinaL
+719;1;YoMamaChinaR
+1;2;Grand1 L p A
+2;2;Grand1 R p A
+3;2;Grand1 L p B
+4;2;Grand1 R p B
+5;2;Grand1 L p C
+6;2;Grand1 R p C
+7;2;Grand2 L p A
+8;2;Grand2 R p A
+9;2;Grand2 L p B
+10;2;Grand2 R p B
+11;2;Grand2 L p C
+12;2;Grand2 R p C
+13;2;Grand1 L mpA
+14;2;Grand1 R mpA
+15;2;Grand1 L mpB
+16;2;Grand1 R mpB
+17;2;Grand1 L mpC
+18;2;Grand1 R mpC
+19;2;Grand2 L mpA
+20;2;Grand2 R mpA
+21;2;Grand2 L mpB
+22;2;Grand2 R mpB
+23;2;Grand2 L mpC
+24;2;Grand2 R mpC
+25;2;Grand1 L f A
+26;2;Grand1 R f A
+27;2;Grand1 L f B
+28;2;Grand1 R f B
+29;2;Grand1 L f C
+30;2;Grand1 R f C
+31;2;Grand2 L f A
+32;2;Grand2 R f A
+33;2;Grand2 L f B
+34;2;Grand2 R f B
+35;2;Grand2 L f C
+36;2;Grand2 R f C
+37;2;Grand1 L ffA
+38;2;Grand1 R ffA
+39;2;Grand1 L ffB
+40;2;Grand1 R ffB
+41;2;Grand1 L ffC
+42;2;Grand1 R ffC
+43;2;Grand2 L ffA
+44;2;Grand2 R ffA
+45;2;Grand2 L ffB
+46;2;Grand2 R ffB
+47;2;Grand2 L ffC
+48;2;Grand2 R ffC
+1;3;AcPiano3pA L
+2;3;AcPiano3pA R
+3;3;AcPiano3pB L
+4;3;AcPiano3pB R
+5;3;AcPiano3pC L
+6;3;AcPiano3pC R
+7;3;AcPiano3fA L
+8;3;AcPiano3fA R
+9;3;AcPiano3fB L
+10;3;AcPiano3fB R
+11;3;AcPiano3fC L
+12;3;AcPiano3fC R
+13;3;Dyn EP 2 p A
+14;3;Dyn EP 2 p B
+15;3;Dyn EP 2 p C
+16;3;Dyn EP 2 f A
+17;3;Dyn EP 2 f B
+18;3;Dyn EP 2 f C
+19;3;BrightB3 A L
+20;3;BrightB3 A R
+21;3;BrightB3 B L
+22;3;BrightB3 B R
+23;3;BrightB3 C L
+24;3;BrightB3 C R
+25;3;NylonGt4 p A
+26;3;NylonGt4 p B
+27;3;NylonGt4 p C
+28;3;NylonGt4 f A
+29;3;NylonGt4 f B
+30;3;NylonGt4 f C
+31;3;NylnGt4Sld A
+32;3;NylnGt4Sld B
+33;3;NylnGt4Sld C
+34;3;NylnGt4Noiz1
+35;3;NylnGt4Noiz2
+36;3;FlamncGt p A
+37;3;FlamncGt p B
+38;3;FlamncGt p C
+39;3;FlamncGt f A
+40;3;FlamncGt f B
+41;3;FlamncGt f C
+42;3;FlamncGtRoll
+43;3;12StrGt A L
+44;3;12StrGt A R
+45;3;12StrGt B L
+46;3;12StrGt B R
+47;3;12StrGt C L
+48;3;12StrGt C R
+49;3;335Gt p A
+50;3;335Gt p B
+51;3;335Gt p C
+52;3;335Gt f A
+53;3;335Gt f B
+54;3;335Gt f C
+55;3;JazzGt2 p A
+56;3;JazzGt2 p B
+57;3;JazzGt2 p C
+58;3;JazzGt2 f A
+59;3;JazzGt2 f B
+60;3;JazzGt2 f C
+61;3;JzGt3HrmncsA
+62;3;JzGt3HrmncsB
+63;3;JzGt3HrmncsC
+64;3;JzGt3OctaveA
+65;3;JzGt3OctaveB
+66;3;JzGt3OctaveC
+67;3;JzGt3OctSldA
+68;3;JzGt3OctSldB
+69;3;JzGt3OctSldC
+70;3;CleanGt2 A
+71;3;CleanGt2 B
+72;3;CleanGt2 C
+73;3;CleanGt3 A
+74;3;CleanGt3 B
+75;3;CleanGt3 C
+76;3;CrunchGt A
+77;3;CrunchGt B
+78;3;CrunchGt C
+79;3;6StrBs2 p A
+80;3;6StrBs2 p B
+81;3;6StrBs2 p C
+82;3;6StrBs2 f A
+83;3;6StrBs2 f B
+84;3;6StrBs2 f C
+85;3;6StrBs2ThumA
+86;3;6StrBs2ThumB
+87;3;6StrBs2ThumC
+88;3;6StrBs2PullA
+89;3;6StrBs2PullB
+90;3;6StrBs2PullC
+91;3;JazzBs3 p A
+92;3;JazzBs3 p B
+93;3;JazzBs3 p C
+94;3;JazzBs3 f A
+95;3;JazzBs3 f B
+96;3;JazzBs3 f C
+97;3;JzBs3PckMt A
+98;3;JzBs3PckMt B
+99;3;JzBs3PckMt C
+100;3;JzBs3Pops A
+101;3;JzBs3Pops B
+102;3;JzBs3Pops C
+103;3;JzBs3Noise1
+104;3;JzBs3Noise2
+105;3;AcBass2 p A
+106;3;AcBass2 p B
+107;3;AcBass2 p C
+108;3;AcBass2 f A
+109;3;AcBass2 f B
+110;3;AcBass2 f C
+111;3;AcBass2Noiz1
+112;3;AcBass2Noiz2
+113;3;AcBass2Noiz3
+114;3;Gt/BsNz Menu
+115;3;Flute Vib3 A
+116;3;Flute Vib3 B
+117;3;Flute Vib3 C
+118;3;Alto Flute A
+119;3;Alto Flute B
+120;3;Alto Flute C
+121;3;Afro Flute A
+122;3;Afro Flute B
+123;3;Afro Flute C
+124;3;Vox Flute A
+125;3;Vox Flute B
+126;3;Vox Flute C
+127;3;Flute Atk A
+128;3;Flute Atk B
+129;3;Flute Atk C
+130;3;Pan Pipe 2 A
+131;3;Pan Pipe 2 B
+132;3;Pan Pipe 2 C
+133;3;PanPipeBrthA
+134;3;PanPipeBrthB
+135;3;PanPipeBrthC
+136;3;Moceno A
+137;3;Moceno B
+138;3;Moceno C
+139;3;AltoSax2 p A
+140;3;AltoSax2 p B
+141;3;AltoSax2 p C
+142;3;AltoSax2 f A
+143;3;AltoSax2 f B
+144;3;AltoSax2 f C
+145;3;TenrSax2 p A
+146;3;TenrSax2 p B
+147;3;TenrSax2 p C
+148;3;TenrSax2 f A
+149;3;TenrSax2 f B
+150;3;TenrSax2 f C
+151;3;BariSax2 p A
+152;3;BariSax2 p B
+153;3;BariSax2 p C
+154;3;BariSax2 f A
+155;3;BariSax2 f B
+156;3;BariSax2 f C
+157;3;WindsFX Menu
+158;3;Perc.Flute 1
+159;3;Perc.Flute 2
+160;3;Perc.Flute 3
+161;3;Perc.Flute 4
+162;3;Perc.Flute 5
+163;3;Perc.Flute 6
+164;3;Perc.Flute 7
+165;3;AltFlOvrTone
+166;3;AltoSax EFX
+167;3;StudioTp p A
+168;3;StudioTp p B
+169;3;StudioTp p C
+170;3;StudioTp f A
+171;3;StudioTp f B
+172;3;StudioTp f C
+173;3;TpHrmnMt p A
+174;3;TpHrmnMt p B
+175;3;TpHrmnMt p C
+176;3;TpHrmnMt f A
+177;3;TpHrmnMt f B
+178;3;TpHrmnMt f C
+179;3;S-BoreTb p A
+180;3;S-BoreTb p B
+181;3;S-BoreTb p C
+182;3;S-BoreTb f A
+183;3;S-BoreTb f B
+184;3;S-BoreTb f C
+185;3;Brs2K mf A L
+186;3;Brs2K mf A R
+187;3;Brs2K mf B L
+188;3;Brs2K mf B R
+189;3;Brs2K mf C L
+190;3;Brs2K mf C R
+191;3;Brs2K ff A L
+192;3;Brs2K ff A R
+193;3;Brs2K ff B L
+194;3;Brs2K ff B R
+195;3;Brs2K ff C L
+196;3;Brs2K ff C R
+197;3;SoftPad2 A L
+198;3;SoftPad2 A R
+199;3;SoftPad2 B L
+200;3;SoftPad2 B R
+201;3;SoftPad2 C L
+202;3;SoftPad2 C R
+203;3;MG Stringz A
+204;3;MG Stringz B
+205;3;MG Stringz C
+206;3;OB Stringz A
+207;3;OB Stringz B
+208;3;OB Stringz C
+209;3;KidsChoirA L
+210;3;KidsChoirA R
+211;3;KidsChoirB L
+212;3;KidsChoirB R
+213;3;KidsChoirC L
+214;3;KidsChoirC R
+215;3;M+F Ahs A L
+216;3;M+F Ahs A R
+217;3;M+F Ahs B L
+218;3;M+F Ahs B R
+219;3;M+F Ahs C L
+220;3;M+F Ahs C R
+221;3;JazzOoo A
+222;3;JazzOoo B
+223;3;JazzOoo C
+224;3;SteelDrm3p A
+225;3;SteelDrm3p B
+226;3;SteelDrm3p C
+227;3;SteelDrm3f A
+228;3;SteelDrm3f B
+229;3;SteelDrm3f C
+230;3;Kick Menu L
+231;3;Kick Menu R
+232;3;Stdio1K sftL
+233;3;Stdio1K sftR
+234;3;Stdio1K medL
+235;3;Stdio1K medR
+236;3;Stdio1K hrdL
+237;3;Stdio1K hrdR
+238;3;Stdio2K sftL
+239;3;Stdio2K sftR
+240;3;Stdio2K medL
+241;3;Stdio2K medR
+242;3;Stdio2K hrdL
+243;3;Stdio2K hrdR
+244;3;Stdio1SMenuL
+245;3;Stdio1SMenuR
+246;3;Stdio2SMenuL
+247;3;Stdio2SMenuR
+248;3;Stdio3SMenuL
+249;3;Stdio3SMenuR
+250;3;Stdio4SMenuL
+251;3;Stdio4SMenuR
+252;3;CymbalSMenuL
+253;3;CymbalSMenuR
+254;3;Stdio1Ssft1L
+255;3;Stdio1Ssft1R
+256;3;Stdio1Ssft2L
+257;3;Stdio1Ssft2R
+258;3;Stdio1Smed1L
+259;3;Stdio1Smed1R
+260;3;Stdio1Smed2L
+261;3;Stdio1Smed2R
+262;3;Stdio1Shrd1L
+263;3;Stdio1Shrd1R
+264;3;Stdio1Shrd2L
+265;3;Stdio1Shrd2R
+266;3;Stdio1Srim1L
+267;3;Stdio1Srim1R
+268;3;Stdio1Srim2L
+269;3;Stdio1Srim2R
+270;3;Stdio1Sbuz1L
+271;3;Stdio1Sbuz1R
+272;3;Stdio1Sbuz2L
+273;3;Stdio1Sbuz2R
+274;3;Stdio1Sflm L
+275;3;Stdio1Sflm R
+276;3;Stdio1Sstk1L
+277;3;Stdio1Sstk1R
+278;3;Stdio1Sstk2L
+279;3;Stdio1Sstk2R
+280;3;Stdio2Ssft1L
+281;3;Stdio2Ssft1R
+282;3;Stdio2Ssft2L
+283;3;Stdio2Ssft2R
+284;3;Stdio2Smed1L
+285;3;Stdio2Smed1R
+286;3;Stdio2Smed2L
+287;3;Stdio2Smed2R
+288;3;Stdio2Shrd1L
+289;3;Stdio2Shrd1R
+290;3;Stdio2Shrd2L
+291;3;Stdio2Shrd2R
+292;3;Stdio2Srim1L
+293;3;Stdio2Srim1R
+294;3;Stdio2Srim2L
+295;3;Stdio2Srim2R
+296;3;Stdio2Sbuz1L
+297;3;Stdio2Sbuz1R
+298;3;Stdio2Sbuz2L
+299;3;Stdio2Sbuz2R
+300;3;Stdio2Sflm L
+301;3;Stdio2Sflm R
+302;3;Stdio2Sstk1L
+303;3;Stdio2Sstk1R
+304;3;Stdio2Sstk2L
+305;3;Stdio2Sstk2R
+306;3;Stdio3Ssft1L
+307;3;Stdio3Ssft1R
+308;3;Stdio3Ssft2L
+309;3;Stdio3Ssft2R
+310;3;Stdio3Smed1L
+311;3;Stdio3Smed1R
+312;3;Stdio3Smed2L
+313;3;Stdio3Smed2R
+314;3;Stdio3Shrd1L
+315;3;Stdio3Shrd1R
+316;3;Stdio3Shrd2L
+317;3;Stdio3Shrd2R
+318;3;Stdio3Srim1L
+319;3;Stdio3Srim1R
+320;3;Stdio3Srim2L
+321;3;Stdio3Srim2R
+322;3;Stdio3Sbuz1L
+323;3;Stdio3Sbuz1R
+324;3;Stdio3Sbuz2L
+325;3;Stdio3Sbuz2R
+326;3;Stdio3Sflm L
+327;3;Stdio3Sflm R
+328;3;Stdio3Sstk1L
+329;3;Stdio3Sstk1R
+330;3;Stdio3Sstk2L
+331;3;Stdio3Sstk2R
+332;3;Stdio4Ssft1L
+333;3;Stdio4Ssft1R
+334;3;Stdio4Ssft2L
+335;3;Stdio4Ssft2R
+336;3;Stdio4Smed1L
+337;3;Stdio4Smed1R
+338;3;Stdio4Smed2L
+339;3;Stdio4Smed2R
+340;3;Stdio4Shrd1L
+341;3;Stdio4Shrd1R
+342;3;Stdio4Shrd2L
+343;3;Stdio4Shrd2R
+344;3;Stdio4Srim1L
+345;3;Stdio4Srim1R
+346;3;Stdio4Srim2L
+347;3;Stdio4Srim2R
+348;3;Stdio4Sbuz1L
+349;3;Stdio4Sbuz1R
+350;3;Stdio4Sbuz2L
+351;3;Stdio4Sbuz2R
+352;3;Stdio4Sflm L
+353;3;Stdio4Sflm R
+354;3;Sn w/Cym 1 L
+355;3;Sn w/Cym 1 R
+356;3;Sn w/Cym 2 L
+357;3;Sn w/Cym 2 R
+358;3;Sn w/Cym 3 L
+359;3;Sn w/Cym 3 R
+360;3;Sn w/Cym 4 L
+361;3;Sn w/Cym 4 R
+362;3;StdioT MenuL
+363;3;StdioT MenuR
+364;3;StdioT1sft L
+365;3;StdioT1sft R
+366;3;StdioT1med L
+367;3;StdioT1med R
+368;3;StdioT1hrd L
+369;3;StdioT1hrd R
+370;3;StdioT1flm1L
+371;3;StdioT1flm1R
+372;3;StdioT1flm2L
+373;3;StdioT1flm2R
+374;3;StdioT2sft L
+375;3;StdioT2sft R
+376;3;StdioT2med L
+377;3;StdioT2med R
+378;3;StdioT2hrd L
+379;3;StdioT2hrd R
+380;3;StdioT2flm1L
+381;3;StdioT2flm1R
+382;3;StdioT2flm2L
+383;3;StdioT2flm2R
+384;3;StdioT3sft L
+385;3;StdioT3sft R
+386;3;StdioT3med L
+387;3;StdioT3med R
+388;3;StdioT3hrd L
+389;3;StdioT3hrd R
+390;3;StdioT3flm1L
+391;3;StdioT3flm1R
+392;3;StdioT3flm2L
+393;3;StdioT3flm2R
+394;3;StdioT4sft L
+395;3;StdioT4sft R
+396;3;StdioT4med L
+397;3;StdioT4med R
+398;3;StdioT4hrd L
+399;3;StdioT4hrd R
+400;3;StdioT4flm1L
+401;3;StdioT4flm1R
+402;3;StdioT4flm2L
+403;3;StdioT4flm2R
+404;3;StdioH MenuL
+405;3;StdioH MenuR
+406;3;StdioH cl1 L
+407;3;StdioH cl1 R
+408;3;StdioH cl2 L
+409;3;StdioH cl2 R
+410;3;StdioH cl3 L
+411;3;StdioH cl3 R
+412;3;StdioH cl4 L
+413;3;StdioH cl4 R
+414;3;StdioH cl5 L
+415;3;StdioH cl5 R
+416;3;StdioH hcl L
+417;3;StdioH hcl R
+418;3;StdioH op1 L
+419;3;StdioH op1 R
+420;3;StdioH op2 L
+421;3;StdioH op2 R
+422;3;StdioH op3 L
+423;3;StdioH op3 R
+424;3;StdioH pdl1L
+425;3;StdioH pdl1R
+426;3;StdioH pdl2L
+427;3;StdioH pdl2R
+428;3;Conga2 MenuL
+429;3;Conga2 MenuR
+430;3;Cng2LoMtSftL
+431;3;Cng2LoMtSftR
+432;3;Cng2LoMtHrdL
+433;3;Cng2LoMtHrdR
+434;3;Cng2LoOpSftL
+435;3;Cng2LoOpSftR
+436;3;Cng2LoOpHrdL
+437;3;Cng2LoOpHrdR
+438;3;Cng2LoRoll L
+439;3;Cng2LoRoll R
+440;3;Cng2HiMtSftL
+441;3;Cng2HiMtSftR
+442;3;Cng2HiMtHrdL
+443;3;Cng2HiMtHrdR
+444;3;Cng2HiOpSftL
+445;3;Cng2HiOpSftR
+446;3;Cng2HiOpHrdL
+447;3;Cng2HiOpHrdR
+448;3;Cng2SlClSftL
+449;3;Cng2SlClSftR
+450;3;Cng2SlClHrdL
+451;3;Cng2SlClHrdR
+452;3;Cng2SlOpSftL
+453;3;Cng2SlOpSftR
+454;3;Cng2SlOpHrdL
+455;3;Cng2SlOpHrdR
+456;3;Cng2HiFlam L
+457;3;Cng2HiFlam R
+458;3;Cng2HiRoll L
+459;3;Cng2HiRoll R
+460;3;Bngo4LoMenuL
+461;3;Bngo4LoMenuR
+462;3;Bg4LFngrSftL
+463;3;Bg4LFngrSftR
+464;3;Bg4LFngrHrdL
+465;3;Bg4LFngrHrdR
+466;3;Bg4LFngsSftL
+467;3;Bg4LFngsSftR
+468;3;Bg4LFngsHrdL
+469;3;Bg4LFngsHrdR
+470;3;Bg4LMuteSftL
+471;3;Bg4LMuteSftR
+472;3;Bg4LMuteHrdL
+473;3;Bg4LMuteHrdR
+474;3;Bg4LSlapSftL
+475;3;Bg4LSlapSftR
+476;3;Bg4LSlapHrdL
+477;3;Bg4LSlapHrdR
+478;3;Bg4LOpenSftL
+479;3;Bg4LOpenSftR
+480;3;Bg4LOpenHrdL
+481;3;Bg4LOpenHrdR
+482;3;Bngo4HiMenuL
+483;3;Bngo4HiMenuR
+484;3;Bg4HFgMtSftL
+485;3;Bg4HFgMtSftR
+486;3;Bg4HFgMtHrdL
+487;3;Bg4HFgMtHrdR
+488;3;Bg4HFgOpSftL
+489;3;Bg4HFgOpSftR
+490;3;Bg4HFgOpHrdL
+491;3;Bg4HFgOpHrdR
+492;3;Bg4HFngsSftL
+493;3;Bg4HFngsSftR
+494;3;Bg4HFngsHrdL
+495;3;Bg4HFngsHrdR
+496;3;Bg4H Heel L
+497;3;Bg4H Heel R
+498;3;Bg4HSlapSftL
+499;3;Bg4HSlapSftR
+500;3;Bg4HSlapHrdL
+501;3;Bg4HSlapHrdR
+502;3;Bg4HOpenSftL
+503;3;Bg4HOpenSftR
+504;3;Bg4HOpenHrdL
+505;3;Bg4HOpenHrdR
+506;3;Bg4H Flam L
+507;3;Bg4H Flam R
+508;3;Bg4H Roll L
+509;3;Bg4H Roll R
+510;3;Timbals3Menu
+511;3;Timbl3HiHead
+512;3;Timbl3HiRim
+513;3;Timbl3LoHead
+514;3;Timbl3LoRim
+515;3;Timbl3HPaila
+516;3;Timb3lLPaila
+517;3;Synth Saw 2
+518;3;Syn Saw 2inv
+519;3;Synth Square
+520;3;Synth Pulse1
+521;3;Triangle
+522;3;Sine
+1;4;F.Str mp A L
+2;4;F.Str mp A R
+3;4;F.Str mp B L
+4;4;F.Str mp B R
+5;4;F.Str mp C L
+6;4;F.Str mp C R
+7;4;F.Str mp + L
+8;4;F.Str mp + R
+9;4;Mrct A L
+10;4;Mrct A R
+11;4;Mrct B L
+12;4;Mrct B R
+13;4;Mrct C L
+14;4;Mrct C R
+15;4;Mrct + L
+16;4;Mrct + R
+17;4;Spcct A L
+18;4;Spcct A R
+19;4;Spcct B L
+20;4;Spcct B R
+21;4;Spcct C L
+22;4;Spcct C R
+23;4;Trem mp A L
+24;4;Trem mp A R
+25;4;Trem mp B L
+26;4;Trem mp B R
+27;4;Trem mp C L
+28;4;Trem mp C R
+29;4;Trem mp + L
+30;4;Trem mp + R
+31;4;Vn mp A L
+32;4;Vn mp A R
+33;4;Vn mp B L
+34;4;Vn mp B R
+35;4;Vn mp C L
+36;4;Vn mp C R
+37;4;Vn mp + L
+38;4;Vn mp + R
+39;4;Va mp A L
+40;4;Va mp A R
+41;4;Va mp B L
+42;4;Va mp B R
+43;4;Va mp C L
+44;4;Va mp C R
+45;4;Va mp + L
+46;4;Va mp + R
+47;4;Vc mp A L
+48;4;Vc mp A R
+49;4;Vc mp B L
+50;4;Vc mp B R
+51;4;Vc mp C L
+52;4;Vc mp C R
+53;4;Vc mp + L
+54;4;Vc mp + R
+55;4;Cb mp A L
+56;4;Cb mp A R
+57;4;Cb mp B L
+58;4;Cb mp B R
+59;4;Cb mp C L
+60;4;Cb mp C R
+61;4;Cb mp + L
+62;4;Cb mp + R
+63;4;Vn mltV A L
+64;4;Vn mltV A R
+65;4;Vn mltV B L
+66;4;Vn mltV B R
+67;4;Vn mltV C L
+68;4;Vn mltV C R
+69;4;Vn mltV + L
+70;4;Vn mltV + R
+71;4;Va mltV A L
+72;4;Va mltV A R
+73;4;Va mltV B L
+74;4;Va mltV B R
+75;4;Va mltV C L
+76;4;Va mltV C R
+77;4;Va mltV + L
+78;4;Va mltV + R
+79;4;Vc mltV A L
+80;4;Vc mltV A R
+81;4;Vc mltV B L
+82;4;Vc mltV B R
+83;4;Vc mltV C L
+84;4;Vc mltV C R
+85;4;Vc mltV + L
+86;4;Vc mltV + R
+87;4;Cb f A L
+88;4;Cb f A R
+89;4;Cb f B L
+90;4;Cb f B R
+91;4;Cb f C L
+92;4;Cb f C R
+93;4;Cb f + L
+94;4;Cb f + R
+95;4;Vn mltV^ A L
+96;4;Vn mltV^ A R
+97;4;Vn mltV^ B L
+98;4;Vn mltV^ B R
+99;4;Vn mltV^ C L
+100;4;Vn mltV^ C R
+101;4;Vn mltV^ + L
+102;4;Vn mltV^ + R
+103;4;Va mltV^ A L
+104;4;Va mltV^ A R
+105;4;Va mltV^ B L
+106;4;Va mltV^ B R
+107;4;Va mltV^ C L
+108;4;Va mltV^ C R
+109;4;Va mltV^ + L
+110;4;Va mltV^ + R
+111;4;Vc mltV^ A L
+112;4;Vc mltV^ A R
+113;4;Vc mltV^ B L
+114;4;Vc mltV^ B R
+115;4;Vc mltV^ C L
+116;4;Vc mltV^ C R
+117;4;Vc mltV^ + L
+118;4;Vc mltV^ + R
+119;4;Vn Stc A L
+120;4;Vn Stc A R
+121;4;Vn Stc B L
+122;4;Vn Stc B R
+123;4;Vn Stc C L
+124;4;Vn Stc C R
+125;4;Va Stc A L
+126;4;Va Stc A R
+127;4;Va Stc B L
+128;4;Va Stc B R
+129;4;Va Stc C L
+130;4;Va Stc C R
+131;4;Vc Stc A L
+132;4;Vc Stc A R
+133;4;Vc Stc B L
+134;4;Vc Stc B R
+135;4;Vc Stc C L
+136;4;Vc Stc C R
+137;4;Cb Stc A L
+138;4;Cb Stc A R
+139;4;Cb Stc B L
+140;4;Cb Stc B R
+141;4;Cb Stc C L
+142;4;Cb Stc C R
+143;4;All Stc L
+144;4;All Stc R
+145;4;Vn Pz mf A L
+146;4;Vn Pz mf A R
+147;4;Vn Pz mf B L
+148;4;Vn Pz mf B R
+149;4;Vn Pz mf C L
+150;4;Vn Pz mf C R
+151;4;Va Pz mf A L
+152;4;Va Pz mf A R
+153;4;Va Pz mf B L
+154;4;Va Pz mf B R
+155;4;Va Pz mf C L
+156;4;Va Pz mf C R
+157;4;Vc Pz mf A L
+158;4;Vc Pz mf A R
+159;4;Vc Pz mf B L
+160;4;Vc Pz mf B R
+161;4;Vc Pz mf C L
+162;4;Vc Pz mf C R
+163;4;Cb Pz mf A L
+164;4;Cb Pz mf A R
+165;4;Cb Pz mf B L
+166;4;Cb Pz mf B R
+167;4;Cb Pz mf C L
+168;4;Cb Pz mf C R
+169;4;All Pz mf L
+170;4;All Pz mf R
+171;4;Vn Pz ff A L
+172;4;Vn Pz ff A R
+173;4;Vn Pz ff B L
+174;4;Vn Pz ff B R
+175;4;Vn Pz ff C L
+176;4;Vn Pz ff C R
+177;4;Va Pz ff A L
+178;4;Va Pz ff A R
+179;4;Va Pz ff B L
+180;4;Va Pz ff B R
+181;4;Va Pz ff C L
+182;4;Va Pz ff C R
+183;4;Vc Pz ff A L
+184;4;Vc Pz ff A R
+185;4;Vc Pz ff B L
+186;4;Vc Pz ff B R
+187;4;Vc Pz ff C L
+188;4;Vc Pz ff C R
+189;4;Cb Pz ff A L
+190;4;Cb Pz ff A R
+191;4;Cb Pz ff B L
+192;4;Cb Pz ff B R
+193;4;Cb Pz ff C L
+194;4;Cb Pz ff C R
+195;4;All Pz ff L
+196;4;All Pz ff R
+1;5;PhraseMenuL
+2;5;PhraseMenuR
+3;5;080:BladeBtL
+4;5;080:BladeBtR
+5;5;093:R&Bees
+6;5;096:RugBurnL
+7;5;096:RugBurnR
+8;5;120:BossClbL
+9;5;120:BossClbR
+10;5;120:ClubbinL
+11;5;120:ClubbinR
+12;5;135:XRacer L
+13;5;135:XRacer R
+14;5;Drain-O L
+15;5;Drain-O R
+16;5;RocketBrs L
+17;5;RocketBrs R
+18;5;Resound L
+19;5;Resound R
+20;5;StrikeWhstle
+21;5;Blowout L
+22;5;Blowout R
+23;5;MGSAW HQ
+24;5;P5SAW HQ
+25;5;106 Saw HQ
+26;5;SH101SAW HQ
+27;5;TB303SAW HQ
+28;5;CustomSawA2
+29;5;JU2SpSaw2
+30;5;JU2SpSaw3
+31;5;JU2SpSaw4
+32;5;OB2 Pat7
+33;5;JPSuperSaw
+34;5;JP8SQU HQ
+35;5;MGSQU HQ
+36;5;P5SQU HQ
+37;5;CustomSquA2
+38;5;TB303SQU HQ
+39;5;106 SubOsc
+40;5;JU2SpSub1
+41;5;JU2SpSub2
+42;5;JP8PLS05 HQ
+43;5;JP8PLS15 HQ
+44;5;JP8PLS20 HQ
+45;5;JP8PLS30 HQ
+46;5;JP8PLS40 HQ
+47;5;JP8PLS45 HQ
+48;5;SyncPlsInv
+49;5;JUNO Pls Bd
+50;5;JUNO Pls Rls
+51;5;JP6 DynPLS P
+52;5;JP6 DynPLS N
+53;5;JUNO106 Rave
+54;5;MGTRI HQ
+55;5;JP8TRI HQ
+56;5;Variant Sin
+57;5;ARP SIN
+58;5;CalcSIN2
+59;5;106 Bs56
+60;5;Spct11
+61;5;Sprk vx2
+62;5;Spct2 20
+63;5;MG WhteNz HQ
+64;5;MG PinkNz HQ
+65;5;Spect Noise
+66;5;JD PnoEQ
+67;5;EP Chd Menu
+68;5;EP Maj 9th
+69;5;EP Maj 11th
+70;5;EP Min 11th
+71;5;FM Clavi mf
+72;5;Old Hous Org
+73;5;FM Prc Organ
+74;5;Fing E.Bs mf
+75;5;Fing E.Bs ff
+76;5;Baby Bass f2
+77;5;Baby Bassff2
+78;5;GuitarrnWarm
+79;5;GuitarrnOct2
+80;5;HouseBass mf
+81;5;HouseBass ff
+82;5;Brs Stab L
+83;5;Brs Stab R
+84;5;Brs Fall L
+85;5;Brs Fall R
+86;5;WindsFX Menu
+87;5;Flute Fx 1
+88;5;Flute Fx 2
+89;5;Flute Fx 3
+90;5;Sax Fx 1
+91;5;Sax Fx 2
+92;5;Sax Fx 3
+93;5;Gregorian2 L
+94;5;Gregorian2 R
+95;5;Dance Str L
+96;5;Dance Str R
+97;5;D50Pizzagogo
+98;5;Str Fall L
+99;5;Str Fall R
+100;5;StrScaleMajL
+101;5;StrScaleMajR
+102;5;StrChd MenuL
+103;5;StrChd MenuR
+104;5;StrChdMin9L
+105;5;StrChdMin9R
+106;5;StrChdMn11L
+107;5;StrChdMn11R
+108;5;StrSprdMaj L
+109;5;StrSprdMaj R
+110;5;StrSprdMin L
+111;5;StrSprdMin R
+112;5;E.Gtr Menu L
+113;5;E.Gtr Menu R
+114;5;ShredFuzzGtr
+115;5;ClnGtrRif1 L
+116;5;ClnGtrRif1 R
+117;5;ClnGtrRif2 L
+118;5;ClnGtrRif2 R
+119;5;TrmDwnGtr1 L
+120;5;TrmDwnGtr1 R
+121;5;TrmDwnGtr2 L
+122;5;TrmDwnGtr2 R
+123;5;WahGtrChord
+124;5;WahGtrCt1 L
+125;5;WahGtrCt1 R
+126;5;WahGtrCt2 L
+127;5;WahGtrCt2 R
+128;5;WahGtrCt3 L
+129;5;WahGtrCt3 R
+130;5;WahGtrCt4 L
+131;5;WahGtrCt4 R
+132;5;WahGtrCt5 L
+133;5;WahGtrCt5 R
+134;5;WahGtrCt6 L
+135;5;WahGtrCt6 R
+136;5;WahGtrRif1 L
+137;5;WahGtrRif1 R
+138;5;WahGtrRif2 L
+139;5;WahGtrRif2 R
+140;5;Hit SpecialL
+141;5;Hit SpecialR
+142;5;Hit OneShotL
+143;5;Hit OneShotR
+144;5;BrassHit 1
+145;5;BrassHit 2
+146;5;BrassHit 3
+147;5;BrassHit 4
+148;5;BrassHit 5
+149;5;BrassHit 6 L
+150;5;BrassHit 6 R
+151;5;BrassHit 7 L
+152;5;BrassHit 7 R
+153;5;BrassHit 8
+154;5;BrassHit 9 L
+155;5;BrassHit 9 R
+156;5;BrassHit 10L
+157;5;BrassHit 10R
+158;5;BrassHit 11L
+159;5;BrassHit 11R
+160;5;BrassHit 12L
+161;5;BrassHit 12R
+162;5;BrassHit 13L
+163;5;BrassHit 13R
+164;5;BrassHit 14L
+165;5;BrassHit 14R
+166;5;BrassHit 15
+167;5;BrassHit 16L
+168;5;BrassHit 16R
+169;5;BrassHit 17L
+170;5;BrassHit 17R
+171;5;BrassHit 18
+172;5;BrassHit 19L
+173;5;BrassHit 19R
+174;5;BrassHit 20
+175;5;BrassHit 21L
+176;5;BrassHit 21R
+177;5;BrassHit 22L
+178;5;BrassHit 22R
+179;5;BrassHit 23L
+180;5;BrassHit 23R
+181;5;BrassHit 24
+182;5;SymphHit 1 L
+183;5;SymphHit 1 R
+184;5;SymphHit 2 L
+185;5;SymphHit 2 R
+186;5;SymphHit 3 L
+187;5;SymphHit 3 R
+188;5;SymphHit 4 L
+189;5;SymphHit 4 R
+190;5;SymphHit 5 L
+191;5;SymphHit 5 R
+192;5;SymphHit 6 L
+193;5;SymphHit 6 R
+194;5;SymphHit 7 L
+195;5;SymphHit 7 R
+196;5;Organ Hit 1
+197;5;OrgTrnsplntL
+198;5;OrgTrnsplntR
+199;5;Organ Hit 2L
+200;5;Organ Hit 2R
+201;5;Chord Hit 1
+202;5;Chord Hit 2L
+203;5;Chord Hit 2R
+204;5;Chord Hit 3L
+205;5;Chord Hit 3R
+206;5;Chord Hit 4
+207;5;Altr Hit L
+208;5;Altr Hit R
+209;5;Crystal HitL
+210;5;Crystal HitR
+211;5;Dirty Hit 2
+212;5;Exhaust HitL
+213;5;Exhaust HitR
+214;5;Scoop Hit L
+215;5;Scoop Hit R
+216;5;Stamp Hit L
+217;5;Stamp Hit R
+218;5;ThousandHitL
+219;5;ThousandHitR
+220;5;9th Hit L
+221;5;9th Hit R
+222;5;Slap Hit 1 L
+223;5;Slap Hit 1 R
+224;5;Slap Hit 2 L
+225;5;Slap Hit 2 R
+226;5;Slap Hit 3 L
+227;5;Slap Hit 3 R
+228;5;Dust Hit L
+229;5;Dust Hit R
+230;5;Dist Hit 1 L
+231;5;Dist Hit 1 R
+232;5;Dist Hit 2 L
+233;5;Dist Hit 2 R
+234;5;Slide Hit L
+235;5;Slide Hit R
+236;5;Wah Hit
+237;5;Slide Hit 2L
+238;5;Slide Hit 2R
+239;5;Tremble Hit
+240;5;Sweep Hit
+241;5;ParabolaHitL
+242;5;ParabolaHitR
+243;5;Daw Hit L
+244;5;Daw Hit R
+245;5;Dah Hit L
+246;5;Dah Hit R
+247;5;Aah Hit
+248;5;Mixed Hit L
+249;5;Mixed Hit R
+250;5;Showy Hit
+251;5;Pretty Hit L
+252;5;Pretty Hit R
+253;5;Smoky Hit L
+254;5;Smoky Hit R
+255;5;Fist Hit
+256;5;Iron Hit 2
+257;5;Clavy Hit L
+258;5;Clavy Hit R
+259;5;Warp Hit 1L
+260;5;Warp Hit 1R
+261;5;Warp Hit 2L
+262;5;Warp Hit 2R
+263;5;Warp Hit 3L
+264;5;Warp Hit 3R
+265;5;Warp Hit 4
+266;5;Tread Hit
+267;5;Old Org Hit
+268;5;Sand Hit
+269;5;Bounce Hit1
+270;5;Bounce Hit2L
+271;5;Bounce Hit2R
+272;5;Bounce Hit3
+273;5;Warp Hit 5L
+274;5;Warp Hit 5R
+275;5;Bounce Hit4
+276;5;Scratch Menu
+277;5;Scratch 4
+278;5;Scratch 5
+279;5;Scratch 6
+280;5;Scratch 7
+281;5;Scratch 8
+282;5;Scratch 9
+283;5;Scratch 10
+284;5;Scratch 11
+285;5;Scratch 12
+286;5;Scratch 13
+287;5;Scratch 14
+288;5;Scratch 15
+289;5;Vinyl NzLp 1
+290;5;Vinyl NzLp 2
+291;5;Vox Menu
+292;5;Whoo! M
+293;5;You’re DJ M
+294;5;Groove M
+295;5;Com’on M
+296;5;Yeah M
+297;5;Wow Yeah F
+298;5;Yeah F
+299;5;Ho F
+300;5;Aow F
+301;5;Oh F
+302;5;R&B Kick 1
+303;5;LoBit Kick 1
+304;5;LoBit Kick 2
+305;5;Old Kick 1
+306;5;Old Kick 2
+307;5;Metal Kick
+308;5;Old Kick 3
+309;5;Rebo Kick 1
+310;5;Abuz Kick
+311;5;Cool Kick 1
+312;5;Dyna Kick
+313;5;Floor Kick
+314;5;Gan Kick
+315;5;GoGo Kick
+316;5;Livn Kick
+317;5;Old Kick 4
+318;5;Mellow Kick
+319;5;Two Kick
+320;5;Gummo Kick 1
+321;5;Gummo Kick 2
+322;5;R&B Kick 2
+323;5;Narrow Kick
+324;5;Alley Kick 1
+325;5;Alley Kick 2
+326;5;FunkB Kick
+327;5;Light Kick 1
+328;5;Light Kick 2
+329;5;Light Kick 3
+330;5;L-RiderKick1
+331;5;Light Kick 4
+332;5;Light Kick 5
+333;5;Light Kick 6
+334;5;H-Rider Kick
+335;5;Light Kick 7
+336;5;L-RiderKick2
+337;5;Light Kick 8
+338;5;ChickenKick1
+339;5;Edge Kick
+340;5;Buck Kick
+341;5;Layer Kick 1
+342;5;Layer Kick 2
+343;5;Layer Kick 3
+344;5;Layer Kick 4
+345;5;Retro Kick 1
+346;5;Ambi Kick
+347;5;Cbell Kick
+348;5;Tamb Kick
+349;5;Retro Kick 2
+350;5;Pump Kick
+351;5;Heavy Kick 1
+352;5;Heavy Kick 2
+353;5;Heavy Kick 3
+354;5;Heavy Kick 4
+355;5;Layer Kick 5
+356;5;Shake Kick
+357;5;Rebo Kick 2
+358;5;Chop Kick
+359;5;Cool Kick 2
+360;5;Light Kick 9
+361;5;Seiz Kick
+362;5;Soul Kick
+363;5;Trip Kick
+364;5;Lo-Tek Kick
+365;5;Filter Kick
+366;5;Vinyl Kick
+367;5;Blade Kick
+368;5;Club Kick
+369;5;Dinky Kick 1
+370;5;Dinky Kick 2
+371;5;Dinky Kick 3
+372;5;Dinky Kick 4
+373;5;Old Kick 5
+374;5;Hybrid Kick3
+375;5;Slopey Kick1
+376;5;Junk Kick
+377;5;707 DryKick1
+378;5;707 DryKick2
+379;5;808 DryKick1
+380;5;808 DryKick2
+381;5;808 DryKick3
+382;5;808 DryKick4
+383;5;808 DryKick5
+384;5;Analog Kick1
+385;5;Analog Kick2
+386;5;909 DryKick1
+387;5;909 DryKick2
+388;5;909 DryKick3
+389;5;Craze Kick 1
+390;5;Craze Kick 2
+391;5;106 Kick 1
+392;5;106 Kick 2
+393;5;MG Kick 1
+394;5;MG Kick 2
+395;5;Fat Kick
+396;5;Croak Kick 1
+397;5;Fuzz Kick
+398;5;ChickenKick2
+399;5;Motor Kick
+400;5;Craze Kick 3
+401;5;Craze Kick 4
+402;5;Layer Kick 6
+403;5;Plump Kick
+404;5;Deviant Kick
+405;5;Dance Kick 5
+406;5;Dance Kick 6
+407;5;Dance Kick 7
+408;5;Dance Kick 8
+409;5;BigDrds Kick
+410;5;Slopey Kick2
+411;5;Swanky Kick
+412;5;SnugBugaKick
+413;5;Synth Kick
+414;5;DeeBee Kick
+415;5;HipHop SD 1
+416;5;R&B SD 1
+417;5;Lo-Bit SD 1
+418;5;Blade SD
+419;5;Basis SD 1
+420;5;Gruntoid SD
+421;5;L-Rider SD
+422;5;Craze SD 1
+423;5;R&B SD 2
+424;5;Lo-Bit SD 2
+425;5;Metalic SD
+426;5;Noisy SD
+427;5;Pump SD
+428;5;Dinky SD 1
+429;5;Dinky SD 2
+430;5;Dinky SD 3
+431;5;Basis SD 2
+432;5;Basis SD 3
+433;5;Basis SD 4
+434;5;Retro SD 1
+435;5;HiTune SD
+436;5;Snapy SD
+437;5;Thin SD
+438;5;Thin SD mb
+439;5;Slim SD
+440;5;Rocky SD1
+441;5;Rocky SD1 mb
+442;5;Rocky SD2 mb
+443;5;Rocky SD3 mb
+444;5;Club SD1
+445;5;Club SD2 mb
+446;5;Club SD3
+447;5;Club SD3 mb
+448;5;Comp SD1 mb
+449;5;Comp SD2 mb
+450;5;Rev SD mb
+451;5;LoBtHf SD1mb
+452;5;LoBtHf SD2mb
+453;5;LoBtHf SD3mb
+454;5;LoBtHf SD4mb
+455;5;LoBtHf SD5mb
+456;5;LoBtHf SD6mb
+457;5;Light SD1
+458;5;Light SD1 mb
+459;5;Light SD2
+460;5;Light SD2 mb
+461;5;Alley SD1
+462;5;Alley SD1mb
+463;5;BigDreds SD
+464;5;H-Rider SD
+465;5;PFunkSD mb
+466;5;Slopey SD
+467;5;Gan SD mb
+468;5;GoGo SD mb
+469;5;MellowSD mb
+470;5;Metal SD mb
+471;5;Old SD1 mb
+472;5;Old SD2 mb
+473;5;Old SD3 mb
+474;5;Old SD4 mb
+475;5;Old SD5 mb
+476;5;Attack SD1
+477;5;Retro SD1
+478;5;Retro SD2 mb
+479;5;Retro SD3
+480;5;Retro SD4
+481;5;Retro SD5
+482;5;Retro SD6
+483;5;Hybrid SD mb
+484;5;DeeBee SD
+485;5;Old SD6 mb
+486;5;Layer SD1 mb
+487;5;Layer SD2 mb
+488;5;Filter SD1
+489;5;Filter SD2
+490;5;Attack SD2
+491;5;Attack SD3
+492;5;Attack SD4
+493;5;Lo-Tek SD
+494;5;Chicken SD
+495;5;Filter SD3
+496;5;Filter SD4
+497;5;Retro SD7
+498;5;Retro SD8
+499;5;Ultra SD 1
+500;5;Ultra SD 2
+501;5;Funky SD
+502;5;Layer SD3
+503;5;Layer SD4 mb
+504;5;Alley SD2
+505;5;Alley SD2 mb
+506;5;Fella SD1 mb
+507;5;Fella SD2
+508;5;Fella SD2 mb
+509;5;Rebo SD1
+510;5;Rebo SD1 mb
+511;5;Rebo SD2
+512;5;Swush SD mb
+513;5;Heat SD mb
+514;5;Layer SD5 mb
+515;5;Cool SD
+516;5;GoGo SD
+517;5;Soul SD mb
+518;5;Layer SD6
+519;5;Funk SD1
+520;5;Funk SD2
+521;5;Dinky SD4 mb
+522;5;Layer SD7 mb
+523;5;Layer SD8 mb
+524;5;Layer SD9 mb
+525;5;Vynil SD mb
+526;5;FilterSD5 mb
+527;5;Junk SD mb
+528;5;707 Dry SD1
+529;5;707 Dry SD2
+530;5;808 Dry SD1
+531;5;808 Dry SD2
+532;5;808 Dry SD3
+533;5;909 Dry SD1
+534;5;909 Dry SD2
+535;5;909 Dry SD3
+536;5;909 Dry SD4
+537;5;909 Dry SD5
+538;5;909 SD&CLP
+539;5;106 SD1
+540;5;106 SD2
+541;5;Clappy SD
+542;5;Cranky SD
+543;5;Grim SD
+544;5;Sparkle SD
+545;5;SparkleSD mb
+546;5;Hush SD mb
+547;5;R&B Crs Stk1
+548;5;R&B Crs Stk2
+549;5;Lo-Bit CStk
+550;5;707 Dry RSht
+551;5;808 Dry RSht
+552;5;909 Dry RSht
+553;5;Basis Rim
+554;5;Basis Rim mb
+555;5;Deviant RM1
+556;5;Devi RM1mb
+557;5;Deviant RM2
+558;5;Deviant RM3
+559;5;Devi RM3mb
+560;5;Hop RimShot1
+561;5;Hop RimShot2
+562;5;Hop RimShot3
+563;5;Old HTom A1
+564;5;Old HTom A2
+565;5;Old HTom A3
+566;5;Old LTom A1
+567;5;Old LTom A2
+568;5;Old HTom B1
+569;5;Old HTom B2
+570;5;Old HTom B3
+571;5;Old LTom B1
+572;5;Old LTom B2
+573;5;Retro Tom1
+574;5;Retro Tom2
+575;5;Sim5 Tom1S
+576;5;Sim5 Tom1F
+577;5;Sim5 Tom2S
+578;5;Sim5 Tom2F
+579;5;Sim5 Tom3S
+580;5;Sim5 Tom3F
+581;5;Sim5 Tom4S
+582;5;Sim5 Tom4F
+583;5;707 Dry HTom
+584;5;707 Dry MTom
+585;5;707 Dry LTom
+586;5;808 Dry HTom
+587;5;808 Dry MTom
+588;5;808 Dry LTom
+589;5;909 Dry HTom
+590;5;909 Dry MTom
+591;5;909 Dry LTom
+592;5;Lo-Tek HH1
+593;5;Lo-Tek HH2
+594;5;Lo-Tek HH3
+595;5;Lo-Tek HH4
+596;5;Lo-Bit CHH
+597;5;Dry CHH 1
+598;5;Dry CHH 2
+599;5;Dry CHH 3
+600;5;Comp CHH 1
+601;5;Comp CHH 2
+602;5;Comp CHH 3
+603;5;Lo-Fi CHH 1
+604;5;Lo-Fi CHH 2
+605;5;Lo-Fi CHH 3
+606;5;Timba CHH
+607;5;Chill CHH
+608;5;Mosaic CHH 1
+609;5;Mosaic CHH 2
+610;5;Mosaic CHH 3
+611;5;UltrafunkCH1
+612;5;UltrafunkCH2
+613;5;Miami CHH
+614;5;Lulu CHH
+615;5;707 Dry CHH
+616;5;808 Dry CHH
+617;5;808 Cl&OpHH
+618;5;909 Dry CHH1
+619;5;909 Dry CHH2
+620;5;909 Dry CHH3
+621;5;Miami OHH
+622;5;Time OHH
+623;5;UltrafunkOHH
+624;5;Jiggle OHH
+625;5;Lo-Bit OHH
+626;5;Dry OHH
+627;5;Comp OHH
+628;5;Lo-Fi OHH
+629;5;707 Dry OHH
+630;5;808 Dry OHH1
+631;5;808 Dry OHH2
+632;5;808 Dry OHH3
+633;5;909 Dry OHH1
+634;5;909 Dry OHH2
+635;5;Single HClp1
+636;5;Single HClp2
+637;5;Single HClp3
+638;5;Real Clap L
+639;5;Real Clap R
+640;5;Lofi Clap1mb
+641;5;Lofi Clap2mb
+642;5;Lofi Clap3mb
+643;5;Buck Clap
+644;5;Head Knd Clp
+645;5;Royal Clap
+646;5;Clap Tail 2
+647;5;GospelClap L
+648;5;GospelClap R
+649;5;707 Dry Clap
+650;5;808 Dry Clap
+651;5;909 Dry Clap
+652;5;Pop Crash1
+653;5;Pop Crash2
+654;5;Pop SprshCym
+655;5;Pop ChinaCym
+656;5;Pop Cym Roll
+657;5;707 Dry CR
+658;5;909 Dry CR 1
+659;5;909 Dry CR 2
+660;5;909 Dry CR 3
+661;5;PopRideCym 1
+662;5;PopRideCym 2
+663;5;PopRideCym 3
+664;5;PopRideCym 4
+665;5;707 Dry RD
+666;5;808 Dry Cym1
+667;5;808 Dry Cym2
+668;5;808 Dry Cym3
+669;5;808 Dry Cym4
+670;5;909 Dry RD1
+671;5;909 Dry RD2
+672;5;909 Dry RD3
+673;5;MG Nz Cym
+674;5;US Nz Cym
+675;5;WindChime Up
+676;5;WindChime Dn
+677;5;Cwbl Lo
+678;5;Cwbl Hi
+679;5;Cwbl Mute
+680;5;707 Dry Cwbl
+681;5;808 Dry Cwbl
+682;5;808 Dry Clvs
+683;5;Clvs Hi
+684;5;Clvs Lo
+685;5;HiBongo Opn
+686;5;HiBongo Mfld
+687;5;HiBongo 2
+688;5;HiBongo Slp1
+689;5;HiBongo Slp2
+690;5;HiBongo Mute
+691;5;LoBongo Opn
+692;5;LoBongo Slap
+693;5;808 Dry HCng
+694;5;808 Dry MCng
+695;5;808 Dry LCng
+696;5;LTBit CgH L
+697;5;LTBit CgH R
+698;5;LTBit CgL L
+699;5;LTBit CgL R
+700;5;HiConga Opn
+701;5;HiConga Slap
+702;5;HiConga Cls
+703;5;LoConga Opn
+704;5;Tmbl Hi p
+705;5;Tmbl Hi f
+706;5;Tmbl Hi Rim
+707;5;Tmbl Hi Flm
+708;5;Tmbl Hi Roll
+709;5;Tmbl HiPaila
+710;5;Tmbl Lo p
+711;5;Tmbl Lo Flm
+712;5;Latin Hit
+713;5;Chekele 1
+714;5;Chekele 2
+715;5;Real Shaker1
+716;5;Real Shaker2
+717;5;Real Shaker3
+718;5;Real Cabasa3
+719;5;808 Dry Mrcs
+720;5;Short Guiro2
+721;5;Long Guiro2
+722;5;Long Tamb
+723;5;707 Dry Tamb
+724;5;Long Triangl
+725;5;Short FgSnap
+726;5;St. FgSnap L
+727;5;St. FgSnap R
+728;5;Bobs Slide
+729;5;Cave Hit L
+730;5;Cave Hit R
+731;5;Warp Hit 6
+732;5;Thru Hit 1
+733;5;Thru Hit 2
+734;5;Mull Hit
+735;5;Warp Hit 7
+736;5;Warp Hit 8
+737;5;Electronica
+738;5;Ripper L
+739;5;Ripper R
+740;5;Warp Hit 9
+741;5;Tickle Hit
+742;5;PercolateHit
+743;5;Tramp Hit L
+744;5;Tramp Hit R
+745;5;LoFi Moan
+746;5;Sonar Hit
+747;5;Electric Saw
+748;5;Cartn Fall L
+749;5;Cartn Fall R
+750;5;Cartn Boing1
+751;5;Cartn Boing2
+752;5;LoTek Bit L
+753;5;LoTek Bit R
+754;5;LoFi Hole
+755;5;LoFi Coo
+756;5;LoFi Bit 1
+757;5;LoFi Bit 2
+758;5;Nz Pass L
+759;5;Nz Pass R
+760;5;Thumpkin L
+761;5;Thumpkin R
+762;5;Dist Slide L
+763;5;Dist Slide R
+764;5;Howl Sync
+765;5;Slipper Hit
+766;5;Spoon Hit
+767;5;Pod Hit
+768;5;LoFi Shaker
+769;5;Box Hit 1
+770;5;Hard Shaker
+771;5;LoFi Pod Hit
+772;5;Press Hit
+773;5;Swish Hit
+774;5;Rumble Hit
+775;5;Cym Slide
+776;5;Knock Hit 1
+777;5;Knock Hit 2
+778;5;Swish Rope 1
+779;5;Swish Rope 2
+780;5;Swish Rope 3
+781;5;Swish Rope 4
+782;5;Metal Atk Lo
+783;5;Metal Atk Hi
+784;5;Fl Press Hit
+785;5;Dump Hit
+786;5;Vice Hit 1
+787;5;Vice Hit 2
+788;5;Vice Hit 3
+789;5;Box Hit 2
+790;5;US Metal 1
+791;5;US Metal 2
+792;5;MG NoiseHit
+793;5;SH2 S Zap 1
+794;5;SH2 S Zap 2
+795;5;SH2 S Zap 3
+796;5;SH2 S Zap 4
+797;5;SH2 S Zap 5
+798;5;MG S Zap 1
+799;5;MG S Zap 2
+800;5;MG S Zap 3
+801;5;SH2 U Zap 1
+802;5;SH2 U Zap 2
+803;5;SH2 U Zap 3
+804;5;SH2 U Zap 4
+805;5;SH2 U Zap 5
+806;5;SH2 U Zap 6
+807;5;Ring FX 1
+808;5;Ring FX 2
+809;5;OSC Perc 1
+810;5;OSC Perc 2
+811;5;US SweepD L1
+812;5;US SweepD S1
+813;5;US SweepD L2
+814;5;US SweepD S2
+815;5;US SweepD L3
+816;5;MG SweepDn
+817;5;US SweepU L1
+818;5;US SweepU L2
+1;6;Strings L pA
+2;6;Strings R pA
+3;6;Strings L pB
+4;6;Strings R pB
+5;6;Strings L pC
+6;6;Strings R pC
+7;6;Strs L pA Lp
+8;6;Strs R pA Lp
+9;6;Strs L pB Lp
+10;6;Strs R pB Lp
+11;6;Strs L pC Lp
+12;6;Strs R pC Lp
+13;6;Strings L fA
+14;6;Strings R fA
+15;6;Strings L fB
+16;6;Strings R fB
+17;6;Strings L fC
+18;6;Strings R fC
+19;6;Strs L fA Lp
+20;6;Strs R fA Lp
+21;6;Strs L fB Lp
+22;6;Strs R fB Lp
+23;6;Strs L fC Lp
+24;6;Strs R fC Lp
+25;6;Multi STR A
+26;6;Multi STR B
+27;6;Multi STR C
+28;6;Multi STR Lp
+29;6;Vl Sect A
+30;6;Vl Sect B
+31;6;Vl Sect C
+32;6;Vl Sect Lp
+33;6;Va Sect A
+34;6;Va Sect B
+35;6;Va Sect C
+36;6;Va Sect Lp
+37;6;Vc Sect A
+38;6;Vc Sect B
+39;6;Vc Sect C
+40;6;Vc Sect Lp
+41;6;Cb Sect
+42;6;Cb Sect Lp
+43;6;Vl Solo A
+44;6;Vl Solo B
+45;6;Vl Solo C
+46;6;Va Solo A
+47;6;Va Solo B
+48;6;Va Solo C
+49;6;Vc Solo A
+50;6;Vc Solo B
+51;6;Vc Solo C
+52;6;Cb Solo
+53;6;Violin&Cello
+54;6;Multi Solo 1
+55;6;Multi Solo 2
+56;6;VlSolo Vib A
+57;6;VlSolo Vib B
+58;6;VlSolo Vib C
+59;6;VcSolo Vib A
+60;6;VcSolo Vib B
+61;6;VcSolo Vib C
+62;6;Vls Spicc A
+63;6;Vls Spicc B
+64;6;Vls Spicc C
+65;6;Vas Spicc A
+66;6;Vas Spicc B
+67;6;Vas Spicc C
+68;6;Vcs Spicc A
+69;6;Vcs Spicc B
+70;6;Vcs Spicc C
+71;6;Cbs Spicc A
+72;6;Cbs Spicc B
+73;6;Cbs Spicc C
+74;6;Multi Spicc
+75;6;VlSolo Spicc
+76;6;VlSlSpicc2 A
+77;6;VlSlSpicc2 B
+78;6;VlSlSpicc2 C
+79;6;VcSolo Spicc
+80;6;MultSl Spicc
+81;6;Pizzicato 1
+82;6;Pizzicato 2
+83;6;STR Attack
+84;6;StrAttack 2A
+85;6;StrAttack 2B
+86;6;StrAttack 2C
+87;6;OrchUnisonLA
+88;6;OrchUnisonRA
+89;6;OrchUnisonLB
+90;6;OrchUnisonRB
+91;6;OrchUnisonLC
+92;6;OrchUnisonRC
+93;6;Full Orch.
+94;6;Full Orch Lp
+95;6;JV Strings L
+96;6;JV Strings R
+97;6;JV Strings A
+98;6;JP Strings1A
+99;6;JP Strings2A
+100;6;Soft Pad A
+101;6;Piccolo
+102;6;Piccolo 2 A
+103;6;Piccolo 2 B
+104;6;Piccolo 2 C
+105;6;Flute 1A
+106;6;FluteVib2 A
+107;6;FluteVib2 B
+108;6;FluteVib2 C
+109;6;Celtic Flt A
+110;6;Celtic Flt B
+111;6;Celtic Flt C
+112;6;ORG_Flute A
+113;6;ORG_Flute B
+114;6;ORG_Flute C
+115;6;Clarinet
+116;6;Clarinet 2 A
+117;6;Clarinet 2 B
+118;6;Clarinet 2 C
+119;6;Multi Cla
+120;6;Bs Clarinet
+121;6;Oboe 1
+122;6;Oboe 1A
+123;6;Oboe 1B
+124;6;Oboe 1C
+125;6;Oboe 2A
+126;6;Oboe 2B
+127;6;Oboe 2C
+128;6;Oboe 3 A
+129;6;Oboe 3 B
+130;6;Oboe 3 C
+131;6;Eng.Horn A
+132;6;Eng.Horn B
+133;6;Eng.Horn C
+134;6;Eng.Horn 2 A
+135;6;Eng.Horn 2 B
+136;6;Eng.Horn 2 C
+137;6;Bassoon
+138;6;Bassoon 1
+139;6;Bassoon 2 A
+140;6;Bassoon 2 B
+141;6;Bassoon 2 C
+142;6;Bassoon&Oboe
+143;6;S_Recorder A
+144;6;S_Recorder B
+145;6;S_Recorder C
+146;6;T_Recorder A
+147;6;T_Recorder B
+148;6;T_Recorder C
+149;6;Tnr.Recorder
+150;6;TinWhistle A
+151;6;TinWhistle B
+152;6;TinWhistle C
+153;6;TinWhisOrn A
+154;6;TinWhisOrn B
+155;6;TinWhisOrn C
+156;6;Whistle 1
+157;6;Multi Sax 1
+158;6;Multi Sax 2
+159;6;BRS Ensemble
+160;6;BRS Ens Lp
+161;6;Brass ff
+162;6;ff Brass Lp
+163;6;Trumpet 1A
+164;6;Trumpet 2
+165;6;Trumpet 3 A
+166;6;Trumpet 3 B
+167;6;Trumpet 3 C
+168;6;Cornet
+169;6;Tpt Sect. A
+170;6;Flugelhorn
+171;6;HarmonMute2A
+172;6;HarmonMute2B
+173;6;HarmonMute2C
+174;6;Solo Tb A
+175;6;Solo Tb B
+176;6;Solo Tb C
+177;6;Trombone 1
+178;6;Trombone 2 A
+179;6;Trombone 2 B
+180;6;Trombone 2 C
+181;6;Trombone mfA
+182;6;Trombone mfB
+183;6;Trombone mfC
+184;6;Trombone f A
+185;6;Trombone f B
+186;6;Trombone f C
+187;6;Bass Tb
+188;6;Tb Sect
+189;6;Tb Sect Lp
+190;6;Multi Reed
+191;6;Uill.Pipe1 A
+192;6;Uill.Pipe1 B
+193;6;Uill.Pipe1 C
+194;6;Uill.Pipe2 A
+195;6;Uill.Pipe2 B
+196;6;Uill.Pipe2 C
+197;6;U.Pipe Orn A
+198;6;U.Pipe Orn B
+199;6;U.Pipe Orn C
+200;6;F.Horn Solo
+201;6;F.HornSolo2A
+202;6;F.HornSolo2B
+203;6;F.HornSolo2C
+204;6;F.Horn Sect1
+205;6;F.Horn Sect2
+206;6;F.Hrn Sc1 Lp
+207;6;F.Hrn Sc2 Lp
+208;6;French 1A
+209;6;F.Horns2 pA
+210;6;F.Horns2 pB
+211;6;F.Horns2 pC
+212;6;F.Horns2 pA+
+213;6;F.Horns2 pB+
+214;6;F.Horns2 pC+
+215;6;F.Horns2 fA
+216;6;F.Horns2 fB
+217;6;F.Horns2 fC
+218;6;F.Horns2 fA+
+219;6;F.Horns2 fB+
+220;6;F.Horns2 fC+
+221;6;F.Horn Mute
+222;6;F.Hrn MuteLp
+223;6;Tuba
+224;6;Tuba 1
+225;6;Harp A
+226;6;Harp B
+227;6;Harp C
+228;6;Harp 2 A
+229;6;Harp 2 B
+230;6;Harp 2 C
+231;6;ClarsahHarpA
+232;6;ClarsahHarpB
+233;6;ClarsahHarpC
+234;6;Harp Maj Up
+235;6;Harp Maj Dn
+236;6;Harp m7 Up
+237;6;Harp m7 Dwn
+238;6;Harp 9th Up
+239;6;Harp 9th Dwn
+240;6;Harp +7 Up
+241;6;Harp +7 Dwn
+242;6;Harp b9 Up
+243;6;Harp b9 Dwn
+244;6;Harp m7 UpLp
+245;6;Harp m7 DnLp
+246;6;Harp 9thUpLp
+247;6;Harp 9thDnLp
+248;6;Harp +7 UpLp
+249;6;Harp +7 DnLp
+250;6;Harp b9 UpLp
+251;6;Harp b9 DnLp
+252;6;EuroPiano pA
+253;6;EuroPiano pB
+254;6;EuroPiano pC
+255;6;EuroPiano fA
+256;6;EuroPiano fB
+257;6;EuroPiano fC
+258;6;Ac Piano1 A
+259;6;Piano Thump
+260;6;Piano Up TH
+261;6;Harpsichord
+262;6;HPS_Front A
+263;6;HPS_Front B
+264;6;HPS_Front C
+265;6;HPS_Back A
+266;6;HPS_Back B
+267;6;HPS_Back C
+268;6;HPS_Lute A
+269;6;HPS_Lute B
+270;6;HPS_Lute C
+271;6;HPS_Click
+272;6;Celesta A
+273;6;Celesta B
+274;6;Celesta C
+275;6;MusicBox 2 A
+276;6;MusicBox 2 B
+277;6;MusicBox 2 C
+278;6;Bass Marimba
+279;6;Xylophone
+280;6;Glockenspiel
+281;6;Glocken 2 A
+282;6;Glocken 2 B
+283;6;Glocken 2 C
+284;6;TubularBells
+285;6;Tubular 2 A
+286;6;Tubular 2 B
+287;6;Tubular 2 C
+288;6;Wind Chime 2
+289;6;Wind Chime 3
+290;6;Church Bells
+291;6;ChurchBell 2
+292;6;JingleBell 2
+293;6;Sleigh Bell
+294;6;Bousouki A
+295;6;Bousouki B
+296;6;Bousouki C
+297;6;OrchPrc Hit
+298;6;OrchestraHit
+299;6;Orch Hit f
+300;6;Orch Hit Maj
+301;6;Orch Hit Min
+302;6;Orch Hit Dim
+303;6;OrchHit2 Maj
+304;6;OrchHit2 Min
+305;6;OrchHit2 Dim
+306;6;Gliss Maj
+307;6;Gliss Min
+308;6;Gliss Maj Lp
+309;6;Gliss Min Lp
+310;6;Tremolo p
+311;6;Tremolo f
+312;6;Tremolo sfz
+313;6;Tremolo p Lp
+314;6;Tremolo f Lp
+315;6;Tremolo sfLp
+316;6;Cluster
+317;6;Cluster Lp
+318;6;Pentatonic
+319;6;PentatonicLp
+320;6;Staccato p
+321;6;Staccato f
+322;6;Brass Stacc
+323;6;Brass Fall
+324;6;Tps Fall
+325;6;F.Horn Rip
+326;6;Choir A
+327;6;Choir B
+328;6;Choir C
+329;6;F.Chor Aah A
+330;6;F.Chor Aah B
+331;6;F.Chor Aah C
+332;6;F.Chor Mmh A
+333;6;F.Chor Mmh B
+334;6;F.Chor Mmh C
+335;6;LargeChrL pA
+336;6;LargeChrR pA
+337;6;LargeChrL pB
+338;6;LargeChrR pB
+339;6;LargeChrL pC
+340;6;LargeChrR pC
+341;6;LargeChrL fA
+342;6;LargeChrR fA
+343;6;LargeChrL fB
+344;6;LargeChrR fB
+345;6;LargeChrL fC
+346;6;LargeChrR fC
+347;6;Boys Choir A
+348;6;Boys Choir B
+349;6;Boys Choir C
+350;6;Gregorian LA
+351;6;Gregorian RA
+352;6;Gregorian LB
+353;6;Gregorian RB
+354;6;Gregorian LC
+355;6;Gregorian RC
+356;6;Sop Chr Mono
+357;6;SopranoChr L
+358;6;SopranoChr R
+359;6;Tenor Solo
+360;6;Jazz Doo L A
+361;6;Jazz Doo R A
+362;6;Jazz Doo L B
+363;6;Jazz Doo R B
+364;6;Jazz Doo L C
+365;6;Jazz Doo R C
+366;6;Jazz Doot LA
+367;6;Jazz Doot RA
+368;6;Jazz Doot LB
+369;6;Jazz Doot RB
+370;6;Jazz Doot LC
+371;6;Jazz Doot RC
+372;6;Jazz Dat L A
+373;6;Jazz Dat R A
+374;6;Jazz Dat L B
+375;6;Jazz Dat R B
+376;6;Jazz Dat L C
+377;6;Jazz Dat R C
+378;6;Jazz Bap L A
+379;6;Jazz Bap R A
+380;6;Jazz Bap L B
+381;6;Jazz Bap R B
+382;6;Jazz Bap L C
+383;6;Jazz Bap R C
+384;6;Dow fall L A
+385;6;Dow fall R A
+386;6;Dow fall L B
+387;6;Dow fall R B
+388;6;Dow fall L C
+389;6;Dow fall R C
+390;6;Bass Thum A
+391;6;Bass Thum B
+392;6;Bass Thum C
+393;6;Vocal Menu L
+394;6;Vocal Menu R
+395;6;BoysAleluiaL
+396;6;BoysAleluiaR
+397;6;Boys Amen1 L
+398;6;Boys Amen1 R
+399;6;Boys Amen2 L
+400;6;Boys Amen2 R
+401;6;Amen L
+402;6;Amen R
+403;6;Aleluia L
+404;6;Aleluia R
+405;6;Breath Wind
+406;6;Breath Atack
+407;6;Breath Whisl
+408;6;Breath Hrmon
+409;6;Whistle Nz
+410;6;Flute Breath
+411;6;Vocal Breath
+412;6;Timpani
+413;6;Timpani p
+414;6;Timpani f
+415;6;Timpani 2 p
+416;6;Timpani 2 f
+417;6;Timpani Roll
+418;6;Timp Roll p
+419;6;Timp Roll f
+420;6;Concert SNR1
+421;6;Concert SNR2
+422;6;Concert SNR3
+423;6;Orch SNR
+424;6;OrchSNR Roll
+425;6;SNR Roll
+426;6;SNR Set
+427;6;Concert BD 1
+428;6;Concert BD 2
+429;6;Concert BD 3
+430;6;Orch BD
+431;6;BD Roll
+432;6;Tam Tam
+433;6;Crash Cymbal
+434;6;Crash Cym Lp
+435;6;Cymbal Hit
+436;6;Finger Cym 2
+437;6;MalletCymbal
+438;6;CymbalScrape
+439;6;Gong
+440;6;Grongkas
+441;6;Castanets 1
+442;6;Castanets 2
+443;6;Tambourine
+444;6;Triangle
+445;6;Slapstick
+446;6;Ratchet
+447;6;TunedBlock A
+448;6;TunedBlock B
+449;6;TunedBlock C
+450;6;Bodhran MENU
+451;6;Bodhran 1
+452;6;Bodhran 2
+453;6;Bodhran 3
+454;6;Bodhran 4
+455;6;Bodhran 5
+456;6;Bodhran 6
+457;6;Bodhran 7
+458;6;Perc Hit 1
+459;6;Perc Hit 2
+460;6;Perc Set 1
+461;6;Perc Set 2
+462;6;Perc Set 3
+463;6;REV Hrp m7Up
+464;6;REV Hrp m7Dn
+465;6;REV Hrp9thUp
+466;6;REV Hrp9thDn
+467;6;REV Hrp +7Up
+468;6;REV Hrp +7Dn
+469;6;REV Hrp b9Up
+470;6;REV Hrp b9Dn
+471;6;REV Hit f
+472;6;REV Hit Maj
+473;6;REV Hit Min
+474;6;REV Hit Dim
+475;6;REV Hit2 Maj
+476;6;REV Hit2 Min
+477;6;REV Hit2 Dim
+478;6;REV Stacc p
+479;6;REV Stacc f
+480;6;REV Bell
+481;6;REV Cym Hit
+482;6;REV PercHit1
+483;6;REV PercHit2
+484;6;REV BD 1
+485;6;REV BD 2
+486;6;REV BD 3
+487;6;REV BD Roll
+488;6;REV SNR 1
+489;6;REV SNR 2
+490;6;REV SNR 3
+491;6;REV Tam Tam
+492;6;REV Crash
+493;6;REV Gong
+494;6;REV Tamb
+495;6;REV Timp 1
+496;6;REV Timp 2
+497;6;REV Casta 1
+498;6;REV Casta 2
+499;6;REV S.Stick
+500;6;REV Sleigh
+501;6;REV VoMenu L
+502;6;REV VoMenu R
+503;6;REV ByAleluL
+504;6;REV ByAleluR
+505;6;REV ByAmen1L
+506;6;REV ByAmen1R
+507;6;REV ByAmen2L
+508;6;REV ByAmen2R
+509;6;REV Amen L
+510;6;REV Amen R
+511;6;REV AleluiaL
+512;6;REV AleluiaR
+1;7;StGrand L pA
+2;7;StGrand R pA
+3;7;StGrand L pB
+4;7;StGrand R pB
+5;7;StGrand L pC
+6;7;StGrand R pC
+7;7;StGrand L fA
+8;7;StGrand R fA
+9;7;StGrand L fB
+10;7;StGrand R fB
+11;7;StGrand L fC
+12;7;StGrand R fC
+13;7;SApiano 3
+14;7;E.Grand BdyA
+15;7;E.Grand BdyB
+16;7;E.Grand BdyC
+17;7;E.Grand 1A
+18;7;E.Grand 1B
+19;7;E.Grand 1C
+20;7;Suitcase p A
+21;7;Suitcase p B
+22;7;Suitcase p C
+23;7;Suitcase mfA
+24;7;Suitcase mfB
+25;7;Suitcase mfC
+26;7;Suitcase f A
+27;7;Suitcase f B
+28;7;Suitcase f C
+29;7;Stage p A
+30;7;Stage p B
+31;7;Stage p C
+32;7;Stage f A
+33;7;Stage f B
+34;7;Stage f C
+35;7;70'EP 5 A p
+36;7;70'EP 5 B p
+37;7;70'EP 5 C p
+38;7;70'EP 5 A f
+39;7;70'EP 5 B f
+40;7;70'EP 5 C f
+41;7;70'EP Bs p A
+42;7;70'EP Bs p B
+43;7;70'EP Bs p C
+44;7;70'EP Bs f A
+45;7;70'EP Bs f B
+46;7;70'EP Bs f C
+47;7;Wurly 1 p A
+48;7;Wurly 1 p B
+49;7;Wurly 1 p C
+50;7;Wurly 1 mf A
+51;7;Wurly 1 mf B
+52;7;Wurly 1 mf C
+53;7;Wurly 1 f A
+54;7;Wurly 1 f B
+55;7;Wurly 1 f C
+56;7;Wurly 2 p A
+57;7;Wurly 2 p B
+58;7;Wurly 2 p C
+59;7;Wurly 2 mf A
+60;7;Wurly 2 mf B
+61;7;Wurly 2 mf C
+62;7;Wurly 2 f A
+63;7;Wurly 2 f B
+64;7;Wurly 2 f C
+65;7;Pnet p A
+66;7;Pnet p B
+67;7;Pnet p C
+68;7;Pnet f A
+69;7;Pnet f B
+70;7;Pnet f C
+71;7;R.Chord A
+72;7;R.Chord B
+73;7;R.Chord C
+74;7;'70s Piano A
+75;7;'70s Piano B
+76;7;'70s PianoLp
+77;7;'70s Lute A
+78;7;'70s Lute B
+79;7;'70s Lute Lp
+80;7;Vibraphone A
+81;7;Vibraphone B
+82;7;Vibraphone C
+83;7;Clav Pluck A
+84;7;Clav Pluck B
+85;7;Clav Pluck C
+86;7;Ch.Clav A
+87;7;Ch.Clav B
+88;7;Ch.Clav C
+89;7;Clav 1 A
+90;7;Clav 1 B
+91;7;Clav 1 C
+92;7;Clav 2 A
+93;7;Clav 2 B
+94;7;Clav 2 C
+95;7;Clav 3 p A
+96;7;Clav 3 p B
+97;7;Clav 3 p C
+98;7;Clav 3 f A
+99;7;Clav 3 f B
+100;7;Clav 3 f C
+101;7;Clav 4 p A
+102;7;Clav 4 p B
+103;7;Clav 4 p C
+104;7;Clav 4 mf A
+105;7;Clav 4 mf B
+106;7;Clav 4 mf C
+107;7;Clav 4 f A
+108;7;Clav 4 f B
+109;7;Clav 4 f C
+110;7;Clav 5 p A
+111;7;Clav 5 p B
+112;7;Clav 5 p C
+113;7;Clav 5 f A
+114;7;Clav 5 f B
+115;7;Clav 5 f C
+116;7;Clav 6 p A
+117;7;Clav 6 p B
+118;7;Clav 6 p C
+119;7;Clav 6 f A
+120;7;Clav 6 f B
+121;7;Clav 6 f C
+122;7;Clav 7 A
+123;7;Clav 7 B
+124;7;Clav 7 C
+125;7;Clav Mute 1A
+126;7;Clav Mute 1B
+127;7;Clav Mute 1C
+128;7;Clav Mute 2A
+129;7;Clav Mute 2B
+130;7;Clav Mute 2C
+131;7;Clav Attack
+132;7;B3 1 A
+133;7;B3 1 B
+134;7;B3 1 C
+135;7;B3 2 A
+136;7;B3 2 B
+137;7;B3 2 C
+138;7;B3 2 Ch A
+139;7;B3 2 Ch B
+140;7;B3 2 Ch C
+141;7;B3 2 FL A
+142;7;B3 2 FL B
+143;7;B3 2 FL C
+144;7;B3 3 A
+145;7;B3 3 B
+146;7;B3 3 C
+147;7;B3 3 FL A
+148;7;B3 3 FL B
+149;7;B3 3 FL C
+150;7;B3 4
+151;7;B3 5 A
+152;7;B3 5 B
+153;7;B3 5 C
+154;7;B3 6 A
+155;7;B3 6 B
+156;7;B3 6 C
+157;7;B3 7 A
+158;7;B3 7 B
+159;7;B3 7 C
+160;7;B3 7 FL A
+161;7;B3 7 FL B
+162;7;B3 7 FL C
+163;7;B3 8 A
+164;7;B3 8 B
+165;7;B3 8 C
+166;7;B3 8 Ch A
+167;7;B3 8 Ch B
+168;7;B3 8 Ch C
+169;7;B3 8 FL A
+170;7;B3 8 FL B
+171;7;B3 8 FL C
+172;7;B3 9
+173;7;B3 10 A
+174;7;B3 10 B
+175;7;B3 10 C
+176;7;B3 10 Ch A
+177;7;B3 10 Ch B
+178;7;B3 10 Ch C
+179;7;B3 10 FL A
+180;7;B3 10 FL B
+181;7;B3 10 FL C
+182;7;B3 11
+183;7;B3 12
+184;7;B3 13
+185;7;B3 14 A
+186;7;B3 14 B
+187;7;B3 14 C
+188;7;B3 14 Ch A
+189;7;B3 14 Ch B
+190;7;B3 14 Ch C
+191;7;B3 14 FL A
+192;7;B3 14 FL B
+193;7;B3 14 FL C
+194;7;B3 15 A
+195;7;B3 15 B
+196;7;B3 15 C
+197;7;B3 15 Ch A
+198;7;B3 15 Ch B
+199;7;B3 15 Ch C
+200;7;B3 15 FL A
+201;7;B3 15 FL B
+202;7;B3 15 FL C
+203;7;B3 16
+204;7;B3 17
+205;7;B3 18
+206;7;B3 19 A
+207;7;B3 19 B
+208;7;B3 19 C
+209;7;B3 Perc 1 A
+210;7;B3 Perc 1 B
+211;7;B3 Perc 1 C
+212;7;B3 Perc 2 A
+213;7;B3 Perc 2 B
+214;7;B3 Perc 2 C
+215;7;B3 Perc 3 A
+216;7;B3 Perc 3 B
+217;7;B3 Perc 3 C
+218;7;B3 Perc3FL A
+219;7;B3 Perc3FL B
+220;7;B3 Perc3FL C
+221;7;B3 Harm 1
+222;7;B3 Harm 2 A
+223;7;B3 Harm 2 B
+224;7;B3 Harm 2 C
+225;7;B3 Harm 3 A
+226;7;B3 Harm 3 B
+227;7;B3 Harm 3 C
+228;7;B3 Harm3FL A
+229;7;B3 Harm3FL B
+230;7;B3 Harm3FL C
+231;7;Power B slwA
+232;7;Power B slwB
+233;7;Power B slwC
+234;7;Power B fstA
+235;7;Power B fstB
+236;7;Power B fstC
+237;7;B3 Click
+238;7;VX Organ 1 A
+239;7;VX Organ 1 B
+240;7;VX Organ 1 C
+241;7;VX Organ 2 A
+242;7;VX Organ 2 B
+243;7;VX Organ 2 C
+244;7;VX Organ 3 A
+245;7;VX Organ 3 B
+246;7;VX Organ 3 C
+247;7;VX Organ 4 A
+248;7;VX Organ 4 B
+249;7;VX Organ 4 C
+250;7;VX Harpsi A
+251;7;VX Harpsi B
+252;7;VX Harpsi C
+253;7;VX Org Bs A
+254;7;VX Org Bs B
+255;7;VX Org Bs C
+256;7;Farf Organ 1
+257;7;Farf Organ 2
+258;7;Farf Organ 3
+259;7;Farf Organ 4
+260;7;Farf Organ 5
+261;7;Farf Organ 6
+262;7;Farf Organ 7
+263;7;Farf Organ 8
+264;7;FarfClar16'A
+265;7;FarfClar16'B
+266;7;FarfClar16'C
+267;7;FarfFlut8' A
+268;7;FarfFlut8' B
+269;7;FarfFlut8' C
+270;7;Farf 8'+2'
+271;7;Farf 8'+4'
+272;7;Farf 8'+5th
+273;7;Farf Noise
+274;7;Tron Str A
+275;7;Tron Str B
+276;7;Tron Str C
+277;7;Tron Str2 A
+278;7;Tron Str2 B
+279;7;Tron Str2 C
+280;7;Tron Vlns A
+281;7;Tron Vlns B
+282;7;Tron Vlns C
+283;7;Tron Cello A
+284;7;Tron Cello B
+285;7;Tron Cello C
+286;7;Tron Flute A
+287;7;Tron Flute B
+288;7;Tron Flute C
+289;7;Tron Choir A
+290;7;Tron Choir B
+291;7;Tron Choir C
+292;7;Tron Cho.1 A
+293;7;Tron Cho.1 B
+294;7;Tron Cho.1 C
+295;7;Tron Cho.2 A
+296;7;Tron Cho.2 B
+297;7;Tron Cho.2 C
+298;7;Blow Sax A
+299;7;Blow Sax B
+300;7;Blow Sax C
+301;7;T.Sax hrd A
+302;7;T.Sax hrd B
+303;7;T.Sax hrd C
+304;7;Solo Tpt. A
+305;7;Solo Tpt. B
+306;7;Solo Tpt. C
+307;7;R&R Horns A
+308;7;R&R Horns B
+309;7;R&R Horns C
+310;7;Flute Vib A
+311;7;Flute Vib B
+312;7;Flute Vib C
+313;7;Clean TC2 pA
+314;7;Clean TC2 pB
+315;7;Clean TC2 pC
+316;7;Clean TC2 fA
+317;7;Clean TC2 fB
+318;7;Clean TC2 fC
+319;7;NylonGt2 p A
+320;7;NylonGt2 p B
+321;7;NylonGt2 p C
+322;7;NylonGt2 mfA
+323;7;NylonGt2 mfB
+324;7;NylonGt2 mfC
+325;7;NylonGt2 f A
+326;7;NylonGt2 f B
+327;7;NylonGt2 f C
+328;7;D.MuteGt p A
+329;7;D.MuteGt p B
+330;7;D.MuteGt p C
+331;7;D.MuteGt mpA
+332;7;D.MuteGt mpB
+333;7;D.MuteGt mpC
+334;7;D.MuteGt mfA
+335;7;D.MuteGt mfB
+336;7;D.MuteGt mfC
+337;7;Wah Gtr MENU
+338;7;Wah Down 1
+339;7;Wah Up 1
+340;7;Wah Down 2
+341;7;Wah Up 2
+342;7;Gtr FX MENU
+343;7;Gtr Feedback
+344;7;Gtr Scrap
+345;7;Gtr Slid Nz
+346;7;Gtr Cut Nz
+347;7;Gtr Slap
+348;7;MM Slap Bs A
+349;7;MM Slap Bs B
+350;7;MM Slap Bs C
+351;7;MM Pop Bs A
+352;7;MM Pop Bs B
+353;7;MM Pop Bs C
+354;7;MM Frls Bs A
+355;7;MM Frls Bs B
+356;7;MM Frls Bs C
+357;7;MM Jazz Bs A
+358;7;MM Jazz Bs B
+359;7;MM Jazz Bs C
+360;7;MM Pick Bs A
+361;7;MM Pick Bs B
+362;7;MM Pick Bs C
+363;7;MM Harm Bs A
+364;7;MM Harm Bs B
+365;7;MM Harm Bs C
+366;7;AL Funk Bs A
+367;7;AL Funk Bs B
+368;7;AL Funk Bs C
+369;7;AL Pop Bs A
+370;7;AL Pop Bs B
+371;7;AL Pop Bs C
+372;7;AL Frls Bs A
+373;7;AL Frls Bs B
+374;7;AL Frls Bs C
+375;7;AL LatinBs A
+376;7;AL LatinBs B
+377;7;AL LatinBs C
+378;7;AL Old Bs A
+379;7;AL Old Bs B
+380;7;AL Old Bs C
+381;7;AL P.Bass A
+382;7;AL P.Bass B
+383;7;AL P.Bass C
+384;7;JP Funk Bs A
+385;7;JP Funk Bs B
+386;7;JP Funk Bs C
+387;7;JP Pop Bs A
+388;7;JP Pop Bs B
+389;7;JP Pop Bs C
+390;7;JP Frls Bs A
+391;7;JP Frls Bs B
+392;7;JP Frls Bs C
+393;7;JP Pick Bs A
+394;7;JP Pick Bs B
+395;7;JP Pick Bs C
+396;7;JP Rock Bs A
+397;7;JP Rock Bs B
+398;7;JP Rock Bs C
+399;7;JP 6StrBs pA
+400;7;JP 6StrBs pB
+401;7;JP 6StrBs pC
+402;7;JP 6StrBs fA
+403;7;JP 6StrBs fB
+404;7;JP 6StrBs fC
+405;7;JP Ac.Bs p A
+406;7;JP Ac.Bs p B
+407;7;JP Ac.Bs p C
+408;7;JP Ac.Bs f A
+409;7;JP Ac.Bs f B
+410;7;JP Ac.Bs f C
+411;7;Sld&Nz MENU
+412;7;Slides MENU
+413;7;E.Bs Nz MENU
+414;7;A.Bs Nz MENU
+415;7;MM Slide 1
+416;7;MM Slide 2
+417;7;AL Slide
+418;7;JP Slide 1
+419;7;JP Slide 2
+420;7;JP Slide 3
+421;7;AL Nz 1
+422;7;AL Nz 2
+423;7;AL Nz 3
+424;7;AL Nz 4
+425;7;AL Nz 5
+426;7;AL Nz 6
+427;7;AL Nz 7
+428;7;AL Nz 8
+429;7;AL Nz 9
+430;7;JP Frls Nz 1
+431;7;JP Frls Nz 2
+432;7;JP Frls Nz 3
+433;7;JP Frls Nz 4
+434;7;JP Ac.Nz 1
+435;7;JP Ac.Nz 2
+436;7;JP Ac.Nz 3
+437;7;JP Ac.Nz 4
+438;7;OB Bass
+439;7;OB Bass Lp A
+440;7;OB Bass Lp B
+441;7;OB Bass Lp C
+442;7;MG BsPedal
+443;7;MG BsPdl LpA
+444;7;MG BsPdl LpC
+445;7;MG Fat Bs
+446;7;MG Sharp Bs1
+447;7;MG Big Bs
+448;7;MG ClassicBs
+449;7;MG Sharp Bs2
+450;7;TB-303 Bass
+451;7;JP-4 Bass 1
+452;7;JP-4 Bass 2
+453;7;SH-101 Bs 1
+454;7;SH-101 Bs 2
+455;7;SH-101 Bs 3
+456;7;SH-101 Bs 4
+457;7;SH-101 Bs 5
+458;7;Sys700 Bs 1
+459;7;Sys700 Bs 2
+460;7;FM Super Bs
+461;7;KG Poly Bs
+462;7;KG Poly BsLp
+463;7;Muted Bass A
+464;7;Muted Bass B
+465;7;Muted Bass C
+466;7;JP-8 Saw A
+467;7;JP-8 Saw C
+468;7;Sys700 Saw
+469;7;JX-10 Saw
+470;7;D-50 Saw 1
+471;7;D-50 Saw 2
+472;7;SH-5 Saw
+473;7;SH-2 Saw
+474;7;SH-101 Saw
+475;7;SH-1000 Saw
+476;7;GR-300 Saw 1
+477;7;GR-300 Saw 2
+478;7;JU-2 Saw
+479;7;MG Saw 1A
+480;7;MG Saw 1C
+481;7;MG Saw 2
+482;7;OB Saw 1A
+483;7;OB Saw 1C
+484;7;OB Saw 2
+485;7;P5 Saw 1A
+486;7;P5 Saw 1C
+487;7;2600 Saw
+488;7;AP Saw
+489;7;OSC Saw
+490;7;OSC Reso Saw
+491;7;KG700 Saw
+492;7;KG800 Saw 1
+493;7;KG800 Saw 2
+494;7;KG MS Saw
+495;7;CS Saw 1A
+496;7;CS Saw 1C
+497;7;CS Saw 2
+498;7;JP-8 SquareA
+499;7;JP-8 SquareC
+500;7;JX-10 Square
+501;7;SH-5 Square
+502;7;SH-2 Square
+503;7;MG Square A
+504;7;MG Square C
+505;7;OB Square A
+506;7;OB Square C
+507;7;P5 Square A
+508;7;P5 Square C
+509;7;2600 Square
+510;7;OSC Square
+511;7;KG800 Square
+512;7;KG MS Square
+513;7;CS Square
+514;7;JP-8 Pulse 1
+515;7;JP-8 Pulse 2
+516;7;JP-8 Pulse 3
+517;7;JP-8 Pulse 4
+518;7;JP-8 Pulse 5
+519;7;SH-1000 Puls
+520;7;MG Pulse 1A
+521;7;MG Pulse 1C
+522;7;MG Pulse 2A
+523;7;MG Pulse 2C
+524;7;OB Pulse 1
+525;7;OB Pulse 2
+526;7;OB Pulse 3
+527;7;2600 Pulse 1
+528;7;2600 Pulse 2
+529;7;EM Pulse
+530;7;CS Pulse 1
+531;7;CS Pulse 2
+532;7;JU-2 Sub OSC
+533;7;MG Ramp
+534;7;MG Triangle
+535;7;2600Triangle
+536;7;2600 Sine
+537;7;JP-8 PWM A
+538;7;JP-8 PWM B
+539;7;JP-8 PWM C
+540;7;MG Dt.Saw A
+541;7;MG Dt.Saw B
+542;7;MG Dt.Saw C
+543;7;P5 Dt.Saw A
+544;7;P5 Dt.Saw B
+545;7;P5 Dt.Saw C
+546;7;MG Dt.Squ A
+547;7;MG Dt.Squ B
+548;7;MG Dt.Squ C
+549;7;Juno Rave A
+550;7;Juno Rave B
+551;7;Juno Rave C
+552;7;Blaster A
+553;7;Blaster B
+554;7;Blaster C
+555;7;JP Hollo A
+556;7;JP Hollo B
+557;7;JP Hollo C
+558;7;JP-8 Str A
+559;7;JP-8 Str B
+560;7;JP-8 Str C
+561;7;OB Str 1A
+562;7;OB Str 1B
+563;7;OB Str 1C
+564;7;OB Str 2A
+565;7;OB Str 2B
+566;7;OB Str 2C
+567;7;AP Str Ens A
+568;7;AP Str Ens B
+569;7;AP Str Ens C
+570;7;Hard 5ths A
+571;7;Hard 5ths B
+572;7;Hard 5ths C
+573;7;OBXP Str A
+574;7;OBXP Str B
+575;7;OBXP Str C
+576;7;OBXP Str Lp
+577;7;MG Oct A
+578;7;MG Oct B
+579;7;MG Oct C
+580;7;MG Dt.Oct A
+581;7;MG Dt.Oct B
+582;7;MG Dt.Oct C
+583;7;OBXP Brass A
+584;7;OBXP Brass B
+585;7;OBXP Brass C
+586;7;OBXP BrassLp
+587;7;FM Brass
+588;7;Waspy
+589;7;Waspy Lp
+590;7;OB Lead
+591;7;OB Lead Lp
+592;7;JP-6 SqLead
+593;7;JP-6 SqLd Lp
+594;7;Blown 1
+595;7;Blown 2
+596;7;PG Sweep 1A
+597;7;PG Sweep 1C
+598;7;PG Sweep 2A
+599;7;PG Sweep 2C
+600;7;D-50 HeavenA
+601;7;D-50 HeavenB
+602;7;D-50 HeavenC
+603;7;JX-8P Vox
+604;7;JX-8P Vox Lp
+605;7;VP-330ChoirA
+606;7;VP-330ChoirB
+607;7;VP-330ChoirC
+608;7;P5 Unisync
+609;7;P5 UnisyncLp
+610;7;P5 Dipthong
+611;7;P5 DipthngLp
+612;7;FM Lead
+613;7;KG800 Lead
+614;7;MG Lead
+615;7;MG Lead Lp
+616;7;JP-8 Lead
+617;7;Digiwave 1
+618;7;Digiwave 2
+619;7;Digiwave 3
+620;7;Frog wave
+621;7;SRG FM
+622;7;Shimmer wave
+623;7;VS Organ A
+624;7;VS Organ C
+625;7;Juno Organ
+626;7;Juno OrganLp
+627;7;FM Punch
+628;7;Mondigital
+629;7;MondigitalLp
+630;7;JP-8 Clavi A
+631;7;JP-8 Clavi C
+632;7;JP-8 ClaviLp
+633;7;Juno Clavi
+634;7;P5 X-mod
+635;7;Steam Drum
+636;7;Kalimba Atk
+637;7;Additive
+638;7;MG Blip
+639;7;MG Blip Lp
+640;7;MG Thump
+641;7;MG Thump Lp
+642;7;MG Attack
+643;7;MG Attack Lp
+644;7;VS Bell 1
+645;7;VS Bell 2
+646;7;JP-6 Bell
+647;7;MKS-80 Xmod1
+648;7;MKS-80 Xmod2
+649;7;MKS-80 Xmod3
+650;7;MKS-80 Xmod4
+651;7;MKS-80 Xmod5
+652;7;Record Noise
+653;7;MG White Nz
+654;7;MG Pink Nz
+655;7;SH-5 Pink Nz
+656;7;JP-8 X-mod 1
+657;7;JP-8 X-mod 2
+658;7;P5 Noise 1
+659;7;P5 Noise 2
+660;7;ZZZ loop
+661;7;Atmosphere
+662;7;FX1A-L(RSS)
+663;7;FX1A-R(RSS)
+664;7;FX1B-L(RSS)
+665;7;FX1B-R(RSS)
+666;7;FX1C-L(RSS)
+667;7;FX1C-R(RSS)
+668;7;FX2A-L(RSS)
+669;7;FX2A-R(RSS)
+670;7;FX2B-L(RSS)
+671;7;FX2B-R(RSS)
+672;7;FX2C-L(RSS)
+673;7;FX2C-R(RSS)
+674;7;FX3A-L(RSS)
+675;7;FX3A-R(RSS)
+676;7;FX3B-L(RSS)
+677;7;FX3B-R(RSS)
+678;7;FX3C-L(RSS)
+679;7;FX3C-R(RSS)
+680;7;DrumGrv MENU
+681;7;BW Jz 6/8 52
+682;7;BW Brush 66
+683;7;AL Slam 66
+684;7;AL Whack 76
+685;7;AL Grunge 84
+686;7;BW Swamp 90
+687;7;BW Latin 102
+688;7;BW Fusion112
+689;7;AL Funk 120
+690;7;AL Shuff.126
+691;7;Kik&CymSET 1
+692;7;Kik&CymSET 2
+693;7;Kik&CymSET 3
+694;7;Kik&CymSET 4
+695;7;Kik&CymSET 5
+696;7;Kik&CymSET 6
+697;7;Kik&CymSET 7
+698;7;Kik&CymSET 8
+699;7;Kik&CymSET 9
+700;7;Kik&CymSET10
+701;7;Kik&CymSET11
+702;7;Kik&CymSET12
+703;7;Kik&CymSET13
+704;7;SNR SET 1p
+705;7;SNR SET 1f
+706;7;SNR SET 2p
+707;7;SNR SET 2f
+708;7;SNR SET 3p
+709;7;SNR SET 3f
+710;7;SNR SET 4p
+711;7;SNR SET 4f
+712;7;SNR SET 5p
+713;7;SNR SET 5f
+714;7;SNR SET 6p
+715;7;SNR SET 6f
+716;7;SNR SET 7p
+717;7;SNR SET 7f
+718;7;SNR SET 8p
+719;7;SNR SET 8f
+720;7;SNR SET 9p
+721;7;SNR SET 9f
+722;7;SNR SET 10p
+723;7;SNR SET 10f
+724;7;SNR SET 11p
+725;7;SNR SET 11f
+726;7;HAT SET 1p
+727;7;HAT SET 1f
+728;7;HAT SET 1pdl
+729;7;HAT SET 2p
+730;7;HAT SET 2f
+731;7;HAT SET 2pdl
+732;7;HAT SET 3
+733;7;TOM SET 1p
+734;7;TOM SET 1f
+735;7;TOM SET 2
+736;7;TOM SET 3p
+737;7;TOM SET 3f
+738;7;KIK MENU
+739;7;Meat K
+740;7;Boomer K1
+741;7;Boomer K2
+742;7;Medium K
+743;7;Deep Dry K
+744;7;Real Dry K1
+745;7;Real Dry K2
+746;7;Real Dry K3
+747;7;Stomp K
+748;7;Comp K1
+749;7;Comp K2
+750;7;Comp K3
+751;7;Lo-Fi K
+752;7;SNR MENU 1
+753;7;SNR MENU 2
+754;7;SNR MENU 3
+755;7;Ring sft Sn
+756;7;Ring hrd Sn
+757;7;Ring rol Sn
+758;7;Ring flm Sn
+759;7;SlamRm sftSn
+760;7;SlamRm hrdSn
+761;7;SlamRm rolSn
+762;7;SlamRm flmSn
+763;7;SlmDry sftSn
+764;7;SlmDry hrdSn
+765;7;Dry sft Sn
+766;7;Dry hrd Sn
+767;7;Dry rol Sn
+768;7;Dry flm Sn
+769;7;RockOn Sn1
+770;7;RockOn Sn2
+771;7;Verb sft Sn
+772;7;Verb hrd Sn
+773;7;Warm sft Sn
+774;7;Warm hrd Sn
+775;7;Warm flm Sn
+776;7;DryFat sftSn
+777;7;DryFat hrdSn
+778;7;DryFat rolSn
+779;7;DryFat flmSn
+780;7;Funk Sn1
+781;7;Funk Sn2
+782;7;Picc. sft Sn
+783;7;Picc. mid Sn
+784;7;Picc. hrd Sn
+785;7;Picc. rol Sn
+786;7;Picc. flm Sn
+787;7;Choke Sn
+788;7;LiteVerb Sn
+789;7;Live Stick
+790;7;NaturalStick
+791;7;Click Stick
+792;7;HAT MENU
+793;7;18 Hat pdl
+794;7;18 Hat cls 1
+795;7;18 Hat cls 2
+796;7;18 Hat hlf 1
+797;7;18 Hat hlf 2
+798;7;18 Hat opn 1
+799;7;18 Hat opn 2
+800;7;16 Hat pdl
+801;7;16 Hat cls 1
+802;7;16 Hat cls 2
+803;7;16 Hat hlf 1
+804;7;16 Hat hlf 2
+805;7;16 Hat opn 1
+806;7;16 Hat opn 2
+807;7;CR78 Hat cls
+808;7;CR78 Hat opn
+809;7;TOM MENU
+810;7;16 MPL sftTm
+811;7;16 MPL hrdTm
+812;7;13 MPL sftTm
+813;7;13 MPL hrdTm
+814;7;12 MPL sftTm
+815;7;12 MPL hrdTm
+816;7;10 MPL sftTm
+817;7;10 MPL hrdTm
+818;7;Soft Low Tom
+819;7;Soft Mid Tom
+820;7;Soft Hi Tom
+821;7;LoVerb sftTm
+822;7;LoVerb hrdTm
+823;7;HiVerb sftTm
+824;7;HiVerb hrdTm
+825;7;CYM MENU
+826;7;Long Crash 1
+827;7;Long Crash 2
+828;7;Long Ride 1
+829;7;Long Ride 2
+830;7;LngRide Bell
+831;7;Shaker MENU2
+832;7;626 Shaker
+833;7;Shaker 3
+834;7;Shaker 4
+835;7;Shaker 5
+836;7;Sm.Club
+837;7;Sm.Club fw
+838;7;Sm.Club lp
+839;7;REV Waspy
+840;7;REV P5 X-mod
+841;7;REV SteamDrm
+842;7;REV Kalimba
+843;7;REV Additive
+844;7;REV Blip
+845;7;REV Thump
+846;7;REV Attack
+847;7;REV Gt Scrap
+848;7;REV Gt SldNz
+849;7;REV Gt CutNz
+850;7;REV Gt Slap
+851;7;REV 626Shakr
+852;7;REV Shaker 3
+853;7;REV Shaker 4
+854;7;REV Shaker 5
+855;7;REV FX1L RSS
+856;7;REV FX1R RSS
+857;7;REV FX2L RSS
+858;7;REV FX2R RSS
+859;7;REV FX3L RSS
+860;7;REV FX3R RSS
+1;8;Phrase MENU1
+2;8;Phrase MENU2
+3;8;Phrase MENU3
+4;8;61:Slow Grv
+5;8;75:BoomRvBel
+6;8;76:TrpHpKikn
+7;8;78:NinjaBrek
+8;8;80:Thump Grv
+9;8;80:MetalHead
+10;8;81:Ringn Kit
+11;8;83:Big & Bad
+12;8;83:HmBeatBx1
+13;8;83:Poing Snr
+14;8;85:Homie
+15;8;85:Snr Wall
+16;8;86:Street 16
+17;8;86:Bubbles
+18;8;88:TrenchTwn
+19;8;88:Cut Hats
+20;8;88:Yo!
+21;8;88:Crackl'n
+22;8;88:HmBeatBx2
+23;8;89:BuzyFunky
+24;8;89:Slamn'Grv
+25;8;90:Swingn
+26;8;90:NoizyBoys
+27;8;90:Swingdirt
+28;8;91:NotopHpHp
+29;8;91:Cruis'n
+30;8;91:Uptown
+31;8;91:BigBeauty
+32;8;92:Jazzman
+33;8;92:Overring
+34;8;92:Boom Town
+35;8;92:Too Big
+36;8;94:Ya Mon
+37;8;95:Head Bobn
+38;8;95:Pure Phat
+39;8;96:PlainJane
+40;8;96:Jane 2
+41;8;98:Funkster1
+42;8;98:Funkster2
+43;8;104:BigBottm
+44;8;104:Respect
+45;8;104:Riddim
+46;8;108:Gargle
+47;8;Phrase MENU4
+48;8;120:House 1
+49;8;120:House 2
+50;8;120:House 3
+51;8;120:TeknoBNG
+52;8;144:Tekno BD
+53;8;144:TeknoHAT
+54;8;160:Drum'nBs
+55;8;184:Gabba
+56;8;132:Detroit
+57;8;132:Agogo
+58;8;116:Elect'80
+59;8;120:Electro1
+60;8;138:Electro2
+61;8;DrumLp MENU1
+62;8;DrumLp MENU2
+63;8;125:Basic 1
+64;8;125:Basic 2
+65;8;125:ClpMania
+66;8;125:LowToEnd
+67;8;125:LivZone1
+68;8;125:LivZone2
+69;8;125:LivZone3
+70;8;125:LivZone4
+71;8;125:LivZone5
+72;8;125:LpFabric
+73;8;125:PuristcL
+74;8;125:PuristcR
+75;8;125:FullHous
+76;8;125:4thFloor
+77;8;125:Front
+78;8;125:Fatbrett
+79;8;125:FatTrck1
+80;8;125:FatTrck2
+81;8;125:BsWorx 1
+82;8;125:BsWorx 2
+83;8;125:Mid Beat
+84;8;125:Offbt HH
+85;8;Perc.Lp MENU
+86;8;125:Tamb Man
+87;8;125:AccntShk
+88;8;125:DoublShk
+89;8;125:Ganza
+90;8;125:Triangle
+91;8;125:Conga L
+92;8;125:Conga R
+93;8;125:ToneCong
+94;8;125:StpBongo
+95;8;125:FullBrzl
+96;8;Pf/Key MENU
+97;8;116:HousePf1
+98;8;116:HousePf2
+99;8;116:HousePf3
+100;8;116:HousePf4
+101;8;116:Pf&Str 1
+102;8;116:Pf&Str 2
+103;8;116:Pf&Str 3
+104;8;125:E-Groove
+105;8;125:SlowWah1
+106;8;125:SlowWah2
+107;8;Dry Chord D#
+108;8;Dry Chord C#
+109;8;Dry Chord F
+110;8;House Organ
+111;8;SubmarineSin
+112;8;ShortStrings
+113;8;Gtr/Bs MENU
+114;8;125:OpenStr1
+115;8;125:OpenStr2
+116;8;125:WahMute1
+117;8;125:WahMute2
+118;8;125:BendLick
+119;8;125:Dry Funk
+120;8;JUNO Bass 1
+121;8;JUNO Bass Lp
+122;8;Moogish
+123;8;JUNO Bass 2
+124;8;JUNO Bs 2 Lp
+125;8;Big Saw Bass
+126;8;Big SawBs 2
+127;8;JUNO Sine Bs
+128;8;Octa Bass
+129;8;Rave Bass
+130;8;FM Pluck Bs
+131;8;FM Slide Bs
+132;8;Solid Bass
+133;8;JUNO-60 Bass
+134;8;SH-5 Bass
+135;8;Dirty Bass
+136;8;Sub Bass
+137;8;Jungle Bass
+138;8;Bass Gliss
+139;8;Bass Sustain
+140;8;Bass Short
+141;8;Bass Slide
+142;8;Bass Down
+143;8;Bass Slap
+144;8;Hard Attack
+145;8;Square Low
+146;8;JUNO 60 Buzz
+147;8;JUNO Pulse 5
+148;8;Funky JUNO
+149;8;Mellow JUNO
+150;8;JUNO Strings
+151;8;JUNO Str Lp
+152;8;Lo-Fi RoomTp
+153;8;JP8000 Saw 1
+154;8;JP8000 Saw 2
+155;8;JP-6 Saw
+156;8;Techno Saw
+157;8;TB Saw
+158;8;TB Dst Saw
+159;8;TB Solid Saw
+160;8;TB Reso Saw
+161;8;SH-1 Square
+162;8;TB Square 1
+163;8;TB Square 2
+164;8;TB Square 3
+165;8;Dist Square
+166;8;TB Dst Sqr 1
+167;8;TB Dst Sqr 2
+168;8;TB Reso Sqr1
+169;8;TB Reso Sqr2
+170;8;TB Reso Sqr3
+171;8;SH-1 Pulse
+172;8;JP8000 PWM
+173;8;JP8000 FBK
+174;8;260 Sub OSC
+175;8;Dist Synth
+176;8;P5 Pipe
+177;8;FM Garage
+178;8;JUNO Pluck
+179;8;Funky Synth
+180;8;JUNO Bowing
+181;8;JUNO Synth
+182;8;JX Synth
+183;8;Alpha Wave
+184;8;Killer
+185;8;Detuned Saw
+186;8;Fat JP-6
+187;8;Euro Dance
+188;8;Noisy 101
+189;8;Daft Wave
+190;8;JP Siren
+191;8;Cold Dress
+192;8;Pizzy Techno
+193;8;Organ Pizz
+194;8;Garage Org
+195;8;FM Club Org
+196;8;Org Chord
+197;8;Org EP
+198;8;Lo-Fi Wurly
+199;8;Pure EP
+200;8;Ac Piano1 A
+201;8;Ac Piano1 B
+202;8;Ac Piano1 C
+203;8;Dist TekGtr1
+204;8;Dist TekGtr2
+205;8;Dist Gtr Chd
+206;8;GTR FX MENU
+207;8;Gtr FX MENU
+208;8;Wah Gtr Lp 1
+209;8;Wah Gtr Lp 2
+210;8;Wah Gtr A
+211;8;Wah Gtr B
+212;8;D.GtrUpwhine
+213;8;Gtr Thumper
+214;8;Hit MENU 1
+215;8;Hit MENU 2
+216;8;Brass Fall 2
+217;8;Smear Hit 1
+218;8;Smear Hit 2
+219;8;LoFi MinorHt
+220;8;BrassVox Hit
+221;8;Brass Hit Lp
+222;8;Mean Brs Hit
+223;8;Sax Lick 1
+224;8;Sax Lick 2
+225;8;Sax Cry
+226;8;Sax Blast
+227;8;Sax Blast Lp
+228;8;HipHop Alarm
+229;8;Cuica Hit
+230;8;Breath Hit
+231;8;Bauw Hit
+232;8;ClassicHseHt
+233;8;JUNO Blip 1
+234;8;JUNO Blip 2
+235;8;Sci-Fi 2
+236;8;Slice of Trp
+237;8;Rattle Hit
+238;8;P.Phatt Hit
+239;8;BD Scratch
+240;8;SD Scratch
+241;8;Tape Stop 2
+242;8;BasicScratch
+243;8;Scratch Loop
+244;8;Record Noiz
+245;8;Hit MENU 3
+246;8;Hit MENU 4
+247;8;Beam HiQ
+248;8;Analog Bird
+249;8;ElectronFall
+250;8;Retro UFO
+251;8;Jungle Beep
+252;8;PC-2 Machine
+253;8;Dr.Beat
+254;8;Mental Perc
+255;8;May Day Perc
+256;8;PC-2 Spacers
+257;8;Techno Scene
+258;8;Pure Psycho
+259;8;TAO Hit
+260;8;Thin Beef
+261;8;Organ Hit 2
+262;8;Hit MENU 5
+263;8;Hit & Drum
+264;8;Stop Hit
+265;8;Horny-Hit
+266;8;Mute Trumpet
+267;8;Panic
+268;8;INDUST. MENU
+269;8;PCM Press
+270;8;ElectricDunk
+271;8;Thrill
+272;8;Drill Hit
+273;8;MachineShout
+274;8;Air Gun
+275;8;Emergency
+276;8;Buzzer
+277;8;Tonality
+278;8;EFX Tom Lp
+279;8;Hip Hop Ride
+280;8;P5 Noise 3
+281;8;Toy Gun 1
+282;8;Toy Gun 2
+283;8;GeigerCountr
+284;8;GlassBreakLp
+285;8;Voice MENU 1
+286;8;Voice MENU 2
+287;8;Voice MENU 3
+288;8;Voice MENU 4
+289;8;Voice MENU 5
+290;8;1,2,3,4
+291;8;Kick it!
+292;8;Come on!
+293;8;Funky!
+294;8;Crazy!
+295;8;DJ!
+296;8;Go!
+297;8;Stop!
+298;8;Good Eve
+299;8;Yeah!
+300;8;Dirty Laugh
+301;8;Female Laugh
+302;8;Ow!
+303;8;Pretty Aou!
+304;8;Singing Ahh
+305;8;Oh Yeah!
+306;8;Hoo!
+307;8;Say Yeah!
+308;8;Scream!
+309;8;Baby!
+310;8;Get on Up
+311;8;MC!
+312;8;Give it Up
+313;8;Canvas Laugh
+314;8;Uuha
+315;8;Whouw
+316;8;Eh
+317;8;Oh !
+318;8;Ahhhhhh 1
+319;8;Ahhhhhh 2
+320;8;Breath
+321;8;Get Off
+322;8;Get On 1
+323;8;Get Up
+324;8;Get On 2
+325;8;Dance
+326;8;Do It !
+327;8;Jam !
+328;8;House Music
+329;8;Come On
+330;8;Oh No !
+331;8;Oh Yes !
+332;8;Alright
+333;8;It's MyHouse
+334;8;Higher
+335;8;Everybody
+336;8;Ouhouhooohou
+337;8;Tic
+338;8;Tac
+339;8;Tigidi
+340;8;Tac Tac
+341;8;Auu
+342;8;VOCODER MENU
+343;8;Aah Formant
+344;8;Eeh Formant
+345;8;Iih Formant
+346;8;Ooh Formant
+347;8;Uuh Formant
+348;8;Dist Ooh Vox
+349;8;Talkbox
+350;8;CricketChoir
+351;8;Wild Ways
+352;8;Psychedelics
+353;8;Taj Mahal
+354;8;Ghandi Drone
+355;8;Enigmatic
+356;8;Cleansing
+357;8;Frost Byte
+358;8;Iceland
+359;8;Columns
+360;8;Effervescent
+361;8;Transolia
+362;8;Voyage
+363;8;Frontiers
+364;8;Cruising
+365;8;Tunnel Rain
+366;8;Rumble Rain
+367;8;Bombay
+368;8;Black Den
+369;8;Husky Chord
+370;8;Phantasm
+371;8;Fumes
+372;8;Temptation
+373;8;Creepy 1
+374;8;Creepy 2
+375;8;Elves
+376;8;Fireflies
+377;8;CrystalWaves
+378;8;Electroshock
+379;8;Snowflakes
+380;8;Steel Spires
+381;8;Rise Up!
+382;8;Sea Whistle
+383;8;Lava Flow
+384;8;Sparkling
+385;8;Fuse
+386;8;Turntable
+387;8;UK Station
+388;8;ChinaStation
+389;8;Crowding
+390;8;Nasalnoise
+391;8;Gnashing
+392;8;Construction
+393;8;Construct. 2
+394;8;Turbine
+395;8;Scraping
+396;8;Vacuum Pump
+397;8;Sawing
+398;8;Air Pump
+399;8;Soda Water
+400;8;CompresStart
+401;8;CompresStop
+402;8;Jack Hammer
+403;8;Propeller
+404;8;Neon Hum
+405;8;Buzz Hum
+406;8;Tcashe Hum
+407;8;Oil Can Bow
+408;8;Crank Shaft
+409;8;Snarls
+410;8;Feed Me!
+411;8;Fuzzy Love
+412;8;Bad Dreams
+413;8;Dark Buzzord
+414;8;SqualorDrone
+415;8;Air Raid!
+416;8;180:CyberToy
+417;8;150:PhoneFrq
+418;8;160:Clockers
+419;8;Phlange Hit
+420;8;Ring Bass
+421;8;Ring Bass Lp
+422;8;Orc.Cluster
+423;8;Harpin'Piano
+424;8;RollingChime
+425;8;Thin Bells
+426;8;FX Bell 3
+427;8;Rave Stopper
+428;8;MachineNoise
+429;8;Gate Keeper
+430;8;FootStepping
+431;8;Droppin'
+432;8;P-Zing
+433;8;Rubberized
+434;8;Pipe
+435;8;Boing
+436;8;Metal Bang
+437;8;MetallicShot
+438;8;Doorsqweek
+439;8;Tomnoise
+440;8;Steam Blow
+441;8;Let Air Go!
+442;8;Screetchy 1
+443;8;Screetchy 2
+444;8;Tubuloid
+445;8;Slicer
+446;8;Fuzzclapz
+447;8;Brakes!
+448;8;Fire Snare
+449;8;Back Snatch
+450;8;Phone
+451;8;Sh.Burst
+452;8;Blasto Kick
+453;8;O.D.Kick
+454;8;Bowl Drop
+455;8;Cavern Tube
+456;8;Fireball
+457;8;Firebomb
+458;8;Firework
+459;8;Hothead
+460;8;Metalicous
+461;8;Cluster Slam
+462;8;Pit Hit
+463;8;Big Stinger
+464;8;Mondo Blast
+465;8;Ignite!
+466;8;Heat Seeker
+467;8;Missile
+468;8;Fly-By
+469;8;Psycho Alert
+470;8;Distressed
+471;8;Afro Cheer
+472;8;Kick MENU 1
+473;8;Kick MENU 2
+474;8;BeatBox Kick
+475;8;BeatBox Hat
+476;8;BeatBox Snr1
+477;8;BeatBox Snr2
+478;8;BeatBox Rim
+479;8;BeatBox Kik2
+480;8;BeatBox Perc
+481;8;B.Box Shaker
+482;8;Chiki!
+483;8;Ahhhhhh
+484;8;B.Box OpHat
+485;8;Jungle Kick
+486;8;Hip Kick
+487;8;Ninja Kick
+488;8;Break Kick
+489;8;Funky Kick
+490;8;Slamn'Kick 1
+491;8;Too Big Kick
+492;8;Boom Kick
+493;8;FarNear Kick
+494;8;Slamn'Kick 2
+495;8;Hall Kick 1
+496;8;Dance Kick 4
+497;8;Thump Kick
+498;8;PurePhatKick
+499;8;Hall Kick 2
+500;8;Plastic Kick
+501;8;ElectricKick
+502;8;TR808 KickLp
+503;8;TR707 Kick 3
+504;8;Lo-Fi Kick
+505;8;Kick MENU 3
+506;8;Kick MENU 4
+507;8;TR909 Kick 1
+508;8;TR909 Kick 2
+509;8;Plastic BD 1
+510;8;Plastic BD 2
+511;8;TR808 Kick 1
+512;8;TR808 Kick 2
+513;8;TR808 Kick 3
+514;8;TR606 Kick 1
+515;8;TR606 Kick 2
+516;8;TR707 Kick 1
+517;8;TR707 Kick 2
+518;8;Culture Kick
+519;8;Optic Kick
+520;8;Lo-Fi BD
+521;8;Wet Kick
+522;8;Video Kick
+523;8;JungleKick 1
+524;8;Street Kick
+525;8;Turbo Kick
+526;8;JungleKick 2
+527;8;Tekno Kick
+528;8;Sim Kick
+529;8;Amsterdam BD
+530;8;TR909 Dst BD
+531;8;Roll Kick
+532;8;Kick MENU 5
+533;8;Kick MENU 6
+534;8;Punchy K 1
+535;8;Punchy K 2
+536;8;Direct K
+537;8;Tone K
+538;8;Dynamic K
+539;8;Clone K
+540;8;Noizzy 909 K
+541;8;Bottom 909 K
+542;8;Sub & Noiz K
+543;8;Open Cut K
+544;8;Short Dry K
+545;8;Medium K2
+546;8;Hicut K
+547;8;Full Range K
+548;8;1ToTheFloorK
+549;8;DrctRehrsalK
+550;8;Fat Clap K
+551;8;Bottom K
+552;8;50Hz K
+553;8;Full House K
+554;8;Snare MENU 1
+555;8;Snare MENU 2
+556;8;Snare MENU 3
+557;8;HpHpJazzySnr
+558;8;DR Snare 1
+559;8;DR Snare 2
+560;8;RealJazz Snr
+561;8;Ragga Snr 3
+562;8;HipHop Snr 3
+563;8;TightBoomSnr
+564;8;Slamn' Snr
+565;8;PurePhat Snr
+566;8;R&B Snare
+567;8;Hi Snare
+568;8;DR Disco Snr
+569;8;Cruis'n Snr
+570;8;Overring Snr
+571;8;Cut Hats Snr
+572;8;Scrap Snr
+573;8;Machine Snr
+574;8;DanceHallSnr
+575;8;Dance Snr 1
+576;8;Big Snare
+577;8;Flat Snare
+578;8;HipHop Snr 4
+579;8;DistortedSnr
+580;8;Dance Snr 2
+581;8;Sizzle Snr
+582;8;Break Snr
+583;8;Whack Snr 2
+584;8;Real Snare
+585;8;TR808 Snr 5
+586;8;TR808 Snr 6
+587;8;TR808 Snr 7
+588;8;TR606 Snr 4
+589;8;Electro Snr
+590;8;Echo Snare
+591;8;TooBig Snr
+592;8;Snare MENU 4
+593;8;Snare MENU 5
+594;8;Snare MENU 6
+595;8;Snare MENU 7
+596;8;Snare MENU 8
+597;8;TR909 Snr 1
+598;8;TR909 Snr 2
+599;8;TR909 Snr 3
+600;8;TR909 Snr 4
+601;8;TR909 Snr 5
+602;8;TR909 Snr 6
+603;8;TR909 Snr 7
+604;8;TR808 Snr 1
+605;8;TR808 Snr 2
+606;8;TR808 Snr 3
+607;8;TR808 Snr 4
+608;8;TR606 Snr 1
+609;8;TR606 Snr 2
+610;8;TR606 Snr 3
+611;8;TR707 Snr 1
+612;8;TR707 Snr 2
+613;8;CR78 Snare
+614;8;Headz Snare
+615;8;Deep Snare
+616;8;Fat Snare
+617;8;Antigua Snr
+618;8;MC Snare
+619;8;DJ Snare
+620;8;Macho Snare
+621;8;Clap Snare
+622;8;Rage Snare
+623;8;Indus Snare
+624;8;TekRok Snare
+625;8;Jungle Snr 1
+626;8;Jungle Snr 2
+627;8;Jungle Snr 3
+628;8;Jungle Snr 4
+629;8;SideStiker
+630;8;Ragga Snr 2
+631;8;Lo-Fi Snare
+632;8;Jungle Snr 5
+633;8;Urban Snare
+634;8;Sim Snare
+635;8;Roll Snare
+636;8;Snare MENU 9
+637;8;Snare MENU1
+638;8;Dry Comp SN
+639;8;ShrtDirectSN
+640;8;Tone Comp SN
+641;8;Wooden SN
+642;8;High Rim SN
+643;8;Mid Rim SN
+644;8;Tone&SynthSN
+645;8;Tiny SN
+646;8;Little SN
+647;8;Clap SN
+648;8;Stick SN
+649;8;Vintage SN
+650;8;Cutted SN
+651;8;Rim and SN
+652;8;AllInOne SN
+653;8;Syn-SN
+654;8;Live SN
+655;8;Back Rev SN
+656;8;Heavy SN
+657;8;Rim MENU
+658;8;Bright Rim
+659;8;Ragga Rim 1
+660;8;TR808 Rim 2
+661;8;Ragga Rim 2
+662;8;Lo-Fi Rim
+663;8;Sizzle Rim
+664;8;Real Rim
+665;8;Tom MENU 1
+666;8;TR606 Tom 2
+667;8;Electro Tom
+668;8;Garbage Tom
+669;8;Tom MENU 2
+670;8;TR909 Tom
+671;8;TR909 DstTom
+672;8;TR808 Tom
+673;8;TR606 Tom
+674;8;TR606 CmpTom
+675;8;TR707 Tom
+676;8;TR707 CmpTom
+677;8;Deep Tom
+678;8;Kick Tom
+679;8;Natural Tom
+680;8;Can Tom
+681;8;HH/Cym MENU
+682;8;Overlord
+683;8;Real Hat
+684;8;Lil' Hat
+685;8;Garbage Hat
+686;8;Ninja Hat
+687;8;Junk Hat
+688;8;Ragga ClHat
+689;8;Rock OpHat
+690;8;HipHopMedHat
+691;8;CR78 Hat
+692;8;TR909 OpHat
+693;8;TR909 Cymbal
+694;8;TR808 Cymbal
+695;8;Ragga Crash
+696;8;Lo-Fi Ride
+697;8;CHH MENU 1
+698;8;CHH MENU 2
+699;8;TR909 CHH 1
+700;8;TR909 CHH 2
+701;8;TR909 CHH 3
+702;8;TR808 CHH 1
+703;8;TR808 CHH 2
+704;8;TR606 CHH
+705;8;TR707 CHH
+706;8;CR78 CHH
+707;8;Pop CHH
+708;8;Bristol CHH
+709;8;PHH MENU
+710;8;TR909 PHH 1
+711;8;TR909 PHH 2
+712;8;TR808 PHH
+713;8;TR606 PHH
+714;8;TR707 PHH
+715;8;OHH MENU
+716;8;TR909 OHH 1
+717;8;TR909 OHH 2
+718;8;TR909 OHH 3
+719;8;TR909 DstOHH
+720;8;TR808 OHH
+721;8;TR606 DstOHH
+722;8;TR707 OHH
+723;8;CR78 OHH
+724;8;R8 OHH
+725;8;Cym OHH
+726;8;HH MENU 1
+727;8;HH MENU 2
+728;8;Old Style HH
+729;8;ShortOpen HH
+730;8;Closed8bitHH
+731;8;ShortNzMidHH
+732;8;Mid Hat
+733;8;Hi Freq HH
+734;8;808 HH
+735;8;OpenDitherHH
+736;8;Open Soft HH
+737;8;Noizzz HH
+738;8;JazzClosedHH
+739;8;Full Ambi HH
+740;8;Open Hard HH
+741;8;FastOpnSynHH
+742;8;Hi Open HH
+743;8;VinylOpen HH
+744;8;Openopen HH
+745;8;Vintage Hat
+746;8;Let It Go HH
+747;8;808 Open HH
+748;8;Cymbal MENU1
+749;8;TR606 Cym 1
+750;8;TR606 Cym 2
+751;8;TR606 DstCym
+752;8;TR909 Ride
+753;8;TR909DstRide
+754;8;TR707 Ride
+755;8;TR909 Crash
+756;8;TR909DsCrash
+757;8;Cymbal MENU2
+758;8;Crash Zero
+759;8;Crash 1 Long
+760;8;Crash 1 Mute
+761;8;Crash 2 Long
+762;8;Crash 2 Mute
+763;8;Hi Crash
+764;8;Ride 3
+765;8;Ride 3 Bell
+766;8;Ride 4
+767;8;Stick Cymbal
+768;8;High Cymbal
+769;8;Clap MENU 1
+770;8;Funk Clap
+771;8;HipHop Clap
+772;8;Crackhed
+773;8;MC Clap
+774;8;TR909 Clap 2
+775;8;Clap MENU 2
+776;8;TR909 Clap
+777;8;TS Clap
+778;8;Clap Stop
+779;8;TR707 Clap
+780;8;HC2 Dry Clap
+781;8;Scratch Clap
+782;8;Comp Clap
+783;8;Claptail
+784;8;Clap MENU 3
+785;8;Shot Clap
+786;8;Room Clap
+787;8;Real Clap 1
+788;8;Real Clap 2
+789;8;Poly Clap
+790;8;TMB&SKR MENU
+791;8;Tambourine 2
+792;8;Rattle Tamb
+793;8;TechnoShaker
+794;8;Dance Shaker
+795;8;COW&RIM MENU
+796;8;TR808Cowbell
+797;8;TR707Cowbell
+798;8;CR78 Cowbell
+799;8;TR727 Agogo
+800;8;TR909 Rim
+801;8;TR808 Rim
+802;8;TR808 RimLng
+803;8;TR808 Claves
+804;8;Perc. MENU 1
+805;8;TR808Claves2
+806;8;TR808 Cowbel
+807;8;Tamb.Short 2
+808;8;Tamb. Long 2
+809;8;CR78 Tamb 2
+810;8;Jingle Bell
+811;8;Belltree
+812;8;Funky Tri
+813;8;TR727Quijada
+814;8;PERCUSS MENU
+815;8;TR808 Conga1
+816;8;TR808 Conga2
+817;8;Surdo mute
+818;8;Surdo open
+819;8;Perc. MENU 2
+820;8;Perc. MENU 3
+821;8;Perc. MENU 4
+822;8;Perc. MENU 5
+823;8;Perc. MENU 6
+824;8;ShortGuira 1
+825;8;ShortGuira 2
+826;8;Guira 1
+827;8;Guira 2
+828;8;Schelle
+829;8;Tin Cowbell
+830;8;ReverbCowbel
+831;8;Real Bell Hi
+832;8;AnalogCwblLo
+833;8;AnalogCwblHi
+834;8;SynthCowbell
+835;8;Block
+836;8;High Claves
+837;8;Timbale 2 Hi
+838;8;Timbale 2 Lo
+839;8;LowRealConga
+840;8;MidRealConga
+841;8;Conga Slap 2
+842;8;FstAtkCngMid
+843;8;FstAtkCngHi
+844;8;FstAtkCngLow
+845;8;Da Conga Mid
+846;8;Da Conga Hi
+847;8;AnalgCongaHi
+848;8;AnalgCongaLo
+849;8;SynthCongaHi
+850;8;SynthCongaLo
+851;8;TalkingConga
+852;8;TambourinHit
+853;8;Tamb Hit&Shk
+854;8;NoizzyTambrn
+855;8;Light Tambrn
+856;8;SuprHighTamb
+857;8;HardTambourn
+858;8;EffectTambrn
+859;8;Small Shake
+860;8;HighShakeUp
+861;8;HighShakeDwn
+862;8;Snake Shake
+863;8;Shortie
+864;8;Klick Shake
+865;8;Open Shake
+866;8;Egg Shake
+867;8;Dirty Shake
+868;8;Sand Shake
+869;8;Hit Shake
+870;8;Analog Shake
+871;8;Noiz Perc.
+872;8;Tick
+873;8;Ping Pong
+874;8;Tack+Tambrn
+875;8;Shot Perc.
+876;8;High Cut
+877;8;Wood Plopp
+878;8;Metal
+879;8;Tuned 4 bit
+880;8;Toy Perc.
+881;8;FX Triangle
+882;8;Flex
+883;8;Metal Box
+884;8;VibratingMtl
+885;8;Plock Drum
+886;8;Sub BD D#
+887;8;30Hz Sub C
+888;8;REV WildWays
+889;8;REV FrostByt
+890;8;REV Elves
+891;8;REV CrystlWv
+892;8;REV Rise Up!
+893;8;REV Cnstrct2
+894;8;REV Turbine
+895;8;REV Sawing
+896;8;REV Air Pump
+897;8;REV SodaWatr
+898;8;REV CompStrt
+899;8;REV CompStop
+900;8;REV OilCanBw
+901;8;REV Feed Me!
+902;8;REV FuzyLove
+903;8;REV BadDream
+904;8;REV DarkBuzz
+905;8;REV SqualDrn
+906;8;REV CyberToy
+907;8;REV PhoneFrq
+908;8;REV Clockers
+909;8;REV PhlngHit
+910;8;REV HrpPiano
+911;8;REV RollChme
+912;8;REV ThinBels
+913;8;REV RaveStop
+914;8;REV MachinNz
+915;8;REV GateKeep
+916;8;REV FootStep
+917;8;REV Droppin'
+918;8;REV P-Zing
+919;8;REV Rubberiz
+920;8;REV Pipe
+921;8;REV Boing
+922;8;REV Mtl Bang
+923;8;REV MtlcShot
+924;8;REV Doorsqwk
+925;8;REV Tomnoise
+926;8;REV SteamBlw
+927;8;REV Scrtchy1
+928;8;REV Fire Snr
+929;8;REV BkSnatch
+930;8;REV Phone
+931;8;REV Sh.Burst
+932;8;REV BlastKik
+933;8;REV O.D.Kick
+934;8;REV BowlDrop
+935;8;REV CaveTube
+936;8;REV Fireball
+937;8;REV Firebomb
+938;8;REV Firework
+939;8;REV Hothead
+940;8;REV Mtlicous
+941;8;REV ClustSlm
+942;8;REV Pit Hit
+943;8;REV BigSting
+944;8;REV MondBlst
+945;8;REV Ignite!
+946;8;REV HeatSeek
+947;8;REV Missile
+948;8;REV Fly-By
+949;8;REV PsycAlrt
+950;8;REV Distresd
+1;9;World Tour
+2;9;Korean Ens
+3;9;Morocco Ens
+4;9;African Ens
+5;9;Asia Phrase
+6;9;122:GamelnP1
+7;9;78:GamelnP2
+8;9;78:Korea Ph
+9;9;118:ChinaPh1
+10;9;132:ChinaPh2
+11;9;118:TablaByP
+12;9;92:DholakPh
+13;9;120:Dhol Ph
+14;9;96:Salsa
+15;9;116:Mariachi
+16;9;96:Cumbia
+17;9;192:LatinPt1
+18;9;180:LatinPt2
+19;9;96:Cng6/8 1
+20;9;96:Cng6/8 2
+21;9;144:CgBolero
+22;9;168:CgChacha
+23;9;88:CgCumbia
+24;9;160:CgMambo
+25;9;104:CgMriach
+26;9;138:CgMarinr
+27;9;126:CgWonwn
+28;9;132:TmblPtn1
+29;9;132:TmblPtn2
+30;9;100:TmblPtn3
+31;9;120:TmblPtn4
+32;9;104:Shakin'
+33;9;80:PndrPtn1
+34;9;108:PndrPtn2
+35;9;138:PndrPtn3
+36;9;132:AgogoPtn
+37;9;132:BotlePtn
+38;9;104:BomboPtn
+39;9;126:SurdoPt1
+40;9;108:SurdoPt2
+41;9;138:CaixaPtn
+42;9;132:TambrmPt
+43;9;108:RepnqPt1
+44;9;144:RepnqPt2
+45;9;Samba MENU
+46;9;BnjoPhs Menu
+47;9;120:Bnjo G
+48;9;120:Bnjo A
+49;9;120:Bnjo B
+50;9;120:Bnjo Cm
+51;9;120:Bnjo Cm+
+52;9;120:Bnjo G-C
+53;9;120:BnjoG-C+
+54;9;EG Phs Menu1
+55;9;95:EGtr1 G
+56;9;95:EGtr1 C
+57;9;95:EGtr1 D
+58;9;95:EGtr2 G
+59;9;95:EGtr2 D
+60;9;EG Phs Menu2
+61;9;140:EGtr3 G+
+62;9;140:EGtr3 G
+63;9;140:EGtr3 C+
+64;9;140:EGtr3 C
+65;9;140:EGtr3 D+
+66;9;140:EGtr3 D
+67;9;PdlSteelMenu
+68;9;120:PdSt1 C
+69;9;120:PdSt1 D
+70;9;120:PdSt1 G
+71;9;140:PdSt2 D
+72;9;140:PdSt2 D+
+73;9;140:PdSt2 G
+74;9;140:PdSt2 G+
+75;9;E.Gtr Sus A
+76;9;E.Gtr Sus B
+77;9;E.Gtr Sus C
+78;9;Strat Rear A
+79;9;Strat Rear B
+80;9;Strat Rear C
+81;9;LP Clean A
+82;9;LP Clean B
+83;9;LP Clean C
+84;9;Tele Front A
+85;9;Tele Front B
+86;9;Tele Front C
+87;9;Tele Rear A
+88;9;Tele Rear B
+89;9;Tele Rear C
+90;9;335Pick A
+91;9;335Pick B
+92;9;335Pick C
+93;9;E.Gtr Mute A
+94;9;E.Gtr Mute B
+95;9;E.Gtr Mute C
+96;9;335Mute A
+97;9;335Mute B
+98;9;335Mute C
+99;9;PdlSteel 1 A
+100;9;PdlSteel 1 B
+101;9;PdlSteel 1 C
+102;9;PdlSteel 2 A
+103;9;PdlSteel 2 B
+104;9;PdlSteel 2 C
+105;9;PdlSteel 3 A
+106;9;PdlSteel 3 B
+107;9;PdlSteel 3 C
+108;9;RequintoGtrA
+109;9;RequintoGtrB
+110;9;RequintoGtrC
+111;9;Nylon Gtr 3A
+112;9;Nylon Gtr 3B
+113;9;Nylon Gtr 3C
+114;9;AcGtr Pick A
+115;9;AcGtr Pick B
+116;9;AcGtr Pick C
+117;9;AcGtr Fngr A
+118;9;AcGtr Fngr B
+119;9;AcGtr Fngr C
+120;9;Ac.Guitar A
+121;9;Ac.Guitar B
+122;9;Ac.Guitar C
+123;9;Reso.Gtr 2 A
+124;9;Reso.Gtr 2 B
+125;9;Reso.Gtr 2 C
+126;9;Reso.Gtr 3pA
+127;9;Reso.Gtr 3pB
+128;9;Reso.Gtr 3pC
+129;9;Reso.Gtr 3fA
+130;9;Reso.Gtr 3fB
+131;9;Reso.Gtr 3fC
+132;9;MandolinDn A
+133;9;MandolinDn B
+134;9;MandolinDn C
+135;9;MandolinUp A
+136;9;MandolinUp B
+137;9;MandolinUp C
+138;9;MandlnTrem A
+139;9;MandlnTrem B
+140;9;MandlnTrem C
+141;9;Banjo 2 A
+142;9;Banjo 2 B
+143;9;Banjo 2 C
+144;9;Banjo 3 A
+145;9;Banjo 3 B
+146;9;Banjo 3 C
+147;9;Bouzouki 2fA
+148;9;Bouzouki 2fB
+149;9;Bouzouki 2fC
+150;9;Bandolim
+151;9;Cavaquinho
+152;9;Oud A
+153;9;Oud B
+154;9;Oud C
+155;9;Sitar/Drone
+156;9;Sitar A
+157;9;Sitar B
+158;9;Sitar C
+159;9;Sitar 2 A
+160;9;Sitar 2 B
+161;9;Sitar 2 C
+162;9;SitarDrone
+163;9;Tambura A
+164;9;Tambura B
+165;9;Tambura C
+166;9;TamburaDrone
+167;9;Zither A
+168;9;Zither B
+169;9;Zither C
+170;9;Santur 2 A
+171;9;Santur 2 B
+172;9;Santur 2 C
+173;9;Santur Trm A
+174;9;Santur Trm B
+175;9;Santur Trm C
+176;9;HmrDulcimer
+177;9;Afro Zither
+178;9;Yuehchin
+179;9;Yangchin
+180;9;Yang Qin 2 A
+181;9;Yang Qin 2 B
+182;9;Yang Qin 2 C
+183;9;YangQinTrm A
+184;9;YangQinTrm B
+185;9;YangQinTrm C
+186;9;Chung Ruan A
+187;9;Chung Ruan B
+188;9;Chung Ruan C
+189;9;Gu Zheng A
+190;9;Gu Zheng B
+191;9;Gu Zheng C
+192;9;Kanoun
+193;9;Koto
+194;9;Kayakeum
+195;9;Sanshin A
+196;9;Sanshin B
+197;9;Sanshin C
+198;9;Pi Pa A
+199;9;Pi Pa B
+200;9;Pi Pa C
+201;9;Biwa MENU
+202;9;Biwa 1
+203;9;Biwa 2
+204;9;Biwa 3
+205;9;Shamisen 2
+206;9;Shami Attack
+207;9;BerimbauMENU
+208;9;Berimbau Opn
+209;9;Berimbau Up
+210;9;Berimbau Dn
+211;9;Berimbau Mut
+212;9;Oct Harp
+213;9;Afro Harp
+214;9;JawHarp MENU
+215;9;Jaw Harp Opn
+216;9;Jaw Harp Wow
+217;9;Gtr Strum 1
+218;9;Gtr Strum 2
+219;9;Nyln GtrNz 1
+220;9;Nyln GtrNz 2
+221;9;Guitarron Nz
+222;9;EG Bend Menu
+223;9;EG C Bend 1
+224;9;EG C Bend 2
+225;9;EG D Bend 1
+226;9;EG D Bend 2
+227;9;EG D Bend 3
+228;9;EG E Bend 1
+229;9;EG E Bend 2
+230;9;EG E Bend 3
+231;9;EG SlideMenu
+232;9;EG Slide 1
+233;9;EG Slide 2
+234;9;EG Slide 3
+235;9;EG Slide 4
+236;9;EG Slide 5
+237;9;EG Slide 6
+238;9;EG Slide 7
+239;9;EG Fx Menu
+240;9;EG Rake 1
+241;9;EG Rake 2
+242;9;EG Mute
+243;9;BzkiChd Menu
+244;9;Bouzki Chd 1
+245;9;Bouzki Chd 2
+246;9;Bouzki Chd 3
+247;9;Sitar Gliss
+248;9;GuZhengArpUp
+249;9;GuZhengArpDn
+250;9;Baby Bass ff
+251;9;6Str Bass A
+252;9;6Str Bass B
+253;9;6Str Bass C
+254;9;FingerdBs 2A
+255;9;FingerdBs 2B
+256;9;FingerdBs 2C
+257;9;Pick Bass 2
+258;9;6StBs Mute A
+259;9;6StBs Mute B
+260;9;6StBs Mute C
+261;9;Tub Bass
+262;9;Guitarron
+263;9;GuitarronOct
+264;9;Baby Bass Nz
+265;9;Violin 2 A
+266;9;Violin 2 B
+267;9;Violin 2 C
+268;9;Fiddle 1 A
+269;9;Fiddle 1 B
+270;9;Fiddle 1 C
+271;9;Fiddle 2 A
+272;9;Fiddle 2 B
+273;9;Fiddle 2 C
+274;9;Fdl Pizz 1 A
+275;9;Fdl Pizz 1 B
+276;9;Fdl Pizz 1 C
+277;9;Fdl Stac 1 A
+278;9;Fdl Stac 1 B
+279;9;Fdl Stac 1 C
+280;9;Erhu
+281;9;Er Hu 2 A
+282;9;Er Hu 2 B
+283;9;Er Hu 2 C
+284;9;Esraj 1
+285;9;Esraj 2
+286;9;Kemanche
+287;9;FiddleFxMenu
+288;9;Fdl 5th 1
+289;9;Fdl 5th 2
+290;9;Fdl Riff 6
+291;9;Fdl Riff 8
+292;9;Er Hu Phrase
+293;9;Trumpets f A
+294;9;Trumpets f B
+295;9;Trumpets f C
+296;9;Tp Ambient A
+297;9;Tp Ambient B
+298;9;Tp Ambient C
+299;9;SoloTp Vib1A
+300;9;SoloTp Vib1B
+301;9;SoloTp Vib1C
+302;9;SoloTp Vib2A
+303;9;SoloTp Vib2B
+304;9;SoloTp Vib2C
+305;9;Tp RomanticA
+306;9;Tp RomanticB
+307;9;Tp RomanticC
+308;9;Tp Vib MariA
+309;9;Tp Vib MariB
+310;9;Tp Vib MariC
+311;9;Tp Shake A
+312;9;Tp Shake B
+313;9;Tp Shake C
+314;9;Tp Grrwah A
+315;9;Tp Grrwah B
+316;9;Tp Grrwah C
+317;9;MuteTp 2 A
+318;9;MuteTp 2 B
+319;9;MuteTp 2 C
+320;9;Tbns ff A
+321;9;Tbns ff B
+322;9;Tbns ff C
+323;9;Fat Tbns A
+324;9;Fat Tbns B
+325;9;Fat Tbns C
+326;9;Tbn Accent A
+327;9;Tbn Accent B
+328;9;Tbn Accent C
+329;9;Trombone3mfA
+330;9;Trombone3mfB
+331;9;Trombone3mfC
+332;9;Trombone3 fA
+333;9;Trombone3 fB
+334;9;Trombone3 fC
+335;9;Tbn Alto A
+336;9;Tbn Alto B
+337;9;Tbn Alto C
+338;9;Tuba f A
+339;9;Tuba f B
+340;9;Tuba f C
+341;9;2Tp+Tbn A
+342;9;2Tp+Tbn B
+343;9;2Tp+Tbn C
+344;9;2Tp+TbAltTnA
+345;9;2Tp+TbAltTnB
+346;9;2Tp+TbAltTnC
+347;9;Sect Fall A
+348;9;Sect Fall B
+349;9;Sect Fall C
+350;9;Sect Stact A
+351;9;Sect Stact B
+352;9;Sect Stact C
+353;9;SectChd 13th
+354;9;SectChd m9
+355;9;SectChd Mj9
+356;9;IndFlute L A
+357;9;IndFlute L B
+358;9;IndFlute L C
+359;9;IndFlute H A
+360;9;IndFlute H B
+361;9;IndFlute H C
+362;9;Bang Di A
+363;9;Bang Di B
+364;9;Bang Di C
+365;9;BangDi Vib A
+366;9;BangDi Vib B
+367;9;BangDi Vib C
+368;9;Qu Di A
+369;9;Qu Di B
+370;9;Qu Di C
+371;9;Qu Di Vib A
+372;9;Qu Di Vib B
+373;9;Qu Di Vib C
+374;9;Zampona 1
+375;9;Zampo Attack
+376;9;Zampo Trem A
+377;9;Zampo Trem B
+378;9;Zampo Trem C
+379;9;Sicu Pipe
+380;9;Quena
+381;9;Ocarina
+382;9;Kawala A
+383;9;Kawala B
+384;9;Kawala C
+385;9;Shakuhachi 2
+386;9;Shaku Attack
+387;9;Shaku Ornam
+388;9;Hunt Pipe
+389;9;Hunt Noise
+390;9;Bagpipes 1
+391;9;Bagpipes 2
+392;9;Bagpipes 3
+393;9;Bagpipes 4
+394;9;Hichiriki
+395;9;Hichiriki Lp
+396;9;Sheng A
+397;9;Sheng B
+398;9;Sheng C
+399;9;Suona A
+400;9;Suona B
+401;9;Suona C
+402;9;Shahnai
+403;9;Mizmar
+404;9;Mizmar Lp
+405;9;Piri
+406;9;Piri Lp
+407;9;Conch Shell1
+408;9;Conch Shell2
+409;9;Didge MENU
+410;9;Didgeridoo 1
+411;9;Didgeridoo 2
+412;9;Didgeridoo 3
+413;9;Accrd ff OpA
+414;9;Accrd ff OpB
+415;9;Accrd ff OpC
+416;9;Accrd Cls A
+417;9;Accrd Cls B
+418;9;Accrd Cls C
+419;9;Musette 4 A
+420;9;Musette 4 B
+421;9;Musette 4 C
+422;9;D.AccordionA
+423;9;D.AccordionB
+424;9;D.AccordionC
+425;9;Harmonica2 A
+426;9;Harmonica2 B
+427;9;Harmonica2 C
+428;9;Harmonica3 A
+429;9;Harmonica3 B
+430;9;Harmonica3 C
+431;9;Harmonica4 A
+432;9;Harmonica4 B
+433;9;Harmonica4 C
+434;9;Voice MENU 1
+435;9;Yoh Tribe
+436;9;How Tribe
+437;9;Hey Brazil
+438;9;Yyoo Dude
+439;9;ZaghrutaLoop
+440;9;ZaghrutaStop
+441;9;Bull Scream
+442;9;Voice MENU 2
+443;9;Sabor!
+444;9;Arriba!
+445;9;Ole!
+446;9;Uno!
+447;9;Dos!
+448;9;Tres!
+449;9;Quatro!
+450;9;Grito-Hahaha
+451;9;Grito-Ahaha!
+452;9;Grito-Haahai
+453;9;Grito-Rrrrr!
+454;9;Voice MENU 3
+455;9;Tiquitito!
+456;9;Grito-Oa Oa!
+457;9;Grito-Eh Eh!
+458;9;Ama ya ahi!
+459;9;Fuego!
+460;9;SambaBateria
+461;9;AsiaGng MENU
+462;9;Asian Gong 1
+463;9;Asian Gong 2
+464;9;Asian Gong 3
+465;9;Asian Gong 4
+466;9;Asian Gong 5
+467;9;Asian Gong 6
+468;9;Asian Gong 7
+469;9;REV Gong 5
+470;9;REV Gong 7
+471;9;Gong MENU
+472;9;Gamelan Gong
+473;9;Kempur
+474;9;Kajar
+475;9;Kelontuk
+476;9;Kelontuk Mt
+477;9;Kelontuk Sid
+478;9;Kemong
+479;9;Ceng Ceng
+480;9;Kopyak Op
+481;9;Kopyak Mt
+482;9;Kane
+483;9;Kane Side
+484;9;Korea MENU
+485;9;Ching Open
+486;9;Ching Mute
+487;9;Kwaengwari p
+488;9;Kwaengwari f
+489;9;KwaengwariMt
+490;9;Bonang
+491;9;Spokes
+492;9;Satellite Dr
+493;9;Atarigane
+494;9;China MENU
+495;9;Xiao Bo
+496;9;Nao Bo
+497;9;Shou Luo 1
+498;9;Shou Luo 2
+499;9;HuYinLuoL Op
+500;9;HuYinLuoL Mt
+501;9;HuYinLuoH Op
+502;9;HuYinLuoH Mt
+503;9;Ban Gu 1
+504;9;Ban Gu 2
+505;9;Ban Gu 3
+506;9;Gender
+507;9;Saron
+508;9;Jegogan A
+509;9;Jegogan B
+510;9;Jegogan C
+511;9;Jublag A
+512;9;Jublag B
+513;9;Jublag C
+514;9;Pemade A
+515;9;Pemade B
+516;9;Pemade C
+517;9;Reyong A
+518;9;Reyong B
+519;9;Reyong C
+520;9;Reyong Sid A
+521;9;Reyong Sid B
+522;9;Reyong Sid C
+523;9;Steel Dr 2
+524;9;Kalimba 1
+525;9;Kalimba 2
+526;9;Kalimba 3
+527;9;Kalimba Glis
+528;9;Kalim Gls Lp
+529;9;Balaphone 1
+530;9;Balaphone 2
+531;9;AsiaCym MENU
+532;9;Chenchen Ptn
+533;9;Chenchen Opn
+534;9;Chenchen Cls
+535;9;BaliCym Opn
+536;9;BaliCym Cls
+537;9;Finger Cym
+538;9;Ramacymbal
+539;9;Sagat Open
+540;9;Sagat Close
+541;9;Sarna Bell
+542;9;Wind Bell
+543;9;Blossom Bell
+544;9;Agogo MENU
+545;9;Agogo 2 Lo
+546;9;Agogo 2 Hi
+547;9;Agogo 3 Lo
+548;9;Agogo 3 Hi
+549;9;AggoCwblMenu
+550;9;BongoBell Op
+551;9;BongoBell Mt
+552;9;MamboBell Op
+553;9;MamboBell Mt
+554;9;Cowbell 1
+555;9;Cowbell 2
+556;9;Cowbell 3
+557;9;VDrm Cowbell
+558;9;Cowbell Op 1
+559;9;Cowbell Mt 1
+560;9;Cowbell Op 2
+561;9;Cowbell Mt 2
+562;9;TablaByMENU1
+563;9;TablaBaya 1
+564;9;TablaBaya 2
+565;9;TablaBaya 3
+566;9;TablaBaya 4
+567;9;TablaBaya 5
+568;9;TablaBaya 6
+569;9;TablaBaya 7
+570;9;TablaBaya 8
+571;9;TablaByMENU2
+572;9;TablaBayaSld
+573;9;TablaBayaGin
+574;9;TablaBaya Ge
+575;9;TablaBaya Ka
+576;9;TablaBaya Na
+577;9;TablaBayaTin
+578;9;TablaBayaTun
+579;9;TablaBaya Te
+580;9;TablaBaya Ti
+581;9;Dholak MENU1
+582;9;Dholak 1
+583;9;Dholak 2
+584;9;Dholak 3
+585;9;Dholak 4
+586;9;Dholak 5
+587;9;Dholak 6
+588;9;Dholak 7
+589;9;Dholak 8
+590;9;Dholak 9
+591;9;Dholak MENU2
+592;9;Dholak Ga
+593;9;Dholak Ta
+594;9;Dholak Tun
+595;9;Dholak Na
+596;9;Madal MENU
+597;9;Madal Da
+598;9;Madal Din
+599;9;Madal Ta
+600;9;Dhol MENU
+601;9;Dhol 1
+602;9;Dhol 2
+603;9;Dhol 3
+604;9;Dhol 4
+605;9;Dhol 5
+606;9;Udu Pot MENU
+607;9;Udu Pot1 Lo
+608;9;Udu Pot1 Hi
+609;9;Udu Pot1 Slp
+610;9;Udu Pot1 Acc
+611;9;Udu Pot2 Lng
+612;9;Udu Pot2 Sht
+613;9;Udu Pot2 Mut
+614;9;Kendang MENU
+615;9;Wadon 1
+616;9;Wadon 2
+617;9;Wadon 3
+618;9;Wadon 4
+619;9;Wadon 5
+620;9;Wadon 6
+621;9;Wadon 7
+622;9;Bebarongan 1
+623;9;Bebarongan 2
+624;9;Bebarongan 3
+625;9;Pelegongan 1
+626;9;Pelegongan 2
+627;9;Pelegongan 3
+628;9;TalkingDr Up
+629;9;TalkingDr Dn
+630;9;AfroDrm MENU
+631;9;AfroDrum Op1
+632;9;AfroDrum Op2
+633;9;AfroDrum Flm
+634;9;AfroDrum Rat
+635;9;Tablah MENU
+636;9;Tablah Bend
+637;9;Tablah Dom
+638;9;Tablah Tak
+639;9;Tablah Rim
+640;9;Tablah Roll
+641;9;Doira Dun
+642;9;Doira Tik
+643;9;Doholla MENU
+644;9;Doholla Dom
+645;9;Doholla Sak
+646;9;Doholla Tak
+647;9;Doholla Roll
+648;9;Doholla Stop
+649;9;Rek MENU
+650;9;Rek Dom
+651;9;Rek Tek
+652;9;Rek Open
+653;9;Rek Trill
+654;9;Bendir 1
+655;9;Bendir 2
+656;9;Dawul
+657;9;JapanPrcMENU
+658;9;Japan MENU
+659;9;Ho
+660;9;Yoh
+661;9;iYooh
+662;9;Taiko
+663;9;Wadaiko
+664;9;Wadaiko Rim
+665;9;Sime Taiko
+666;9;Shimedaiko 2
+667;9;Buk
+668;9;Buk Rim
+669;9;Tsuzumi Lo
+670;9;Tsuzumi Hi
+671;9;Tsuzumi 2 p
+672;9;Tsuzumi 2 mf
+673;9;Tsuzumi 2 Hi
+674;9;Mokugyo 1
+675;9;Mokugyo 2
+676;9;Ohkawa
+677;9;Ohkawa 2
+678;9;Hyoshigi
+679;9;Hyoshigi 2
+680;9;Clapstick
+681;9;VDrm Woodblk
+682;9;Boomerang
+683;9;Changgo
+684;9;Tang Gu Op
+685;9;Tang Gu Mt
+686;9;Shu Gu
+687;9;Shu Gu Rim
+688;9;Shu Ban 1
+689;9;Shu Ban 2
+690;9;Ban Gu 4
+691;9;ChinaPrcMENU
+692;9;Gu Roll
+693;9;Gu Hi
+694;9;Rot Drum
+695;9;Log Drum 2
+696;9;Slit Drum
+697;9;Bongo MENU 1
+698;9;Bongo 1 Lo
+699;9;Bongo 1 Hi
+700;9;Bongo 2 Lo
+701;9;Bongo 2 Hi
+702;9;Bongo MENU 2
+703;9;Bongo LoOp f
+704;9;Bongo Lo Hrd
+705;9;Bongo Lo Sft
+706;9;Bongo LoOpmf
+707;9;Bongo LoSlap
+708;9;Bongo Hi Hrd
+709;9;Bongo HiOp f
+710;9;BongoHiSlap1
+711;9;BongoHiSlap2
+712;9;Conga Menu
+713;9;CongaLoOp f
+714;9;CongaLoOp mf
+715;9;Conga Lo Mt
+716;9;Conga Slap
+717;9;Conga Hi Op
+718;9;Conga Hi Mt
+719;9;Conga Thumb
+720;9;Conga Link
+721;9;Conga Roll
+722;9;Timbale MENU
+723;9;Timbale Lo
+724;9;Timbale Hi
+725;9;Timbale Side
+726;9;TimbalesMenu
+727;9;Timbles LoOp
+728;9;Timbles LoMt
+729;9;Timbles HiOp
+730;9;Timbles HiMt
+731;9;TimbalesHand
+732;9;Timbales Rim
+733;9;TmbSideStick
+734;9;TimbalesFil1
+735;9;TimbalesFil2
+736;9;TimbalesFil3
+737;9;TimbalesFil4
+738;9;Surdo MENU 1
+739;9;Surdo Open L
+740;9;Surdo Open H
+741;9;Surdo Mute
+742;9;Surdo Rim
+743;9;Surdo MENU 2
+744;9;Surdo Hard
+745;9;Surdo Open1
+746;9;Surdo Open2
+747;9;Surdo Mute2
+748;9;Surdo Rim 2
+749;9;Surdo Soft
+750;9;Caixa MENU 1
+751;9;Caixa Open1
+752;9;Caixa Open2
+753;9;Caixa Roll
+754;9;Caixa Mute
+755;9;Caixa MENU 2
+756;9;Caixa Open3
+757;9;Caixa Mute2
+758;9;Caixa Roll2
+759;9;Caixa Rim
+760;9;Rpnq&RpqMenu
+761;9;RepiniqueHrd
+762;9;RepiniqueSft
+763;9;Repinique1
+764;9;Repinique2
+765;9;Repique Open
+766;9;Repique Rim
+767;9;Repique Roll
+768;9;Clv&CucaMenu
+769;9;Clave!
+770;9;Claves Lo 2
+771;9;VDrm Claves
+772;9;Cuica 2
+773;9;Cuica 3
+774;9;Cuica Lo 1
+775;9;Cuica Lo 2
+776;9;Cuica Hi 1
+777;9;Cuica Hi 2
+778;9;MrcsShkrMenu
+779;9;Maracas 2
+780;9;MaracasUpDwn
+781;9;VDrm Maracas
+782;9;Shaker MENU
+783;9;Shaker Ptn
+784;9;Shaker 1
+785;9;Shaker 2
+786;9;Shaker Long
+787;9;Shaker Short
+788;9;Angklung 2
+789;9;Rainstick
+790;9;Guiro Long
+791;9;Guiro Short
+792;9;Guiro Menu
+793;9;Quide Long
+794;9;Quide Short
+795;9;Guiro Long2
+796;9;Guiro Short2
+797;9;RecoRecoLng
+798;9;RecoRecoSht
+799;9;MtlGuiroLng
+800;9;MtlGuiroSht
+801;9;CbsCxGnzMenu
+802;9;Real Cabasa1
+803;9;Real Cabasa2
+804;9;Cabasa Roll
+805;9;VDrmCabasaUp
+806;9;VDrmCabasDwn
+807;9;Caxixi
+808;9;Ganza Soft
+809;9;Ganza Hard
+810;9;Chekere 1
+811;9;Chekere 2
+812;9;PandeiroMENU
+813;9;PandeiroL Lo
+814;9;PandeiroL Hi
+815;9;PandeiroL Sp
+816;9;PandeiroL Rm
+817;9;PandeiroS Op
+818;9;PandeiroS Sp
+819;9;PandeiroS Rm
+820;9;PandTambMenu
+821;9;PandeiroOpen
+822;9;PandeiroMute
+823;9;PandeiroHit
+824;9;PandeiroRim
+825;9;PandeiroCrsh
+826;9;PandeiroRoll
+827;9;TamborimMENU
+828;9;Tamborim Opn
+829;9;Tamborim Mut
+830;9;Tamborim Slp
+831;9;TamborimOpen
+832;9;TamborimRim
+833;9;TamborimMute
+834;9;TamborimRoll
+835;9;Tambrin Hit
+836;9;TambrinShake
+837;9;R8 Tamb
+838;9;Others Menu
+839;9;ApitoHiShort
+840;9;ApitoLoShort
+841;9;SambaWhistle
+842;9;Quijada
+843;9;Chekere 3
+844;9;CajonClpMenu
+845;9;Cajon Lo
+846;9;Cajon Hi
+847;9;Cajon Rol Hi
+848;9;Cajon Rol Lo
+849;9;Afro Feet 1
+850;9;Afro Feet 2
+851;9;Afro Clap
+852;9;Hand Clap 2
+853;9;Claps Real
+854;9;FingerSnaps4
+855;9;BomboBbnMenu
+856;9;SoftSet Menu
+857;9;HardSet Menu
+858;9;Fat BD
+859;9;Room Kick 2
+860;9;Maple Kick
+861;9;Warm Kick
+862;9;Maple Lo Snr
+863;9;MapleSoft SN
+864;9;NaturlHardSN
+865;9;NaturlRimSht
+866;9;Cross Stick2
+867;9;StudioLo Tom
+868;9;StudioMidTom
+869;9;StudioHi Tom
+870;9;Dixie HH Pdl
+871;9;Dixie HH Cls
+872;9;Dixie HH Hlf
+873;9;Dixie HH Opn
+1;10;PopBrs mfA L
+2;10;PopBrs mfA R
+3;10;PopBrs mfB L
+4;10;PopBrs mfB R
+5;10;PopBrs mfC L
+6;10;PopBrs mfC R
+7;10;PopBrs f A L
+8;10;PopBrs f A R
+9;10;PopBrs f B L
+10;10;PopBrs f B R
+11;10;PopBrs f C L
+12;10;PopBrs f C R
+13;10;PopStc mfA L
+14;10;PopStc mfA R
+15;10;PopStc mfB L
+16;10;PopStc mfB R
+17;10;PopStc mfC L
+18;10;PopStc mfC R
+19;10;PopStc f A L
+20;10;PopStc f A R
+21;10;PopStc f B L
+22;10;PopStc f B R
+23;10;PopStc f C L
+24;10;PopStc f C R
+25;10;PopBrsRipA L
+26;10;PopBrsRipA R
+27;10;PopBrsRipB L
+28;10;PopBrsRipB R
+29;10;PopBrsRipC L
+30;10;PopBrsRipC R
+31;10;PopFlSht A L
+32;10;PopFlSht A R
+33;10;PopFlSht B L
+34;10;PopFlSht B R
+35;10;PopFlSht C L
+36;10;PopFlSht C R
+37;10;PopFlLng A L
+38;10;PopFlLng A R
+39;10;PopFlLng B L
+40;10;PopFlLng B R
+41;10;PopFlLng C L
+42;10;PopFlLng C R
+43;10;Tps mf A L
+44;10;Tps mf A R
+45;10;Tps mf B L
+46;10;Tps mf B R
+47;10;Tps mf C L
+48;10;Tps mf C R
+49;10;Tps f A L
+50;10;Tps f A R
+51;10;Tps f B L
+52;10;Tps f B R
+53;10;Tps f C L
+54;10;Tps f C R
+55;10;Tps Stc mfAL
+56;10;Tps Stc mfAR
+57;10;Tps Stc mfBL
+58;10;Tps Stc mfBR
+59;10;Tps Stc mfCL
+60;10;Tps Stc mfCR
+61;10;Tps Stc f AL
+62;10;Tps Stc f AR
+63;10;Tps Stc f BL
+64;10;Tps Stc f BR
+65;10;Tps Stc f CL
+66;10;Tps Stc f CR
+67;10;Tps Mute A L
+68;10;Tps Mute A R
+69;10;Tps Mute B L
+70;10;Tps Mute B R
+71;10;Tps Mute C L
+72;10;Tps Mute C R
+73;10;Tps MtStc AL
+74;10;Tps MtStc AR
+75;10;Tps MtStc BL
+76;10;Tps MtStc BR
+77;10;Tps MtStc CL
+78;10;Tps MtStc CR
+79;10;Tps RipFl AL
+80;10;Tps RipFl AR
+81;10;Tps RipFl BL
+82;10;Tps RipFl BR
+83;10;Tps RipFl CL
+84;10;Tps RipFl CR
+85;10;Tps RipCp AL
+86;10;Tps RipCp AR
+87;10;Tps RipCp BL
+88;10;Tps RipCp BR
+89;10;Tps RipCp CL
+90;10;Tps RipCp CR
+91;10;Tps Fall A L
+92;10;Tps Fall A R
+93;10;Tps Fall B L
+94;10;Tps Fall B R
+95;10;Tps Fall C L
+96;10;Tps Fall C R
+97;10;Tps Shake AL
+98;10;Tps Shake AR
+99;10;Tps Shake BL
+100;10;Tps Shake BR
+101;10;Tps Shake CL
+102;10;Tps Shake CR
+103;10;Tps Doit A L
+104;10;Tps Doit A R
+105;10;Tps Doit B L
+106;10;Tps Doit B R
+107;10;Tps Doit C L
+108;10;Tps Doit C R
+109;10;C Tps mp A L
+110;10;C Tps mp A R
+111;10;C Tps mp B L
+112;10;C Tps mp B R
+113;10;C Tps mp C L
+114;10;C Tps mp C R
+115;10;C Tps mf A L
+116;10;C Tps mf A R
+117;10;C Tps mf B L
+118;10;C Tps mf B R
+119;10;C Tps mf C L
+120;10;C Tps mf C R
+121;10;C Tps f A L
+122;10;C Tps f A R
+123;10;C Tps f B L
+124;10;C Tps f B R
+125;10;C Tps f C L
+126;10;C Tps f C R
+127;10;CTpsStc mpAL
+128;10;CTpsStc mpAR
+129;10;CTpsStc mpBL
+130;10;CTpsStc mpBR
+131;10;CTpsStc mpCL
+132;10;CTpsStc mpCR
+133;10;CTpsStc mfAL
+134;10;CTpsStc mfAR
+135;10;CTpsStc mfBL
+136;10;CTpsStc mfBR
+137;10;CTpsStc mfCL
+138;10;CTpsStc mfCR
+139;10;CTpsStc f AL
+140;10;CTpsStc f AR
+141;10;CTpsStc f BL
+142;10;CTpsStc f BR
+143;10;CTpsStc f CL
+144;10;CTpsStc f CR
+145;10;CTps Trit AL
+146;10;CTps Trit AR
+147;10;CTps Trit BL
+148;10;CTps Trit BR
+149;10;CTps Trit CL
+150;10;CTps Trit CR
+151;10;Tbs mp A L
+152;10;Tbs mp A R
+153;10;Tbs mp B L
+154;10;Tbs mp B R
+155;10;Tbs mp C L
+156;10;Tbs mp C R
+157;10;Tbs mf A L
+158;10;Tbs mf A R
+159;10;Tbs mf B L
+160;10;Tbs mf B R
+161;10;Tbs mf C L
+162;10;Tbs mf C R
+163;10;Tbs f A L
+164;10;Tbs f A R
+165;10;Tbs f B L
+166;10;Tbs f B R
+167;10;Tbs f C L
+168;10;Tbs f C R
+169;10;Tbs Stc mfAL
+170;10;Tbs Stc mfAR
+171;10;Tbs Stc mfBL
+172;10;Tbs Stc mfBR
+173;10;Tbs Stc mfCL
+174;10;Tbs Stc mfCR
+175;10;Tbs Stc f AL
+176;10;Tbs Stc f AR
+177;10;Tbs Stc f BL
+178;10;Tbs Stc f BR
+179;10;Tbs Stc f CL
+180;10;Tbs Stc f CR
+181;10;Tbs Fall A L
+182;10;Tbs Fall A R
+183;10;Tbs Fall B L
+184;10;Tbs Fall B R
+185;10;Tbs Fall C L
+186;10;Tbs Fall C R
+187;10;Tbs Rip A L
+188;10;Tbs Rip A R
+189;10;Tbs Rip B L
+190;10;Tbs Rip B R
+191;10;Tbs Rip C L
+192;10;Tbs Rip C R
+193;10;Horns mp A L
+194;10;Horns mp A R
+195;10;Horns mp B L
+196;10;Horns mp B R
+197;10;Horns mp C L
+198;10;Horns mp C R
+199;10;Horns mf A L
+200;10;Horns mf A R
+201;10;Horns mf B L
+202;10;Horns mf B R
+203;10;Horns mf C L
+204;10;Horns mf C R
+205;10;Horns f A L
+206;10;Horns f A R
+207;10;Horns f B L
+208;10;Horns f B R
+209;10;Horns f C L
+210;10;Horns f C R
+211;10;HrnsStc mpAL
+212;10;HrnsStc mpAR
+213;10;HrnsStc mpBL
+214;10;HrnsStc mpBR
+215;10;HrnsStc mpCL
+216;10;HrnsStc mpCR
+217;10;HrnsStc mfAL
+218;10;HrnsStc mfAR
+219;10;HrnsStc mfBL
+220;10;HrnsStc mfBR
+221;10;HrnsStc mfCL
+222;10;HrnsStc mfCR
+223;10;HrnsStc f AL
+224;10;HrnsStc f AR
+225;10;HrnsStc f BL
+226;10;HrnsStc f BR
+227;10;HrnsStc f CL
+228;10;HrnsStc f CR
+229;10;Hrns Rip A L
+230;10;Hrns Rip A R
+231;10;Hrns Rip B L
+232;10;Hrns Rip B R
+233;10;Hrns Rip C L
+234;10;Hrns Rip C R
+235;10;Tuba mf A
+236;10;Tuba mf B
+237;10;Tuba mf C
+238;10;Tuba f A
+239;10;Tuba f B
+240;10;Tuba f C
+241;10;Tuba Stc mpA
+242;10;Tuba Stc mpB
+243;10;Tuba Stc mpC
+244;10;Tuba Stc mfA
+245;10;Tuba Stc mfB
+246;10;Tuba Stc mfC
+247;10;Tuba Stc f A
+248;10;Tuba Stc f B
+249;10;Tuba Stc f C
+250;10;Brs LipNz1 L
+251;10;Brs LipNz1 R
+252;10;Brs LipNz2 L
+253;10;Brs LipNz2 R
+254;10;Brs LipNz3 L
+255;10;Brs LipNz3 R
+256;10;Tp LipNz 1 L
+257;10;Tp LipNz 1 R
+258;10;Tp LipNz 2 L
+259;10;Tp LipNz 2 R
+260;10;CTp Lip Nz L
+261;10;CTp Lip Nz R
+1;11;CmpPno ppA L
+2;11;CmpPno ppA R
+3;11;CmpPno ppB L
+4;11;CmpPno ppB R
+5;11;CmpPno ppB’L
+6;11;CmpPno ppB’R
+7;11;CmpPno ppC L
+8;11;CmpPno ppC R
+9;11;CmpPno ppC’L
+10;11;CmpPno ppC’R
+11;11;CmpPno mpA L
+12;11;CmpPno mpA R
+13;11;CmpPno mpB L
+14;11;CmpPno mpB R
+15;11;CmpPno mpB’L
+16;11;CmpPno mpB’R
+17;11;CmpPno mpC L
+18;11;CmpPno mpC R
+19;11;CmpPno mpC’L
+20;11;CmpPno mpC’R
+21;11;CmpPno f A L
+22;11;CmpPno f A R
+23;11;CmpPno f B L
+24;11;CmpPno f B R
+25;11;CmpPno f B’L
+26;11;CmpPno f B’R
+27;11;CmpPno f C L
+28;11;CmpPno f C R
+29;11;CmpPno f C’L
+30;11;CmpPno f C’R
+31;11;CmpPno ffA L
+32;11;CmpPno ffA R
+33;11;CmpPno ffB L
+34;11;CmpPno ffB R
+35;11;CmpPno ffB’L
+36;11;CmpPno ffB’R
+37;11;CmpPno ffC L
+38;11;CmpPno ffC R
+39;11;CmpPno ffC’L
+40;11;CmpPno ffC’R
+1;12;EPtype1 pp A
+2;12;EPtype1 pp B
+3;12;EPtype1 pp C
+4;12;EPtype1 ppV1
+5;12;EPtype1 ppV2
+6;12;EPtype1 ppV3
+7;12;EPtype1 ppV4
+8;12;EPtype1 mp A
+9;12;EPtype1 mp B
+10;12;EPtype1 mp C
+11;12;EPtype1 mpV1
+12;12;EPtype1 mpV2
+13;12;EPtype1 mpV3
+14;12;EPtype1 mpV4
+15;12;EPtype1 f A
+16;12;EPtype1 f B
+17;12;EPtype1 f C
+18;12;EPtype1 f V1
+19;12;EPtype1 f V2
+20;12;EPtype1 f V3
+21;12;EPtype1 f V4
+22;12;EPtype1 ff A
+23;12;EPtype1 ff B
+24;12;EPtype1 ff C
+25;12;EPtype1 ffV1
+26;12;EPtype1 ffV2
+27;12;EPtype1 ffV3
+28;12;EPtype1 ffV4
+29;12;EPtype2 pp A
+30;12;EPtype2 pp B
+31;12;EPtype2 pp C
+32;12;EPtype2 ppV1
+33;12;EPtype2 ppV2
+34;12;EPtype2 ppV3
+35;12;EPtype2 ppV4
+36;12;EPtype2 mp A
+37;12;EPtype2 mp B
+38;12;EPtype2 mp C
+39;12;EPtype2 mpV1
+40;12;EPtype2 mpV2
+41;12;EPtype2 mpV3
+42;12;EPtype2 mpV4
+43;12;EPtype2 f A
+44;12;EPtype2 f B
+45;12;EPtype2 f C
+46;12;EPtype2 f V1
+47;12;EPtype2 f V2
+48;12;EPtype2 f V3
+49;12;EPtype2 f V4
+50;12;EPtype2 ff A
+51;12;EPtype2 ff B
+52;12;EPtype2 ff C
+53;12;EPtype2 ffV1
+54;12;EPtype2 ffV2
+55;12;EPtype2 ffV3
+56;12;EPtype2 ffV4
+57;12;EPtype3 pp A
+58;12;EPtype3 pp B
+59;12;EPtype3 pp C
+60;12;EPtype3 ppV1
+61;12;EPtype3 ppV2
+62;12;EPtype3 ppV3
+63;12;EPtype3 ppV4
+64;12;EPtype3 mp A
+65;12;EPtype3 mp B
+66;12;EPtype3 mp C
+67;12;EPtype3 mpV1
+68;12;EPtype3 mpV2
+69;12;EPtype3 mpV3
+70;12;EPtype3 mpV4
+71;12;EPtype3 f A
+72;12;EPtype3 f B
+73;12;EPtype3 f C
+74;12;EPtype3 f V1
+75;12;EPtype3 f V2
+76;12;EPtype3 f V3
+77;12;EPtype3 f V4
+78;12;EPtype3 ff A
+79;12;EPtype3 ff B
+80;12;EPtype3 ff C
+81;12;EPtype3 ffV1
+82;12;EPtype3 ffV2
+83;12;EPtype3 ffV3
+84;12;EPtype3 ffV4
+85;12;Clav CA mp A
+86;12;Clav CA mp B
+87;12;Clav CA mp C
+88;12;Clav CA f A
+89;12;Clav CA f B
+90;12;Clav CA f C
+91;12;Clav CA ff A
+92;12;Clav CA ff B
+93;12;Clav CA ff C
+94;12;Clav CB mp A
+95;12;Clav CB mp B
+96;12;Clav CB mp C
+97;12;Clav CB f A
+98;12;Clav CB f B
+99;12;Clav CB f C
+100;12;Clav CB ff A
+101;12;Clav CB ff B
+102;12;Clav CB ff C
+103;12;Clav DA mp A
+104;12;Clav DA mp B
+105;12;Clav DA mp C
+106;12;Clav DA f A
+107;12;Clav DA f B
+108;12;Clav DA f C
+109;12;Clav DA ff A
+110;12;Clav DA ff B
+111;12;Clav DA ff C
+112;12;Clav DB mp A
+113;12;Clav DB mp B
+114;12;Clav DB mp C
+115;12;Clav DB f A
+116;12;Clav DB f B
+117;12;Clav DB f C
+118;12;Clav DB ff A
+119;12;Clav DB ff B
+120;12;Clav DB ff C
+121;12;ClvMtCA mp A
+122;12;ClvMtCA mp B
+123;12;ClvMtCA mp C
+124;12;ClvMt CA f A
+125;12;ClvMt CA f B
+126;12;ClvMt CA f C
+127;12;ClvMtCB mp A
+128;12;ClvMtCB mp B
+129;12;ClvMtCB mp C
+130;12;ClvMt CB f A
+131;12;ClvMt CB f B
+132;12;ClvMt CB f C
+133;12;ClvMtDA mp A
+134;12;ClvMtDA mp B
+135;12;ClvMtDA mp C
+136;12;ClvMt DA f A
+137;12;ClvMt DA f B
+138;12;ClvMt DA f C
+139;12;ClvMtDB mp A
+140;12;ClvMtDB mp B
+141;12;ClvMtDB mp C
+142;12;ClvMt DB f A
+143;12;ClvMt DB f B
+144;12;ClvMt DB f C
+145;12;ClvMtRsCA pA
+146;12;ClvMtRsCA pB
+147;12;ClvMtRsCA pC
+148;12;ClvMtRsCA fA
+149;12;ClvMtRsCA fB
+150;12;ClvMtRsCA fC
+151;12;ClvMtRsCB pA
+152;12;ClvMtRsCB pB
+153;12;ClvMtRsCB pC
+154;12;ClvMtRsCB fA
+155;12;ClvMtRsCB fB
+156;12;ClvMtRsCB fC
+157;12;ClvMtRsDA pA
+158;12;ClvMtRsDA pB
+159;12;ClvMtRsDA pC
+160;12;ClvMtRsDA fA
+161;12;ClvMtRsDA fB
+162;12;ClvMtRsDA fC
+163;12;ClvMtRsDB pA
+164;12;ClvMtRsDB pB
+165;12;ClvMtRsDB pC
+166;12;ClvMtRsDB fA
+167;12;ClvMtRsDB fB
+168;12;ClvMtRsDB fC
+1;20;JP-8 Saw
+2;20;Syn Saw Wave
+3;20;MG Saw 1
+4;20;GR-300 Saw
+5;20;P5 Saw
+6;20;MG Saw 2
+7;20;Calc.Saw
+8;20;Calc.Saw inv
+9;20;Digital Saw
+10;20;JD Fat Saw
+11;20;Unison Saw
+12;20;DistSaw Wave
+13;20;JP-8 Pls 05
+14;20;Pulse Wave
+15;20;Ramp Wave 1
+16;20;Ramp Wave 2
+17;20;Sine
+18;20;PWM Wave 1
+19;20;PWM Wave 2
+20;20;PWM Wave 3
+21;20;PWM Wave 4
+22;20;Hollo Wave1
+23;20;Hollo Wave2
+24;20;Hollo Wave2+
+25;20;SynStrings 1
+26;20;SynStrings 2
+27;20;SynStrings 3
+28;20;SynStrings 4
+29;20;SynStrings 5
+30;20;SynStrings5+
+31;20;SynStrings 6
+32;20;SynStrings 7
+33;20;SynStrings 8
+34;20;SynStrings 9
+35;20;FM Brass
+36;20;Lead Wave 1
+37;20;Lead Wave 2
+38;20;Lead Wave 3
+39;20;Lead Wave 4
+40;20;Lead Wave 5
+41;20;SqrLeadWave
+42;20;SqrLeadWave+
+43;20;SBF Lead 1
+44;20;SBF Lead 2
+45;20;Sync Sweep
+46;20;Saw Sync
+47;20;Unison Sync
+48;20;Unison Sync+
+49;20;Sync Wave
+50;20;X-Mod Wave 1
+51;20;X-Mod Wave 2
+52;20;X-Mod Wave 3
+53;20;X-Mod Wave 4
+54;20;X-Mod Wave 5
+55;20;X-Mod Wave 6
+56;20;X-Mod Wave 7
+57;20;FeedbackWave
+58;20;SubOSC Wave1
+59;20;SubOSC Wave2
+60;20;SubOSC Wave3
+61;20;Saw+Sub Wave
+62;20;DipthongWave
+63;20;DipthongWv +
+64;20;Heaven Wave
+65;20;Fanta Synth
+66;20;Syn Vox 1
+67;20;Syn Vox 2
+68;20;Org Vox
+69;20;ZZZ Vox
+70;20;Male Ooh
+71;20;Doo
+72;20;MMM Vox
+73;20;Digital Vox
+74;20;Spark Vox 1
+75;20;Spark Vox 2
+76;20;Aah Formant
+77;20;Eeh Formant
+78;20;Iih Formant
+79;20;Ooh Formant
+80;20;Uuh Formant
+81;20;SBF Vox
+82;20;SBF Digi Vox
+83;20;VP-330 Choir
+84;20;FM Syn Vox
+85;20;Fine Wine
+86;20;Digi Loop
+87;20;Vib Wave
+88;20;Bell Wave 1
+89;20;Bell Wave 1+
+90;20;Bell Wave 2
+91;20;Bell Wave 3
+92;20;Bell Wave 4
+93;20;Digi Wave 1
+94;20;Digi Wave 2
+95;20;Digi Wave 3
+96;20;DIGI Bell
+97;20;DIGI Bell +
+98;20;Digi Chime
+99;20;Org Bell
+100;20;FM Bell
+101;20;Hooky
+102;20;Klack Wave
+103;20;Syn Sax
+104;20;Can Wave 1
+105;20;Can Wave 2
+106;20;MIDI Clav
+107;20;Huge MIDI
+108;20;Huge MIDI +
+109;20;Pulse Clav
+110;20;Pulse Clav+
+111;20;Cello Wave
+112;20;Cutters
+113;20;5th Wave
+114;20;Nasty
+115;20;Wave Table
+116;20;Bagpipe Wave
+117;20;Wally Wave
+118;20;Brusky Wave
+119;20;Wave Scan
+120;20;Wire String
+121;20;Synth Piano
+122;20;EP Hard
+123;20;Vint. EP mp
+124;20;Vint. EP f
+125;20;Vint. EP ff
+126;20;Stage EP p
+127;20;Stage EP f
+128;20;SA EP 1
+129;20;SA EP 2
+130;20;Wurly mp
+131;20;Wurly mf
+132;20;FM EP 1
+133;20;FM EP 2
+134;20;FM EP 3
+135;20;FM EP 4
+136;20;FM EP 5
+137;20;EP Distone
+138;20;OrganWave 1
+139;20;OrganWave 2
+140;20;OrganWave 3
+141;20;OrganWave 4
+142;20;OrganWave 5
+143;20;OrganWave 5+
+144;20;OrganWave 6
+145;20;PercOrgan 1
+146;20;PercOrgan 1+
+147;20;PercOrgan 2
+148;20;PercOrgan 2+
+149;20;OrganWave 7
+150;20;OrganWave 8
+151;20;Org Basic 1
+152;20;Org Basic 2
+153;20;3rd Perc Org
+154;20;Vint.Organ
+155;20;Chorus Organ
+156;20;Org Perc
+157;20;Orc Perc 2nd
+158;20;JLOrg1 Slw L
+159;20;JLOrg1 Slw R
+160;20;JLOrg1 Fst L
+161;20;JLOrg1 Fst R
+162;20;JLOrg2 Slw L
+163;20;JLOrg2 Slw R
+164;20;JLOrg2 Fst L
+165;20;JLOrg2 Fst R
+166;20;TheaterOrg1L
+167;20;TheaterOrg1R
+168;20;TheaterOrg2L
+169;20;TheaterOrg2R
+170;20;TheaterOrg3L
+171;20;TheaterOrg3R
+172;20;Positive '8
+173;20;Pipe Organ
+174;20;CathedralOrg
+175;20;Clav Wave 1
+176;20;Clav Wave 2
+177;20;Clav Wave 3
+178;20;Reg.Clav
+179;20;Harpsi Wave1
+180;20;Harpsi Wave2
+181;20;Harpsi Wave3
+182;20;Marimba Wave
+183;20;Marimba Atk
+184;20;Vibe Wave
+185;20;Xylo Wave 1
+186;20;Xylo Wave 2
+187;20;FM Mallet
+188;20;Tubular Bell
+189;20;Celesta
+190;20;Music Box 1
+191;20;Music Box 2
+192;20;Nylon Gtr
+193;20;Brite Nylon
+194;20;Ac. Gtr ff
+195;20;Strat Sust
+196;20;Strat Wave 1
+197;20;Jazz Gtr
+198;20;Strat Wave 2
+199;20;FstPick70s
+200;20;Funk Gtr
+201;20;Muters
+202;20;Mute Gtr 1
+203;20;Mute Gtr 2
+204;20;Mute Gtr 3
+205;20;Harm Gtrs
+206;20;Nasty Gtr
+207;20;E.Gtr Loop
+208;20;Overdrive 1
+209;20;Overdrive 2
+210;20;Dist Gtr 1
+211;20;Dist Gr 2
+212;20;Mute Dist
+213;20;Fretless
+214;20;SlapBs Wave1
+215;20;SlapBs Wave2
+216;20;Hollow Bass
+217;20;Solid Bass
+218;20;FM Super Bs
+219;20;SynBs Wave
+220;20;SynBs Wave +
+221;20;Banjo Wave
+222;20;Pluck Harp
+223;20;Harp Harm
+224;20;Harp Wave
+225;20;E.Sitar
+226;20;Sitar Wave
+227;20;Sitar Drone
+228;20;Yangqin
+229;20;KalimbaWave1
+230;20;KalimbaWave2
+231;20;Gamelan 1
+232;20;Gamelan 2
+233;20;Gamelan 3
+234;20;Steel Drum
+235;20;Log Drum
+236;20;Bottle Hit
+237;20;Agogo
+238;20;Agogo Bell
+239;20;Crystal
+240;20;Finger Bell
+241;20;Church Bell
+242;20;LargeChrF 1
+243;20;LargeChrF 2
+244;20;Female Aahs1
+245;20;Female Oohs
+246;20;Female Aahs2
+247;20;Male Aahs
+248;20;Gospel Hum 1
+249;20;Gospel Hum 2
+250;20;Pop Voice
+251;20;Jazz Doo 1
+252;20;Jazz Doo 2
+253;20;Jazz Doo 1+
+254;20;Jazz Doo 2+
+255;20;Jazz Doot 1
+256;20;Jazz Doot 2
+257;20;Jazz Dat 1
+258;20;Jazz Dat 2
+259;20;Jazz Bap 1
+260;20;Jazz Bap 2
+261;20;Dow fall 1
+262;20;Dow fall 2
+263;20;Bass Thum
+264;20;Strings 1
+265;20;Strings 2
+266;20;Strings 3
+267;20;Strings 4
+268;20;Strings 5 L
+269;20;Strings 5 R
+270;20;Marcato1 L
+271;20;Marcato1 R
+272;20;Marcato2
+273;20;F.StrStac1
+274;20;F.StrStac2 L
+275;20;F.StrStac2 R
+276;20;Pizz 1
+277;20;Pizz 2
+278;20;Pizzagogo
+279;20;Flute Wave
+280;20;Flute Push
+281;20;PanPipe Wave
+282;20;Bottle Blow
+283;20;Rad Hose
+284;20;Shaku Atk 1
+285;20;Shaku Atk 2
+286;20;OrchUnison L
+287;20;OrchUnison R
+288;20;Tp Section
+289;20;Flugel Wave
+290;20;Fr.Horn Wave
+291;20;Harmonica
+292;20;Harmonica +
+293;20;Cowbell
+294;20;Tabla
+295;20;O'Skool Hit
+296;20;Orch. Hit
+297;20;Punch Hit
+298;20;Philly Hit
+299;20;ClassicHseHt
+300;20;Tao Hit
+301;20;Anklungs
+302;20;Rattles
+303;20;Xylo Seq. 1
+304;20;Wind Chimes
+305;20;Bubble
+306;20;Xylo Seq. 2
+307;20;Siren Wave
+308;20;Scratch 1
+309;20;Scratch 2
+310;20;Scratch 3
+311;20;Scratch 4
+312;20;Scratch 5
+313;20;Scratch 6
+314;20;Scratch Push
+315;20;Scratch Pull
+316;20;Metal Vox 1
+317;20;Metal Vox 1+
+318;20;Metal Vox 2
+319;20;Metal Vox 2+
+320;20;Metal Vox 3
+321;20;Metal Vox 3+
+322;20;Scrape Gut
+323;20;Strat Atk
+324;20;EP Atk
+325;20;Org Atk 1
+326;20;Org Atk 2
+327;20;Org Click
+328;20;Harpsi Thmp1
+329;20;Harpsi Thmp2
+330;20;Shaku Noise
+331;20;Klmba Atk
+332;20;Shami Attack
+333;20;Block
+334;20;Wood Crak
+335;20;AnalogAttack
+336;20;Metal Attack
+337;20;Pole Loop
+338;20;Strike Pole
+339;20;Switch
+340;20;Tuba Slap
+341;20;Plink
+342;20;Plunk
+343;20;Tin Wave
+344;20;Vinyl Noise
+345;20;Pitch Wind
+346;20;Vox Noise 1
+347;20;Vox Noise 2
+348;20;SynVox Noise
+349;20;Digi Breath
+350;20;Agogo Noise
+351;20;Wind Agogo
+352;20;Polishing Nz
+353;20;Dentist Nz
+354;20;CrunchWind
+355;20;ThroatWind
+356;20;MetalWind
+357;20;Atmosphere
+358;20;DigiSpectrum
+359;20;SBF Cym
+360;20;SBF Bell
+361;20;SBF Nz
+362;20;White Noise
+363;20;Pink Noise
+364;20;Thickness Bs
+365;20;Plastic Bass
+366;20;Breakdown Bs
+367;20;Dist TB
+368;20;Pulse Bass
+369;20;Hip Lead
+370;20;VintageStack
+371;20;Tekno Ld 1
+372;20;Icy Keys
+373;20;JP-8StringsL
+374;20;JP-8StringsR
+375;20;Revalation
+376;20;Boreal Pad L
+377;20;Boreal Pad R
+378;20;Sea Waves L
+379;20;Sea Waves R
+380;20;Sweep Pad 1
+381;20;Sweep Pad 2
+382;20;Sweep Pad 3
+383;20;Particles L
+384;20;Particles R
+385;20;3Delay Poly
+386;20;Poly Fat 1
+387;20;Poly Fat 2
+388;20;Poly Fat 3
+389;20;Alan's Pad L
+390;20;Alan's Pad R
+391;20;DlyReso Saw1
+392;20;DlyReso Saw2
+393;20;DlyReso Saw3
+394;20;TranceSaws 1
+395;20;TranceSaws 2
+396;20;TranceSaws 3
+397;20;Tekno Ld 2
+398;20;NuWave
+399;20;EQ Lead 1
+400;20;EQ Lead 2
+401;20;EQ Lead 3
+402;20;80sBrsSect L
+403;20;80sBrsSect R
+404;20;LoveBrsLiveL
+405;20;LoveBrsLiveR
+406;20;ScoopSynBrsL
+407;20;ScoopSynBrsR
+408;20;Power JP L
+409;20;Power JP R
+410;20;ChasingBells
+411;20;Bad Axe L
+412;20;Bad Axe R
+413;20;Cutting Lead
+414;20;Poly Key
+415;20;Buzz Cut
+416;20;DsturbedSync
+417;20;LFO Poly
+418;20;HPF Pad L
+419;20;HPF Pad R
+420;20;Chubby Ld
+421;20;FantaClaus
+422;20;FantasyPad 1
+423;20;FantasyPad 2
+424;20;FantasyPad 3
+425;20;Legend Pad
+426;20;D-50 Stack
+427;20;Digi Crystal
+428;20;PipeChatter1
+429;20;PipeChatter2
+430;20;PipeChatter3
+431;20;JP Hollow L
+432;20;JP Hollow R
+433;20;VoiceHeavenL
+434;20;VoiceHeavenR
+435;20;Atmospheric
+436;20;Air Pad 1
+437;20;Air Pad 2
+438;20;Air Pad 3
+439;20;ChrdOfCnadaL
+440;20;ChrdOfCnadaR
+441;20;Fireflies
+442;20;NewJupiter 1
+443;20;NewJupiter 2
+444;20;NewJupiter 3
+445;20;NewJupiter 4
+446;20;NewJupiter 5
+447;20;Pulsatron
+448;20;JazzyBubbles
+449;20;SynthFx 1
+450;20;SynthFx 2

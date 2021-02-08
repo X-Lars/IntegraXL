@@ -143,7 +143,7 @@ namespace Integra.Core
             }
         }
 
-        protected override bool Initialize(byte[] data)
+        internal override bool Initialize(byte[] data)
         {
             Add((U)Activator.CreateInstance(typeof(U), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { IDCounter, data }, null));
 

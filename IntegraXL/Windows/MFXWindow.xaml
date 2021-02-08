@@ -18,19 +18,22 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0"
+        <uc:PartSelectButtons Grid.Row="0"/>
+        
+        <StackPanel Grid.Row="1"
                     Orientation="Horizontal">
             
             <ComboBox x:Name="MFXTypeCombo"
-                      ItemsSource="{Binding MFXContext.MFX.MFXTypes}"
-                      SelectedItem="{Binding MFXContext.MFX.Type}"
+                      ItemsSource="{Binding MFX.MFXTypes}"
+                      SelectedItem="{Binding MFX.Type}"
                       SelectionChanged="MFXTypeChanged"/>
 
         </StackPanel>
         
         <!-- Presents the MFX user control -->
         <ContentPresenter Content="{Binding MFXControl}"
-                          Grid.Row="1"/>
+                          Grid.Row="2"/>
+        
     </Grid>
     
 </local:IntegraWindow>
