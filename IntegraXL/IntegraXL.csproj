@@ -167,6 +167,12 @@
     <Compile Include="Windows\StudioSetPartEQWindow.xaml.cs">
       <DependentUpon>StudioSetPartEQWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\StudioSetPartWindow.xaml.cs">
+      <DependentUpon>StudioSetPartWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SuperNATURALDrumKitNotesWindow.xaml.cs">
+      <DependentUpon>SuperNATURALDrumKitNotesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\SystemExclusivesWindow.xaml.cs">
       <DependentUpon>SystemExclusivesWindow.xaml</DependentUpon>
     </Compile>
@@ -281,6 +287,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\StudioSetPartEQWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\StudioSetPartWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SuperNATURALDrumKitNotesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

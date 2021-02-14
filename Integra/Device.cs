@@ -140,43 +140,43 @@ namespace Integra
 
         #region Events
 
-        /// <summary>
-        /// Provides the signature for device operation events.
-        /// </summary>
-        /// <param name="sender">An <see cref="object"/> representing the class that raised the event.</param>
-        /// <param name="e">An <see cref="IntegraOperationEventArgs"/> containing event data.</param>
-        public delegate void DeviceOperationEventHandler(object sender, IntegraOperationEventArgs e);
+        ///// <summary>
+        ///// Provides the signature for device operation events.
+        ///// </summary>
+        ///// <param name="sender">An <see cref="object"/> representing the class that raised the event.</param>
+        ///// <param name="e">An <see cref="IntegraOperationEventArgs"/> containing event data.</param>
+        //public delegate void DeviceOperationEventHandler(object sender, IntegraOperationEventArgs e);
 
-        /// <summary>
-        /// Provides the signature for device status events.
-        /// </summary>
-        /// <param name="sender">An <see cref="object"/> representing the class that raised the event.</param>
-        /// <param name="e">An <see cref="IntegraStatusEventArgs"/> containing event data.</param>
-        public delegate void DeviceStatusEventHandler(object sender, IntegraStatusEventArgs e);
+        ///// <summary>
+        ///// Provides the signature for device status events.
+        ///// </summary>
+        ///// <param name="sender">An <see cref="object"/> representing the class that raised the event.</param>
+        ///// <param name="e">An <see cref="IntegraStatusEventArgs"/> containing event data.</param>
+        //public delegate void DeviceStatusEventHandler(object sender, IntegraStatusEventArgs e);
 
         /// <summary>
         /// Raised when the <see cref="Device"/> starts an operation.
         /// </summary>
         /// <remarks><i>Event is static to be able to bind event handlers without the creating an instance.</i></remarks>
-        public static event DeviceOperationEventHandler OperationStart;
+        public static event EventHandler<IntegraOperationEventArgs> OperationStart;
 
         /// <summary>
         /// Raised when the <see cref="Device"/> operation progresses.
         /// </summary>
         /// <remarks><i>Event is static to be able to bind event handlers without the creating an instance.</i></remarks>
-        public static event DeviceOperationEventHandler OperationProgress;
+        public static event EventHandler<IntegraOperationEventArgs> OperationProgress;
 
         /// <summary>
         /// Raised when the <see cref="Device"/> finished an operation.
         /// </summary>
         /// <remarks><i>Event is static to be able to bind event handlers without the creating an instance.</i></remarks>
-        public static event DeviceOperationEventHandler OperationComplete;
+        public static event EventHandler<IntegraOperationEventArgs> OperationComplete;
 
         /// <summary>
         /// Raised when the <see cref="Status"/> is changed. <b>Must be subscribed to before any call to <see cref="Instance"/>!</b>
         /// </summary>
         /// <remarks><i>Event is static to be able to bind event handlers without the creating an instance.</i></remarks>
-        public static event DeviceStatusEventHandler StatusChanged;
+        public static event EventHandler<IntegraStatusEventArgs> StatusChanged;
 
         /// <summary>
         /// Provides the signature for system exclusive events.
@@ -295,7 +295,7 @@ namespace Integra
                     _IsConnected = value;
                     NotifyPropertyChanged();
 
-                    if(_IsConnected)
+                    if (_IsConnected)
                         Connected?.Invoke(this, new EventArgs());
                 }
             }
@@ -516,23 +516,24 @@ namespace Integra
 
         #region Methods
 
+
         internal void SendSystemExclusive(IntegraSystemExclusive syx)
         {
             lock (MidiOutputDevice)
             {
                 Debug.Print($"SX {syx}");
                 MidiOutputDevice.Send(new SystemExclusiveMessage(syx));
-                Thread.Sleep(DEVICE_LATENCY);
-                
+                //Thread.Sleep(DEVICE_LATENCY);
+
             }
         }
 
         public void SendSystemExclusive(uint address, uint request)
         {
-            lock(MidiOutputDevice)
+            lock (MidiOutputDevice)
             {
                 MidiOutputDevice.Send(new SystemExclusiveMessage(new IntegraSystemExclusive(address, request)));
-                Thread.Sleep(DEVICE_LATENCY);
+                //Thread.Sleep(DEVICE_LATENCY);
             }
         }
 
@@ -716,23 +717,14 @@ namespace Integra
             return IsConnected;
         }
 
-        internal async Task Initialize<T>(IntegraObservableCollection<T> collection) where T : IntegraBase<T>
+        internal Task Initialize<T>(IntegraObservableCollection<T> collection) where T : IntegraBase<T>
         {
-            // Ensure the INTEGRA-7 is connected before starting initialization
-            // MOVED TO: IntegraBase
+            ReportInit(this, new StatusMessage($"Initializing {collection.Name}", "Please wait...", 100, "Initializing"));
 
-            Debug.Print($"Initializing {collection.Name}");
-            await Task.Factory.StartNew(() =>
+            Task<bool> task = new Task<bool>(() =>
             {
-                ReportInit(this, new StatusMessage($"Initializing {collection.Name}", "Please wait...", 100, "Initializing"));
 
-                // Hookup the system exclusive event handler to the INTEGRA-7 data structure
-                // MOVED TO: IntegraBase
-
-                // Send all requests contained inside the data structure
-                
                 SendSystemExclusive(new IntegraSystemExclusive(collection.Address, collection.Request));
-                
 
                 while (!collection.IsInitialized)
                 {
@@ -741,40 +733,90 @@ namespace Integra
                 }
 
                 ReportComplete(this, new StatusMessage($"Initializing {collection.Name}", "Complete", 100, "Done"));
+                return true;
 
-            }, TaskCreationOptions.LongRunning);
+            });
 
-            Debug.Print($"Done initializing {collection.Name}");
+            _Operations.Enqueue(task);
+
+            if (!_IsOperating)
+            {
+                StartOperation();
+            }
+
+            return task;
+            //// Ensure the INTEGRA-7 is connected before starting initialization
+            //// MOVED TO: IntegraBase
+
+            //Debug.Print($"Initializing {collection.Name}");
+            //await Task.Factory.StartNew(() =>
+            //{
+            //    ReportInit(this, new StatusMessage($"Initializing {collection.Name}", "Please wait...", 100, "Initializing"));
+
+            //    // Hookup the system exclusive event handler to the INTEGRA-7 data structure
+            //    // MOVED TO: IntegraBase
+
+            //    // Send all requests contained inside the data structure
+                
+            //    SendSystemExclusive(new IntegraSystemExclusive(collection.Address, collection.Request));
+                
+
+            //    while (!collection.IsInitialized)
+            //    {
+            //        // Allow the data struture to report progress
+            //        Thread.Sleep(DEVICE_LATENCY);
+            //    }
+
+            //    ReportComplete(this, new StatusMessage($"Initializing {collection.Name}", "Complete", 100, "Done"));
+
+            //}, TaskCreationOptions.LongRunning);
+
+            //Debug.Print($"Done initializing {collection.Name}");
         }
 
 
+
+        private static bool _IsOperating = false;
+
+        private static ConcurrentQueue<Task> _Operations = new ConcurrentQueue<Task>();
+
+
+        private async void StartOperation()
+        {
+            _IsOperating = true;
+
+            while (!_Operations.IsEmpty)
+            {
+                Task task;
+
+                _Operations.TryDequeue(out task);
+
+                
+                task.RunSynchronously();
+
+                await task;
+                
+            }
+
+            _IsOperating = false;
+        }
         /// <summary>
         /// Request initialization for an INTEGRA-7 data structure
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="dataStructure"></param>
-        internal async Task Initialize<T>(IntegraBase<T> dataStructure) where T : IntegraBase<T>
+        internal Task Initialize<T>(IntegraBase<T> dataStructure) where T : IntegraBase<T>
         {
-            // Ensure the INTEGRA-7 is connected before starting initialization
-            // MOVED TO: IntegraBase
 
-            Debug.Print($"Initializing {dataStructure.GetType().Name}");
-            await Task.Factory.StartNew(() =>
+            ReportInit(this, new StatusMessage($"Initializing {dataStructure.Name}", "Please wait...", 100, "Initializing"));
+
+            Task<bool> task = new Task<bool>(() =>
             {
-                ReportInit(this, new StatusMessage($"Initializing {dataStructure.Name}", "Please wait...", 100, "Initializing"));
 
-                // Hookup the system exclusive event handler to the INTEGRA-7 data structure
-                // MOVED TO: IntegraBase
-
-                // Send all requests contained inside the data structure
-                //lock (MidiOutputDevice)
-                //{
-                    for (int i = 0; i < dataStructure.Requests.Count; i++)
-                    {
-                        SendSystemExclusive(new IntegraSystemExclusive(dataStructure.Address, dataStructure.Requests[i]));
-                    }
-                //}
-            
+                for (int i = 0; i < dataStructure.Requests.Count; i++)
+                {
+                    SendSystemExclusive(new IntegraSystemExclusive(dataStructure.Address, dataStructure.Requests[i]));
+                }
 
                 while (!dataStructure.IsInitialized)
                 {
@@ -783,10 +825,51 @@ namespace Integra
                 }
 
                 ReportComplete(this, new StatusMessage($"Initializing {dataStructure.Name}", "Complete", 100, "Done"));
+                return true;
 
-            }, TaskCreationOptions.LongRunning);
+            });
 
-            Debug.Print($"Done initializing {dataStructure.GetType().Name}");
+            _Operations.Enqueue(task);
+            
+            if(!_IsOperating)
+            {
+                StartOperation();
+            }
+
+            return task;
+
+            // Ensure the INTEGRA-7 is connected before starting initialization
+            // MOVED TO: IntegraBase
+
+            //Debug.Print($"Initializing {dataStructure.GetType().Name}");
+            //await Task.Factory.StartNew(() =>
+            //{
+            //    ReportInit(this, new StatusMessage($"Initializing {dataStructure.Name}", "Please wait...", 100, "Initializing"));
+
+            //    // Hookup the system exclusive event handler to the INTEGRA-7 data structure
+            //    // MOVED TO: IntegraBase
+
+            //    // Send all requests contained inside the data structure
+            //    //lock (MidiOutputDevice)
+            //    //{
+            //        for (int i = 0; i < dataStructure.Requests.Count; i++)
+            //        {
+            //            SendSystemExclusive(new IntegraSystemExclusive(dataStructure.Address, dataStructure.Requests[i]));
+            //        }
+            //    //}
+            
+
+            //    while (!dataStructure.IsInitialized)
+            //    {
+            //        // Allow the data struture to report progress
+            //        Thread.Sleep(DEVICE_LATENCY);
+            //    }
+
+            //    ReportComplete(this, new StatusMessage($"Initializing {dataStructure.Name}", "Complete", 100, "Done"));
+
+            //}, TaskCreationOptions.LongRunning);
+
+            //Debug.Print($"Done initializing {dataStructure.GetType().Name}");
         }
 
        

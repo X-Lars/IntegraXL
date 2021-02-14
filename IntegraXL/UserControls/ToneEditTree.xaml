@@ -7,6 +7,7 @@
              xmlns:xl="clr-namespace:ControlsXL;assembly=ControlsXL"
              xmlns:core="clr-namespace:Integra.Core;assembly=Integra"
              xmlns:common="clr-namespace:IntegraXL.Common"
+             xmlns:win="clr-namespace:IntegraXL.Windows"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -42,10 +43,9 @@
                 <xl:LinkButton>Common</xl:LinkButton>
                 <xl:LinkButton Command="{Binding ShowIntegraMFXWindow}" CommandParameter="{Binding Integra.StudioSet.MFXType}">MFX</xl:LinkButton>
                 <xl:LinkButton>Common Comp/EQ</xl:LinkButton>
-                <TreeViewItem Header="Note"
-                              IsExpanded="True">
-                    
-                </TreeViewItem>
+                <xl:LinkButton Command="{Binding ShowWindow}"
+                               CommandParameter="{x:Type win:SuperNATURALDrumKitNotesWindow}"
+                               Content="Notes"/>
             </StackPanel>
         </TreeViewItem>
         <TreeViewItem Header="PCM Synth Tone"

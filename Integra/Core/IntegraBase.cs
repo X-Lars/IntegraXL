@@ -169,6 +169,8 @@ namespace Integra.Core
 
             if (Device._IsConnected)
             {
+                // Remove event handler first in case of reinitialization
+                Device.Instance.MidiInputDevice.SystemExclusiveReceived -= SystemExclusiveReceived;
                 Device.Instance.MidiInputDevice.SystemExclusiveReceived += SystemExclusiveReceived;
 
                 // Non blocking initialization request
@@ -278,7 +280,11 @@ namespace Integra.Core
                 }
 
                 NotifyPropertyChanged(string.Empty, false);
-                //DebugPrint();
+
+                if (GetType().GetInterfaces().Contains(typeof(IIntegraStudioSetPartial)))
+                {
+                    Device.Instance.MidiInputDevice.SystemExclusiveReceived -= SystemExclusiveReceived;
+                }
             }
 
             return IsInitialized = true;
@@ -289,9 +295,19 @@ namespace Integra.Core
         /// </summary>
         public virtual void Reinitialize()
         {
-            Console.WriteLine($"[{GetType().Name}.{nameof(Reinitialize)}]");
-            IsInitialized = false;
-            Initialize();
+            if (GetType().GetInterfaces().Contains(typeof(IIntegraStudioSetPartial)))
+            {
+                Device.Instance.MidiInputDevice.SystemExclusiveReceived += SystemExclusiveReceived;
+
+                // Non blocking initialization request
+                Task.Factory.StartNew(() => Device.Instance.Initialize(this), TaskCreationOptions.LongRunning);
+            }
+            else
+            {
+                Console.WriteLine($"[{GetType().Name}.{nameof(Reinitialize)}]");
+                IsInitialized = false;
+                Initialize();
+            }
         }
 
         #region Methods: Private
@@ -699,12 +715,13 @@ namespace Integra.Core
         {
             IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
 
-
-
-            if(!IsInitialized)
+            
+            if (!IsInitialized)
             {
                 if (syx.Address == Address)
                 {
+                   
+                    Console.WriteLine(GetType().Name);
                     // Exact match
                     if (syx.Data.Length == Requests[0].Size)
                     {

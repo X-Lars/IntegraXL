@@ -172,7 +172,7 @@
     </None>
     <None Include="Integra.cd" />
     <Content Include="Resources\WaveForms.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>

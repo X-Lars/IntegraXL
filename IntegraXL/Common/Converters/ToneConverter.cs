@@ -1,5 +1,6 @@
 ﻿using Integra;
 using Integra.Core;
+using Integra.Database;
 using Integra.Models;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ using System.Windows.Data;
 
 namespace IntegraXL.Common.Converters
 {
+    
+
     public class ToneConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -35,6 +38,38 @@ namespace IntegraXL.Common.Converters
                 return new Tone(tone);
 
             return Binding.DoNothing;
+        }
+    }
+
+    public class SNDNoteConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            int id = (int)value;
+
+            return IntegraSNDNotes.Values[id];
+
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return Binding.DoNothing;
+        }
+    }
+    public class WaveFormConverter : IValueConverter
+    {
+        public object Convert(object values, Type targetType, object parameter, CultureInfo culture)
+        {
+            int id = (int)values;
+            IntegraWaveFormType type = (IntegraWaveFormType)int.Parse((string)parameter);
+            
+
+            return DataAccess.SelectWaveForms(type)[id];
+        }
+
+        public object ConvertBack(object value, Type targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 

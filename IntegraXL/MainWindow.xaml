@@ -29,7 +29,7 @@
                 <xl:Sidebar.Sections>
                     <xl:SidebarSection Header="Studio Set">
                         <StackPanel>
-                            <xl:LinkButton Command="{Binding ShowWindow}"
+                            <xl:LinkButton Command="{Binding ShowWindow, RelativeSource={RelativeSource AncestorType=Window}}"
                                            CommandParameter="{x:Type win:StudioSetCommonWindow}"
                                            Content="Studio Set Common"/>
                             <xl:LinkButton>Compressor + EQ Output</xl:LinkButton>
@@ -54,7 +54,9 @@
                                            Content="Motional Surround"/>
 
                             <TreeViewItem Header="Part" IsExpanded="True">
-                                <xl:LinkButton>View</xl:LinkButton>
+                                <xl:LinkButton Command="{Binding ShowIntegraWindow, RelativeSource={RelativeSource AncestorType=Window}}"
+                                               CommandParameter="{x:Type win:StudioSetPartWindow}"
+                                               Content="View"/>
                                 <xl:LinkButton Command="{Binding ShowIntegraWindow, RelativeSource={RelativeSource AncestorType=Window}}"
                                                CommandParameter="{x:Type win:StudioSetPartEQWindow}"
                                                Content="Equalizer"/>

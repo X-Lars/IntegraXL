@@ -24,9 +24,9 @@ namespace Integra.Models
         StudioSetCommonChorus _CommonChorus = new StudioSetCommonChorus();
         StudioSetCommonReverb _CommonReverb = new StudioSetCommonReverb();
         StudioSetCommonMotionalSurround _CommonMotionalSurround = new StudioSetCommonMotionalSurround();
-        IntegraBasePartial<StudioSetMidi> _Midi = new IntegraBasePartial<StudioSetMidi>(0x18001000, 0x00000001);
-        IntegraBasePartial<StudioSetPart> _StudioSetParts = new IntegraBasePartial<StudioSetPart>(0x18002000, 0x00004D);
-        IntegraBasePartial<StudioSetPartEQ> _PartsEQ = new IntegraBasePartial<StudioSetPartEQ>(0x18005000, 0x00000008);
+        StudioSetPartial<StudioSetMidi> _Midi = new StudioSetPartial<StudioSetMidi>(0x18001000);
+        StudioSetPartial<StudioSetPart> _StudioSetParts = new StudioSetPartial<StudioSetPart>(0x18002000);
+        StudioSetPartial<StudioSetPartEQ> _PartsEQ = new StudioSetPartial<StudioSetPartEQ>(0x18005000);
 
         public delegate void PartChangedEventHandler(object sender, IntegraPartChangeEventArgs e);
         public delegate void ToneChangedEventHandler(object sender, IntegraToneChangedEventArgs e);
@@ -166,17 +166,17 @@ namespace Integra.Models
             get { return _MasterEQ; }
         }
 
-        public IntegraBasePartial<StudioSetMidi> MIDI
+        public StudioSetPartial<StudioSetMidi> MIDI
         {
             get { return _Midi; }
         }
 
-        public IntegraBasePartial<StudioSetPart> Parts
+        public StudioSetPartial<StudioSetPart> Parts
         {
             get { return _StudioSetParts; }
         }
 
-        public IntegraBasePartial<StudioSetPartEQ> PartsEQ
+        public StudioSetPartial<StudioSetPartEQ> PartsEQ
         {
             get { return _PartsEQ; }
         }

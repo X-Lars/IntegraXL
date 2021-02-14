@@ -10,7 +10,7 @@ namespace Integra.Models
     /// Defines the INTEGRA-7 MIDI data structure.
     /// </summary>
     /// <remarks><i>18 00 10 00 - 18 00 1F 00</i></remarks>
-    public class StudioSetMidi : IntegraBase<StudioSetMidi>, IIntegraPartial, INotifyPropertyChanged
+    public class StudioSetMidi : IntegraBase<StudioSetMidi>, IIntegraPartial, INotifyPropertyChanged, IIntegraStudioSetPartial
     {
         #region Fields
 

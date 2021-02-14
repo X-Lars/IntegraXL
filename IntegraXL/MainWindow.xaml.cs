@@ -447,7 +447,7 @@ namespace IntegraXL
             if (sender.GetType() == typeof(VirtualSlots))
                 _Dialog = DialogManager.ProgressDialog(e.Action, e.Message, e.Text, true);
             else
-                _Dialog = DialogManager.ProgressDialog(e.Action, e.Message, e.Text);
+                _Dialog = DialogManager.ProgressDialog(e.Action, e.Message, e.Text, false, false, ProgressIndicatorStyles.Linear);
         }
 
         /// <summary>
@@ -461,7 +461,7 @@ namespace IntegraXL
                 return;
 
             if(_Dialog == null)
-                _Dialog = DialogManager.ProgressDialog(e.Action, e.Message, e.Text);
+                _Dialog = DialogManager.ProgressDialog(e.Action, e.Message, e.Text, false, false, ProgressIndicatorStyles.Linear);
 
 
             _Dialog.Title = e.Action;

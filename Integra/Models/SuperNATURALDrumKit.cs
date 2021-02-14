@@ -9,6 +9,7 @@ namespace Integra.Models
         private SuperNATURALDrumKitCommon _Common;
         private DrumKitCommonCompEQ _CompEQ;
         private IntegraBaseSuperNATURALDrumKitNotes<SuperNATURALDrumKitNote> _Notes;
+
         public SuperNATURALDrumKit(IntegraAddress address, IntegraParts part) : base(address)
         {
             Name = "SuperNATURAL Drum Kit";
@@ -16,6 +17,7 @@ namespace Integra.Models
 
             Common = new SuperNATURALDrumKitCommon(address, part);
             CompEQ = new DrumKitCommonCompEQ(address, part);
+
             _Notes = new IntegraBaseSuperNATURALDrumKitNotes<SuperNATURALDrumKitNote>(address, part);
         }
 

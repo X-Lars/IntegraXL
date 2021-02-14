@@ -1,10 +1,11 @@
 ﻿using Integra.Core;
 using Integra.Core.Interfaces;
 using Integra.Common;
+using System.Threading.Tasks;
 
 namespace Integra.Models
 {
-    public class StudioSetPart : IntegraBase<StudioSetPart>, IIntegraPartial
+    public class StudioSetPart : IntegraBase<StudioSetPart>, IIntegraPartial, IIntegraStudioSetPartial
     {
         private IntegraParts _Part;
 
@@ -135,8 +136,6 @@ namespace Integra.Models
             }
         }
 
-
-
         [Offset(0x0000)]
         public IntegraChannels ReceiveChannel
         {
@@ -149,12 +148,12 @@ namespace Integra.Models
         }
 
         [Offset(0x0001)]
-        public IntegraSwitch ReceiveSwitch
+        public byte ReceiveSwitch
         {
-            get { return (IntegraSwitch)_ReceiveSwitch; }
+            get { return _ReceiveSwitch; }
             set
             {
-                _ReceiveSwitch = (byte)value;
+                _ReceiveSwitch = value;
                 NotifyPropertyChanged();
             }
         }
@@ -206,10 +205,10 @@ namespace Integra.Models
         [Offset(0x000A)]
         public byte Pan
         {
-            get { return _Pan.Offset(-64); }
+            get { return _Pan; }
             set
             {
-                _Pan = value.Offset(64);
+                _Pan = value;
                 NotifyPropertyChanged();
             }
         }
@@ -760,8 +759,11 @@ namespace Integra.Models
             get { return _ReceiveVolume; }
             set
             {
-                _ReceiveVolume = value;
-                NotifyPropertyChanged();
+                if (_ReceiveVolume != value)
+                {
+                    _ReceiveVolume = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -856,8 +858,16 @@ namespace Integra.Models
 
         #region Overrides
 
+        public override void Reinitialize()
+        {
+            base.Reinitialize();
 
+            //System.Console.WriteLine("Reinit called");
 
+            //Device.Instance.MidiInputDevice.SystemExclusiveReceived += SystemExclusiveReceived;
+            //Task.Factory.StartNew(() => Device.Instance.Initialize(this), TaskCreationOptions.LongRunning);
+
+        }
         internal override bool Initialize(byte[] data)
         {
             if(!IsInitialized)
@@ -892,6 +902,7 @@ namespace Integra.Models
                 NotifyPropertyChanged(nameof(Part), false);
                 NotifyPropertyChanged(nameof(Type), false);
                 IsInitialized = true;
+                Device.Instance.MidiInputDevice.SystemExclusiveReceived -= SystemExclusiveReceived;
             }
 
             return IsInitialized;

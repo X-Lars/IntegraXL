@@ -16,6 +16,37 @@ namespace Integra.Database
 {
     public class DataAccess
     {
+        public static List<string> SelectWaveForms(IntegraWaveFormType type)
+        {
+            List<string> waveForms = new List<string>();
+
+            string sql = $"SELECT ID, WaveFormName FROM WaveForms WHERE Type = {(int)type} ORDER BY ID ASC";
+            
+            Console.WriteLine(sql);
+
+            using (var connection = new SqlConnection(GetConnectionString()))
+            {
+                OpenConnection(connection);
+
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                waveForms.Add(reader.GetString(1));
+                            }
+                        }
+                    }
+                }
+
+                CloseConnection(connection);
+            }
+
+            return waveForms;
+        }
 
         public static void InsertWaveForms()
         {
@@ -45,11 +76,13 @@ namespace Integra.Database
 
             }
 
-            if (result == 7500)
+            // TODO: Magic number
+            if (result == 7761)
             {
                 Console.WriteLine("Waveforms already inserted!");
                 return;
             }
+
             DataTable data = new DataTable();
 
             data.Columns.Add();
@@ -74,6 +107,8 @@ namespace Integra.Database
                 {
                     using (SqlBulkCopy batch = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
                     {
+
+
 
                         batch.DestinationTableName = "WaveForms";
                         batch.BatchSize = 4000;
@@ -787,7 +822,7 @@ namespace Integra.Database
         {
             Debug.Print($"[{nameof(DataAccess)}.{nameof(Truncate)}<{integraBase.GetType().Name}>]");
 
-            string sql = $"TRUNCATE TABLE {typeof(T).Name}";
+            string sql = $"TRUNCATE TABLE {integraBase.GetType().Name}";
 
             Debug.Print(sql);
 

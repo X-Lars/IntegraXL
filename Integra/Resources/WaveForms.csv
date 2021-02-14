@@ -1,3 +1,4 @@
+0;0;Off
 1;0;StGrand pA L
 2;0;StGrand pA R
 3;0;StGrand pB L
@@ -1081,6 +1082,7 @@
 1081;0;REV Timp3 pp
 1082;0;REV Timp3 mp
 1083;0;REV Metro
+0;1;Off
 1;1;Kick 1 Menu
 2;1;Kick 2 MenuL
 3;1;Kick 2 MenuR
@@ -1800,6 +1802,7 @@
 717;1;BalladSplshR
 718;1;YoMamaChinaL
 719;1;YoMamaChinaR
+0;2;Off
 1;2;Grand1 L p A
 2;2;Grand1 R p A
 3;2;Grand1 L p B
@@ -1848,6 +1851,7 @@
 46;2;Grand2 R ffB
 47;2;Grand2 L ffC
 48;2;Grand2 R ffC
+0;3;Off
 1;3;AcPiano3pA L
 2;3;AcPiano3pA R
 3;3;AcPiano3pB L
@@ -2370,6 +2374,7 @@
 520;3;Synth Pulse1
 521;3;Triangle
 522;3;Sine
+0;4;Off
 1;4;F.Str mp A L
 2;4;F.Str mp A R
 3;4;F.Str mp B L
@@ -2566,6 +2571,7 @@
 194;4;Cb Pz ff C R
 195;4;All Pz ff L
 196;4;All Pz ff R
+0;5;Off
 1;5;PhraseMenuL
 2;5;PhraseMenuR
 3;5;080:BladeBtL
@@ -3384,6 +3390,7 @@
 816;5;MG SweepDn
 817;5;US SweepU L1
 818;5;US SweepU L2
+0;6;Off
 1;6;Strings L pA
 2;6;Strings R pA
 3;6;Strings L pB
@@ -3896,6 +3903,7 @@
 510;6;REV Amen R
 511;6;REV AleluiaL
 512;6;REV AleluiaR
+0;7;Off
 1;7;StGrand L pA
 2;7;StGrand R pA
 3;7;StGrand L pB
@@ -4756,6 +4764,7 @@
 858;7;REV FX2R RSS
 859;7;REV FX3L RSS
 860;7;REV FX3R RSS
+0;8;Off
 1;8;Phrase MENU1
 2;8;Phrase MENU2
 3;8;Phrase MENU3
@@ -5706,6 +5715,7 @@
 948;8;REV Fly-By
 949;8;REV PsycAlrt
 950;8;REV Distresd
+0;9;Off
 1;9;World Tour
 2;9;Korean Ens
 3;9;Morocco Ens
@@ -6579,6 +6589,7 @@
 871;9;Dixie HH Cls
 872;9;Dixie HH Hlf
 873;9;Dixie HH Opn
+0;10;Off
 1;10;PopBrs mfA L
 2;10;PopBrs mfA R
 3;10;PopBrs mfB L
@@ -6840,6 +6851,7 @@
 259;10;Tp LipNz 2 R
 260;10;CTp Lip Nz L
 261;10;CTp Lip Nz R
+0;11;Off
 1;11;CmpPno ppA L
 2;11;CmpPno ppA R
 3;11;CmpPno ppB L
@@ -6880,6 +6892,7 @@
 38;11;CmpPno ffC R
 39;11;CmpPno ffC’L
 40;11;CmpPno ffC’R
+0;12;Off
 1;12;EPtype1 pp A
 2;12;EPtype1 pp B
 3;12;EPtype1 pp C
@@ -7048,6 +7061,7 @@
 166;12;ClvMtRsDB fA
 167;12;ClvMtRsDB fB
 168;12;ClvMtRsDB fC
+0;20;Off
 1;20;JP-8 Saw
 2;20;Syn Saw Wave
 3;20;MG Saw 1
@@ -7498,3 +7512,250 @@
 448;20;JazzyBubbles
 449;20;SynthFx 1
 450;20;SynthFx 2
+0;21;Off
+1;21;Concert Grand
+2;21;Grand Piano1
+3;21;Grand Piano2
+4;21;Grand Piano3
+5;21;Mellow Piano
+6;21;Bright Piano
+7;21;Upright Piano
+8;21;Concert Mono
+9;21;Honky-tonk
+10;21;Pure Vintage EP1
+11;21;Pure Vintage EP2
+12;21;Pure Wurly
+13;21;Pure Vintage EP3
+14;21;Old Hammer EP
+15;21;Dyno Piano
+16;21;Clav CB Flat
+17;21;Clav CA Flat
+18;21;Clav CB Medium
+19;21;Clav CA Medium
+20;21;Clav CB Brillia
+21;21;Clav CA Brillia
+22;21;Clav CB Combo
+23;21;Clav CA Combo
+24;21;Glockenspiel
+25;21;Vibraphone
+26;21;Marimba
+27;21;Xylophone
+28;21;Tubular Bells
+29;21;TW Organ
+30;21;French Accordion
+31;21;ItalianAccordion
+32;21;Harmonica
+33;21;Bandoneon
+34;21;Nylon Guitar
+35;21;Flamenco Guitar
+36;21;SteelStr Guitar
+37;21;Jazz Guitar
+38;21;ST Guitar Half
+39;21;ST Guitar Front
+40;21;TC Guitar Rear
+41;21;Acoustic Bass
+42;21;Fingered Bass
+43;21;Picked Bass
+44;21;Fretless Bass
+45;21;Violin
+46;21;Violin 2
+47;21;Viola
+48;21;Cello
+49;21;Cello 2
+50;21;Contrabass
+51;21;Harp
+52;21;Timpani
+53;21;Strings
+54;21;Marcato Strings
+55;21;London Choir
+56;21;Boys Choir
+57;21;Trumpet
+58;21;Trombone
+59;21;Tb2 CupMute
+60;21;Mute Trumpet
+61;21;French Horn
+62;21;Soprano Sax 2
+63;21;Alto Sax 2
+64;21;Tenor Sax 2
+65;21;Baritone Sax 2
+66;21;Oboe
+67;21;Bassoon
+68;21;Clarinet
+69;21;Piccolo
+70;21;Flute
+71;21;Pan Flute
+72;21;Shakuhachi
+73;21;Sitar
+74;21;Uilleann Pipes
+75;21;Bag Pipes
+76;21;Erhu
+77;21;Steel Drums
+0;22;Off
+1;22;Studio Kick
+2;22;Pop Kick
+3;22;Jazz Kick
+4;22;Rock Kick
+5;22;Studio Kick 2
+6;22;Rock Kick 2
+7;22;Orch Bass Drum
+8;22;Studio Sn
+9;22;Studio Sn Rim
+10;22;Studio Sn XStk
+11;22;Pop Sn
+12;22;Pop Sn Rim
+13;22;Pop Sn XStk
+14;22;Jazz Sn
+15;22;Jazz Sn Rim
+16;22;Jazz Sn XStk
+17;22;Rock Sn
+18;22;Rock Sn Rim
+19;22;Rock Sn XStk
+20;22;Tight Sn
+21;22;Tight Sn Rim
+22;22;Tight Sn XStk
+23;22;Studio Sn 2
+24;22;Studio Sn 2 Rim
+25;22;Studio Sn 2 XStk
+26;22;Rock Sn 2
+27;22;Rock Sn 2 Rim
+28;22;Rock Sn 2 XStk
+29;22;Brush Sn Slap
+30;22;Brush Sn Tap
+31;22;Brush Sn Slide
+32;22;Brush Sn Swirl 1
+33;22;Brush Sn Swirl 2
+34;22;Snare CrossStk
+35;22;Orch Snare
+36;22;Orch Snare XStk
+37;22;Pop Tom Hi
+38;22;Pop Tom Mid
+39;22;Pop Tom Flr
+40;22;Rock Tom Hi
+41;22;Rock Tom Mid
+42;22;Rock Tom Floor
+43;22;Jazz Tom Hi
+44;22;Jazz Tom Mid
+45;22;Jazz Tom Floor
+46;22;Brush Tom Hi
+47;22;Brush Tom Mid
+48;22;Brush Tom Floor
+49;22;Med HH Close
+50;22;Med HH Open
+51;22;Med HH Pedal
+52;22;Standard HH Cl
+53;22;Standard HH Op
+54;22;Standard HH Pdl
+55;22;Jazz HH Close
+56;22;Jazz HH Open
+57;22;Jazz HH Pedal
+58;22;Brush HH Close
+59;22;Brush HH Open
+60;22;Standard Rd Edge
+61;22;Standard Rd Bell
+62;22;Std Rd Edge/Bell
+63;22;Medium Ride Edge
+64;22;Medium Ride Bell
+65;22;Med Rd Edge/Bell
+66;22;Flat 18 Ride
+67;22;Brush 18 Ride
+68;22;Brush 20 Ride
+69;22;Standard 16 Cr R
+70;22;Standard 16 Cr L
+71;22;Standard 18 Cr R
+72;22;Standard 18 Cr L
+73;22;Jazz 16 Cr R
+74;22;Jazz 16 Cr L
+75;22;Heavy 18 Cr R
+76;22;Heavy 18 Cr L
+77;22;Brush 16 Cr R
+78;22;Brush 16 Cr L
+79;22;Brush 18 Cr R
+80;22;Brush 18 Cr L
+81;22;Splash Cymbal 1
+82;22;Splash Cymbal 2
+83;22;Brush Splash Cym
+84;22;China Cymbal
+85;22;Orch Cymbal
+86;22;Orch Mallet Cym
+87;22;Gong
+88;22;Timpani F2
+89;22;Timpani F#2
+90;22;Timpani G2
+91;22;Timpani G#2
+92;22;Timpani A2
+93;22;Timpani A#2
+94;22;Timpani B2
+95;22;Timpani C3
+96;22;Timpani C#3
+97;22;Timpani D3
+98;22;Timpani D#3
+99;22;Timpani E3
+100;22;Timpani F3
+101;22;Tambourine 1
+102;22;Tambourine 2
+103;22;Cowbell 1
+104;22;Cowbell 2
+105;22;Vibra-Slap
+106;22;High Bongo 1
+107;22;Low Bongo 1
+108;22;High Bongo 2
+109;22;Low Bongo 2
+110;22;MuteHi Conga 1
+111;22;OpenHi Conga 1
+112;22;Low Conga 1
+113;22;MuteHi Conga 2
+114;22;OpenHi Conga 2
+115;22;Low Conga 2
+116;22;High Timbale
+117;22;Low Timbale
+118;22;High Agogo 1
+119;22;Low Agogo 1
+120;22;High Agogo 2
+121;22;Low Agogo 2
+122;22;Cabasa 1
+123;22;Cabasa 2
+124;22;Maracas 1
+125;22;Maracas 2
+126;22;Short Whistle
+127;22;Long Whistle
+128;22;Short Guiro
+129;22;Long Guiro
+130;22;Claves 1
+131;22;Claves 2
+132;22;Hi Woodblock 1
+133;22;Low Woodblock 1
+134;22;Hi Woodblock 2
+135;22;Low Woodblock 2
+136;22;Mute Cuica 1
+137;22;Open Cuica 1
+138;22;Mute Cuica 2
+139;22;Open Cuica 2
+140;22;Mute Triangle 1
+141;22;Open Triangle 1
+142;22;Mute Triangle 2
+143;22;Open Triangle 2
+144;22;Shaker
+145;22;Sleigh Bell 1
+146;22;Sleigh Bell 2
+147;22;Wind Chimes
+148;22;Castanets 1
+149;22;Castanets 2
+150;22;Mute Surdo 1
+151;22;Open Surdo 1
+152;22;Mute Surdo 2
+153;22;Open Surdo 2
+154;22;Sticks
+155;22;Square Click
+156;22;Metro Click
+157;22;Metro Bell
+158;22;Hand Clap
+159;22;High Q
+160;22;Slap
+161;22;Scratch Push
+162;22;Scratch Pull
+163;22;Gt Fret Noise
+164;22;Gt Cutting Up Nz
+165;22;Gt Cutting Dw Nz
+166;22;AcBass Noise
+167;22;Flute Key Click
+168;22;Applause

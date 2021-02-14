@@ -55,7 +55,7 @@ namespace Integra.Core
                 {
                     _IsInitialized = value;
 
-                    NotifyPropertyChanged();
+                    //NotifyPropertyChanged();
 
                     InitializationCounter = 0;
                 }
@@ -75,61 +75,61 @@ namespace Integra.Core
         /// Override to bind collection items to notify property changed event.
         /// </summary>
         /// <param name="e">Event data.</param>
-        protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove)
-            {
-                if (e.OldItems != null)
-                {
-                    foreach (INotifyPropertyChanged item in e.OldItems)
-                    {
-                        item.PropertyChanged -= ItemChanged;
-                    }
-                }
-            }
+        //protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+        //{
+        //    if (e.Action == NotifyCollectionChangedAction.Remove)
+        //    {
+        //        if (e.OldItems != null)
+        //        {
+        //            foreach (INotifyPropertyChanged item in e.OldItems)
+        //            {
+        //                item.PropertyChanged -= ItemChanged;
+        //            }
+        //        }
+        //    }
 
-            if (e.Action == NotifyCollectionChangedAction.Add)
-            {
-                if (e.NewItems != null)
-                {
-                    foreach (INotifyPropertyChanged item in e.NewItems)
-                    {
-                        item.PropertyChanged += ItemChanged;
+        //    if (e.Action == NotifyCollectionChangedAction.Add)
+        //    {
+        //        if (e.NewItems != null)
+        //        {
+        //            foreach (INotifyPropertyChanged item in e.NewItems)
+        //            {
+        //                item.PropertyChanged += ItemChanged;
                         
-                    }
-                }
-            }
+        //            }
+        //        }
+        //    }
 
-            if (e.Action == NotifyCollectionChangedAction.Replace)
-            {
-                if (e.OldItems != null)
-                {
-                    foreach (INotifyPropertyChanged item in e.OldItems)
-                    {
-                        item.PropertyChanged -= ItemChanged;
-                    }
-                }
-                if (e.NewItems != null)
-                {
-                    foreach (INotifyPropertyChanged item in e.NewItems)
-                    {
-                        item.PropertyChanged += ItemChanged;
-                    }
-                }
-            }
+        //    if (e.Action == NotifyCollectionChangedAction.Replace)
+        //    {
+        //        if (e.OldItems != null)
+        //        {
+        //            foreach (INotifyPropertyChanged item in e.OldItems)
+        //            {
+        //                item.PropertyChanged -= ItemChanged;
+        //            }
+        //        }
+        //        if (e.NewItems != null)
+        //        {
+        //            foreach (INotifyPropertyChanged item in e.NewItems)
+        //            {
+        //                item.PropertyChanged += ItemChanged;
+        //            }
+        //        }
+        //    }
 
-            base.OnCollectionChanged(e);
-        }
+        //    base.OnCollectionChanged(e);
+        //}
 
-        /// <summary>
-        /// Raises the collection changed with reset action to notify property changes.
-        /// </summary>
-        /// <param name="sender">The object that raised the event.</param>
-        /// <param name="e">Event data containing the property name.</param>
-        private void ItemChanged(object sender, PropertyChangedEventArgs e)
-        {
-            base.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
+        ///// <summary>
+        ///// Raises the collection changed with reset action to notify property changes.
+        ///// </summary>
+        ///// <param name="sender">The object that raised the event.</param>
+        ///// <param name="e">Event data containing the property name.</param>
+        //private void ItemChanged(object sender, PropertyChangedEventArgs e)
+        //{
+        //    base.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        //}
 
         #region IIntegraDataClass
 

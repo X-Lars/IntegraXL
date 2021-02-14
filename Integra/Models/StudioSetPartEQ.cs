@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Integra.Models
 {
-    public class StudioSetPartEQ : IntegraBase<StudioSetPartEQ>, IIntegraPartial, INotifyPropertyChanged
+    public class StudioSetPartEQ : IntegraBase<StudioSetPartEQ>, IIntegraPartial, INotifyPropertyChanged, IIntegraStudioSetPartial
     {
         #region Fields
 

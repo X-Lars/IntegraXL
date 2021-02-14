@@ -2,13 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Integra.Core
 {
-    
+
 
     [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraNoteRates : byte
@@ -53,10 +50,45 @@ namespace Integra.Core
         SRX10 = 10,
         SRX11 = 11,
         SRX12 = 12,
-        SNS = 20
+        SNS = 20,
+        SNA = 21,
+        SND = 22
+
 
     }
     #region Custom Build Enumerations
+
+    public class IntegraSNDNotes : Enumeration
+    {
+        public new static List<string> Values
+        {
+            get
+            {
+                List<string> values = new List<string>();
+
+                for (int i = 1; i < 7;)
+                {
+                    values.Add($"Eb{i}");
+                    values.Add($"E{i}");
+                    if (i == 6)
+                        break;
+                    values.Add($"F{i}");
+                    values.Add($"F#{i}");
+                    values.Add($"G{i}");
+                    values.Add($"G#{i}");
+                    values.Add($"A{i}");
+                    values.Add($"Bb{i}");
+                    values.Add($"B{i}");
+                    i++;
+                    values.Add($"C{i}");
+                    values.Add($"C#{i}");
+                    values.Add($"D{i}");
+                }
+
+                return values;
+            }
+        }
+    }
 
     public class IntegraVoiceReserves : Enumeration
     {
@@ -78,6 +110,30 @@ namespace Integra.Core
         }
     }
 
+    public class IntegraPan : Enumeration
+    {
+        public new static List<string> Values
+        {
+            get
+            {
+                List<string> values = new List<string>();
+
+                for (int i = 0; i < 64; i++)
+                {
+                    values.Add($"L {Math.Abs(0 - 64 + i).ToString("00")}");
+                }
+
+                values.Add("0");
+
+                for (int i = 1; i < 64; i++)
+                {
+                    values.Add($"R {i.ToString("00")}");
+                }
+
+                return values;
+            }
+        }
+    }
   
     public class IntegraPartSelections : Enumeration
     {

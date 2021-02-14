@@ -104,4 +104,6 @@ namespace Integra.Core.Interfaces
         byte LSB { get; }
         byte PC { get; }
     }
+
+    public interface IIntegraStudioSetPartial { }
 }
