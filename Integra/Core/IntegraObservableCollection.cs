@@ -169,6 +169,7 @@ namespace Integra.Core
 
         public void Truncate()
         {
+
             // TODO: Truncate only once
             for (int i = 0; i < Items.Count; i++)
             {

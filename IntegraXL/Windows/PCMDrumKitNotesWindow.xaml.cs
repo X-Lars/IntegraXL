@@ -19,44 +19,40 @@ using System.Windows.Shapes;
 namespace IntegraXL.Windows
 {
     /// <summary>
-    /// Interaction logic for SuperNATURALDrumKitNotesWindow.xaml
+    /// Interaction logic for PCMDrumKitNotesWindow.xaml
     /// </summary>
-    public partial class SuperNATURALDrumKitNotesWindow : IntegraWindow
+    public partial class PCMDrumKitNotesWindow : IntegraWindow
     {
-
         private List<string> _WaveForms;
         public List<string> WaveForms
         {
             get { return _WaveForms; }
         }
 
+        private PCMDrumKitPartial _SelectedPartial;
 
-        SuperNATURALDrumKitNote _SelectedNote;
-
-        public SuperNATURALDrumKitNotesWindow()
+        public PCMDrumKitNotesWindow()
         {
-            _WaveForms = DataAccess.SelectWaveForms(IntegraWaveFormType.SND);
-            SelectedNote = DrumKitContext.Notes[0];
+            _WaveForms = DataAccess.SelectWaveForms(IntegraWaveFormType.INT);
+            SelectedPartial = DrumKitContext.Partials[0];
             InitializeComponent();
 
             DataContext = this;
-
-        }
-       
-        public SuperNATURALDrumKit DrumKitContext
-        {
-            get { return DeviceContext.StudioSet.Parts[(int)DeviceContext.StudioSet.SelectedPart].TemporaryTone.SuperNATURALDrumKit; }
         }
 
-        public SuperNATURALDrumKitNote SelectedNote
+        public PCMDrumKit DrumKitContext
         {
-            get { return _SelectedNote; }
+            get { return DeviceContext.StudioSet.Parts[(int)DeviceContext.StudioSet.SelectedPart].TemporaryTone.PCMDrumKit; }
+        }
+
+        public PCMDrumKitPartial SelectedPartial
+        {
+            get { return _SelectedPartial; }
             set
             {
-                _SelectedNote = value;
+                _SelectedPartial = value;
                 NotifyPropertyChanged();
             }
         }
-
     }
 }

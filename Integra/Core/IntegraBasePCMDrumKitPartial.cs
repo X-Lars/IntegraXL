@@ -1,25 +1,24 @@
 ﻿using Integra.Core.Interfaces;
+using MidiXL;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Integra.Core
 {
-    public class IntegraBasePCMDrumKitPartial<T> : ObservableCollection<T>, IIntegraDataClass where T : IntegraBase<T>, IIntegraPartial, IIntegraDrumKitPartial, INotifyPropertyChanged
+    public class IntegraBasePCMDrumKitPartial<T> : IntegraObservableCollection<T>, IIntegraDataClass where T : IntegraBase<T>, IIntegraPartial, IIntegraDrumKitPartial, INotifyPropertyChanged
     {
+        private const int NOTE_COUNT = 88;
         private IntegraParts _Part;
 
-        public IntegraBasePCMDrumKitPartial(IntegraAddress address, IntegraParts part)
+        public IntegraBasePCMDrumKitPartial(IntegraAddress address, IntegraParts part): base(address + 0x00001000, 0x00013E00)
         {
-            Part = part;
+            uint p = (((address - 0x19000000) & 0xFF000000) >> 24) * 4;
+            p += ((address & 0x00FF0000) >> 16) / 0x20;
+
+            Part = (IntegraParts)p;
             address += 0x00001000;
 
-            for (int i = 0; i < 87; i++)
+            for (int i = 0; i < NOTE_COUNT; i++)
             {
                 T item = Activator.CreateInstance<T>();
 
@@ -33,12 +32,14 @@ namespace Integra.Core
 
                 Console.WriteLine(item.Address.ToString());
                 item.Requests.Add(0x00000143);
-                item.Part = _Part;
+                item.Part = Part;
                 item.Note = i;
                 //item.Initialize();
 
                 Add(item);
             }
+
+            Initialize();
         }
 
         public IntegraParts Part
@@ -53,112 +54,163 @@ namespace Integra.Core
                 }
             }
         }
-        /// <summary>
-        /// Override to bind collection items to notify property changed event.
-        /// </summary>
-        /// <param name="e">Event data.</param>
-        protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+
+        public double Progress
         {
-            if (e.Action == NotifyCollectionChangedAction.Remove)
+            get { return (100d / NOTE_COUNT * InitializationCounter); }
+        }
+
+        protected override void SystemExclusiveReceived(object sender, SystemExclusiveMessageEventArgs e)
+        {
+            IntegraSystemExclusive syx = new IntegraSystemExclusive(e.Message);
+
+            if (!IsInitialized)
             {
-                if (e.OldItems != null)
+                //if ((syx.Address & 0xFFFF0000) == (Address & 0xFFFF0000))
+                //{
+                if (syx.Address.IsInRange(Address, Address + 0x00013E00))
                 {
-                    foreach (INotifyPropertyChanged item in e.OldItems)
+
+                    uint item = ((syx.Address& 0x0000FF00) >> 8) - 0x10;
+                    item += ((syx.Address & 0x000F0000) >> 16) * 128;
+                    item /= 2;
+
+                    if (Items[(int)item].Initialize(syx.Data))
                     {
-                        item.PropertyChanged -= ItemChanged;
+                        InitializationCounter++;
+
+                        if (InitializationCounter == NOTE_COUNT)
+                        {
+                            Device.Instance.ReportProgress(this, new StatusMessage($"Initializing {Name}", "Initialized", 100, "Done"));
+                            IsInitialized = true;
+                        }
+                        else
+                            Device.Instance.ReportProgress(this, new StatusMessage($"Initializing {Name}", "Please wait...", Progress, $"{InitializationCounter} of {NOTE_COUNT}"));
                     }
                 }
+                //}
             }
-
-            if (e.Action == NotifyCollectionChangedAction.Add)
+            else
             {
-                if (e.NewItems != null)
+                if ((syx.Address & 0xFFFFF000) == (Address & 0xFFFFF000))
                 {
-                    foreach (INotifyPropertyChanged item in e.NewItems)
-                    {
-                        item.PropertyChanged += ItemChanged;
-                    }
+                    uint item = ((syx.Address & 0x0000FF00) >> 8) - 0x10;
+                    item += ((syx.Address & 0x000F0000) >> 16) * 128;
+                    item /= 2;
+
+                    Items[(int)item].InitializeField(syx);
                 }
             }
-
-            if (e.Action == NotifyCollectionChangedAction.Replace)
-            {
-                if (e.OldItems != null)
-                {
-                    foreach (INotifyPropertyChanged item in e.OldItems)
-                    {
-                        item.PropertyChanged -= ItemChanged;
-                    }
-                }
-                if (e.NewItems != null)
-                {
-                    foreach (INotifyPropertyChanged item in e.NewItems)
-                    {
-                        item.PropertyChanged += ItemChanged;
-                    }
-                }
-            }
-
-            base.OnCollectionChanged(e);
-        }
-
-        /// <summary>
-        /// Raises the collection changed with reset action to notify property changes.
-        /// </summary>
-        /// <param name="sender">The object that raised the event.</param>
-        /// <param name="e">Event data containing the property name.</param>
-        private void ItemChanged(object sender, PropertyChangedEventArgs e)
-        {
-            base.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
 
-        #region IIntegraDataClass
+        ///// <summary>
+        ///// Override to bind collection items to notify property changed event.
+        ///// </summary>
+        ///// <param name="e">Event data.</param>
+        //protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+        //{
+        //    if (e.Action == NotifyCollectionChangedAction.Remove)
+        //    {
+        //        if (e.OldItems != null)
+        //        {
+        //            foreach (INotifyPropertyChanged item in e.OldItems)
+        //            {
+        //                item.PropertyChanged -= ItemChanged;
+        //            }
+        //        }
+        //    }
 
-        public int ID { get; }
+        //    if (e.Action == NotifyCollectionChangedAction.Add)
+        //    {
+        //        if (e.NewItems != null)
+        //        {
+        //            foreach (INotifyPropertyChanged item in e.NewItems)
+        //            {
+        //                item.PropertyChanged += ItemChanged;
+        //            }
+        //        }
+        //    }
 
-        public void Update()
-        {
-            for (int i = 0; i < Items.Count; i++)
-            {
-                Items[i].Update();
-            }
-        }
+        //    if (e.Action == NotifyCollectionChangedAction.Replace)
+        //    {
+        //        if (e.OldItems != null)
+        //        {
+        //            foreach (INotifyPropertyChanged item in e.OldItems)
+        //            {
+        //                item.PropertyChanged -= ItemChanged;
+        //            }
+        //        }
+        //        if (e.NewItems != null)
+        //        {
+        //            foreach (INotifyPropertyChanged item in e.NewItems)
+        //            {
+        //                item.PropertyChanged += ItemChanged;
+        //            }
+        //        }
+        //    }
 
-        public void Delete()
-        {
-            for (int i = 0; i < Items.Count; i++)
-            {
-                Items[i].Delete();
-            }
-        }
+        //    base.OnCollectionChanged(e);
+        //}
 
-        public void Select(int id)
-        {
-            for (int i = 0; i < Items.Count; i++)
-            {
-                Items[i].Select(id);
-            }
-        }
+        ///// <summary>
+        ///// Raises the collection changed with reset action to notify property changes.
+        ///// </summary>
+        ///// <param name="sender">The object that raised the event.</param>
+        ///// <param name="e">Event data containing the property name.</param>
+        //private void ItemChanged(object sender, PropertyChangedEventArgs e)
+        //{
+        //    base.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        //}
 
-        public void Insert()
-        {
-            for (int i = 0; i < Items.Count; i++)
-            {
-                Items[i].Insert();
-            }
-        }
 
-        public void Truncate()
-        {
-            // TODO: Truncate only once
-            for (int i = 0; i < Items.Count; i++)
-            {
-                Items[i].Truncate();
-            }
-        }
+        //#region IIntegraDataClass
 
-        #endregion
+        //public int ID { get; }
+
+        //public void Update()
+        //{
+        //    for (int i = 0; i < Items.Count; i++)
+        //    {
+        //        Items[i].Update();
+        //    }
+        //}
+
+        //public void Delete()
+        //{
+        //    for (int i = 0; i < Items.Count; i++)
+        //    {
+        //        Items[i].Delete();
+        //    }
+        //}
+
+        //public void Select(int id)
+        //{
+        //    for (int i = 0; i < Items.Count; i++)
+        //    {
+        //        Items[i].Select(id);
+        //    }
+        //}
+
+        //public void Insert()
+        //{
+        //    for (int i = 0; i < Items.Count; i++)
+        //    {
+        //        Items[i].Insert();
+        //    }
+        //}
+
+        //public void Truncate()
+        //{
+        //    // TODO: Truncate only once
+        //    for (int i = 0; i < Items.Count; i++)
+        //    {
+        //        Items[i].Truncate();
+        //    }
+        //}
+
+
+        //#endregion
 
 
     }

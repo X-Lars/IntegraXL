@@ -255,8 +255,11 @@ namespace Integra.Models
         {
             switch (type)
             {
-                case IntegraMFXTypes.Equalizer: _MFXModel = new Equalizer(); break;
-                case IntegraMFXTypes.Spectrum:  _MFXModel = new Spectrum();  break;
+                case IntegraMFXTypes.Equalizer:  _MFXModel = new Equalizer();  break;
+                case IntegraMFXTypes.Spectrum:   _MFXModel = new Spectrum();   break;
+                case IntegraMFXTypes.LowBoost:   _MFXModel = new LowBoost();   break;
+                case IntegraMFXTypes.StepFilter: _MFXModel = new StepFilter(); break;
+
                 default:
                     _MFXModel = new Thru();
                     break;

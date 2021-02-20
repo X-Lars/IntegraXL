@@ -190,6 +190,7 @@ namespace Integra.Core
         /// <returns>True if the class is completely initialized.</returns>
         internal virtual bool Initialize(byte[] data)
         {
+
             if (!IsInitialized)
             {
                 foreach (var field in GetFields())

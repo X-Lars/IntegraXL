@@ -24,6 +24,7 @@ namespace Integra.Models
         StudioSetCommonChorus _CommonChorus = new StudioSetCommonChorus();
         StudioSetCommonReverb _CommonReverb = new StudioSetCommonReverb();
         StudioSetCommonMotionalSurround _CommonMotionalSurround = new StudioSetCommonMotionalSurround();
+
         StudioSetPartial<StudioSetMidi> _Midi = new StudioSetPartial<StudioSetMidi>(0x18001000);
         StudioSetPartial<StudioSetPart> _StudioSetParts = new StudioSetPartial<StudioSetPart>(0x18002000);
         StudioSetPartial<StudioSetPartEQ> _PartsEQ = new StudioSetPartial<StudioSetPartEQ>(0x18005000);

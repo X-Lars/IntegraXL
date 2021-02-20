@@ -30,6 +30,8 @@ namespace IntegraXL.Windows
 
             DataContext = this;
 
+            MFX.Reinitialize();
+
             InitializeControl();
 
             DeviceContext.StudioSet.PartChanged += StudioSetPartChanged;
@@ -86,8 +88,10 @@ namespace IntegraXL.Windows
 
             switch (MFX.Type)
             {
-                case IntegraMFXTypes.Equalizer: type = typeof(Equalizer); break;
-                case IntegraMFXTypes.Spectrum: type = typeof(Spectrum); break;
+                case IntegraMFXTypes.Equalizer:  type = typeof(Equalizer);  break;
+                case IntegraMFXTypes.Spectrum:   type = typeof(Spectrum);   break;
+                case IntegraMFXTypes.LowBoost:   type = typeof(LowBoost);   break;
+                case IntegraMFXTypes.StepFilter: type = typeof(StepFilter); break;
             }
 
             MFXControl = (UserControl)Activator.CreateInstance(type);

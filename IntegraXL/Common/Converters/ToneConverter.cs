@@ -3,19 +3,13 @@ using Integra.Core;
 using Integra.Database;
 using Integra.Models;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace IntegraXL.Common.Converters
 {
-    
-
     public class ToneConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -41,6 +35,22 @@ namespace IntegraXL.Common.Converters
         }
     }
 
+    public class PCMNoteConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            int id = (int)value;
+
+            return IntegraPCMDrumKitNotes.Values[id];
+
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return Binding.DoNothing;
+        }
+    }
+
     public class SNDNoteConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -60,6 +70,8 @@ namespace IntegraXL.Common.Converters
     {
         public object Convert(object values, Type targetType, object parameter, CultureInfo culture)
         {
+            // TODO: Data access is called for every note
+
             int id = (int)values;
             IntegraWaveFormType type = (IntegraWaveFormType)int.Parse((string)parameter);
             

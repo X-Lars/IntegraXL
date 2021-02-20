@@ -373,3 +373,5 @@ FodyWeavers.xsd
 /Integra/Database/Conventions.txt
 /Integra/Core/IntegraBaseBase.cs
 /Integra/Core/IntegraCache.cs
+/WPFTest/WPFTest.csproj
+/WPFTest

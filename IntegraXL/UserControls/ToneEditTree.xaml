@@ -69,8 +69,9 @@
                 <xl:LinkButton Command="{Binding ShowIntegraMFXWindow}" CommandParameter="{Binding Integra.StudioSet.MFXType}">MFX</xl:LinkButton>
                 <xl:LinkButton>Common Comp/EQ</xl:LinkButton>
                 <xl:LinkButton>Common</xl:LinkButton>
-                <TreeViewItem Header="Note"
-                              IsExpanded="True"/>
+                <xl:LinkButton Command="{Binding ShowWindow}"
+                               CommandParameter="{x:Type win:PCMDrumKitNotesWindow}"
+                               Content="Notes"/>
                 <xl:LinkButton>Common 2</xl:LinkButton>
             </StackPanel>
         </TreeViewItem>

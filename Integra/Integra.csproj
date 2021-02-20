@@ -100,6 +100,8 @@
     <Compile Include="Core\IntegraWaveForm.cs" />
     <Compile Include="Core\Interfaces\Interfaces.cs" />
     <Compile Include="Models\DrumKitCommonCompEQ.cs" />
+    <Compile Include="Models\MFX\StepFilter.cs" />
+    <Compile Include="Models\MFX\LowBoost.cs" />
     <Compile Include="Models\PCMDrumKitCommon02.cs" />
     <Compile Include="Models\PCMDrumKitPartial.cs" />
     <Compile Include="Models\PCMSynthTonePartial.cs" />

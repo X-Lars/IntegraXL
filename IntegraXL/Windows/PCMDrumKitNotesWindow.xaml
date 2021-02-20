@@ -1,69 +1,59 @@
-﻿<local:IntegraWindow x:Class="IntegraXL.Windows.SuperNATURALDrumKitNotesWindow"
+﻿<local:IntegraWindow x:Class="IntegraXL.Windows.PCMDrumKitNotesWindow"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IntegraXL.Windows"
-                     xmlns:xl="clr-namespace:ControlsXL;assembly=ControlsXL"
-                     xmlns:core="clr-namespace:Integra.Core;assembly=Integra"
                      xmlns:convert="clr-namespace:IntegraXL.Common.Converters"
+                     xmlns:core="clr-namespace:Integra.Core;assembly=Integra"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
                      x:Name="root">
-    
     <local:IntegraWindow.Resources>
-        <convert:SNDNoteConverter x:Key="NoteConverter"/>
+        <convert:PCMNoteConverter x:Key="NoteConverter"/>
         <convert:WaveFormConverter x:Key="WaveConverter"/>
     </local:IntegraWindow.Resources>
-    
+
     <Grid>
         <StackPanel Orientation="Horizontal">
-        <DataGrid AutoGenerateColumns="False" 
+            <DataGrid AutoGenerateColumns="False" 
                              
-                             ItemsSource="{Binding DrumKitContext.Notes}"
-                             SelectedItem="{Binding SelectedNote}"
+                             ItemsSource="{Binding DrumKitContext.Partials}"
+                             SelectedItem="{Binding SelectedPartial}"
                              MaxHeight="480"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   IsSynchronizedWithCurrentItem="True"
                   SelectionMode="Single"
                   >
-            
-            <DataGrid.Columns>
-                
-                <DataGridTextColumn Binding="{Binding Path=Note, Converter={StaticResource NoteConverter}}"
+
+                <DataGrid.Columns>
+
+                    <DataGridTextColumn Binding="{Binding Path=Note, Converter={StaticResource NoteConverter}}"
                                                Header="Note"
                                                IsReadOnly="True"
                                                MinWidth="36"/>
 
-                    <DataGridTemplateColumn Header="Instrument"
+                    <DataGridTemplateColumn Header="Partial"
                                             IsReadOnly="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding InstNumber, Converter={StaticResource WaveConverter}, ConverterParameter=22}">
-                                </TextBlock>
+                                <TextBlock Text="{Binding PartialName}"/>
+
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
-                        <DataGridTemplateColumn.CellEditingTemplate>
+                        <!--<DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate>
                                 <ComboBox ItemsSource="{Binding ElementName=root, Path=WaveForms}" 
                                           SelectedIndex="{Binding ElementName=root, Path=SelectedNote.InstNumber}"
                                           ></ComboBox>
                             </DataTemplate>
-                        </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>-->
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
+
+            </DataGrid>
             
-        </DataGrid>
-            <GroupBox Header="Note" DataContext="{Binding SelectedNote}">
-                <StackPanel>
-                    <xl:NumericTextBox MinValue="0" MaxValue="127"
-                                       Orientation="Vertical"
-                                       Value="{Binding NoteLevel}"/>
-                    <xl:NumericTextBox ValueProvider="{x:Static core:IntegraPan.Values}"
-                                       Index="{Binding Pan}"/>
-                </StackPanel>
-            </GroupBox>
         </StackPanel>
     </Grid>
 </local:IntegraWindow>

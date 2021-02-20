@@ -30,13 +30,16 @@
                 
             </StackPanel>
 
+            <StackPanel Orientation="Horizontal">
+                
             <GroupBox Grid.Row="2" 
                       Header="Level / Channel">
 
                 <StackPanel>
-                    
-                    <xl:NumericTextBox MinValue="0" MaxValue="127"
-                                       Value="{Binding PartLevel}"/>
+
+                    <xl:Slider Min="0" Max="127" 
+                               TrackSize="8"
+                               Value="{Binding PartLevel}"/>
 
                     <xl:NumericTextBox ValueProvider="{x:Static core:IntegraPan.Values}"
                                        Index="{Binding Pan}"/>
@@ -59,6 +62,41 @@
                     
                 </StackPanel>
             </GroupBox>
+
+                <GroupBox Header="Pitch">
+                    <StackPanel>
+                        <xl:NumericTextBox MinValue="-3" MaxValue="3"
+                                           Value="{Binding OctaveShift}"/>
+
+                        <xl:NumericTextBox MinValue="-48" MaxValue="48"
+                                           Value="{Binding CoarseTune}"/>
+
+                        <xl:NumericTextBox MinValue="-50" MaxValue="50"
+                                           Value="{Binding FineTune}"/>
+
+                        <xl:NumericTextBox ValueProvider="{x:Static core:IntegraPitchBendRange.Values}"
+                                           Index="{Binding PitchBendRange}"/>
+
+                        <ComboBox ItemsSource="{Binding Source={common:EnumerationBindingSource {x:Type core:IntegraToneSwitch}}}"
+                                  SelectedItem="{Binding PortamentoSwitch}"/>
+
+                        <xl:NumericTextBox ValueProvider="{x:Static core:IntegraPortamentoTime.Values}"
+                                           Index="{Binding PortamentoTime}"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Offset">
+                    <StackPanel>
+                        <xl:Slider Min="-64" Max="63"
+                                Value="{Binding CutoffOffset}"/>
+                        <xl:Slider Min="-64" Max="63"
+                                Value="{Binding ResonanceOffset}"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Vibrato">
+                    
+                </GroupBox>
+            </StackPanel>
         </StackPanel>
         
     </Grid>

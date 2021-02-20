@@ -29,6 +29,7 @@ namespace Integra.Models
             {
                 _Type = value;
                 NotifyPropertyChanged();
+                Reinitialize();
             }
         }
 

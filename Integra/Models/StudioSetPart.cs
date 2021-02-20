@@ -213,23 +213,23 @@ namespace Integra.Models
             }
         }
         [Offset(0x000B)]
-        public byte CoarseTune
+        public int CoarseTune
         {
-            get { return _CoarseTune.Offset(-48); }
+            get { return _CoarseTune - 64; }
             set
             {
-                _CoarseTune = value.Offset(48);
+                _CoarseTune = (byte)(value + 64);
                 NotifyPropertyChanged();
             }
         }
 
         [Offset(0x000C)]
-        public byte FineTune
+        public int FineTune
         {
-            get { return _FineTune.Offset(-50); }
+            get { return _FineTune -64; }
             set
             {
-                _FineTune = value.Offset(50);
+                _FineTune = (byte)(value + 64);
                 NotifyPropertyChanged();
             }
         }
@@ -293,23 +293,23 @@ namespace Integra.Models
         }
 
         [Offset(0x0013)]
-        public byte CutoffOffset
+        public int CutoffOffset
         {
-            get { return _CutoffOffset.Offset(-64); }
+            get { return _CutoffOffset - 64; }
             set
             {
-                _CutoffOffset = value.Offset(64);
+                _CutoffOffset = (byte)(value + 64);
                 NotifyPropertyChanged();
             }
         }
 
         [Offset(0x0014)]
-        public byte ResonanceOffset
+        public int ResonanceOffset
         {
-            get { return _ResonanceOffset.Offset(-64); }
+            get { return _ResonanceOffset - 64; }
             set
             {
-                _ResonanceOffset = value.Offset(64);
+                _ResonanceOffset = (byte)(value + 64);
                 NotifyPropertyChanged();
             }
         }
@@ -381,12 +381,13 @@ namespace Integra.Models
         }
 
         [Offset(0x001B)]
-        public byte OctaveShift
+        public int OctaveShift
         {
-            get { return _OctaveShift.Offset(-3); }
+            get { return _OctaveShift - 64; }
             set
             {
-                _OctaveShift = value.Offset(3);
+                _OctaveShift = (byte)(value + 64);
+                NotifyPropertyChanged();
             }
         }
 

@@ -34,7 +34,7 @@ namespace Integra.Core
         [Description("W")]  _2    = 0x15,
     }
 
-   
+    
     public enum IntegraWaveFormType : int
     {
         INT = 0,
@@ -53,9 +53,8 @@ namespace Integra.Core
         SNS = 20,
         SNA = 21,
         SND = 22
-
-
     }
+
     #region Custom Build Enumerations
 
     public class IntegraSNDNotes : Enumeration
@@ -89,6 +88,79 @@ namespace Integra.Core
             }
         }
     }
+
+    public class IntegraPitchBendRange : Enumeration
+    {
+        public new static List<string> Values
+        {
+            get
+            {
+                List<string> values = new List<string>();
+
+                for (int i = 0; i < 25; i++)
+                {
+                    values.Add(i.ToString());
+                }
+
+                values.Add("Tone");
+
+                return values;
+            }
+        }
+    }
+
+    public class IntegraPortamentoTime : Enumeration
+    {
+        public new static List<string> Values
+        {
+            get
+            {
+                List<string> values = new List<string>();
+
+                for (int i = 0; i < 128; i++)
+                {
+                    values.Add(i.ToString());
+                }
+
+                values.Add("Tone");
+
+                return values;
+            }
+        }
+    }
+
+    public class IntegraPCMDrumKitNotes : Enumeration
+    {
+        public new static List<string> Values
+        {
+            get
+            {
+                List<string> values = new List<string>();
+
+                for (int i = 0; i < 9;)
+                {
+                    values.Add($"A{i}");
+                    values.Add($"Bb{i}");
+                    values.Add($"B{i}");
+                    i++;
+                    values.Add($"C{i}");
+                    if (i == 8)
+                        break;
+                    values.Add($"C#{i}");
+                    values.Add($"D{i}");
+                    values.Add($"Eb{i}");
+                    values.Add($"E{i}");
+                    values.Add($"F{i}");
+                    values.Add($"F#{i}");
+                    values.Add($"G{i}");
+                    values.Add($"G#{i}");
+                }
+
+                return values;
+            }
+        }
+    }
+
 
     public class IntegraVoiceReserves : Enumeration
     {
@@ -1483,6 +1555,33 @@ namespace Integra.Core
         On     = 0x01,
         Random = 0x02,
     }
+
+    #endregion
+
+    #region MFX
+
+    #region MFX: Low Boost
+
+    public enum IntegraBoostFrequency : byte
+    {
+        [Description("50 [Hz]")]   Hz50    = 0x00,
+        [Description("56 [Hz]")]   Hz56    = 0x01,
+        [Description("63 [Hz]")]   Hz63    = 0x02,
+        [Description("71 [Hz]")]   Hz71    = 0x03,
+        [Description("80 [Hz]")]   Hz80    = 0x04,
+        [Description("90 [Hz]")]   Hz90    = 0x05,
+        [Description("100 [Hz]")]  Hz100   = 0x06,
+        [Description("112 [Hz]")]  Hz112   = 0x07,
+        [Description("125 [Hz]")]  Hz125   = 0x08
+    }
+
+    public enum IntegraBoostWidth : byte
+    {
+        Wide    = 0x00,
+        Mid     = 0x01,
+        Narrow  = 0x02
+    }
+    #endregion
 
     #endregion
 }

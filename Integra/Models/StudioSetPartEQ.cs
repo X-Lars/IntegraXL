@@ -70,12 +70,12 @@ namespace Integra.Models
         }
 
         [Offset(0x0002)]
-        public byte EQLowGain
+        public int EQLowGain
         {
-            get { return _EQLowGain.Offset(-15); }
+            get { return _EQLowGain - 15; }
             set
             {
-                _EQLowGain = value.Offset(15);
+                _EQLowGain = (byte)(value + 15);
                 NotifyPropertyChanged();
             }
         }
@@ -92,12 +92,12 @@ namespace Integra.Models
         }
 
         [Offset(0x0004)]
-        public byte EQMidGain
+        public int EQMidGain
         {
-            get { return _EQMidGain.Offset(-15); }
+            get { return _EQMidGain - 15; }
             set
             {
-                _EQMidGain = value.Offset(15);
+                _EQMidGain = (byte)(value + 15);
                 NotifyPropertyChanged();
             }
         }
@@ -125,12 +125,12 @@ namespace Integra.Models
         }
 
         [Offset(0x0007)]
-        public byte EQHighGain
+        public int EQHighGain
         {
-            get { return _EQHighGain.Offset(-15); }
+            get { return _EQHighGain -15; }
             set
             {
-                _EQHighGain = value.Offset(15);
+                _EQHighGain = (byte)(value + 15);
                 NotifyPropertyChanged();
             }
         }

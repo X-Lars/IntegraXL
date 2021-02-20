@@ -17,9 +17,8 @@
 
             <GroupBox Header="Switch">
 
-                <xl:NumericTextBox Interval="1" 
-                                       MinValue="0" MaxValue="1" 
-                                       Value="{Binding EQSwitch}"/>
+                <xl:Switch OffLabel="Off" OnLabel="On" IsChecked="{Binding EQSwitch}"/>
+
             </GroupBox>
             
             <GroupBox Header="Low Range">

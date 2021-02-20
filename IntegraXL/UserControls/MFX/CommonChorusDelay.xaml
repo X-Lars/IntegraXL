@@ -4,9 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:xl="clr-namespace:ControlsXL;assembly=ControlsXL"
+             xmlns:convert="clr-namespace:IntegraXL.Common.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
+    <UserControl.Resources>
+        <convert:IntBooleanConverter x:Key="BoolConvert"/>
+    </UserControl.Resources>
     <StackPanel Orientation="Horizontal">
 
         <GroupBox Header="Left">
@@ -28,10 +32,11 @@
                 <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Delay</Label>
                 <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Level</Label>
 
-                <xl:NumericTextBox x:Name="LeftSwitch" 
-                                   Grid.Column="1" Grid.Row="0"
-                                   MinValue="0" MaxValue="1"
-                                   Value="{Binding CommonChorus[0]}"/>
+                <xl:Switch x:Name="LeftSwitch" 
+                           Grid.Column="1" Grid.Row="0"
+                           OffLabel="msec" OnLabel="Note"
+                           InlineLabels="False"
+                           IsChecked="{Binding CommonChorus[0]}"/>
 
                 <xl:NumericTextBox Grid.Column="1" Grid.Row="1"
                                    MinValue="0" MaxValue="1000" 
@@ -42,7 +47,7 @@
                         <Style TargetType="{x:Type xl:NumericTextBox}">
                             <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=LeftSwitch, Path=Value}" Value="1">
+                                <DataTrigger Binding="{Binding ElementName=LeftSwitch, Path=IsChecked}" Value="True">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -59,7 +64,7 @@
                         <Style TargetType="{x:Type ComboBox}">
                             <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=LeftSwitch, Path=Value}" Value="0">
+                                <DataTrigger Binding="{Binding ElementName=LeftSwitch, Path=IsChecked}" Value="False">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -94,10 +99,11 @@
                 <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Delay</Label>
                 <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Level</Label>
 
-                <xl:NumericTextBox x:Name="CenterSwitch" 
+                <xl:Switch x:Name="CenterSwitch" 
                                    Grid.Column="1" Grid.Row="0"
-                                   MinValue="0" MaxValue="1"
-                                   Value="{Binding CommonChorus[6]}"/>
+                                   OffLabel="msec" OnLabel="note"
+                           InlineLabels="False"
+                                   IsChecked="{Binding CommonChorus[6]}"/>
 
                 <xl:NumericTextBox Grid.Column="1" Grid.Row="1"
                                    MinValue="0" MaxValue="1000" 
@@ -108,7 +114,7 @@
                         <Style TargetType="{x:Type xl:NumericTextBox}">
                             <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=CenterSwitch, Path=Value}" Value="1">
+                                <DataTrigger Binding="{Binding ElementName=CenterSwitch, Path=IsChecked}" Value="True">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -125,7 +131,7 @@
                         <Style TargetType="{x:Type ComboBox}">
                             <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=CenterSwitch, Path=Value}" Value="0">
+                                <DataTrigger Binding="{Binding ElementName=CenterSwitch, Path=IsChecked}" Value="False">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -159,10 +165,11 @@
                 <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Delay</Label>
                 <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Level</Label>
 
-                <xl:NumericTextBox x:Name="RightSwitch"
+                <xl:Switch x:Name="RightSwitch"
                                    Grid.Column="1" Grid.Row="0"
-                                   MinValue="0" MaxValue="1"
-                                   Value="{Binding CommonChorus[3]}"/>
+                                   OffLabel="msec" OnLabel="Note"
+                           InlineLabels="False"
+                                   IsChecked="{Binding CommonChorus[3]}"/>
 
                 <xl:NumericTextBox Grid.Column="1" Grid.Row="1"
                                    MinValue="0" MaxValue="1000" 
@@ -173,7 +180,7 @@
                         <Style TargetType="{x:Type xl:NumericTextBox}">
                             <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=RightSwitch, Path=Value}" Value="1">
+                                <DataTrigger Binding="{Binding ElementName=RightSwitch, Path=IsChecked}" Value="True">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -191,7 +198,7 @@
                         <Style TargetType="{x:Type ComboBox}">
                             <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=RightSwitch, Path=Value}" Value="0">
+                                <DataTrigger Binding="{Binding ElementName=RightSwitch, Path=IsChecked}" Value="False">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
