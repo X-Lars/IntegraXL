@@ -21,7 +21,7 @@
                               SelectedIndex="{Binding [0]}"/>
 
                     <xl:NumericTextBox Interval="1" 
-                                       MinValue="-15" MaxValue="15" 
+                                       Min="-15" Max="15" 
                                        Suffix="dB"
                                        Value="{Binding [1]}"/>
 
@@ -35,7 +35,7 @@
                               SelectedIndex="{Binding [2]}"/>
 
                     <xl:NumericTextBox Interval="1" 
-                                       MinValue="-15" MaxValue="15" 
+                                       Min="-15" Max="15" 
                                        Suffix="dB"
                                        Value="{Binding [3]}"/>
 
@@ -52,7 +52,7 @@
                               SelectedIndex="{Binding [5]}"/>
 
                     <xl:NumericTextBox Interval="1" 
-                                       MinValue="-15" MaxValue="15" 
+                                       Min="-15" Max="15" 
                                        Suffix="dB"
                                        Value="{Binding [6]}"/>
 
@@ -69,7 +69,7 @@
                               SelectedIndex="{Binding [8]}"/>
 
                     <xl:NumericTextBox Interval="1" 
-                                       MinValue="-15" MaxValue="15" 
+                                       Min="-15" Max="15" 
                                        Suffix="dB"
                                        Value="{Binding [9]}"/>
 
@@ -80,7 +80,7 @@
                 <StackPanel>
 
                     <xl:NumericTextBox Interval="1" 
-                                       MinValue="0" MaxValue="127" 
+                                       Min="0" Max="127" 
                                        Value="{Binding [10]}"/>
 
                 </StackPanel>

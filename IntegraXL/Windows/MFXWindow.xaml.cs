@@ -95,6 +95,7 @@ namespace IntegraXL.Windows
             }
 
             MFXControl = (UserControl)Activator.CreateInstance(type);
+
             NotifyPropertyChanged(nameof(MFX));
         }
 

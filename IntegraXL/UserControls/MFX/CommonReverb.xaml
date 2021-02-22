@@ -13,37 +13,37 @@
         <StackPanel>
             
             <xl:NumericTextBox Interval="1"
-                               MinValue="0" MaxValue="100"
+                               Min="0" Max="100"
                                Value="{Binding CommonReverb[1]}"
                                Suffix="ms"/>
 
             <xl:NumericTextBox Interval="0.1"
-                               MinValue="0.1" MaxValue="10.0"
+                               Min="0.1" Max="10.0"
                                Value="{Binding CommonReverb[2]}"
                                Suffix="S"/>
 
             <xl:NumericTextBox Interval="1"
-                               MinValue="0" MaxValue="127"
+                               Min="0" Max="127"
                                Value="{Binding CommonReverb[3]}"/>
 
             <xl:NumericTextBox Interval="1"
-                               MinValue="0" MaxValue="127"
+                               Min="0" Max="127"
                                Value="{Binding CommonReverb[4]}"/>
 
             <xl:NumericTextBox Interval="1"
-                               MinValue="0" MaxValue="100"
+                               Min="0" Max="100"
                                Value="{Binding CommonReverb[5]}"/>
 
             <xl:NumericTextBox Interval="1"
-                               MinValue="0" MaxValue="100"
+                               Min="0" Max="100"
                                Value="{Binding CommonReverb[6]}"/>
 
             <xl:NumericTextBox Interval="1"
-                               MinValue="0" MaxValue="127"
+                               Min="0" Max="127"
                                Value="{Binding CommonReverb[7]}"/>
 
             <xl:NumericTextBox Interval="1"
-                               MinValue="0" MaxValue="127"
+                               Min="0" Max="127"
                                Value="{Binding CommonReverb[8]}"/>
 
         </StackPanel>

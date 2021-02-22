@@ -22,7 +22,7 @@
                               SelectedItem="{Binding EQLowFreq}"/>
 
                     <xl:NumericTextBox Interval="1" 
-                                       MinValue="-15" MaxValue="15" 
+                                       Min="-15" Max="15" 
                                        Suffix="dB"
                                        Value="{Binding EQLowGain}"/>
 
@@ -36,7 +36,7 @@
                               SelectedItem="{Binding EQMidFreq}"/>
 
                     <xl:NumericTextBox Interval="1" 
-                                       MinValue="-15" MaxValue="15" 
+                                       Min="-15" Max="15" 
                                        Suffix="dB"
                                        Value="{Binding EQMidGain}"/>
 
@@ -53,7 +53,7 @@
                               SelectedItem="{Binding EQHighFreq}"/>
 
                     <xl:NumericTextBox Interval="1" 
-                                       MinValue="-15" MaxValue="15" 
+                                       Min="-15" Max="15" 
                                        Suffix="dB"
                                        Value="{Binding EQHighGain}"/>
 

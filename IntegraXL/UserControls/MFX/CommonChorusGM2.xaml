@@ -35,31 +35,31 @@
             <Label Grid.Column="0" Grid.Row="6" Content="Reverb Send Level"/>
 
             <xl:NumericTextBox Grid.Column="1" Grid.Row="0"
-                               MinValue="0" MaxValue="7"
+                               Min="0" Max="7"
                                Value="{Binding CommonChorus[0]}"/>
 
             <xl:NumericTextBox Grid.Column="1" Grid.Row="1"
-                               MinValue="0" MaxValue="127"
+                               Min="0" Max="127"
                                Value="{Binding CommonChorus[1]}"/>
 
             <xl:NumericTextBox Grid.Column="1" Grid.Row="2"
-                               MinValue="0" MaxValue="127"
+                               Min="0" Max="127"
                                Value="{Binding CommonChorus[2]}"/>
 
             <xl:NumericTextBox Grid.Column="1" Grid.Row="3"
-                               MinValue="0" MaxValue="127"
+                               Min="0" Max="127"
                                Value="{Binding CommonChorus[3]}"/>
 
             <xl:NumericTextBox Grid.Column="1" Grid.Row="4"
-                               MinValue="0" MaxValue="127"
+                               Min="0" Max="127"
                                Value="{Binding CommonChorus[4]}"/>
 
             <xl:NumericTextBox Grid.Column="1" Grid.Row="5"
-                               MinValue="0" MaxValue="127"
+                               Min="0" Max="127"
                                Value="{Binding CommonChorus[5]}"/>
 
             <xl:NumericTextBox Grid.Column="1" Grid.Row="6"
-                               MinValue="0" MaxValue="127"
+                               Min="0" Max="127"
                                Value="{Binding CommonChorus[6]}"/>
 
         </Grid>

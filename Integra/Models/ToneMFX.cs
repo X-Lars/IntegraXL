@@ -68,6 +68,7 @@ namespace Integra.Models
             get { return _Type; }
             set
             {
+
                 _Type = value;
                 SetValidationModel(value);
                 NotifyPropertyChanged();

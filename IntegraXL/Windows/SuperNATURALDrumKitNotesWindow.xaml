@@ -57,7 +57,7 @@
         </DataGrid>
             <GroupBox Header="Note" DataContext="{Binding SelectedNote}">
                 <StackPanel>
-                    <xl:NumericTextBox MinValue="0" MaxValue="127"
+                    <xl:NumericTextBox Min="0" Max="127"
                                        Orientation="Vertical"
                                        Value="{Binding NoteLevel}"/>
                     <xl:NumericTextBox ValueProvider="{x:Static core:IntegraPan.Values}"

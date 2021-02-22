@@ -25,13 +25,14 @@ namespace Integra.Models.MFX
     /// 14: Step 15 <br/>
     /// 15: Step 16 <br/>
     /// 16: Rate Switch <br/>
-    /// 17: Rate <br/>
-    /// 18: Attack <br/>
-    /// 19: Filter Type <br/>
-    /// 20: Filter Slope <br/>
-    /// 21: Filter Resonance <br/>
-    /// 22: Filter Gain <br/>
-    /// 23: Level <br/>
+    /// 17: Rate [msec] <br/>
+    /// 18: Rate [Note] <br/>
+    /// 19: Attack <br/>
+    /// 20: Filter Type <br/>
+    /// 21: Filter Slope <br/>
+    /// 22: Filter Resonance <br/>
+    /// 23: Filter Gain <br/>
+    /// 24: Level <br/>
     /// </remarks>
     public class StepFilter : IToneMFXModel
     {
@@ -39,6 +40,10 @@ namespace Integra.Models.MFX
         {
             switch (index)
             {
+                case 17:
+
+                    return value - 1;
+
                 default:
                     return value;
             }
@@ -64,8 +69,23 @@ namespace Integra.Models.MFX
                 case 13:
                 case 14:
                 case 15:
+                case 19:
+                case 22:
+                case 24:
 
                     return value.InvalidateRange(0, 127);
+
+                case 16:
+
+                    return value.InvalidateRange(0, 1);
+
+                case 17:
+                    value += 1;
+                    return value.InvalidateRange(1, 200);
+
+                case 23:
+
+                    return value.InvalidateRange(0, 12);
 
                 default:
                     return (int)value;

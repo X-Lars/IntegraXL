@@ -17,26 +17,26 @@
                 <ComboBox ItemsSource="{Binding Source={common:EnumerationBindingSource {x:Type core:IntegraBoostFrequency}}}"
                                   SelectedIndex="{Binding [0]}"/>
 
-                <xl:NumericTextBox MinValue="0" MaxValue="12"
+                <xl:NumericTextBox Min="0" Max="12"
                                    Value="{Binding [1]}"/>
 
                     <ComboBox ItemsSource="{Binding Source={common:EnumerationBindingSource {x:Type core:IntegraBoostWidth}}}"
                                   SelectedIndex="{Binding [2]}"/>
 
                     <xl:NumericTextBox Interval="1" 
-                                       MinValue="-15" MaxValue="15" 
+                                       Min="-15" Max="15" 
                                        Suffix="dB"
                                        Value="{Binding [3]}"/>
 
                     <xl:NumericTextBox Interval="1" 
-                                       MinValue="-15" MaxValue="15" 
+                                       Min="-15" Max="15" 
                                        Suffix="dB"
                                        Value="{Binding [4]}"/>
 
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Level">
-                <xl:NumericTextBox MinValue="0" MaxValue="127"
+                <xl:NumericTextBox Min="0" Max="127"
                                    Value="{Binding [5]}"/>
             </GroupBox>
         </StackPanel>

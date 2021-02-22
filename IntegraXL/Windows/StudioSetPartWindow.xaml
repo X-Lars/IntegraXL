@@ -44,10 +44,10 @@
                     <xl:NumericTextBox ValueProvider="{x:Static core:IntegraPan.Values}"
                                        Index="{Binding Pan}"/>
 
-                    <xl:NumericTextBox MinValue="0" MaxValue="127"
+                    <xl:NumericTextBox Min="0" Max="127"
                                        Value="{Binding ChorusSendLevel}"/>
 
-                    <xl:NumericTextBox MinValue="0" MaxValue="127"
+                    <xl:NumericTextBox Min="0" Max="127"
                                        Value="{Binding ReverbSendLevel}"/>
 
                     <ComboBox ItemsSource="{Binding Source={common:EnumerationBindingSource {x:Type core:IntegraOutputAssigns}}}"
@@ -65,13 +65,13 @@
 
                 <GroupBox Header="Pitch">
                     <StackPanel>
-                        <xl:NumericTextBox MinValue="-3" MaxValue="3"
+                        <xl:NumericTextBox Min="-3" Max="3"
                                            Value="{Binding OctaveShift}"/>
 
-                        <xl:NumericTextBox MinValue="-48" MaxValue="48"
+                        <xl:NumericTextBox Min="-48" Max="48"
                                            Value="{Binding CoarseTune}"/>
 
-                        <xl:NumericTextBox MinValue="-50" MaxValue="50"
+                        <xl:NumericTextBox Min="-50" Max="50"
                                            Value="{Binding FineTune}"/>
 
                         <xl:NumericTextBox ValueProvider="{x:Static core:IntegraPitchBendRange.Values}"

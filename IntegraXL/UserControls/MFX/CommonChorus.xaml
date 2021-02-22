@@ -52,27 +52,27 @@
 
             <xl:NumericTextBox Grid.Column="1" Grid.Row="3"
                                Interval="1"
-                               MinValue="0" MaxValue="1"
+                               Min="0" Max="1"
                                Value="{Binding CommonChorus[3]}"/>
 
             <xl:NumericTextBox Grid.Column="1" Grid.Row="4"
                                Interval="0.05"
-                               MinValue="0.05" MaxValue="10.00" 
+                               Min="0.05" Max="10.00" 
                                Value="{Binding CommonChorus[4]}" 
                                Suffix="Hz"/>
 
             <xl:NumericTextBox Grid.Column="1" Grid.Row="5"
-                               MinValue="0" MaxValue="127"
+                               Min="0" Max="127"
                                Value="{Binding CommonChorus[6]}"/>
 
             <xl:NumericTextBox Grid.Column="1" Grid.Row="6"
                                Interval="2"
-                               MinValue="0" MaxValue="180" 
+                               Min="0" Max="180" 
                                Value="{Binding CommonChorus[7]}" 
                                Suffix="Deg"/>
 
             <xl:NumericTextBox Grid.Column="1" Grid.Row="7"
-                               MinValue="0" MaxValue="127"
+                               Min="0" Max="127"
                                Value="{Binding CommonChorus[8]}"/>
 
         </Grid>

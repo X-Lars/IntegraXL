@@ -61,6 +61,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\ControlsXL\ControlsXL\ControlsXL\bin\Release\ControlsXL.dll</HintPath>
     </Reference>
+    <Reference Include="StylesXL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\StylesXL\StylesXL\StylesXL\bin\Release\StylesXL.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />

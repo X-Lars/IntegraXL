@@ -5,10 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IntegraXL.UserControls.MFX"
              xmlns:ic="clr-namespace:IntegraControls;assembly=IntegraControls"
+             xmlns:xl="clr-namespace:ControlsXL;assembly=ControlsXL"
+             xmlns:common="clr-namespace:IntegraXL.Common"
+             xmlns:core="clr-namespace:Integra.Core;assembly=Integra"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid DataContext="{Binding MFX}">
-        <ic:StepControl
+        <StackPanel Orientation="Horizontal">
+            <ic:StepControl
             Min="0" Max="127"
             Step01="{Binding [0]}"
             Step02="{Binding [1]}"
@@ -27,5 +31,81 @@
             Step15="{Binding [14]}"
             Step16="{Binding [15]}"
             />
+            
+            <GroupBox Header="Timing">
+                <StackPanel>
+                    <xl:Switch x:Name="RateSwitch" 
+                           Grid.Column="1" Grid.Row="0"
+                           OffLabel="msec" OnLabel="Note"
+                           InlineLabels="False"
+                           IsChecked="{Binding [16]}"/>
+
+                    <xl:NumericTextBox Grid.Column="1" Grid.Row="1"
+                                   Min="0.05" Max="10.00" 
+                                       Interval="0.05"
+                                   Index="{Binding [17]}" 
+                                   Suffix="Hz">
+
+                        <xl:NumericTextBox.Style>
+                            <Style TargetType="{x:Type xl:NumericTextBox}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=RateSwitch, Path=IsChecked}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </xl:NumericTextBox.Style>
+                    </xl:NumericTextBox>
+
+                    <ComboBox FontFamily="/IntegraXL;component/Resources/#BravuraText" FontSize="14"
+                          Grid.Column="1" Grid.Row="1"
+                          ItemsSource="{Binding Source={common:EnumerationBindingSource {x:Type core:IntegraNoteRates}}}"
+                          SelectedIndex="{Binding [18]}">
+
+                        <ComboBox.Style>
+                            <Style TargetType="{x:Type ComboBox}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=RateSwitch, Path=IsChecked}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.Style>
+
+                    </ComboBox>
+
+                    <xl:NumericTextBox Min="0" Max="127"
+                                       Value="{Binding [19]}"/>
+                    
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Filter">
+                <StackPanel>
+                    <ComboBox ItemsSource="{Binding Source={common:EnumerationBindingSource {x:Type core:IntegraStepFilterType}}}"
+                          SelectedIndex="{Binding [20]}"/>
+
+                    <xl:NumericTextBox Min="-12" Max="-36"
+                                       Interval="12"
+                                       Index="{Binding [21]}"
+                                       Suffix="dB"/>
+
+                    <xl:NumericTextBox Min="0" Max="127"
+                                       Value="{Binding [22]}"/>
+
+                    <xl:NumericTextBox Min="0" Max="12"
+                                       Suffix="dB"
+                                       Value="{Binding [23]}"/>
+
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Common">
+                <StackPanel>
+                <xl:NumericTextBox Min="0" Max="127"
+                                   Value="{Binding [24]}"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
     </Grid>
 </UserControl>

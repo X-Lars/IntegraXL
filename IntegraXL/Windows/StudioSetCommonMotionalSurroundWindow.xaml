@@ -32,7 +32,7 @@
                     <Label Grid.Row="0" VerticalAlignment="Center">Motional Surround Switch</Label>
 
                     <xl:NumericTextBox Grid.Column="1" Grid.Row="0"
-                                       MinValue="0" MaxValue="1"
+                                       Min="0" Max="1"
                                        Value="{Binding MotionalSurroundSwitch}"/>
 
                 </Grid>
@@ -113,19 +113,19 @@
 
                         <xl:NumericTextBox Grid.Column="1" Grid.Row="0"
                                                Value="{Binding AmbienceLevel}" 
-                                               MinValue="0" MaxValue="127"/>
+                                               Min="0" Max="127"/>
 
                         <xl:NumericTextBox Grid.Column="1" Grid.Row="1"
                                                Value="{Binding AmbienceTime}" 
-                                               MinValue="0" MaxValue="100"/>
+                                               Min="0" Max="100"/>
 
                         <xl:NumericTextBox Grid.Column="1" Grid.Row="2"
                                                Value="{Binding AmbienceDensity}" 
-                                               MinValue="0" MaxValue="100"/>
+                                               Min="0" Max="100"/>
 
                         <xl:NumericTextBox Grid.Column="1" Grid.Row="3"
                                                Value="{Binding AmbienceHFDamp}" 
-                                               MinValue="0" MaxValue="100"/>
+                                               Min="0" Max="100"/>
 
                     </Grid>
                 </GroupBox>
@@ -148,7 +148,7 @@
 
                         <xl:NumericTextBox Grid.Column="1" Grid.Row="0"
                                                Value="{Binding MotionalSurroundDepth}" 
-                                               MinValue="0" MaxValue="100"/>
+                                               Min="0" Max="100"/>
 
                     </Grid>
                 </GroupBox>
@@ -179,19 +179,19 @@
 
                         <xl:NumericTextBox Grid.Column="1" Grid.Row="0"
                                                Value="{Binding ExtPartLR}" 
-                                               MinValue="-64" MaxValue="63"/>
+                                               Min="-64" Max="63"/>
 
                         <xl:NumericTextBox Grid.Column="1" Grid.Row="1"
                                                Value="{Binding ExtPartFB}" 
-                                               MinValue="-64" MaxValue="63"/>
+                                               Min="-64" Max="63"/>
 
                         <xl:NumericTextBox Grid.Column="1" Grid.Row="2"
                                                Value="{Binding ExtPartWidth}" 
-                                               MinValue="0" MaxValue="32"/>
+                                               Min="0" Max="32"/>
 
                         <xl:NumericTextBox Grid.Column="1" Grid.Row="3"
                                                Value="{Binding ExtPartAmbienceSendLevel}" 
-                                               MinValue="0" MaxValue="100"/>
+                                               Min="0" Max="100"/>
 
                         <ComboBox Grid.Column="1" Grid.Row="4"
                                       ItemsSource="{Binding ControlChannels}"

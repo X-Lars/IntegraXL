@@ -38,35 +38,35 @@
                     <StackPanel Grid.Column="1">
 
                         <xl:NumericTextBox Interval="1" 
-                                       MinValue="-15" MaxValue="15" 
+                                       Min="-15" Max="15" 
                                        Value="{Binding [0]}"/>
 
                         <xl:NumericTextBox Interval="1" 
-                                       MinValue="-15" MaxValue="15" 
+                                       Min="-15" Max="15" 
                                        Value="{Binding [1]}"/>
 
                         <xl:NumericTextBox Interval="1" 
-                                       MinValue="-15" MaxValue="15" 
+                                       Min="-15" Max="15" 
                                        Value="{Binding [2]}"/>
 
                         <xl:NumericTextBox Interval="1" 
-                                       MinValue="-15" MaxValue="15" 
+                                       Min="-15" Max="15" 
                                        Value="{Binding [3]}"/>
 
                         <xl:NumericTextBox Interval="1" 
-                                       MinValue="-15" MaxValue="15" 
+                                       Min="-15" Max="15" 
                                        Value="{Binding [4]}"/>
 
                         <xl:NumericTextBox Interval="1" 
-                                       MinValue="-15" MaxValue="15" 
+                                       Min="-15" Max="15" 
                                        Value="{Binding [5]}"/>
 
                         <xl:NumericTextBox Interval="1" 
-                                       MinValue="-15" MaxValue="15" 
+                                       Min="-15" Max="15" 
                                        Value="{Binding [6]}"/>
 
                         <xl:NumericTextBox Interval="1" 
-                                       MinValue="-15" MaxValue="15" 
+                                       Min="-15" Max="15" 
                                        Value="{Binding [7]}"/>
 
                         <ComboBox ItemsSource="{Binding Source={common:EnumerationBindingSource {x:Type core:IntegraMidQs}}}"
@@ -82,7 +82,7 @@
                 <StackPanel>
 
                     <xl:NumericTextBox Interval="1" 
-                                       MinValue="0" MaxValue="127" 
+                                       Min="0" Max="127" 
                                        Value="{Binding [9]}"/>
 
                 </StackPanel>

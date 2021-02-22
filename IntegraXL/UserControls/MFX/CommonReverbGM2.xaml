@@ -11,10 +11,10 @@
 
         <StackPanel>
 
-            <xl:NumericTextBox MinValue="0" MaxValue="5"
+            <xl:NumericTextBox Min="0" Max="5"
                                Value="{Binding CommonReverb[0]}"/>
 
-            <xl:NumericTextBox MinValue="0" MaxValue="127"
+            <xl:NumericTextBox Min="0" Max="127"
                                Value="{Binding CommonReverb[3]}"/>
 
         </StackPanel>

@@ -39,7 +39,7 @@
                            IsChecked="{Binding CommonChorus[0]}"/>
 
                 <xl:NumericTextBox Grid.Column="1" Grid.Row="1"
-                                   MinValue="0" MaxValue="1000" 
+                                   Min="0" Max="1000" 
                                    Value="{Binding CommonChorus[1]}" 
                                    Suffix="ms">
 
@@ -75,7 +75,7 @@
 
                 <xl:NumericTextBox Grid.Column="1" Grid.Row="2"
                                    Value="{Binding CommonChorus[11]}" 
-                                   MinValue="0" MaxValue="127"/>
+                                   Min="0" Max="127"/>
 
             </Grid>
         </GroupBox>
@@ -106,7 +106,7 @@
                                    IsChecked="{Binding CommonChorus[6]}"/>
 
                 <xl:NumericTextBox Grid.Column="1" Grid.Row="1"
-                                   MinValue="0" MaxValue="1000" 
+                                   Min="0" Max="1000" 
                                    Value="{Binding CommonChorus[7]}" 
                                    Suffix="ms">
 
@@ -140,7 +140,7 @@
                 </ComboBox>
 
                 <xl:NumericTextBox Grid.Column="1" Grid.Row="2"
-                                   MinValue="0" MaxValue="127"
+                                   Min="0" Max="127"
                                    Value="{Binding CommonChorus[13]}"/>
 
             </Grid>
@@ -172,7 +172,7 @@
                                    IsChecked="{Binding CommonChorus[3]}"/>
 
                 <xl:NumericTextBox Grid.Column="1" Grid.Row="1"
-                                   MinValue="0" MaxValue="1000" 
+                                   Min="0" Max="1000" 
                                    Value="{Binding CommonChorus[4]}" 
                                    Suffix="ms">
                     
@@ -207,7 +207,7 @@
                 </ComboBox>
                 
                 <xl:NumericTextBox Grid.Column="1" Grid.Row="2"
-                                   MinValue="0" MaxValue="127"
+                                   Min="0" Max="127"
                                    Value="{Binding CommonChorus[12]}"/>
 
             </Grid>
@@ -232,7 +232,7 @@
 
                 <xl:NumericTextBox Grid.Column="1" Grid.Row="0"
                                    Interval="2"
-                                   MinValue="-98" MaxValue="98" 
+                                   Min="-98" Max="98" 
                                    Value="{Binding CommonChorus[9]}" 
                                    Suffix="%"/>
 

@@ -83,7 +83,7 @@ namespace IntegraControls
         /// Stores the offset to ensure all values are visible.
         /// </summary>
         /// <remarks><i>Calculated based on the min and max value signs.</i></remarks>
-        private int _ValueOffset;
+        private double _ValueOffset;
 
         /// <summary>
         /// Stores the base line to offset the control points from.
@@ -132,6 +132,14 @@ namespace IntegraControls
             //this.RenderTransform = new ScaleTransform(1, -1);
 
             Loaded += StepControlLoaded;
+
+            StyleManager.StyleChanged += StyleManagerStyleChanged;
+        }
+
+        private void StyleManagerStyleChanged(object sender, EventArgs e)
+        {
+            InitializeStyle();
+            InvalidateVisual();
         }
 
 
@@ -143,27 +151,41 @@ namespace IntegraControls
 
         public static readonly DependencyProperty HandleTypeProperty = DependencyProperty.Register(nameof(HandleType), typeof(HandleTypes), typeof(StepControl), new PropertyMetadata(HandleTypes.Circle));
 
-        public static readonly DependencyProperty MinProperty = DependencyProperty.Register(nameof(Min), typeof(int), typeof(StepControl), new PropertyMetadata(0));
-        public static readonly DependencyProperty MaxProperty = DependencyProperty.Register(nameof(Max), typeof(int), typeof(StepControl), new PropertyMetadata(127));
+
+
+        public double Interval
+        {
+            get { return (double)GetValue(IntervalProperty); }
+            set { SetValue(IntervalProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Interval.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IntervalProperty =
+            DependencyProperty.Register(nameof(Interval), typeof(double), typeof(StepControl), new PropertyMetadata(1.0));
+
+
+
+        public static readonly DependencyProperty MinProperty = DependencyProperty.Register(nameof(Min), typeof(double), typeof(StepControl), new PropertyMetadata(0.0));
+        public static readonly DependencyProperty MaxProperty = DependencyProperty.Register(nameof(Max), typeof(double), typeof(StepControl), new PropertyMetadata(100.0));
 
         public static readonly DependencyProperty TypeProperty = DependencyProperty.Register(nameof(Type), typeof(StepControlTypes), typeof(StepControl), new PropertyMetadata(StepControlTypes.Square));
 
-        public static readonly DependencyProperty Step01Property = DependencyProperty.Register(nameof(Step01), typeof(int), typeof(StepControl), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
-        public static readonly DependencyProperty Step02Property = DependencyProperty.Register(nameof(Step02), typeof(int), typeof(StepControl), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
-        public static readonly DependencyProperty Step03Property = DependencyProperty.Register(nameof(Step03), typeof(int), typeof(StepControl), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
-        public static readonly DependencyProperty Step04Property = DependencyProperty.Register(nameof(Step04), typeof(int), typeof(StepControl), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
-        public static readonly DependencyProperty Step05Property = DependencyProperty.Register(nameof(Step05), typeof(int), typeof(StepControl), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
-        public static readonly DependencyProperty Step06Property = DependencyProperty.Register(nameof(Step06), typeof(int), typeof(StepControl), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
-        public static readonly DependencyProperty Step07Property = DependencyProperty.Register(nameof(Step07), typeof(int), typeof(StepControl), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
-        public static readonly DependencyProperty Step08Property = DependencyProperty.Register(nameof(Step08), typeof(int), typeof(StepControl), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
-        public static readonly DependencyProperty Step09Property = DependencyProperty.Register(nameof(Step09), typeof(int), typeof(StepControl), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
-        public static readonly DependencyProperty Step10Property = DependencyProperty.Register(nameof(Step10), typeof(int), typeof(StepControl), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
-        public static readonly DependencyProperty Step11Property = DependencyProperty.Register(nameof(Step11), typeof(int), typeof(StepControl), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
-        public static readonly DependencyProperty Step12Property = DependencyProperty.Register(nameof(Step12), typeof(int), typeof(StepControl), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
-        public static readonly DependencyProperty Step13Property = DependencyProperty.Register(nameof(Step13), typeof(int), typeof(StepControl), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
-        public static readonly DependencyProperty Step14Property = DependencyProperty.Register(nameof(Step14), typeof(int), typeof(StepControl), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
-        public static readonly DependencyProperty Step15Property = DependencyProperty.Register(nameof(Step15), typeof(int), typeof(StepControl), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
-        public static readonly DependencyProperty Step16Property = DependencyProperty.Register(nameof(Step16), typeof(int), typeof(StepControl), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
+        public static readonly DependencyProperty Step01Property = DependencyProperty.Register(nameof(Step01), typeof(double), typeof(StepControl), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
+        public static readonly DependencyProperty Step02Property = DependencyProperty.Register(nameof(Step02), typeof(double), typeof(StepControl), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
+        public static readonly DependencyProperty Step03Property = DependencyProperty.Register(nameof(Step03), typeof(double), typeof(StepControl), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
+        public static readonly DependencyProperty Step04Property = DependencyProperty.Register(nameof(Step04), typeof(double), typeof(StepControl), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
+        public static readonly DependencyProperty Step05Property = DependencyProperty.Register(nameof(Step05), typeof(double), typeof(StepControl), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
+        public static readonly DependencyProperty Step06Property = DependencyProperty.Register(nameof(Step06), typeof(double), typeof(StepControl), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
+        public static readonly DependencyProperty Step07Property = DependencyProperty.Register(nameof(Step07), typeof(double), typeof(StepControl), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
+        public static readonly DependencyProperty Step08Property = DependencyProperty.Register(nameof(Step08), typeof(double), typeof(StepControl), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
+        public static readonly DependencyProperty Step09Property = DependencyProperty.Register(nameof(Step09), typeof(double), typeof(StepControl), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
+        public static readonly DependencyProperty Step10Property = DependencyProperty.Register(nameof(Step10), typeof(double), typeof(StepControl), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
+        public static readonly DependencyProperty Step11Property = DependencyProperty.Register(nameof(Step11), typeof(double), typeof(StepControl), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
+        public static readonly DependencyProperty Step12Property = DependencyProperty.Register(nameof(Step12), typeof(double), typeof(StepControl), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
+        public static readonly DependencyProperty Step13Property = DependencyProperty.Register(nameof(Step13), typeof(double), typeof(StepControl), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
+        public static readonly DependencyProperty Step14Property = DependencyProperty.Register(nameof(Step14), typeof(double), typeof(StepControl), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
+        public static readonly DependencyProperty Step15Property = DependencyProperty.Register(nameof(Step15), typeof(double), typeof(StepControl), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
+        public static readonly DependencyProperty Step16Property = DependencyProperty.Register(nameof(Step16), typeof(double), typeof(StepControl), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceStep));
 
         #endregion
 
@@ -175,15 +197,15 @@ namespace IntegraControls
             set { SetValue(HandleTypeProperty, value); }
         }
 
-        public int Min
+        public double Min
         {
-            get { return (int)GetValue(MinProperty); }
+            get { return (double)GetValue(MinProperty); }
             set { SetValue(MinProperty, value); }
         }
 
-        public int Max
+        public double Max
         {
-            get { return (int)GetValue(MaxProperty); }
+            get { return (double)GetValue(MaxProperty); }
             set { SetValue(MaxProperty, value); }
         }
 
@@ -193,22 +215,22 @@ namespace IntegraControls
             set { SetValue(TypeProperty, value); }
         }
 
-        public int Step01 { get { return (int)GetValue(Step01Property); } set { SetValue(Step01Property, value); } }
-        public int Step02 { get { return (int)GetValue(Step02Property); } set { SetValue(Step02Property, value); } }
-        public int Step03 { get { return (int)GetValue(Step03Property); } set { SetValue(Step03Property, value); } }
-        public int Step04 { get { return (int)GetValue(Step04Property); } set { SetValue(Step04Property, value); } }
-        public int Step05 { get { return (int)GetValue(Step05Property); } set { SetValue(Step05Property, value); } }
-        public int Step06 { get { return (int)GetValue(Step06Property); } set { SetValue(Step06Property, value); } }
-        public int Step07 { get { return (int)GetValue(Step07Property); } set { SetValue(Step07Property, value); } }
-        public int Step08 { get { return (int)GetValue(Step08Property); } set { SetValue(Step08Property, value); } }
-        public int Step09 { get { return (int)GetValue(Step09Property); } set { SetValue(Step09Property, value); } }
-        public int Step10 { get { return (int)GetValue(Step10Property); } set { SetValue(Step10Property, value); } }
-        public int Step11 { get { return (int)GetValue(Step11Property); } set { SetValue(Step11Property, value); } }
-        public int Step12 { get { return (int)GetValue(Step12Property); } set { SetValue(Step12Property, value); } }
-        public int Step13 { get { return (int)GetValue(Step13Property); } set { SetValue(Step13Property, value); } }
-        public int Step14 { get { return (int)GetValue(Step14Property); } set { SetValue(Step14Property, value); } }
-        public int Step15 { get { return (int)GetValue(Step15Property); } set { SetValue(Step15Property, value); } }
-        public int Step16 { get { return (int)GetValue(Step16Property); } set { SetValue(Step16Property, value); } }
+        public double Step01 { get { return (double)GetValue(Step01Property); } set { SetValue(Step01Property, value); } }
+        public double Step02 { get { return (double)GetValue(Step02Property); } set { SetValue(Step02Property, value); } }
+        public double Step03 { get { return (double)GetValue(Step03Property); } set { SetValue(Step03Property, value); } }
+        public double Step04 { get { return (double)GetValue(Step04Property); } set { SetValue(Step04Property, value); } }
+        public double Step05 { get { return (double)GetValue(Step05Property); } set { SetValue(Step05Property, value); } }
+        public double Step06 { get { return (double)GetValue(Step06Property); } set { SetValue(Step06Property, value); } }
+        public double Step07 { get { return (double)GetValue(Step07Property); } set { SetValue(Step07Property, value); } }
+        public double Step08 { get { return (double)GetValue(Step08Property); } set { SetValue(Step08Property, value); } }
+        public double Step09 { get { return (double)GetValue(Step09Property); } set { SetValue(Step09Property, value); } }
+        public double Step10 { get { return (double)GetValue(Step10Property); } set { SetValue(Step10Property, value); } }
+        public double Step11 { get { return (double)GetValue(Step11Property); } set { SetValue(Step11Property, value); } }
+        public double Step12 { get { return (double)GetValue(Step12Property); } set { SetValue(Step12Property, value); } }
+        public double Step13 { get { return (double)GetValue(Step13Property); } set { SetValue(Step13Property, value); } }
+        public double Step14 { get { return (double)GetValue(Step14Property); } set { SetValue(Step14Property, value); } }
+        public double Step15 { get { return (double)GetValue(Step15Property); } set { SetValue(Step15Property, value); } }
+        public double Step16 { get { return (double)GetValue(Step16Property); } set { SetValue(Step16Property, value); } }
 
         #endregion
 
@@ -218,7 +240,7 @@ namespace IntegraControls
         {
             StepControl control = (StepControl)d;
 
-            int value = (int)baseValue;
+            double value = (double)baseValue;
 
             value = Math.Min(value, control.Max);
             value = Math.Max(value, control.Min);
@@ -230,16 +252,31 @@ namespace IntegraControls
 
         #endregion
 
-        
-        #region Event Handlers
 
+        #region Event Handlers
+        private int _Resolution;
         private void StepControlLoaded(object sender, RoutedEventArgs e)
         {
-            MinWidth = 240;
-            MinHeight = 160;
+            MinWidth = 360;
+            MinHeight = 240;
 
             _AspectRatio = MinWidth / MinHeight;
 
+            double value = Interval;
+
+            // Get the number of decimal places from the interval if smaller than 1
+            while ((int)value % 10 == 0)
+            {
+                value *= 10;
+                _Resolution++;
+            }
+
+            // Ensure the interval divides evenly into the min max range
+            double range = Math.Round((Max - Min) * Math.Pow(10, _Resolution));
+            double interval = Math.Round(Interval * Math.Pow(10, _Resolution));
+
+            if(range % interval != 0)
+                throw new ArgumentException("Interval doesn't divide into the min max range evenly.", nameof(Interval));
 
             InitializeStyle();
             InitializeMeasures();
@@ -260,7 +297,7 @@ namespace IntegraControls
 
             if(MouseOverControlPoint(mouse, out index))
             {
-                _SelectedPoint  = index;
+                _SelectedPoint = index;
 
                 // Offset between mouse cursor and the control point center
                 _MouseOffset = new Point(_ControlPoints[index].X - mouse.X, 
@@ -269,10 +306,21 @@ namespace IntegraControls
                 // Update visual to highlight selected control point
                 InvalidateVisual();
             }
+            else if(MouseOverRegion(mouse, out index))
+            {
+                _SelectedRegion = index;
+
+                _ControlPoints[(int)_SelectedRegion].Y = mouse.Y;
+
+                UpdateValues();
+                InvalidateVisual();
+            }
         }
 
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
+            base.OnPreviewMouseMove(e);
+
             Point mouse = e.GetPosition(this);
 
             if(e.LeftButton == MouseButtonState.Pressed)
@@ -287,32 +335,28 @@ namespace IntegraControls
                 }
             }
 
-            if(_SelectedPoint != null)
+            
+            int index;
+
+            if(MouseOverRegion(mouse, out index))
             {
-                _SelectedRegion = _SelectedPoint;
+                _SelectedRegion = index;
             }
             else
             {
-                int index;
-
-                if(MouseOverRegion(mouse, out index))
-                {
-                    _SelectedRegion = index;
-                }
-                else
-                {
-                    _SelectedRegion = null;
-                }
+                _SelectedRegion = null;
             }
-
+            
             InvalidateVisual();
         }
 
         protected override void OnPreviewMouseUp(MouseButtonEventArgs e)
         {
-            _SelectedPoint  = null;
+            base.OnPreviewMouseUp(e);
 
-            InvalidateVisual();
+            _SelectedPoint  = null;
+            
+            UpdateValues();
         }
 
 
@@ -322,17 +366,16 @@ namespace IntegraControls
 
             if(_SelectedRegion != null)
             {
-                if(e.Delta > 0)
+                if (e.Delta > 0)
                 {
-                    _ControlPoints[(int)_SelectedRegion].Y -= Math.Ceiling(_Factor.Y);
+                    _ControlPoints[(int)_SelectedRegion].Y -= _Factor.Y * Interval;
                 }
-                else
+                else if (e.Delta < 0)
                 {
-                    _ControlPoints[(int)_SelectedRegion].Y += Math.Ceiling(_Factor.Y);
+                    _ControlPoints[(int)_SelectedRegion].Y += _Factor.Y * Interval;
                 }
 
                 UpdateValues();
-                InvalidateVisual();
             }
         }
 
@@ -418,7 +461,7 @@ namespace IntegraControls
             {
                 _DataPen.Brush = StyleManager.Brush(StylesXL.Brushes.TestBrush);
                 _ControlBrush = StyleManager.Brush(StylesXL.Brushes.TestBrush);
-                _GraphBrush = StyleManager.Brush(StylesXL.Brushes.ControlSelected);
+                _GraphBrush = StyleManager.Brush(StylesXL.Brushes.TestBrush);
 
                 if(BorderBrush == null)
                 {
@@ -552,7 +595,7 @@ namespace IntegraControls
                         context.LineTo(new Point(Padding.Left + (_SegmentSize.Width * segment), _ControlPoints[cp + 1].Y), true, false);
                     }
 
-                    context.LineTo(new Point(Padding.Left +(_SegmentSize.Width * 16), _ControlPoints[15].Y), true, false);
+                    context.LineTo(new Point(Padding.Left + (_SegmentSize.Width * 16), _ControlPoints[15].Y), true, false);
                 }
                 else
                 {
@@ -573,28 +616,49 @@ namespace IntegraControls
             _ControlPath = controlPath;
         }
 
+        private double GetValue(Point controlPoint)
+        {
+            double value = ((ActualHeight - Padding.Top - controlPoint.Y) / _Factor.Y) + Min;
+            double remainder = (value - Min) % Interval;
+
+            if(controlPoint == _ControlPoints[0])
+            {
+                Console.WriteLine(value);
+                Console.WriteLine(remainder);
+            }
+            if (remainder >= Interval / 2)
+            {
+                value += Interval - remainder;
+            }
+            else
+            {
+                value -= remainder;
+            }
+
+            return value;
+        }
         /// <summary>
         /// Actuates the step property values based on the control points.
         /// </summary>
         private void UpdateValues()
         {
-            Step01 = (int)((ActualHeight - Padding.Top - _ControlPoints[0].Y)  / _Factor.Y) + Min;
-            Step02 = (int)((ActualHeight - Padding.Top - _ControlPoints[1].Y ) / _Factor.Y) + Min;
-            Step03 = (int)((ActualHeight - Padding.Top - _ControlPoints[2].Y ) / _Factor.Y) + Min;
-            Step04 = (int)((ActualHeight - Padding.Top - _ControlPoints[3].Y ) / _Factor.Y) + Min;
-            Step05 = (int)((ActualHeight - Padding.Top - _ControlPoints[4].Y ) / _Factor.Y) + Min;
-            Step06 = (int)((ActualHeight - Padding.Top - _ControlPoints[5].Y ) / _Factor.Y) + Min;
-            Step07 = (int)((ActualHeight - Padding.Top - _ControlPoints[6].Y ) / _Factor.Y) + Min;
-            Step08 = (int)((ActualHeight - Padding.Top - _ControlPoints[7].Y ) / _Factor.Y) + Min;
-            Step09 = (int)((ActualHeight - Padding.Top - _ControlPoints[8].Y ) / _Factor.Y) + Min;
-            Step10 = (int)((ActualHeight - Padding.Top - _ControlPoints[9].Y ) / _Factor.Y) + Min;
-            Step11 = (int)((ActualHeight - Padding.Top - _ControlPoints[10].Y) / _Factor.Y) + Min;
-            Step12 = (int)((ActualHeight - Padding.Top - _ControlPoints[11].Y) / _Factor.Y) + Min;
-            Step13 = (int)((ActualHeight - Padding.Top - _ControlPoints[12].Y) / _Factor.Y) + Min;
-            Step14 = (int)((ActualHeight - Padding.Top - _ControlPoints[13].Y) / _Factor.Y) + Min;
-            Step15 = (int)((ActualHeight - Padding.Top - _ControlPoints[14].Y) / _Factor.Y) + Min;
-            Step16 = (int)((ActualHeight - Padding.Top - _ControlPoints[15].Y) / _Factor.Y) + Min;
-
+            Step01 = GetValue(_ControlPoints[0]);
+            Step02 = GetValue(_ControlPoints[1]);
+            Step03 = GetValue(_ControlPoints[2]);
+            Step04 = GetValue(_ControlPoints[3]);
+            Step05 = GetValue(_ControlPoints[4]);
+            Step06 = GetValue(_ControlPoints[5]);
+            Step07 = GetValue(_ControlPoints[6]);
+            Step08 = GetValue(_ControlPoints[7]);
+            Step09 = GetValue(_ControlPoints[8]);
+            Step10 = GetValue(_ControlPoints[9]);
+            Step11 = GetValue(_ControlPoints[10]);
+            Step12 = GetValue(_ControlPoints[11]);
+            Step13 = GetValue(_ControlPoints[12]);
+            Step14 = GetValue(_ControlPoints[13]);
+            Step15 = GetValue(_ControlPoints[14]);
+            Step16 = GetValue(_ControlPoints[15]);
+            
             UpdatePath();
             InvalidateVisual();
         }
@@ -618,7 +682,7 @@ namespace IntegraControls
         {
             if(mouse.X >= Padding.Left && mouse.X <= ActualWidth - Padding.Right)
             {
-                index = (int)((mouse.X - Padding.Left) / _SegmentSize.Width);
+                index = Math.Min((int)((mouse.X - Padding.Left) / _SegmentSize.Width), CONTROL_POINTS - 1);
                 return true;
             }
 
@@ -685,6 +749,7 @@ namespace IntegraControls
             // Draw region indicators
             if (_SelectedRegion != null)
             {
+                // TODO: cp null?
                 Point cp = _ControlPoints[(int)_SelectedRegion];
 
                 double x = Padding.Left + (int)_SelectedRegion * _SegmentSize.Width;
@@ -761,22 +826,22 @@ namespace IntegraControls
                 // Get label from property associated with control point or region
                 switch (selectedIndex)
                 {
-                    case 0: labelValue  = string.Format("{0}", Step01); labelProperty = "Step 1"; break;
-                    case 1: labelValue  = string.Format("{0}", Step02); labelProperty = "Step 2"; break;
-                    case 2: labelValue  = string.Format("{0}", Step03); labelProperty = "Step 3"; break;
-                    case 3: labelValue  = string.Format("{0}", Step04); labelProperty = "Step 4"; break;
-                    case 4: labelValue  = string.Format("{0}", Step05); labelProperty = "Step 5"; break;
-                    case 5: labelValue  = string.Format("{0}", Step06); labelProperty = "Step 6"; break;
-                    case 6: labelValue  = string.Format("{0}", Step07); labelProperty = "Step 7"; break;
-                    case 7: labelValue  = string.Format("{0}", Step08); labelProperty = "Step 8"; break;
-                    case 8: labelValue  = string.Format("{0}", Step09); labelProperty = "Step 9"; break;
-                    case 9: labelValue  = string.Format("{0}", Step10); labelProperty = "Step 10"; break;
-                    case 10: labelValue = string.Format("{0}", Step11); labelProperty = "Step 11"; break;
-                    case 11: labelValue = string.Format("{0}", Step12); labelProperty = "Step 12"; break;
-                    case 12: labelValue = string.Format("{0}", Step13); labelProperty = "Step 13"; break;
-                    case 13: labelValue = string.Format("{0}", Step14); labelProperty = "Step 14"; break;
-                    case 14: labelValue = string.Format("{0}", Step15); labelProperty = "Step 15"; break;
-                    case 15: labelValue = string.Format("{0}", Step16); labelProperty = "Step 16"; break;
+                    case 0: labelValue  = Step01.ToString("N" + _Resolution.ToString()); labelProperty = "Step 1"; break;
+                    case 1: labelValue  = Step02.ToString("N" + _Resolution.ToString()); labelProperty = "Step 2"; break;
+                    case 2: labelValue  = Step03.ToString("N" + _Resolution.ToString()); labelProperty = "Step 3"; break;
+                    case 3: labelValue  = Step04.ToString("N" + _Resolution.ToString()); labelProperty = "Step 4"; break;
+                    case 4: labelValue  = Step05.ToString("N" + _Resolution.ToString()); labelProperty = "Step 5"; break;
+                    case 5: labelValue  = Step06.ToString("N" + _Resolution.ToString()); labelProperty = "Step 6"; break;
+                    case 6: labelValue  = Step07.ToString("N" + _Resolution.ToString()); labelProperty = "Step 7"; break;
+                    case 7: labelValue  = Step08.ToString("N" + _Resolution.ToString()); labelProperty = "Step 8"; break;
+                    case 8: labelValue  = Step09.ToString("N" + _Resolution.ToString()); labelProperty = "Step 9"; break;
+                    case 9: labelValue  = Step10.ToString("N" + _Resolution.ToString()); labelProperty = "Step 10"; break;
+                    case 10: labelValue = Step11.ToString("N" + _Resolution.ToString()); labelProperty = "Step 11"; break;
+                    case 11: labelValue = Step12.ToString("N" + _Resolution.ToString()); labelProperty = "Step 12"; break;
+                    case 12: labelValue = Step13.ToString("N" + _Resolution.ToString()); labelProperty = "Step 13"; break;
+                    case 13: labelValue = Step14.ToString("N" + _Resolution.ToString()); labelProperty = "Step 14"; break;
+                    case 14: labelValue = Step15.ToString("N" + _Resolution.ToString()); labelProperty = "Step 15"; break;
+                    case 15: labelValue = Step16.ToString("N" + _Resolution.ToString()); labelProperty = "Step 16"; break;
                 }
 
                 if(labelValue != string.Empty)

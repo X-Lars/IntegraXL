@@ -22,7 +22,8 @@ namespace IntegraXL.UserControls
 
             DataContext = this;
 
-            ItemsSource = DataAccess.SelectAll<Tone>();
+            if(!DesignerProperties.GetIsInDesignMode(this))
+                ItemsSource = DataAccess.SelectAll<Tone>();
 
             CommandBindings.Add(new CommandBinding(Select, OnSelect, CanExecuteSelect));
             CommandBindings.Add(new CommandBinding(Remove, OnRemove));

@@ -44,7 +44,7 @@
 
                     <xl:NumericTextBox Grid.Column="1" Grid.Row="0"
                                        Value="{Binding Common.Tempo}" 
-                                       MinValue="20" MaxValue="250"/>
+                                       Min="20" Max="250"/>
 
                     <ComboBox Grid.Column="1" Grid.Row="1"
                               ItemsSource="{Binding Common.IntegraParts}"

@@ -1583,5 +1583,24 @@ namespace Integra.Core
     }
     #endregion
 
+    #region MFX: Step Filter
+
+    public enum IntegraStepFilterType : byte
+    {
+        LPF     = 0x00,
+        BPF     = 0x01,
+        HPF     = 0x02,
+        NOTCH   = 0x03
+    }
+
+    public enum IntegraFilterSlope : byte
+    {
+        [Description("-12 dB")] _12 = 0x00,
+        [Description("-24 dB")] _24 = 0x01,
+        [Description("-36 dB")] _36 = 0x02
+    }
+
+    #endregion
+
     #endregion
 }
