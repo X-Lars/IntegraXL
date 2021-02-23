@@ -465,7 +465,7 @@ namespace IntegraControls
 
                 if(BorderBrush == null)
                 {
-                    BorderBrush = StyleManager.Brush(StylesXL.Brushes.ControlBorder);
+                    BorderBrush = StyleManager.Brush(StylesXL.Brushes.Border);
                 }
             }
             else

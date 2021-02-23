@@ -34,7 +34,7 @@ namespace IntegraXL
             // [REQUIRED]
             Device.StatusChanged += DeviceStatusChanged;
 
-            StylesXL.StyleManager.Style = StylesXL.ControlStyle.Default;
+            //StylesXL.StyleManager.Style = StylesXL.ControlStyle.Default;
 
             Widgets.Add(new CommonWidget());
 
@@ -60,13 +60,13 @@ namespace IntegraXL
             //Config<IntegraConfiguration>.Print();
             DataAccess.InsertWaveForms();
 
-            StylesXL.StyleManager.StyleChanged += StyleManager_StyleChanged;
+            //StylesXL.StyleManager.StyleChanged += StyleManager_StyleChanged;
         }
 
-        private void StyleManager_StyleChanged(object sender, EventArgs e)
-        {
-            Console.WriteLine("Style Changed Event");
-        }
+        //private void StyleManager_StyleChanged(object sender, EventArgs e)
+        //{
+        //    Console.WriteLine("Style Changed Event");
+        //}
 
         private void CanExecuteDelete(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -86,10 +86,10 @@ namespace IntegraXL
 
         private void OnTest(object sender, ExecutedRoutedEventArgs e)
         {
-            if(StylesXL.StyleManager.Style == StylesXL.ControlStyle.Default)
-                StylesXL.StyleManager.Style = StylesXL.ControlStyle.Dark;
-            else
-                StylesXL.StyleManager.Style = StylesXL.ControlStyle.Default;
+            //if(StylesXL.StyleManager.Style == StylesXL.ControlStyle.Default)
+            //    StylesXL.StyleManager.Style = StylesXL.ControlStyle.Dark;
+            //else
+            //    StylesXL.StyleManager.Style = StylesXL.ControlStyle.Default;
             //string testString = "TEST";
             //DataAccess.Test(Integra.StudioSet.MIDI);
             //DataAccess.Test(Integra.StudioSet);
