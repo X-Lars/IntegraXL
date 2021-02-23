@@ -13,3 +13,4 @@ References used
 
 ###### <i>First impression.</i>
 ![Previes](/Images/IntegraXL.jpg)
+As said, it is a first impression, the layout will be maintained but the styling will get a big make over as it depends on the StyleXL and ControlsXL which are both in progress.
