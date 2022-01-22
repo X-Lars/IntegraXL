@@ -162,9 +162,9 @@ namespace IntegraXL
                     
                     _SelectedPart = value;
                     NotifyPropertyChanged();
-
                     NotifyPropertyChanged(nameof(SelectedTone));
 
+                    Debug.Print($"Part Changed");
                     PartChanged?.Invoke(this, new IntegraPartChangedEventArgs((Parts)value, (Parts)previous));
                 }
             }
@@ -189,8 +189,21 @@ namespace IntegraXL
                 NotifyPropertyChanged(nameof(ToneInfo));
             }
         }
-       
 
+        private TemporaryTone _TemporaryTone;
+
+        public TemporaryTone TemporaryTone
+        {
+            get => _TemporaryTone;
+            set
+            {
+                if(_TemporaryTone != value)
+                {
+                    _TemporaryTone = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
         #endregion
 
         #endregion
@@ -219,7 +232,8 @@ namespace IntegraXL
             SelectedTones = await GetModel<IntegraTones>();
 
             StudioSet     = await GetModel<StudioSet>();
-            //SelectedTone  = SelectedTones[(int)SelectedPart];
+
+            TemporaryTone = await GetModel<TemporaryTone>(Parts.Part01);
 
             IsInitialized = true;
         }

@@ -89,7 +89,7 @@ namespace IntegraXL.Core
             get => this;
             set
             {
-                if(!this.Equals(value))
+                if(!this.Equals(value))// && value != null)
                 {
                     Initialize(new byte[] { value.MSB, value.LSB, value.PC });
                     NotifyPropertyChanged();
