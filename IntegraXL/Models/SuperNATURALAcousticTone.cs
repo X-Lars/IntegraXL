@@ -10,11 +10,13 @@ namespace IntegraXL.Models
     [Integra(0x00020000, 0x00100000)]
     public class SuperNATURALAcousticTone : IntegraModel
     {
+        //private MFX _MFX;
+
         internal SuperNATURALAcousticTone(TemporaryTone parent) : base(parent.Device)
         {
             Address += parent.Address;
             Common = new SuperNATURALAcousticToneCommon(this);
-            //TODO: MFX = parent.MFX ?new MFX(temporaryTone);
+            //_MFX = parent.MFX;// ?new MFX(temporaryTone);
         }
 
         public override bool IsInitialized 

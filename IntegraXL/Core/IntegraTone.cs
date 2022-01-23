@@ -32,9 +32,9 @@ namespace IntegraXL.Core
             return IsInitialized = true;
         }
 
-        protected internal override uint GetModelHash()
+        protected internal override int GetModelHash()
         {
-            return 0xFF0000FF | (Address & 0x00FFFF00);
+            return (int)(0xFF0000FF | (Address | 0x00FFFF00));
         }
 
         #endregion

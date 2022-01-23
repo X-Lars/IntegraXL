@@ -1,18 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
+[assembly: InternalsVisibleTo("IntegraXLTest")]
+
 namespace IntegraXL.Core
 {
+    /// <summary>
+    /// - Ensures that individual bytes are within the MIDI range of 0x7F.
+    /// </summary>
     public class IntegraAddress
     {
         #region Constructor
 
-        public IntegraAddress() { }
+        internal IntegraAddress() { }
 
-        public IntegraAddress(uint address)
+        internal IntegraAddress(int address)
         {
             this[0] = (byte)((address & 0xFF000000) >> 24);
             this[1] = (byte)((address & 0xFF0000) >> 16);
@@ -20,7 +27,7 @@ namespace IntegraXL.Core
             this[3] = (byte)((address & 0xFF));
         }
 
-        public IntegraAddress(byte[] address)
+        internal IntegraAddress(byte[] address)
         {
             this[0] = address[0];
             this[1] = address[1];
@@ -32,26 +39,26 @@ namespace IntegraXL.Core
 
         #region Properties
 
-        public byte this[int index]
+        internal byte this[int index]
         {
             get { return Address[index]; }
 
-            internal set 
+            set 
             {
-                if (value > 0x7F)
-                    throw new IntegraException($"[{nameof(IntegraAddress)}[{index}]]\nValue out of range [0x00..0x7F]. {this.ToString()}");
+                Debug.Assert(index >= 0 && index < 4, $"[{nameof(IntegraAddress)}[{index}]]\nIndex out of range [0..3].");
+                Debug.Assert(value <= 0x7F, $"[{nameof(IntegraAddress)}[{index}]]\nValue out of range [0x00..0x7F]. {this}");
 
-                Address[index] = value; 
+                Address[index] = value;
             }
         }
 
-        public byte[] Address { get; } = new byte[4];
+        internal byte[] Address { get; } = new byte[4];
 
         #endregion
 
         #region Methods
 
-        public bool InRange(IntegraAddress min, IntegraAddress max)
+        internal bool InRange(IntegraAddress min, IntegraAddress max)
         {
             if (min > max)
             {
@@ -78,22 +85,22 @@ namespace IntegraXL.Core
         public static implicit operator IntegraAddress(byte[] address) => new IntegraAddress(address);
 
         /// <summary>
-        /// Implicitly converts an <see cref="IntegraAddress"/> to an <see cref="uint"/>.
+        /// Implicitly converts an <see cref="IntegraAddress"/> to an <see cref="int"/>.
         /// </summary>
-        public static implicit operator uint(IntegraAddress instance)
+        public static implicit operator int(IntegraAddress instance)
         {
             IntegraAddress address = new IntegraAddress(instance.Address);
 
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(address);
 
-            return BitConverter.ToUInt32(address, 0);
+            return BitConverter.ToInt32(address, 0);
         }
 
         /// <summary>
-        /// Implicitly creates a new <see cref="IntegraAddress"/> from an <see cref="uint"/>.
+        /// Implicitly creates a new <see cref="IntegraAddress"/> from an <see cref="int"/>.
         /// </summary>
-        public static implicit operator IntegraAddress(uint address)
+        public static implicit operator IntegraAddress(int address)
         {
             byte[] bytes = BitConverter.GetBytes(address);
 
@@ -102,6 +109,7 @@ namespace IntegraXL.Core
 
             return new IntegraAddress(bytes);
         }
+
         #endregion
 
         #region Operator Overloads
@@ -140,7 +148,7 @@ namespace IntegraXL.Core
         /// <returns>True if the left hand side address is smaller, false otherwise.</returns>
         public static bool operator <(IntegraAddress lhs, IntegraAddress rhs)
         {
-            return (uint)lhs < (uint)rhs;
+            return (int)lhs < (int)rhs;
         }
 
         /// <summary>
@@ -151,9 +159,13 @@ namespace IntegraXL.Core
         /// <returns>True if the left hand side address is greater, false otherwise.</returns>
         public static bool operator >(IntegraAddress lhs, IntegraAddress rhs)
         {
-            return (uint)lhs > (uint)rhs;
+            return (int)lhs > (int)rhs;
         }
 
+        //public static IntegraAddress operator -(IntegraAddress lhs, IntegraAddress rhs)
+        //{
+        //    throw new NotImplementedException();
+        //}
         /// <summary>
         /// Overloads the + operator to add two INTEGRA-7 addresses to create an offset.
         /// </summary>
@@ -218,12 +230,12 @@ namespace IntegraXL.Core
         /// <returns>The hash code for the address.</returns>
         public override int GetHashCode()
         {
-            return Address.GetHashCode();
+            return base.GetHashCode();
         }
 
         public override string ToString()
         {
-            return "0x" + ((uint)this).ToString("X4");
+            return "0x" + ((int)this).ToString("X4");
         }
 
         #endregion

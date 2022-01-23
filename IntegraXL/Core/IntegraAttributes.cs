@@ -14,7 +14,7 @@ namespace IntegraXL.Core
         /// <summary>
         /// Creates and initializes a new <see cref="IntegraAttribute"/>, decorates the class as INTEGRA-7 collection.
         /// </summary>
-        public IntegraAttribute(uint address, uint request, ushort size = 0)
+        public IntegraAttribute(int address, int request, int size = 0)
         {
             //Debug.Assert(address != 0);
             //Debug.Assert(request != 0 || size != 0);
@@ -36,7 +36,7 @@ namespace IntegraXL.Core
             }
             else
             {
-                Size = (ushort)request;
+                Size = (int)(((request & 0x00000F00) >> 8) * 128 + (request & 0x000000FF));
             }
            
         }
@@ -48,12 +48,12 @@ namespace IntegraXL.Core
         /// <summary>
         /// Gets the physical INTEGRA-7 address of the model, template or collection.
         /// </summary>
-        public uint Address { get; }
+        public int Address { get; }
 
         /// <summary>
         /// Gets the request to generate an INTEGRA-7 initialization request.
         /// </summary>
-        public uint Request { get; }
+        public int Request { get; }
 
         /// <summary>
         /// Gets the size of a model or template in bytes or the size of a collection in items.
@@ -73,14 +73,14 @@ namespace IntegraXL.Core
         /// Creates and initalizes a new offset attribute.
         /// </summary>
         /// <param name="offset">The offset into the containing model.</param>
-        public OffsetAttribute(ushort offset)
+        public OffsetAttribute(short offset)
         {
-            Value = (ushort)((((offset & 0xFF00) >> 8) * 128) + offset & 0x00FF);
+            Value = ((((offset & 0xFF00) >> 8) * 128) + offset & 0x00FF);
         }
 
         /// <summary>
         /// Gets the offset into the containing model of the associated property or field.
         /// </summary>
-        public uint Value { get; }
+        public int Value { get; }
     }
 }

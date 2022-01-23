@@ -144,20 +144,27 @@ namespace IntegraXL.Models
             {
                 case IntegraToneTypes.SuperNATURALAcousticTone:
                     SuperNATURALAcousticTone = new SuperNATURALAcousticTone(this);
+                    MFX.Address |= SuperNATURALAcousticTone.Address;
                     break;
                 case IntegraToneTypes.SuperNATURALSynthTone:
                     SuperNATURALSynthTone = new SuperNATURALSynthTone(this);
+                    MFX.Address |= SuperNATURALSynthTone.Address;
                     break;
                 case IntegraToneTypes.SuperNATURALDrumkit:
                     SuperNATURALDrumKit = new SuperNATURALDrumKit(this);
+                    MFX.Address |= SuperNATURALDrumKit.Address;
                     break;
                 case IntegraToneTypes.PCMSynthTone:
                     PCMSynthTone = new PCMSynthTone(this);
+                    MFX.Address |= PCMSynthTone.Address;
                     break;
                 case IntegraToneTypes.PCMDrumkit:
                     PCMDrumKit = new PCMDrumKit(this);
+                    MFX.Address |= PCMDrumKit.Address;
                     break;
             }
+
+            Debug.Print($"{nameof(TemporaryTone)}] {nameof(InitializeToneAsync)} MFX: {MFX.Address}");
         }
 
         #endregion

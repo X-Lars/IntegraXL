@@ -74,6 +74,7 @@ namespace IntegraXL.Extensions
             // TODO: Check little endian
             return (short)((value[0] & 0x0F) << 4 | (value[1] & 0x0F));
         }
+
         //public static int MIDIValue(this short value)
         //{
         //    return (((value & 0xFF00) >> 8) * 128) + (value & 0x00FF);

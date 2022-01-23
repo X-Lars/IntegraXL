@@ -27,7 +27,7 @@ namespace IntegraXL
         /// <summary>
         /// 
         /// </summary>
-        private ConcurrentDictionary<uint, IntegraModel> _Models = new();
+        private ConcurrentDictionary<int, IntegraModel> _Models = new();
 
         /// <summary>
         /// 
@@ -94,7 +94,7 @@ namespace IntegraXL
         /// Gets the device ID.
         /// </summary>
         /// <remarks><i>Equals the connection ID.</i></remarks>
-        private byte DeviceID { get; }
+        internal byte DeviceID { get; }
 
         /// <summary>
         /// Gets whether the nescesary models are initialized and the INTEGRA-7 is ready for operation.
@@ -432,6 +432,11 @@ namespace IntegraXL
 
         #endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="systemExclusive"></param>
+        /// <remarks><i>Sets the system exclusive device ID.</i></remarks>
         internal void TransmitSystemExclusive(IntegraSystemExclusive systemExclusive)
         {
             // TODO: Check if taskmanager is nescessary for sending

@@ -76,7 +76,7 @@ namespace IntegraXL.Core
         /// </summary>
         /// <returns>A hash code for the collection.</returns>
         /// <remarks><i>The LSB is maxed out to specify a collection.</i></remarks>
-        protected internal override uint GetModelHash()
+        protected internal override int GetModelHash()
         {
             return base.GetModelHash() | 0xFF;
         }

@@ -140,7 +140,7 @@ namespace IntegraXL.Models
         /// Gets a hash code based on the model's address with the LSB maxed out.
         /// </summary>
         /// <returns>A hash code for the model.</returns>
-        protected internal override uint GetModelHash()
+        protected internal override int GetModelHash()
         {
             // Base hash conflicts with studio set common hash
             return base.GetModelHash() | 0xFF;

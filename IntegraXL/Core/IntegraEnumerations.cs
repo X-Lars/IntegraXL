@@ -953,7 +953,7 @@ namespace IntegraXL.Core
     #endregion
 
     #region MFX
-
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraMFXTypes : byte
     {
         [Description("Thru")]                               Thru                = 0x00,
@@ -1026,6 +1026,7 @@ namespace IntegraXL.Core
         [Description("Chorus -> Flanger")]                  ChorusFlanger = 67
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraMFXControlSources : byte
     {
         [Description("Off")]
@@ -1178,6 +1179,7 @@ namespace IntegraXL.Core
         Sys04 = 101,
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraMFXControlAssigns : byte
     {
         [Description("Off")] Off,

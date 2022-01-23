@@ -154,7 +154,7 @@ namespace IntegraXL.Core
             switch (e.Data[1])
             {
                 // System Exclusive Message
-                case IntegraConstants.MANUFACTURER_ID:
+                case IntegraConstants.MIDI_MANUFACTURER_ID:
 
                     //try
                     //{

@@ -2,6 +2,7 @@
 using IntegraXL.Validation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -9,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace IntegraXL.Models
 {
-    [Integra(0x00000200, 0x00000111)]
+    [Integra(0x00000200, 0x00000111, 145)]
     public class MFX : IntegraModel
     {
-        IntegraValidator _Validator;
+        IntegraValidator? _Validator;
 
         #region Fields
 
@@ -37,7 +38,8 @@ namespace IntegraXL.Models
 
         public MFX(TemporaryTone temporaryTone) : base(temporaryTone.Device)
         {
-            Address += temporaryTone.Address;
+            //Address; += temporaryTone.Address;
+            Debug.Print($"[{nameof(MFX)}] Contructor: {Address:X4}, 0x{Size:X4}");
         }
 
         #region Properties : INTEGRA-7
@@ -282,6 +284,7 @@ namespace IntegraXL.Models
         /// </summary>
         private void SetValidator()
         {
+            Debug.Print($"Set Validator: {Type}");
             switch(Type)
             {
                 case IntegraMFXTypes.Equalizer: _Validator = new Equalizer(); break;
@@ -291,12 +294,35 @@ namespace IntegraXL.Models
                     _Validator = new Thru();
                     break;
             }
+
+            NotifyPropertyChanged(string.Empty);
         }
 
         #endregion
 
         #region Overrides: Model
 
+        protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
+        {
+            //base.SystemExclusiveReceived(sender, e);
+
+            if (e.SystemExclusive.Address == Address)
+            {
+                if (e.SystemExclusive.Data.Length == Size)
+                {
+                    Debug.Print("***");
+                    Initialize(e.SystemExclusive.Data);
+                }
+                else 
+                {
+                    IntegraAddress offset = new IntegraAddress(0x00000111);
+                    if (e.SystemExclusive.Address.InRange(Address, (int)(Address + offset)))
+                        // Parameter data received
+                        ReceivedProperty(e.SystemExclusive);
+                }
+            }
+            
+        }
         /// <summary>
         /// Initializes the model with data.
         /// </summary>
@@ -307,15 +333,18 @@ namespace IntegraXL.Models
         {
             // After initialization the MFX type
             if (base.Initialize(data))
+            {
                 SetValidator();
-
+            }
+            
             return IsInitialized;
         }
 
-        protected internal override uint GetModelHash()
+        protected internal override int GetModelHash()
         {
             // TODO: Check uniqueness
-            return base.GetModelHash() & 0xFFF00F00;
+            return (int)(base.GetModelHash() | 0xFFF00F00);
+            //return base.GetModelHash() & 0xFFF00F00;
         }
 
         #endregion

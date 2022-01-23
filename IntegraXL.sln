@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegraXL", "IntegraXL\IntegraXL.csproj", "{56E8E236-8D3B-4520-B893-41F73673B33F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegraXL", "IntegraXL\IntegraXL.csproj", "{56E8E236-8D3B-4520-B893-41F73673B33F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPF", "WPF\WPF.csproj", "{EF3B13EE-DB9B-411E-BDF5-539010DA268F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegraXLTest", "IntegraXLTest\IntegraXLTest.csproj", "{28146560-79AD-4EF2-BD4C-5C8BFE38C2D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{56E8E236-8D3B-4520-B893-41F73673B33F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56E8E236-8D3B-4520-B893-41F73673B33F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56E8E236-8D3B-4520-B893-41F73673B33F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF3B13EE-DB9B-411E-BDF5-539010DA268F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF3B13EE-DB9B-411E-BDF5-539010DA268F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF3B13EE-DB9B-411E-BDF5-539010DA268F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF3B13EE-DB9B-411E-BDF5-539010DA268F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28146560-79AD-4EF2-BD4C-5C8BFE38C2D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28146560-79AD-4EF2-BD4C-5C8BFE38C2D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28146560-79AD-4EF2-BD4C-5C8BFE38C2D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28146560-79AD-4EF2-BD4C-5C8BFE38C2D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

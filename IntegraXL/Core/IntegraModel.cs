@@ -110,7 +110,7 @@ namespace IntegraXL.Core
                     }
                 }
             }
-            else if (e.SystemExclusive.Address.InRange(Address, (uint)(Address + Size)))
+            else if (e.SystemExclusive.Address.InRange(Address, (int)(Address + Size)))
             {
 
                 // Parameter data received
@@ -242,12 +242,12 @@ namespace IntegraXL.Core
         /// <summary>
         /// Gets the physical INTEGRA-7 address of the model.
         /// </summary>
-        public IntegraAddress Address { get; protected set; }
+        public IntegraAddress Address { get; internal set; }
 
         /// <summary>
         /// 
         /// </summary>
-        internal List<IntegraRequest> Requests { get; } = new();
+        internal List<IntegraAddress> Requests { get; } = new();
 
         /// <summary>
         /// Gets the device associated with the model.
@@ -304,7 +304,7 @@ namespace IntegraXL.Core
             if (this.CachedProperties() == null)
                 return;
 
-            if (this.CachedProperties().TryGetValue(propertyName, out uint offset))
+            if (this.CachedProperties().TryGetValue(propertyName, out int offset))
             {
                 FieldInfo field = this.CachedFields()[offset];
 
@@ -358,7 +358,7 @@ namespace IntegraXL.Core
                                     Array.Reverse(bytes);
 
                                 data = bytes;
-                                offset += (uint)(index * 4);
+                                offset += (int)(index * 4);
 
                             }
                             else
@@ -377,20 +377,20 @@ namespace IntegraXL.Core
                         throw new NotImplementedException($"{GetType().Name}.{nameof(TransmitProperty)}] {field.FieldType.Name} {field.Name}");
                     }
 
-                    Device.TransmitSystemExclusive(new IntegraSystemExclusive(Address, offset, data));
+                    Device.TransmitSystemExclusive(new IntegraSystemExclusive(Device.DeviceID, Address, offset, data));
                 }
             }
         }
 
         internal void ReceivedProperty(IntegraSystemExclusive systemExclusive)
         {
-            uint offset = systemExclusive.Address - Address;
+            int offset = systemExclusive.Address - Address;
 
             var fields = this.CachedFields();
 
-            for (uint dataOffset = 0; dataOffset < systemExclusive.Data.Length; dataOffset++)
+            for (int dataOffset = 0; dataOffset < systemExclusive.Data.Length; dataOffset++)
             {
-                uint fieldOffset = offset + dataOffset;
+                int fieldOffset = offset + dataOffset;
 
                 fields.TryGetValue(fieldOffset, out FieldInfo field);
 
@@ -494,7 +494,7 @@ namespace IntegraXL.Core
         /// Gets a hash code based on the model's address.
         /// </summary>
         /// <returns>A hash code for the model.</returns>
-        internal protected virtual uint GetModelHash()
+        internal protected virtual int GetModelHash()
         {
             return Address;
         }

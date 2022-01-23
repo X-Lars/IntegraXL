@@ -10,16 +10,16 @@ namespace IntegraXL.Extensions
         /// <summary>
         /// Thread safe cache to store a model's dictionary of <see cref="OffsetAttribute"/> decorated fields.
         /// </summary>
-        private static ConcurrentDictionary<int, Dictionary<uint, FieldInfo>> _CachedFields = new();
+        private static ConcurrentDictionary<int, Dictionary<int, FieldInfo>> _CachedFields = new();
 
         /// <summary>
         /// Thread safe cache to store a model's dictionary of <see cref="OffsetAttribute"/> decorated properties.
         /// </summary>
-        private static ConcurrentDictionary<int, Dictionary<string, uint>> _CachedProperties = new();
+        private static ConcurrentDictionary<int, Dictionary<string, int>> _CachedProperties = new();
 
-        internal static Dictionary<uint, FieldInfo> CachedFields(this IntegraModel instance)
+        internal static Dictionary<int, FieldInfo> CachedFields(this IntegraModel instance)
         {
-            if (_CachedFields.TryGetValue(instance.GetTypeHash(), out Dictionary<uint, FieldInfo>? fields))
+            if (_CachedFields.TryGetValue(instance.GetTypeHash(), out Dictionary<int, FieldInfo>? fields))
             {
                 return fields;
             }
@@ -29,9 +29,9 @@ namespace IntegraXL.Extensions
             }
         }
 
-        public static Dictionary<string, uint> CachedProperties(this IntegraModel instance)
+        public static Dictionary<string, int> CachedProperties(this IntegraModel instance)
         {
-            if (_CachedProperties.TryGetValue(instance.GetTypeHash(), out Dictionary<string, uint>? properties))
+            if (_CachedProperties.TryGetValue(instance.GetTypeHash(), out Dictionary<string, int>? properties))
             {
                 //Debug.Print($"{nameof(IntegraModelExtensions)}.{nameof(CachedProperties)}({instance.GetType().Name}) 0x{instance.GetTypeHash().ToString("X8")}");
                 return properties;
@@ -62,7 +62,7 @@ namespace IntegraXL.Extensions
 
             Debug.Print($"[{nameof(IntegraModelExtensions)}] {nameof(Cache)}<{instance.GetType().Name}>() New Cache Entry 0x{key.ToString("X4")}");
 
-            Dictionary<uint, FieldInfo> cachedFields = new();
+            Dictionary<int, FieldInfo> cachedFields = new();
             foreach (var field in integraFields)
             {
                 Debug.Assert(field.GetCustomAttribute<OffsetAttribute>() != null);
@@ -87,7 +87,7 @@ namespace IntegraXL.Extensions
             if (!integraProperties.Any())
                 return;
 
-            Dictionary<string, uint> cachedProperties = new();
+            Dictionary<string, int> cachedProperties = new();
 
             
             foreach (var property in integraProperties)

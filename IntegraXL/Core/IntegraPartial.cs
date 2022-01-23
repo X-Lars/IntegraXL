@@ -13,15 +13,15 @@ namespace IntegraXL.Core
         protected IntegraPartial(Integra device, Parts part) : base(device)
         {
             Debug.Print($"[{nameof(IntegraPartial)}] Constructor<{GetType().Name}>({part})");
-            Address += (uint)part << 8;
+            Address += (int)part << 8;
             Part = part;
         }
 
         public Parts Part { get; }
 
-        protected internal override uint GetModelHash()
+        protected internal override int GetModelHash()
         {
-            return base.GetModelHash() | (uint)Part << 8;
+            return base.GetModelHash() | (int)Part << 8;
         }
     }
 }
