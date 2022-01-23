@@ -38,7 +38,7 @@ namespace IntegraXL.Extensions
             }
             else
             {
-                Debug.Assert(properties != null);
+                //Debug.Assert(properties != null);
                 return null;
                 throw new IntegraException($"[{nameof(IntegraModelExtensions)}.{nameof(CachedProperties)}({instance.GetType().Name})]");
             }
@@ -101,7 +101,7 @@ namespace IntegraXL.Extensions
             if (cachedProperties.Any())
                 _CachedProperties.TryAdd(key, cachedProperties);
 
-            instance.IsCached = true;
+            //instance.IsCached = true;
         }
     }
 }

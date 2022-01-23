@@ -59,9 +59,7 @@ namespace IntegraXL.Core
 
             Requests.Add(new IntegraRequest(attribute.Request));
 
-            // 
-            if(GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic).Where(x => x.GetCustomAttribute<OffsetAttribute>() != null).Any())
-                this.Cache();
+            this.Cache();
         }
 
         /// <summary>
@@ -264,12 +262,6 @@ namespace IntegraXL.Core
         public bool IsConnected { get; private set; }
 
         /// <summary>
-        /// Gets wheter the model type is cached.
-        /// </summary>
-        /// <remarks><i>Used to skip transmission of models in the <see cref="NotifyPropertyChanged(string, int?)"/> event handler.</i></remarks>
-        public bool IsCached { get; internal protected set; }
-
-        /// <summary>
         /// Gets the name of the model.
         /// </summary>
         public string Name { get; internal set; }
@@ -316,8 +308,8 @@ namespace IntegraXL.Core
             //if (string.IsNullOrEmpty(propertyName))
             //    return;
 
-            //if (this.CachedProperties() == null)
-            //    return;
+            if (this.CachedProperties() == null)
+                return;
 
             if (this.CachedProperties().TryGetValue(propertyName, out int offset))
             {
@@ -543,14 +535,14 @@ namespace IntegraXL.Core
         /// <b>IMPORTANT:</b><br/>
         /// <i>Properties decorated with the <see cref="OffsetAttribute"/> are transmitted to the device.</i><br/>
         /// <i>Transmission can be prevented by calling the method with <see cref="string.Empty"/> explicitly.</i><br/>
-        /// <i>Uncached or uninitialized models do not transmit properties.</i><br/>
+        // <i>Uncached or uninitialized models do not transmit properties.</i><br/>
         /// </remarks>
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "", int? index = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-            if (!IsCached)
-                return;
+            //if (!IsCached)
+            //    return;
 
             if (string.IsNullOrEmpty(propertyName))
                 return;

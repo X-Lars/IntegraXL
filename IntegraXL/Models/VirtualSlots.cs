@@ -319,7 +319,7 @@ namespace IntegraXL.Models
             private set
             {
                 _IsLoading = value;
-                NotifyPropertyChanged();
+                NotifyPropertyChanged(string.Empty);
             }
         }
 

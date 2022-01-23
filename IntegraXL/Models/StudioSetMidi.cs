@@ -47,6 +47,13 @@ namespace IntegraXL.Models
 
         #endregion
 
+        protected override bool Initialize(byte[] data)
+        {
+            _PhaseLock = Convert.ToBoolean(data[0]);
+            NotifyPropertyChanged(string.Empty);
+            return IsInitialized = true;
+        }
+
         #endregion
     }
 }
