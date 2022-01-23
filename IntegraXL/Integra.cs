@@ -1,4 +1,5 @@
-﻿using IntegraXL.Core;
+﻿using IntegraXL.Common;
+using IntegraXL.Core;
 using IntegraXL.Extensions;
 using IntegraXL.Interfaces;
 using IntegraXL.Models;
@@ -7,6 +8,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace IntegraXL
 {
@@ -43,6 +45,11 @@ namespace IntegraXL
         /// Stores the selected tone of the active part.
         /// </summary>
         private IntegraTone _SelectedTone;
+
+        /// <summary>
+        /// Stores the command to preview the active tone.
+        /// </summary>
+        private ICommand _PreviewCommand;
 
         #endregion
 
@@ -113,6 +120,32 @@ namespace IntegraXL
             }
         }
 
+        /// <summary>
+        /// Gets whether the tone preview is running.
+        /// </summary>
+        [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
+        public bool IsPreviewing { get; private set; }
+
+        /// <summary>
+        /// On get, gets wheter the tone preview is running.<br/>
+        /// On set, starts or stops the tone preview on the active part based on a true or false value respectively.
+        /// </summary>
+        [Bindable(BindableSupport.Yes, BindingDirection.TwoWay)]
+        public bool Preview
+        {
+            get => IsPreviewing;
+            set
+            {
+                if (IsPreviewing != value)
+                {
+                    if (CanExecutePreview())
+                    {
+                        ExecutePreview();
+                    }
+                }
+            }
+        }
+
         #region Properties: INTEGRA-7
 
         /// <summary>
@@ -123,7 +156,7 @@ namespace IntegraXL
         /// <summary>
         /// Gets the studio sets collection.
         /// </summary>
-        /// <remarks><i>Use the <see cref="Setup.StudioSetPC"/> property to get or set the active studio set.</i></remarks>
+        /// <remarks><i>Use the <see cref="Setup.StudioSetPC"/> property to get or set the active studio set by index.</i></remarks>
         public StudioSets? StudioSets { get; private set; }
 
         /// <summary>
@@ -145,10 +178,11 @@ namespace IntegraXL
         /// Gets or sets the active part.
         /// </summary>
         /// <remarks>
-        /// <i>Determines the partial models returned from the studio set.</i><br/>
-        /// <i>Determines the partial model returned for the selected tone.</i><br/>
+        /// <i>Determines the indexed partial models returned from the studio set.</i><br/>
+        /// <i>Determines the indexed partial model returned for the selected tone.</i><br/>
         /// <i>Can be used to notify and update UI applications.</i>
         /// </remarks>
+        [Bindable(BindableSupport.Yes, BindingDirection.TwoWay)]
         public int SelectedPart
         {
             get => _SelectedPart;
@@ -156,34 +190,45 @@ namespace IntegraXL
             {
                 if (_SelectedPart != value)
                 {
+                    var previous = _SelectedPart;
+                    var preview  = IsPreviewing;
+
+                    // Clamp to part index 0..15
                     value = Math.Min(value, 15);
                     value = Math.Max(value, 0);
-                    var previous = _SelectedPart;
-                    
+
+                    if (preview)
+                        Preview = false;
+
                     _SelectedPart = value;
+
+                    if (preview)
+                        Preview = true;
+
+                    
+                    PartChanged?.Invoke(this, new IntegraPartChangedEventArgs((Parts)value, (Parts)previous));
+
                     NotifyPropertyChanged();
                     NotifyPropertyChanged(nameof(SelectedTone));
-
-                    Debug.Print($"Part Changed");
-                    PartChanged?.Invoke(this, new IntegraPartChangedEventArgs((Parts)value, (Parts)previous));
                 }
             }
         }
 
         public IntegraTone ToneInfo
         {
-            get => SelectedTones[(int)SelectedPart];
+            get => SelectedTones[SelectedPart];
         }
 
+        [Bindable(BindableSupport.Yes, BindingDirection.TwoWay)]
         public IBankSelect SelectedTone
         {
-            get => SelectedTones[(int)SelectedPart];
+            get => SelectedTones[SelectedPart];
             set
             {
-                if (SelectedTones[(int)SelectedPart].Equals(value))
+                if (SelectedTones[SelectedPart].Equals(value))
                     return;
 
-                SelectedTones[(int)SelectedPart].BankSelect = value;
+                SelectedTones[SelectedPart].BankSelect = value;
 
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(ToneInfo));
@@ -195,7 +240,7 @@ namespace IntegraXL
         public TemporaryTone TemporaryTone
         {
             get => _TemporaryTone;
-            set
+            private set
             {
                 if(_TemporaryTone != value)
                 {
@@ -204,6 +249,43 @@ namespace IntegraXL
                 }
             }
         }
+        #endregion
+
+        #endregion
+
+        #region Commands
+
+        /// <summary>
+        /// Provides a bindable UI command to toggle the tone preview on or off on the active part.
+        /// </summary>
+        [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
+        public ICommand PreviewCommand
+        {
+            get
+            {
+                if (_PreviewCommand != null)
+                    return _PreviewCommand;
+
+                return _PreviewCommand = new UICommand(ExecutePreview, CanExecutePreview, this);
+            }
+        }
+
+        #region Commands: CanExecute
+
+        /// <summary>
+        /// Gets wheter the <see cref="PreviewCommand"/> can be executed.
+        /// </summary>
+        /// <returns>True if the command can be executed.</returns>
+        private bool CanExecutePreview()
+        {
+            return StudioSet.Part != null && StudioSet.Part.IsInitialized;
+        }
+
+        #endregion
+
+        #region Commands: Implementation
+
+        
         #endregion
 
         #endregion
@@ -238,6 +320,8 @@ namespace IntegraXL
             IsInitialized = true;
         }
 
+        #region Model Instantiation
+
         /// <summary>
         /// Creates and caches a new INTEGRA-7 model or returns the model from cache if it exists.<br/>
         /// Maintains refrential integrity of models and prevents duplicates.
@@ -267,8 +351,7 @@ namespace IntegraXL
             {
                 Debug.Print($"[{nameof(Integra)}] {nameof(CreateModel)}<{typeof(TModel).Name}>({part}) From Cache");
                 
-                // IMPORTANT: Disconnect to remove the device event listener to free all references to the newly created instance
-                // TODO: Remove model connecting logic to model class
+                // IMPORTANT: Disconnect to remove the device event listener to free all references to the newly created instance?
                 instance.Disconnect();
                 instance = null;
 
@@ -304,6 +387,11 @@ namespace IntegraXL
             return model;
         }
 
+        /// <summary>
+        /// Gets an initialized INTEGRA-7 tone bank.
+        /// </summary>
+        /// <param name="tonebank">The tone bank to retreive.</param>
+        /// <returns>An awaitable <see cref="Task"/> that returns an initialized INTEGRA-7 tone bank.</returns>
         public async Task<IntegraToneBank> GetToneBank(IntegraToneBanks tonebank)
         {
             Debug.Print($"[{nameof(Integra)}] {nameof(GetToneBank)}({tonebank})");
@@ -320,7 +408,15 @@ namespace IntegraXL
             return model;
         }
 
-        internal IntegraToneBank CreateToneBank(Type type)
+        /// <summary>
+        /// Creates and caches a new INTEGRA-7 tone bank or returns the tone bank from cache if it exists.<br/>
+        /// Maintains refrential integrity of tone banks and prevents duplicates.
+        /// </summary>
+        /// <param name="type">The tone bank type specifier.</param>
+        /// <returns>A new or cached INTEGRA-7 tone bank.</returns>
+        /// <exception cref="IntegraException"></exception>
+        /// <remarks><i>Newly created models are uninitialized, cached models are possibly already initialized with data.</i></remarks>
+        private IntegraToneBank CreateToneBank(Type type)
         {
             IntegraToneBank? instance;
 
@@ -334,8 +430,7 @@ namespace IntegraXL
             {
                 Debug.Print($"[{nameof(Integra)}] {nameof(CreateToneBank)}({type}) From Cache");
 
-                // IMPORTANT: Disconnect to remove the device event listener to free all references to the newly created instance
-                // TODO: Remove model connecting logic to model class
+                // IMPORTANT: Disconnect to remove the device event listener to free all references to the newly created instance?
                 instance.Disconnect();
                 instance = null;
 
@@ -351,8 +446,9 @@ namespace IntegraXL
 
             return instance;
         }
-        // TODO: GetModel override to easy select tone bank
-        // TODO: GetModel override to easy select partials
+
+        #endregion
+
 
         #region INTEGRA-7 Requests
 
@@ -385,7 +481,8 @@ namespace IntegraXL
 
                 foreach (var request in model.Requests)
                 {
-                    IntegraSystemExclusive systemExclusive = new (DeviceID, model.Address, request);
+                    IntegraSystemExclusive systemExclusive = new (model.Address, request);
+                    systemExclusive.DeviceID = DeviceID;
                     _Connection.SendSystemExclusiveMessage(systemExclusive);
                 }
 
@@ -413,8 +510,8 @@ namespace IntegraXL
         {
             Task<bool> task = new (() =>
             {
-                IntegraSystemExclusive systemExclusive = new(DeviceID, 0x0F003000, instance.Requests[0]);
-
+                IntegraSystemExclusive systemExclusive = new(0x0F003000, instance.Requests[0]);
+                systemExclusive.DeviceID = DeviceID;
                 _Connection.SendSystemExclusiveMessage(systemExclusive);
 
                 while (instance.IsLoading)
@@ -430,7 +527,30 @@ namespace IntegraXL
             return task;
         }
 
+
         #endregion
+
+        /// <summary>
+        /// Toggles the tone preview on or off.
+        /// </summary>
+        private void ExecutePreview()
+        {
+            if (IsPreviewing)
+            {
+                TransmitSystemExclusive(new IntegraSystemExclusive(0x0F002000, 0x00000000, new byte[] { 0x00 }));
+
+                IsPreviewing = false;
+            }
+            else
+            {
+                TransmitSystemExclusive(new IntegraSystemExclusive(0x0F002000, 0x00000000, new byte[] { (byte)(SelectedPart + 1) }));
+
+                IsPreviewing = true;
+            }
+
+            NotifyPropertyChanged(nameof(IsPreviewing));
+            NotifyPropertyChanged(nameof(Preview));
+        }
 
         /// <summary>
         /// 
@@ -442,7 +562,7 @@ namespace IntegraXL
             // TODO: Check if taskmanager is nescessary for sending
             Task<bool> task = new (() =>
             {
-                systemExclusive.DeviceID = this.DeviceID;
+                systemExclusive.DeviceID = DeviceID;
                 
                 _Connection.SendSystemExclusiveMessage(systemExclusive);
                 return true;
@@ -453,11 +573,14 @@ namespace IntegraXL
 
         #endregion
 
+        #region Event Handlers
+
         private void OnSystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
         {
             switch (e.SystemExclusive.Address[0])
             {
                 case 0x01:
+                    // TODO: Studio set changed
                     //Debug.Print($"0x01 Setup Address");
                     break;
                 case 0x02:
@@ -476,6 +599,8 @@ namespace IntegraXL
             SystemExclusiveReceived?.Invoke(this, e);
         }
 
+        #endregion
+
         #region Interfaces: INotifyPropertyChanged
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -488,17 +613,7 @@ namespace IntegraXL
         #endregion
     }
 
-
-    // Studio Set (Depends on setup)
-    // Temporary Tones [1..16]
-    // Virtual Slots
-
-
-    // METHODS
-    // Get Model
-    // 
-
-
+    // Database model
     // Cache Model
     // Send Model
     // Receive Model

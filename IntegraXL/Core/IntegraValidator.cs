@@ -1,10 +1,9 @@
 ﻿using IntegraXL.Extensions;
-using System.Diagnostics;
 
 namespace IntegraXL.Core
 {
     /// <summary>
-    /// Base class for INTEGRA-7 parameter validation.
+    /// Base class for INTEGRA-7 parameter validators.
     /// </summary>
     public abstract class IntegraValidator
     {

@@ -1,125 +1,183 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using IntegraXL.Extensions;
+using System.Diagnostics;
 
 namespace IntegraXL.Core
 {
     public class IntegraSystemExclusive
     {
-        private const byte SYX_STATUS     = 0xF0;
-        private const byte MANUFACTURER_ID = 0x41;
-        private static readonly byte[] MODEL_ID        = { 0x00, 0x00, 0x64 };
+        #region Constants
+
+        /// <summary>
+        /// Defines the system exclusive status byte.
+        /// </summary>
+        private const byte SYX_STATUS = 0xF0;
+
+        /// <summary>
+        /// Defines the Roland's MIDI manufacturers ID.
+        /// </summary>
+        private const byte SYX_MANUFACTURER = 0x41;
+
+        /// <summary>
+        /// Defines the LSB of the INTEGRA-7 model ID.
+        /// </summary>
+        private const byte SYX_MODEL = 0x64;
+
+        /// <summary>
+        /// Defines the system exclusive mode to request data.
+        /// </summary>
+        private const byte SYX_MODE_RX = 0x11;
+
+        /// <summary>
+        /// Defines the system exclusive mode to transmit data.
+        /// </summary>
+        private const byte SYX_MODE_TX = 0x12;
+
+        /// <summary>
+        /// Defines the system exclusive closing byte.
+        /// </summary>
         private const byte SYX_END = 0xF7;
-        private const byte TRANSMIT = 0x12;
-        private const byte REQUEST  = 0x11;
 
-        public const int INTEGRA_SYSTEM_EXCLUSIVE_HEADER_SIZE = 6;
-        #region Fields
+        /// <summary>
+        /// Defines the fixed index of the system exclusive address part.
+        /// </summary>
+        private const byte SYX_ADDRESS_IDX = 7;
 
-        //private static readonly byte[] _Header               = { 0xF0, 0x41, 0x10, 0x00, 0x00, 0x64, 0x11 };
-        private static readonly byte[] _SystemExclusiveStart = { 0xF0 };
-        private byte[]                 _DeviceID             = { 0x10 };
-        private static readonly byte[] _ModelID              = { 0x00, 0x00, 0x64 };
-        private readonly byte[]        _Mode                 = { 0x11 };
-        private readonly byte[]        _Address              = { 0x00, 0x00, 0x00, 0x00};
-        private readonly byte[]        _Data                 = { };
-        private byte[]                 _Checksum             = { };
-        private static readonly byte[] _SystemExclusiveEnd   = { 0xF7 };
+        /// <summary>
+        /// Defines the fixed index of the system exclusive data part.
+        /// </summary>
+        private const byte SYX_DATA_IDX = 11;
+
+        /// <summary>
+        /// Defines the fixed size the system exclusive.
+        /// </summary>
+        /// <remarks><i>Fixed size without the variable sized data part.</i></remarks>
+        private const byte SYX_FIXED_SIZE = 13;
 
         #endregion
 
+        #region Constructor
 
-        public IntegraSystemExclusive(byte deviceID, IntegraAddress address, IntegraAddress request)
+        /// <summary>
+        /// Creates and initializes a new system exclusive message to request data.
+        /// </summary>
+        /// <param name="address">The physical INTEGRA-7 address of the data.</param>
+        /// <param name="request">The data request.</param>
+        /// <remarks><i>Request</i></remarks>
+        public IntegraSystemExclusive( IntegraAddress address, IntegraRequest request)
         {
-            DeviceID = deviceID;
             Address = address;
             Data = request;
 
-            InvalidateChecksum();
+            CalculateChecksum();
         }
 
-
-        public IntegraSystemExclusive(byte[] syx)
+        /// <summary>
+        /// Creates and initializes a new system exclusive message from received data.
+        /// </summary>
+        /// <param name="raw">The raw MIDI data.</param>
+        /// <exception cref="IntegraException"></exception>
+        public IntegraSystemExclusive(byte[] raw)
         {
-            Array.Copy(syx, 7, Address, 0, 4);
-
-            Data = new byte[syx.Length - 13];
-
-            Array.Copy(syx, 11, Data, 0, Data.Length);
-
-            InvalidateChecksum();
-
-            if (syx[syx.Length - 2] != _Checksum[0])
-                throw new IntegraException($"[{nameof(IntegraSystemExclusive)}]\nInvalid checksum.");
+            Address = raw.Part(SYX_ADDRESS_IDX, 4);
+            Data    = raw.Part(SYX_DATA_IDX, raw.Length - SYX_FIXED_SIZE);
         }
 
-        public IntegraSystemExclusive(byte deviceID, IntegraAddress address, int offset, byte[] data)
+        /// <summary>
+        /// Creates and initializes a new system exclusive message to transmit data.
+        /// </summary>
+        /// <param name="address">The physical INTEGRA-7 base address of the model.</param>
+        /// <param name="offset">The property offset into the model's base address.</param>
+        /// <param name="data">The serialized MIDI data.</param>
+        public IntegraSystemExclusive(IntegraAddress address, IntegraAddress offset, byte[] data)
         {
-            DeviceID = deviceID;
-            Mode = TRANSMIT;
+            Debug.Assert(data.All(x => x <= IntegraConstants.MAX_MIDI_VALUE));
+
             Address = address + offset;
             Data = data;
+            Mode = SYX_MODE_TX;
 
-            InvalidateChecksum();
+            CalculateChecksum();
         }
 
-        public byte DeviceID { get; set; } = 0x10;
-        public byte Mode { get; set; } = REQUEST;
+        #endregion
 
+        #region Properties
+
+        /// <summary>
+        /// Gets the system exclusive address.
+        /// </summary>
         public IntegraAddress Address { get; private set; } = new byte[4];
-        //{ 
-        //    get { return _Address; } 
-        //}
 
-       
+        /// <summary>
+        /// Gets the system exclusive device ID.
+        /// </summary>
+        public byte DeviceID { get; internal set; } = 0x10;
+
+        /// <summary>
+        /// Gets the system exclusive mode, either <see cref="SYX_MODE_RX"/> or <see cref="SYX_MODE_TX"/>.
+        /// </summary>
+        /// <remarks><i>Defaults to <see cref="SYX_MODE_RX"/>.</i></remarks>
+        public byte Mode { get; private set; } = SYX_MODE_RX;
+
+        /// <summary>
+        /// Gets the system exclusive data part.
+        /// </summary>
         public byte[] Data { get; private set; }
-        //{
-        //    get { return _Data; }
-        //}
 
-        private byte InvalidateChecksum()
+        /// <summary>
+        /// Gets the system exclusive checsum.
+        /// </summary>
+        public byte Checksum { get; private set; }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Calculates and sets the system exclusive checksum.
+        /// </summary>
+        /// <returns>The calculated checksum.</returns>
+        private byte CalculateChecksum()
         {
             int checkSum = 0;
 
             for (int i = 0; i < 4; i++)
             {
-                checkSum += _Address[i];
+                checkSum += Address[i];
             }
 
-            if (_Data != null)
+            if (Data != null)
             {
-                for (int i = 0; i < _Data.Length; i++)
+                for (int i = 0; i < Data.Length; i++)
                 {
-                    checkSum += _Data[i];
+                    checkSum += Data[i];
                 }
             }
 
             checkSum %= 128;
-            checkSum = 128 - checkSum;
+            checkSum  = 128 - checkSum;
 
-            checkSum = checkSum == 128 ? 0 : checkSum;
-
-            _Checksum = new byte[] { (byte)checkSum };
-
-            return (byte)checkSum;
+            return Checksum = (byte)checkSum;
         }
 
+        #endregion
+
+        #region Operators
+
         /// <summary>
-        /// Overloads the assignment operator to implicitly convert an INTEGRA-7 system exclusive to a raw MIDI byte array.
+        /// Makes the <see cref="IntegraSystemExclusive"/> assignable to a <see cref="byte"/>[] array.
         /// </summary>
-        /// <param name="instance">The instance to assign to the byte array.</param>
+        /// <param name="instance">The instance to assign.</param>
         public static implicit operator byte[](IntegraSystemExclusive instance)
         {
-            List<byte> bytes = new List<byte>();
+            List<byte> bytes = new();
 
             bytes.Add(SYX_STATUS);
-            bytes.Add(MANUFACTURER_ID);
+            bytes.Add(SYX_MANUFACTURER);
             bytes.Add(instance.DeviceID);
             bytes.Add(0x00);
             bytes.Add(0x00);
-            bytes.Add(0x64);
+            bytes.Add(SYX_MODEL);
             bytes.Add(instance.Mode);
             bytes.Add(instance.Address[0]);
             bytes.Add(instance.Address[1]);
@@ -129,41 +187,20 @@ namespace IntegraXL.Core
             for (int i = 0; i < instance.Data.Length; i++)
                 bytes.Add(instance.Data[i]);
 
-            bytes.Add(instance._Checksum[0]);
+            bytes.Add(instance.Checksum);
             bytes.Add(SYX_END);
 
             return bytes.ToArray();
-            //// Create a jagged array to combine all system exclusive fields
-            //byte[][] fields =
-            //{
-            //    SYX_STATUS,
-            //    MANUFACTURER_ID,
-            //    new byte[] {instance.DeviceID },
-            //    MODEL_ID,
-            //    instance._Mode,
-            //    instance._Address,
-            //    instance._Data,
-            //    instance._Checksum,
-            //    STATUS_END
-            //};
-
-            //// Create the byte array with the total size of the jagged array dimensions
-            //byte[] byteArray = new byte[fields.Sum(b => b.Length)];
-
-            //int offset = 0;
-
-            //// Copy all bytes from the jagged array into one sequential data array
-            //foreach (byte[] value in fields)
-            //{
-            //    Buffer.BlockCopy(value, 0, byteArray, offset, value.Length);
-            //    offset += value.Length;
-            //}
-
-            //return byteArray;
         }
+
+        #endregion
 
         #region Overrides: Object
 
+        /// <summary>
+        /// Provides a user friendly hexadecimal string representation of the raw system exclusive message bytes.
+        /// </summary>
+        /// <returns>A user friendly <see cref="string"/> representation of the system exclusive message.</returns>
         public override string ToString()
         {
             return string.Join(" ", ((byte[])this).Select(x => string.Format("{0:X2}", x)));

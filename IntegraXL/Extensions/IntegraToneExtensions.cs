@@ -107,7 +107,6 @@ namespace IntegraXL.Extensions
                 IntegraToneBanks.SNDUserDrum   => typeof(SNDUserToneBank),
                 IntegraToneBanks.PCMUserTone   => typeof(PCMUserToneBank),
                 IntegraToneBanks.PCMUserDrum   => typeof(PCMUserDrumKits),
-                IntegraToneBanks.ExSn01Tone    => typeof(ExSN01ToneBank),
                 IntegraToneBanks.ExSN02Tone    => typeof(ExSN02ToneBank),
                 IntegraToneBanks.ExSN03Tone    => typeof(ExSN03ToneBank),
                 IntegraToneBanks.ExSN04Tone    => typeof(ExSN04ToneBank),

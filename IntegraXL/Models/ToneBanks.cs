@@ -57,9 +57,9 @@ namespace IntegraXL.Models
 
             Requests.Clear();
 
-            Requests.Add(0x7900007F);
-            Requests.Add(0x79013B7F);
-            Requests.Add(0x79027F02);
+            Requests.Add(new IntegraRequest(0x7900007F));
+            Requests.Add(new IntegraRequest(0x79013B7F));
+            Requests.Add(new IntegraRequest(0x79027F02));
         }
     }
 

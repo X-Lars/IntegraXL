@@ -36,7 +36,7 @@ namespace IntegraXL.Core
             }
             else
             {
-                Size = (int)(((request & 0x00000F00) >> 8) * 128 + (request & 0x000000FF));
+                Size = ((request & 0x00000F00) >> 8) * 128 + (request & 0x000000FF);
             }
            
         }

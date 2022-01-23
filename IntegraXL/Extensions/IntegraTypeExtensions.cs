@@ -5,6 +5,16 @@ namespace IntegraXL.Extensions
 {
     public static class IntegraTypeExtensions
     {
+
+        public static T[] Part<T>(this T[] array, int index, int length)
+        {
+            T[] result = new T[length];
+
+            Array.Copy(array, index, result, 0, length);
+
+            return result;
+        }
+
         /// <summary>
         /// Serializes a <see cref="byte"/> to a MIDI byte.
         /// </summary>

@@ -6,7 +6,7 @@ namespace IntegraXL.Core
     /// <summary>
     /// Defines a strongly typed base collection for <see cref="IntegraPartial"/> derived models.
     /// </summary>
-    /// <typeparam name="TPartial">The partial type specifier.</typeparam>
+    /// <typeparam name="TPartial">An <see cref="IntegraPartial"/> derived type.</typeparam>
     public abstract class IntegraPartialCollection<TPartial> : IntegraCollection<TPartial> where TPartial : IntegraPartial
     {
         #region Constructor
@@ -26,7 +26,7 @@ namespace IntegraXL.Core
 
             Debug.Assert(attribute != null);
 
-            Requests.Add(attribute.Request);
+            Requests.Add(new IntegraRequest(attribute.Request));
 
             for (int i = 0; i < IntegraConstants.PART_COUNT; i++)
             {
@@ -57,7 +57,7 @@ namespace IntegraXL.Core
         /// </summary>
         /// <param name="sender">The device that raised the event.</param>
         /// <param name="e">The system exclusive message data.</param>
-        /// <remarks><i>Default to do nothing.</i></remarks>
+        /// <remarks><i>Defaults to do nothing.</i></remarks>
         protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e) { }
 
         /// <summary>
@@ -78,6 +78,7 @@ namespace IntegraXL.Core
         /// <remarks><i>The LSB is maxed out to specify a collection.</i></remarks>
         protected internal override int GetModelHash()
         {
+            // Base hash conflicts with the first element of the collection
             return base.GetModelHash() | 0xFF;
         }
 

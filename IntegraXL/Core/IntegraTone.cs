@@ -89,7 +89,7 @@ namespace IntegraXL.Core
             get => this;
             set
             {
-                if(!this.Equals(value))// && value != null)
+                if(value != null & !this.Equals(value))
                 {
                     Initialize(new byte[] { value.MSB, value.LSB, value.PC });
                     NotifyPropertyChanged();
@@ -180,7 +180,7 @@ namespace IntegraXL.Core
         {
             Debug.Print($"[{nameof(IntegraTone)}({Part})] SX");
             // TODO: check if expansion is loaded
-            Device.TransmitSystemExclusive(new IntegraSystemExclusive(0x00, 0x0F000402, new IntegraRequest(MSB, LSB, PC, 0x01)));
+            Device.TransmitSystemExclusive(new IntegraSystemExclusive(0x0F000402, new IntegraRequest(MSB, LSB, PC, 0x01)));
         }
 
         #endregion

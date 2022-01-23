@@ -37,6 +37,9 @@ namespace IntegraXL.Core
         /// </summary>
         /// <remarks>
         /// <i>All derived classes require an <see cref="IntegraAttribute"/>.</i><br/>
+        /// <i>Sets the address, request and size from the <see cref="IntegraAttribute"/>.</i><br/>
+        /// <i>Collections are not cached and responsible for there own requests.</i><br/>
+        /// <i>Initializes the name with the type name.</i>
         /// </remarks>
         private IntegraModel()
         {
@@ -50,14 +53,15 @@ namespace IntegraXL.Core
             Size = attribute.Size;
             Address = attribute.Address;
 
+            // Collections are responisble for generating the requests and are not cached
             if (GetType().IsSubclassOf(typeof(IntegraCollection)))
-            {
                 return;
-            }
 
             Requests.Add(new IntegraRequest(attribute.Request));
 
-            this.Cache();
+            // 
+            if(GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic).Where(x => x.GetCustomAttribute<OffsetAttribute>() != null).Any())
+                this.Cache();
         }
 
         /// <summary>
@@ -247,7 +251,7 @@ namespace IntegraXL.Core
         /// <summary>
         /// 
         /// </summary>
-        internal List<IntegraAddress> Requests { get; } = new();
+        internal List<IntegraRequest> Requests { get; } = new();
 
         /// <summary>
         /// Gets the device associated with the model.
@@ -260,18 +264,29 @@ namespace IntegraXL.Core
         public bool IsConnected { get; private set; }
 
         /// <summary>
-        /// Gets the user friendly name of the model.
+        /// Gets wheter the model type is cached.
+        /// </summary>
+        /// <remarks><i>Used to skip transmission of models in the <see cref="NotifyPropertyChanged(string, int?)"/> event handler.</i></remarks>
+        public bool IsCached { get; internal protected set; }
+
+        /// <summary>
+        /// Gets the name of the model.
         /// </summary>
         public string Name { get; internal set; }
         
         /// <summary>
         /// Gets the fixed model size in bytes or the fixed item count for collection types.<br/>
         /// </summary>
+        /// <remarks>
+        /// <i><b>IMPORTANT!</b></i><br/>
+        /// <i>The size is not serialized to the MIDI range.</i>
+        /// </remarks>
         public int Size { get; }
 
         /// <summary>
         /// Gets wheter the model is initialized.
         /// </summary>
+        /// <remarks><i>When set to true, property changed is raised for all properties.</i></remarks>
         public virtual bool IsInitialized
         {
             get => _IsInitialized;
@@ -295,14 +310,14 @@ namespace IntegraXL.Core
 
         #region Method
 
-
+        // TODO: Cleanup
         internal void TransmitProperty(string propertyName, int? index = null)
         {
             //if (string.IsNullOrEmpty(propertyName))
             //    return;
 
-            if (this.CachedProperties() == null)
-                return;
+            //if (this.CachedProperties() == null)
+            //    return;
 
             if (this.CachedProperties().TryGetValue(propertyName, out int offset))
             {
@@ -377,11 +392,12 @@ namespace IntegraXL.Core
                         throw new NotImplementedException($"{GetType().Name}.{nameof(TransmitProperty)}] {field.FieldType.Name} {field.Name}");
                     }
 
-                    Device.TransmitSystemExclusive(new IntegraSystemExclusive(Device.DeviceID, Address, offset, data));
+                    Device.TransmitSystemExclusive(new IntegraSystemExclusive(Address, offset, data));
                 }
             }
         }
 
+        // TODO: Combine with Initialize(byte[] data) method
         internal void ReceivedProperty(IntegraSystemExclusive systemExclusive)
         {
             int offset = systemExclusive.Address - Address;
@@ -503,7 +519,7 @@ namespace IntegraXL.Core
         /// Gets a hash code based on the model's type.
         /// </summary>
         /// <returns>A hash code based on the model's type.</returns>
-        /// <remarks><i>Used for caching <see cref="IntegraAttribute"/></i> decorated fields and properties.</remarks>
+        /// <remarks><i>Used for caching <see cref="OffsetAttribute"/></i> decorated fields and properties.</remarks>
         public int GetTypeHash()
         {
             return GetType().GetHashCode();
@@ -525,17 +541,21 @@ namespace IntegraXL.Core
         /// <param name="index">The index of the property, if applicable.</param>
         /// <remarks>
         /// <b>IMPORTANT:</b><br/>
-        /// <i>Properties decorated with the <see cref="IntegraAttribute"/> are transmitted to the device.</i><br/>
-        /// <i>Prevent transmission by calling the method with a <see cref="string.Empty"/> explicitly.</i><br/>
-        /// <i>Uninitialized models do not transmit properties.</i><br/>
+        /// <i>Properties decorated with the <see cref="OffsetAttribute"/> are transmitted to the device.</i><br/>
+        /// <i>Transmission can be prevented by calling the method with <see cref="string.Empty"/> explicitly.</i><br/>
+        /// <i>Uncached or uninitialized models do not transmit properties.</i><br/>
         /// </remarks>
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "", int? index = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
+            if (!IsCached)
+                return;
+
             if (string.IsNullOrEmpty(propertyName))
                 return;
 
+            
             // Only transmit properties if the model is initialized
             if (IsInitialized)
             {
@@ -545,7 +565,6 @@ namespace IntegraXL.Core
                 }
                 else
                 {
-
                     TransmitProperty(propertyName);
                 }
             }

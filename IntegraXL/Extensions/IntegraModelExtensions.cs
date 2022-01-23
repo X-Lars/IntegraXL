@@ -54,6 +54,7 @@ namespace IntegraXL.Extensions
                 return;
             }
 
+            // TODO: Remove double checked in base class
             var integraFields = instance.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic)
                 .Where(x => x.GetCustomAttribute<OffsetAttribute>() != null);
 
@@ -63,6 +64,7 @@ namespace IntegraXL.Extensions
             Debug.Print($"[{nameof(IntegraModelExtensions)}] {nameof(Cache)}<{instance.GetType().Name}>() New Cache Entry 0x{key.ToString("X4")}");
 
             Dictionary<int, FieldInfo> cachedFields = new();
+
             foreach (var field in integraFields)
             {
                 Debug.Assert(field.GetCustomAttribute<OffsetAttribute>() != null);
@@ -88,7 +90,6 @@ namespace IntegraXL.Extensions
                 return;
 
             Dictionary<string, int> cachedProperties = new();
-
             
             foreach (var property in integraProperties)
             {
@@ -99,6 +100,8 @@ namespace IntegraXL.Extensions
 
             if (cachedProperties.Any())
                 _CachedProperties.TryAdd(key, cachedProperties);
+
+            instance.IsCached = true;
         }
     }
 }

@@ -613,7 +613,7 @@ namespace IntegraXL.Core
         [Description("ExSN-06 SuperNATURAL Expansion Drum Kit")]    ExSN06Drum      = 0x5865,
         [Description("SuperNATURAL Acoustic User Tone")]            SNAUserTone     = 0x5900,
         [Description("SuperNATURAL Acoustic Preset Tone")]          SNAPresetTone   = 0x5940,
-        [Description("ExSN-01 SuperNATURAL Expansion Tone")]        ExSn01Tone      = 0x5960,
+        [Description("ExSN-01 SuperNATURAL Expansion Tone")]        ExSN01Tone      = 0x5960,
         [Description("ExSN-02 SuperNATURAL Expansion Tone")]        ExSN02Tone      = 0x5961,
         [Description("ExSN-03 SuperNATURAL Expansion Tone")]        ExSN03Tone      = 0x5962,
         [Description("ExSN-04 SuperNATURAL Expansion Tone")]        ExSN04Tone      = 0x5963,
