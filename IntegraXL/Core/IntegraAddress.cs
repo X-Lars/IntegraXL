@@ -29,6 +29,8 @@ namespace IntegraXL.Core
 
         internal IntegraAddress(byte[] address)
         {
+            Debug.Assert(address.Length == 4);
+
             this[0] = address[0];
             this[1] = address[1];
             this[2] = address[2];

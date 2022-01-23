@@ -183,6 +183,7 @@ namespace IntegraXL.Core
         On  = 0x01
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraControlChannels : byte
     {
         [Description("01")]  Channel01,
@@ -208,6 +209,7 @@ namespace IntegraXL.Core
 
     #region StudioSetCommon
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraControlSources : byte
     {
         [Description("Off")]
@@ -375,6 +377,7 @@ namespace IntegraXL.Core
         Mute = 0x01
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraOutputAssigns : byte
     {
         [Description("Part")] OutputPart,
@@ -392,6 +395,7 @@ namespace IntegraXL.Core
         [Description("8")]    Output08,
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraScaleTuneTypes : byte
     {
         [Description("Custom Individually")]                Custom      = 0x00,
@@ -405,6 +409,7 @@ namespace IntegraXL.Core
         [Description("Arabic Scale")]                       Arabic      = 0x08
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraScaleTuneKeys : byte
     {
         [Description("C")]  C       = 0x00,
@@ -421,6 +426,7 @@ namespace IntegraXL.Core
         [Description("B")]  B       = 0x0B
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraVelocityCurveTypes : byte
     {
         [Description("Off")] Off  = 0x00,
@@ -433,12 +439,14 @@ namespace IntegraXL.Core
 
     #region EQ
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraLowFrequencies : byte
     {
         [Description("200 [Hz]")] Hz200 = 0x00,
         [Description("400 [Hz]")] Hz400 = 0x01
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraMidFrequencies : byte
     {
         [Description("200 [Hz]")]  Hz200  = 0x00,
@@ -460,6 +468,7 @@ namespace IntegraXL.Core
         [Description("8000 [Hz]")] Hz8000 = 0x10
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraMidQs : byte
     {
         [Description("0.5")] Q05,
@@ -469,6 +478,7 @@ namespace IntegraXL.Core
         [Description("8.0")] Q80
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraHighFrequencies : byte
     {
         [Description("2000 [Hz]")] Hz2000,
@@ -480,6 +490,7 @@ namespace IntegraXL.Core
 
     #region Chorus
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraChorusTypes : byte
     {
         [Description("Off")]        Off       = 0x00,
@@ -496,6 +507,7 @@ namespace IntegraXL.Core
         D = 0x03
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraChorusOutputSelections : byte
     {
         [Description("Main")]          Main       = 0x00,
@@ -503,6 +515,7 @@ namespace IntegraXL.Core
         [Description("Main + Reverb")] MainReverb = 0x02
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraChorusFilterTypes : byte
     {
         [Description("Off")] Off = 0x00,
@@ -510,6 +523,7 @@ namespace IntegraXL.Core
         [Description("HPF")] HPF = 0x02
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraDelayHFDamps : byte
     {
         [Description("200 [Hz]")]  Hz200  = 0x00,
@@ -537,6 +551,7 @@ namespace IntegraXL.Core
 
     #region Reverb
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraReverbTypes : byte
     {
         [Description("Off")]        Off   = 0x00,
@@ -551,6 +566,7 @@ namespace IntegraXL.Core
 
     #region MotionalSurround
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraRoomTypes : byte
     {
         [Description("Room 1")] Room01 = 0x00,
@@ -570,6 +586,7 @@ namespace IntegraXL.Core
 
     #region Special
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraNoteRates : byte
     {
         [Description("\uE014\uEB9E\U0000E833")] _164T = 0x00,
@@ -702,6 +719,7 @@ namespace IntegraXL.Core
 
     #region SuperNATURALSynthToneCommon
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraRingSwitch : byte
     {
         [Description("Off")] Off   = 0x00,
@@ -726,6 +744,7 @@ namespace IntegraXL.Core
         Loudest = 0x01
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraStretchTuneDepth : byte
     {
         [Description("Off")] Off     = 0x00,
@@ -746,6 +765,7 @@ namespace IntegraXL.Core
         Note  = 0x01
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraMatrixControlSource : byte
     {
         [Description("Off")]
@@ -953,6 +973,7 @@ namespace IntegraXL.Core
     #endregion
 
     #region MFX
+
     [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraMFXTypes : byte
     {
@@ -1200,5 +1221,6 @@ namespace IntegraXL.Core
         [Description("15")]  Channel15,
         [Description("16")]  Channel16,
     }
+
     #endregion
 }
