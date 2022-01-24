@@ -4,7 +4,7 @@ using System.Reflection;
 namespace IntegraXL.Models
 {
     [Integra(0x00000800, 0x00000054)]
-    public class DrumKitCommonCompEQ : IntegraModel
+    public class DrumKitCommonCompEQ : IntegraModel<DrumKitCommonCompEQ>
     {
         #region Fields: INTEGRA-7
 

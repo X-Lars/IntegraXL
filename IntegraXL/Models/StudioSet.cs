@@ -6,7 +6,7 @@ namespace IntegraXL.Models
     /// Defines the INTEGRA-7 studio set model.
     /// </summary>
     [Integra(0x18000000, 0x01000000)]
-    public sealed class StudioSet : IntegraModel
+    public sealed class StudioSet : IntegraModel<StudioSet>
     {
         #region Constructor
 

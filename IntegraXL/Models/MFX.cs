@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace IntegraXL.Models
 {
     [Integra(0x00000200, 0x00000111, 145)]
-    public class MFX : IntegraModel
+    public class MFX : IntegraModel<MFX>
     {
         IntegraValidator? _Validator;
 

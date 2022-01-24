@@ -17,7 +17,7 @@ namespace IntegraXL.Extensions
         /// </summary>
         private static ConcurrentDictionary<int, Dictionary<string, int>> _CachedProperties = new();
 
-        internal static Dictionary<int, FieldInfo> CachedFields(this IntegraModel instance)
+        internal static Dictionary<int, FieldInfo> CachedFields<T>(this IntegraModel<T> instance)
         {
             if (_CachedFields.TryGetValue(instance.GetTypeHash(), out Dictionary<int, FieldInfo>? fields))
             {
@@ -29,7 +29,7 @@ namespace IntegraXL.Extensions
             }
         }
 
-        public static Dictionary<string, int> CachedProperties(this IntegraModel instance)
+        public static Dictionary<string, int> CachedProperties<T>(this IntegraModel<T> instance)
         {
             if (_CachedProperties.TryGetValue(instance.GetTypeHash(), out Dictionary<string, int>? properties))
             {
@@ -38,20 +38,20 @@ namespace IntegraXL.Extensions
             }
             else
             {
-                //Debug.Assert(properties != null);
+                Debug.Assert(properties != null);
                 return null;
                 throw new IntegraException($"[{nameof(IntegraModelExtensions)}.{nameof(CachedProperties)}({instance.GetType().Name})]");
             }
         }
 
         // TODO: exclude templates
-        public static void Cache(this IntegraModel instance)// where TModel: IntegraModel
+        public static bool Cache<T>(this IntegraModel<T> instance)// where TModel: IntegraModel
         {
             int key = instance.GetTypeHash();
 
             if (_CachedFields.ContainsKey(key))
             {
-                return;
+                return true;
             }
 
             // TODO: Remove double checked in base class
@@ -59,7 +59,7 @@ namespace IntegraXL.Extensions
                 .Where(x => x.GetCustomAttribute<OffsetAttribute>() != null);
 
             if (!integraFields.Any())
-                return;
+                return false;
 
             Debug.Print($"[{nameof(IntegraModelExtensions)}] {nameof(Cache)}<{instance.GetType().Name}>() New Cache Entry 0x{key.ToString("X4")}");
 
@@ -75,11 +75,12 @@ namespace IntegraXL.Extensions
             if (cachedFields.Any())
             {
                 _CachedFields.TryAdd(key, cachedFields);
+                
             }
             else
             {
                 // If there are no fields to cache it is useless to cache properties
-                return;
+                return false;
             }
 
 
@@ -87,7 +88,7 @@ namespace IntegraXL.Extensions
                 .Where(x => x.GetCustomAttribute<OffsetAttribute>() != null);
 
             if (!integraProperties.Any())
-                return;
+                return false;
 
             Dictionary<string, int> cachedProperties = new();
             
@@ -101,6 +102,7 @@ namespace IntegraXL.Extensions
             if (cachedProperties.Any())
                 _CachedProperties.TryAdd(key, cachedProperties);
 
+            return true;
             //instance.IsCached = true;
         }
     }

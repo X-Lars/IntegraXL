@@ -8,7 +8,7 @@ namespace IntegraXL.Models
     /// Defines the INTEGRA-7 super natural acoustic tone model.
     /// </summary>
     [Integra(0x00020000, 0x00100000)]
-    public class SuperNATURALAcousticTone : IntegraModel
+    public class SuperNATURALAcousticTone : IntegraModel<SuperNATURALAcousticTone>
     {
         //private MFX _MFX;
 

@@ -8,7 +8,7 @@ using System.Text;
 namespace IntegraXL.Models
 {
     [Integra(0x00000000, 0x00000046)]
-    public sealed class SuperNATURALAcousticToneCommon : IntegraModel
+    public sealed class SuperNATURALAcousticToneCommon : IntegraModel<SuperNATURALAcousticToneCommon>
     {
         [Offset(0x0000)] byte[] _ToneName = new byte[12];
         [Offset(0x0010)] byte _ToneLevel;

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace IntegraXL.Models
 {
     [Integra(0x00100000, 0x00100000)]
-    public class PCMDrumKit : IntegraModel
+    public class PCMDrumKit : IntegraModel<PCMDrumKit>
     {
         //private DrumKitCommonCompEQ _CompEQ;
         //private IntegraPCMDrumKitPartialCollection _Partials;

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace IntegraXL.Models
 {
     [Integra(0x00030000, 0x00100000)]
-    public class SuperNATURALDrumKit : IntegraModel
+    public class SuperNATURALDrumKit : IntegraModel<SuperNATURALDrumKit>
     {
         //private IntegraSuperNATURALDrumKitNoteCollection _Notes;
 

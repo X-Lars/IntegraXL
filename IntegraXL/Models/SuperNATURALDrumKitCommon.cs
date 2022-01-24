@@ -4,7 +4,7 @@ using System.Text;
 namespace IntegraXL.Models
 {
     [Integra(0x00000000, 0x00000014)]
-    public class SuperNATURALDrumKitCommon : IntegraModel
+    public class SuperNATURALDrumKitCommon : IntegraModel<SuperNATURALDrumKitCommon>
     {
         #region Fields: INTEGRA-7
 

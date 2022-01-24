@@ -12,7 +12,7 @@ namespace IntegraXL.Models
     /// Defines the data structure of the INTEGRA-7 studio set master EQ.
     /// </summary>
     [Integra(0x18000900, 0x00000007)]
-    public class StudioSetMasterEQ : IntegraModel
+    public class StudioSetMasterEQ : IntegraModel<StudioSetMasterEQ>
     {
         #region Fields
 

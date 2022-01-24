@@ -6,7 +6,7 @@ using System.Linq;
 namespace IntegraXL.Models
 {
     [Integra(0x18000600, 0x00000063)]
-    public class StudioSetCommonReverb : IntegraModel
+    public class StudioSetCommonReverb : IntegraModel<StudioSetCommonReverb>
     {
         //IntegraMFXValidator _Validator = new CommonOff();
 

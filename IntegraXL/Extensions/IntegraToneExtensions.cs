@@ -16,12 +16,49 @@ namespace IntegraXL.Extensions
         /// <returns></returns>
         public static IntegraToneBanks ToneBank(this IBankSelect instance)
         {
-            ushort bank = (ushort)((instance.MSB << 8) + instance.LSB);
+            ushort bank = (ushort)((instance.MSB << 8) | instance.LSB);
 
+            // 0x5D11 ERROR
             // Check for single addressable tone banks
             // The low nibble can vary for a long tone banks
+
+            if(Enum.IsDefined(typeof(IntegraToneBanks), (ushort)(bank & 0xFF00)))
+            {
+                if(Enum.IsDefined(typeof(IntegraToneBanks), bank))
+                {
+                    return (IntegraToneBanks)bank;
+                }
+                else
+                {
+                    byte i = (byte)(instance.LSB & 0x0F);
+                    ushort b = (ushort)(bank & 0xFFF0);
+                    //for (; i >= 0; i--)
+                    //{
+                    //    if (Enum.IsDefined(typeof(IntegraToneBanks), (ushort)(b | i)))
+                    //        return (IntegraToneBanks)(b | i);
+                    //}
+
+                    i = instance.LSB;
+                    b = (ushort)(bank & 0xFF00);
+
+                    for (; i >= 0; i--)
+                    {
+                        if (Enum.IsDefined(typeof(IntegraToneBanks), (ushort)(b | i)))
+                            return (IntegraToneBanks)(b | i);
+                    }
+
+                    throw new ArgumentOutOfRangeException($"[{nameof(IntegraToneExtensions)}.{nameof(ToneBank)}] 0x{instance.MSB:X2}{instance.MSB:X2}");
+                    
+                }
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException($"[{nameof(IntegraToneExtensions)}.{nameof(ToneBank)}] 0x{instance.MSB:X2}{instance.MSB:X2}");
+            }
+
             if (Enum.IsDefined(typeof(IntegraToneBanks), (ushort)(bank & 0xFFF0)))
             {
+
                 // Check for tone banks that multi address range tone banks
                 // 
                 if (Enum.IsDefined(typeof(IntegraToneBanks), bank))

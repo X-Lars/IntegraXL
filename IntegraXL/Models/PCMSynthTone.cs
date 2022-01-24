@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace IntegraXL.Models
 {
     [Integra(0x00000000, 0x00100000)]
-    public class PCMSynthTone : IntegraModel
+    public class PCMSynthTone : IntegraModel<PCMSynthTone>
     {
         //private PCMSynthTonePMT _PMT;
         //private IntegraPCMSynthTonePartialCollection _Partials;

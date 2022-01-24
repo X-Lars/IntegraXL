@@ -28,7 +28,7 @@ namespace IntegraXL.Models
     /// Defines the INTEGRA-7 temporary tone model.
     /// </summary>
     [Integra(0x19000000, 0x00200000)]
-    public class TemporaryTone : IntegraPartial
+    public class TemporaryTone : IntegraPartial<TemporaryTone>
     {
         /// <summary>
         /// Stores a reference to the associated tone.
@@ -56,6 +56,7 @@ namespace IntegraXL.Models
 
             MFX = new MFX(this);
             _Tone = device.CreateModel<IntegraTone>(Part);
+
             InitializeToneAsync();
 
         }

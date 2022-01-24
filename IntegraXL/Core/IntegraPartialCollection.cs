@@ -7,7 +7,7 @@ namespace IntegraXL.Core
     /// Defines a strongly typed base collection for <see cref="IntegraPartial"/> derived models.
     /// </summary>
     /// <typeparam name="TPartial">An <see cref="IntegraPartial"/> derived type.</typeparam>
-    public abstract class IntegraPartialCollection<TPartial> : IntegraCollection<TPartial> where TPartial : IntegraPartial
+    public abstract class IntegraPartialCollection<TPartial> : IntegraCollection<TPartial> where TPartial : IntegraPartial<TPartial>
     {
         #region Constructor
 

@@ -15,7 +15,7 @@ namespace IntegraXL.Models
     /// Defines the INTEGRA-7 studio set part EQ model.
     /// </summary>
     [Integra(0x18005000, 0x00000008)]
-    public class StudioSetPartEQ : IntegraPartial
+    public class StudioSetPartEQ : IntegraPartial<StudioSetPartEQ>
     {
         #region Fields: INTEGRA-7
 

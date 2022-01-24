@@ -12,7 +12,7 @@ namespace IntegraXL.Models
     /// Defines the INTEGRA-7 studio set MIDI model.
     /// </summary>
     [Integra(0x18001000, 0x00000001)]
-    public class StudioSetMidi : IntegraPartial
+    public class StudioSetMidi : IntegraPartial<StudioSetMidi>
     {
         #region Fields: INTEGRA-7
 

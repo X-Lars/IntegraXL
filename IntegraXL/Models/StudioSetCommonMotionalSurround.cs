@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace IntegraXL.Models
 {
     [Integra(0x18000800, 0x00000010)]
-    public class StudioSetCommonMotionalSurround : IntegraModel
+    public class StudioSetCommonMotionalSurround : IntegraModel<StudioSetCommonMotionalSurround>
     {
         [Offset(0x0000)] private bool _MotionalSurroundSwitch;
         [Offset(0x0001)] private IntegraRoomTypes _RoomType;

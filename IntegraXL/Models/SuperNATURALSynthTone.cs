@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace IntegraXL.Models
 {
     [Integra(0x00010000, 0x00100000)]
-    public class SuperNATURALSynthTone : IntegraModel
+    public class SuperNATURALSynthTone : IntegraModel<SuperNATURALSynthTone>
     {
         //private IntegraSuperNATURALSynthTonePartialCollection _Partials;
 

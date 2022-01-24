@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace IntegraXL.Core
 {
-    public abstract class IntegraPartial : IntegraModel
+    public abstract class IntegraPartial<T> : IntegraModel<T>
     {
         protected IntegraPartial(Integra device, Parts part) : base(device)
         {
-            Debug.Print($"[{nameof(IntegraPartial)}] Constructor<{GetType().Name}>({part})");
+            Debug.Print($"[{nameof(IntegraPartial<T>)}] Constructor<{GetType().Name}>({part})");
             Address += (int)part << 8;
             Part = part;
         }

@@ -8,7 +8,7 @@ namespace IntegraXL.Models
     /// </summary>
     /// <remarks><i>18 00 00 00</i></remarks>
     [Integra(0x18000000, 0x00000054)]
-    public sealed class StudioSetCommon : IntegraModel
+    public sealed class StudioSetCommon : IntegraModel<StudioSetCommon>
     {
         #region Fields
 

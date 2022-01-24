@@ -24,7 +24,7 @@ namespace IntegraXL.Models
     /// Defines the INTEGRA-7 studio set part model.
     /// </summary>
     [Integra(0x18002000, 0x0000004D)]
-    public sealed class StudioSetPart : IntegraPartial
+    public sealed class StudioSetPart : IntegraPartial<StudioSetPart>
     {
         /// <summary>
         /// Stores a reference to the associated tone.

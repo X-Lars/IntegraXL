@@ -4,7 +4,7 @@ using IntegraXL.Extensions;
 namespace IntegraXL.Models
 {
     [Integra(0x01000000, 0x00000038)]
-    public sealed class Setup : IntegraModel
+    public sealed class Setup : IntegraModel<Setup>
     {
         #region Fields: INTEGRA-7
 

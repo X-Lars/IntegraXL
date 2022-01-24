@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace IntegraXL.Models
 {
     [Integra(0x00000000, 0x00000012)]
-    public class PCMDrumKitCommon : IntegraModel
+    public class PCMDrumKitCommon : IntegraModel<PCMDrumKitCommon>
     {
         [Offset(0x0000)] byte[] _KitName = new byte[12];
         [Offset(0x000C)] byte _KitLevel;

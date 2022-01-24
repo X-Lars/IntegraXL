@@ -33,7 +33,7 @@ namespace IntegraXL.Core
     /// </summary>
     /// <typeparam name="T">The collection type specifier.</typeparam>
     /// <remarks>
-    /// <i>The type must be derived from either <see cref="IntegraModel"/> or <see cref="IntegraTemplate"/>.</i>
+    /// <i>The type must be derived from either <see cref="IntegraModel{T}"/> or <see cref="IntegraTemplate"/>.</i>
     /// </remarks>
     public abstract class IntegraCollection<T> : IntegraCollection, IEnumerable<T>, INotifyCollectionChanged where T : class
     {
@@ -63,7 +63,7 @@ namespace IntegraXL.Core
         /// </remarks>
         internal IntegraCollection(Integra device) : base(device) 
         {
-            Debug.Assert(typeof(T).IsSubclassOf(typeof(IntegraModel)) || typeof(T).IsSubclassOf(typeof(IntegraTemplate)));
+            Debug.Assert(typeof(T).IsSubclassOf(typeof(IntegraModel<T>)) || typeof(T).IsSubclassOf(typeof(IntegraTemplate)));
 
             IntegraAttribute? attribute = typeof(T).GetCustomAttribute<IntegraAttribute>();
 

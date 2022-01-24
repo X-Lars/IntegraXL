@@ -45,7 +45,7 @@ namespace IntegraXL.Core
     /// </summary>
     /// <remarks><i>The model covers the <see cref="StudioSetPart.ToneBankSelectMSB"/>, <see cref="StudioSetPart.ToneBankSelectLSB"/> and <see cref="StudioSetPart.ToneProgramNumber"/> properties.</i></remarks>
     [Integra(0x18002006, 0x00000003)]
-    public sealed class IntegraTone : IntegraPartial, IBankSelect
+    public sealed class IntegraTone : IntegraPartial<IntegraTone>, IBankSelect
     {
         #region Fields: INTEGRA-7
 

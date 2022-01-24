@@ -15,7 +15,7 @@ namespace IntegraXL.Models
     /// <b><i>The model is unable to catch changes made on the physical device.</i></b>
     /// </remarks>
     [Integra(0x0F000011, 0x00000000)]
-    public sealed class StartupExpansions : IntegraModel
+    public sealed class StartupExpansions : IntegraModel<StartupExpansions>
     {
         #region Fields
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace IntegraXL.Models
 {
     [Integra(0x00000000, 0x00000050)]
-    public class PCMSynthToneCommon : IntegraModel
+    public class PCMSynthToneCommon : IntegraModel<PCMSynthToneCommon>
     {
         [Offset(0x0000)] byte[] _ToneName = new byte[12];
         [Offset(0x000E)] byte _ToneLevel;

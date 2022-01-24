@@ -12,7 +12,7 @@ using System.Diagnostics;
 namespace IntegraXL.Models
 {
     [Integra(0x00000000, 0x00000040)]
-    public class SuperNATURALSynthToneCommon : IntegraModel
+    public class SuperNATURALSynthToneCommon : IntegraModel<SuperNATURALSynthToneCommon>
     {
         #region Fields: INTEGRA-7
 

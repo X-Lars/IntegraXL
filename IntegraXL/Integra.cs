@@ -249,6 +249,8 @@ namespace IntegraXL
                 }
             }
         }
+
+        public TemporaryTones TemporaryTones { get; private set; }
         #endregion
 
         #endregion
@@ -308,14 +310,18 @@ namespace IntegraXL
         /// <returns>An awaitable <see cref="Task"/> that returns nothing.</returns>
         private async Task InitializeInstance()
         {
-            Setup         = await GetModel<Setup>();
-            VirtualSlots  = await GetModel<VirtualSlots>();
-            StudioSets    = await GetModel<StudioSets>();
+            Setup = await GetModel<Setup>();
+            VirtualSlots = await GetModel<VirtualSlots>();
+            StudioSets = await GetModel<StudioSets>();
             SelectedTones = await GetModel<IntegraTones>();
 
-            StudioSet     = await GetModel<StudioSet>();
+            StudioSet = await GetModel<StudioSet>();
 
-            TemporaryTone = await GetModel<TemporaryTone>(Parts.Part01);
+            TemporaryTones = await GetModel<TemporaryTones>();
+
+            //TemporaryTone = await GetModel<TemporaryTone>(Parts.Part01);
+            //await TemporaryTone.Initialize();
+            //TemporaryTone = await GetModel<TemporaryTone>(Parts.Part01);
 
             IsInitialized = true;
         }
@@ -334,7 +340,7 @@ namespace IntegraXL
         {
             IntegraModel? instance;
 
-            if(typeof(TModel).IsSubclassOf(typeof(IntegraPartial)))
+            if(typeof(TModel).IsSubclassOf(typeof(IntegraPartial<TModel>)))
             {
                 Debug.Assert(part != null);
 
