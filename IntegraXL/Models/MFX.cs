@@ -295,7 +295,7 @@ namespace IntegraXL.Models
                     break;
             }
 
-            NotifyPropertyChanged(string.Empty);
+            //NotifyPropertyChanged(string.Empty);
         }
 
         #endregion

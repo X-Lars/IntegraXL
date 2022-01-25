@@ -1,12 +1,12 @@
 ﻿using IntegraXL.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using IntegraXL.Interfaces;
+using IntegraXL.Models.Parameters;
+using System.Diagnostics;
 
 namespace IntegraXL.Models
 {
     [Integra(0x18000600, 0x00000063)]
-    public class StudioSetCommonReverb : IntegraModel<StudioSetCommonReverb>
+    public class StudioSetCommonReverb : IntegraModel<StudioSetCommonReverb>, IParameterProvider
     {
         //IntegraMFXValidator _Validator = new CommonOff();
 
@@ -50,32 +50,80 @@ namespace IntegraXL.Models
             }
         }
 
-        //[Offset(0x0003)]
-        //public double this[int index]
-        //{
-        //    get
-        //    {
-        //        return _Validator.GetMFXParameter(index, _Parameters[index]);
-        //    }
-        //    set
-        //    {
-        //        if (_Validator.GetMFXParameter(index, _Parameters[index]) != value)
-        //        {
-        //            _Parameters[index] = _Validator.SetMFXParameter(index, value);
-        //            NotifyPropertyChanged("Item[]", index);
-        //        }
-        //    }
-        //}
 
+        [Offset(0x0003)]
+        public int this[int index]
+        {
+            get
+            {
+                return _Parameters[index];
+            }
+            set
+            {
+                _Parameters[index] = value;
+                NotifyPropertyChanged("Item", index);
+                //NotifyPropertyChanged(nameof(P));
+                //if (_Validator.Get(index, _Parameters[index]) != value)
+                //{
+                //    _Parameters[index] = _Validator.Set(index, value);
+                //    NotifyPropertyChanged("Item[]", index);
+                //}
+            }
+        }
+
+        public IntegraParameter Parameter { get; set; }
+        protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
+        {
+            //base.SystemExclusiveReceived(sender, e);
+
+            if (e.SystemExclusive.Address == Address)
+            {
+                if (e.SystemExclusive.Data.Length == Size)
+                {
+                    Debug.Print("*** COMMON REVERB: Full ***");
+                    Initialize(e.SystemExclusive.Data);
+                }
+                //else
+                //{
+                //    IntegraAddress offset = new IntegraAddress(0x00000111);
+                //    if (e.SystemExclusive.Address.InRange(Address, (int)(Address + offset)))
+                //    {
+                //        Debug.Print("*** COMMON REVERB: Parameters ***");
+                //        // Parameter data received
+                //        ReceivedProperty(e.SystemExclusive);
+                //    }
+                //}
+            }
+            else if (e.SystemExclusive.Address.InRange(Address, Address + Size))
+            {
+                Debug.Print("*** COMMON REVERB: Parameters ***");
+                ReceivedProperty(e.SystemExclusive);
+                InitProperty(e.SystemExclusive);
+            }
+
+        }
+
+        private void InitProperty(IntegraSystemExclusive e)
+        {
+            Debug.Assert(e.Data.Length % 4 == 0);
+            Debug.Assert(e.Data.Length == 4);
+
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(e.Data);
+
+            int value = BitConverter.ToInt32(e.Data, 0);
+            int index = (e.Address - Address) / 4;
+
+            _Parameters[index] = value;
+
+            NotifyPropertyChanged(string.Empty);
+        }
 
         protected override bool Initialize(byte[] data)
         {
-            if (!IsInitialized)
-            {
-                base.Initialize(data);
+            base.Initialize(data);
 
-                SetValidation(Type);
-            }
+            SetValidation();
 
             return IsInitialized;
         }
@@ -84,26 +132,26 @@ namespace IntegraXL.Models
         /// Sets the MFX model to use for parameter conversion and validation.
         /// </summary>
         /// <param name="type">An <see cref="IntegraMFXTypes"/> specifying the model to bind.</param>
-        private void SetValidation(IntegraReverbTypes type)
+        private void SetValidation()
         {
-            //switch (type)
-            //{
-            //    case IntegraReverbTypes.Room1:
-            //    case IntegraReverbTypes.Room2:
-            //    case IntegraReverbTypes.Hall1:
-            //    case IntegraReverbTypes.Hall2:
-            //    case IntegraReverbTypes.Plate: 
-            //        _Validator = new CommonReverb(); 
-            //        break;
+            switch (Type)
+            {
+                case IntegraReverbTypes.Room1:
+                case IntegraReverbTypes.Room2:
+                case IntegraReverbTypes.Hall1:
+                case IntegraReverbTypes.Hall2:
+                case IntegraReverbTypes.Plate:
+                    Parameter = new CommonReverb(this);
+                    break;
 
-            //    case IntegraReverbTypes.GM2:   
-            //        _Validator = new CommonReverbGM2();   
-            //        break;
+                case IntegraReverbTypes.GM2:
+                    Parameter = new CommonReverbGM2(this);
+                    break;
 
-            //    default:
-            //        _Validator = new CommonOff();
-            //        break;
-            //}
+                default:
+                    Parameter = new CommonReverbOff(this);
+                    break;
+            }
         }
 
         public virtual IEnumerable<IntegraReverbTypes> ReverbTypes

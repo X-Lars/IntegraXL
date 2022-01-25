@@ -10,28 +10,28 @@ namespace IntegraXL.Extensions
         /// <summary>
         /// Thread safe cache to store a model's dictionary of <see cref="OffsetAttribute"/> decorated fields.
         /// </summary>
-        private static ConcurrentDictionary<int, Dictionary<int, FieldInfo>> _CachedFields = new();
+        private static ConcurrentDictionary<Type, Dictionary<int, FieldInfo>> _CachedFields = new();
 
         /// <summary>
         /// Thread safe cache to store a model's dictionary of <see cref="OffsetAttribute"/> decorated properties.
         /// </summary>
-        private static ConcurrentDictionary<int, Dictionary<string, int>> _CachedProperties = new();
+        private static ConcurrentDictionary<Type, Dictionary<string, int>> _CachedProperties = new();
 
         internal static Dictionary<int, FieldInfo> CachedFields<T>(this IntegraModel<T> instance)
         {
-            if (_CachedFields.TryGetValue(instance.GetTypeHash(), out Dictionary<int, FieldInfo>? fields))
+            if (_CachedFields.TryGetValue(typeof(T), out Dictionary<int, FieldInfo>? fields))
             {
                 return fields;
             }
             else
             {
-                throw new IntegraException($"[{nameof(IntegraModelExtensions)}.{nameof(CachedFields)}({instance.GetType().Name})]");
+                throw new IntegraException($"[{nameof(IntegraModelExtensions)}.{nameof(CachedFields)}({typeof(T).Name})]");
             }
         }
 
         public static Dictionary<string, int> CachedProperties<T>(this IntegraModel<T> instance)
         {
-            if (_CachedProperties.TryGetValue(instance.GetTypeHash(), out Dictionary<string, int>? properties))
+            if (_CachedProperties.TryGetValue(typeof(T), out Dictionary<string, int>? properties))
             {
                 //Debug.Print($"{nameof(IntegraModelExtensions)}.{nameof(CachedProperties)}({instance.GetType().Name}) 0x{instance.GetTypeHash().ToString("X8")}");
                 return properties;
@@ -40,16 +40,16 @@ namespace IntegraXL.Extensions
             {
                 Debug.Assert(properties != null);
                 return null;
-                throw new IntegraException($"[{nameof(IntegraModelExtensions)}.{nameof(CachedProperties)}({instance.GetType().Name})]");
+                throw new IntegraException($"[{nameof(IntegraModelExtensions)}.{nameof(CachedProperties)}({typeof(T).Name})]");
             }
         }
 
         // TODO: exclude templates
         public static bool Cache<T>(this IntegraModel<T> instance)// where TModel: IntegraModel
         {
-            int key = instance.GetTypeHash();
+            //int key = instance.GetTypeHash();
 
-            if (_CachedFields.ContainsKey(key))
+            if (_CachedFields.ContainsKey(typeof(T)))
             {
                 return true;
             }
@@ -61,7 +61,7 @@ namespace IntegraXL.Extensions
             if (!integraFields.Any())
                 return false;
 
-            Debug.Print($"[{nameof(IntegraModelExtensions)}] {nameof(Cache)}<{instance.GetType().Name}>() New Cache Entry 0x{key.ToString("X4")}");
+            Debug.Print($"[{nameof(IntegraModelExtensions)}] {nameof(Cache)}<{instance.GetType().Name}>() New Cache Entry {typeof(T).Name}");
 
             Dictionary<int, FieldInfo> cachedFields = new();
 
@@ -74,8 +74,7 @@ namespace IntegraXL.Extensions
 
             if (cachedFields.Any())
             {
-                _CachedFields.TryAdd(key, cachedFields);
-                
+                _CachedFields.TryAdd(typeof(T), cachedFields);
             }
             else
             {
@@ -100,7 +99,7 @@ namespace IntegraXL.Extensions
             }
 
             if (cachedProperties.Any())
-                _CachedProperties.TryAdd(key, cachedProperties);
+                _CachedProperties.TryAdd(typeof(T), cachedProperties);
 
             return true;
             //instance.IsCached = true;

@@ -1,5 +1,4 @@
 ﻿using IntegraXL.Core;
-using IntegraXL.Extensions;
 using System.Diagnostics;
 using System.Reflection;
 
@@ -172,6 +171,10 @@ namespace IntegraXL.Models
 
         #region Overrides: Model
 
+        protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
+        {
+            //base.SystemExclusiveReceived(sender, e);
+        }
         /// <summary>
         /// Gets wheter the temorary tone is initialized.
         /// </summary>
@@ -219,6 +222,13 @@ namespace IntegraXL.Models
             // New: Set type
             // New: Reinit
             // New: New / Reinit MFX
+        }
+
+        protected override bool Initialize(byte[] data)
+        {
+            //throw new NotImplementedException();
+
+            return false;
         }
 
         #endregion

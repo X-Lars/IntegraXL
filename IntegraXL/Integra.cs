@@ -93,8 +93,6 @@ namespace IntegraXL
 
         #endregion
 
-
-
         #region Properties
 
         /// <summary>
@@ -317,7 +315,7 @@ namespace IntegraXL
 
             StudioSet = await GetModel<StudioSet>();
 
-            TemporaryTones = await GetModel<TemporaryTones>();
+            //TemporaryTones = await GetModel<TemporaryTones>();
 
             //TemporaryTone = await GetModel<TemporaryTone>(Parts.Part01);
             //await TemporaryTone.Initialize();
@@ -383,6 +381,7 @@ namespace IntegraXL
         public async Task<TModel> GetModel<TModel>(Parts? part = null) where TModel : IntegraModel
         {
             Debug.Print($"[{nameof(Integra)}] {nameof(GetModel)}<{typeof(TModel).Name}>({part})");
+
             TModel model = CreateModel<TModel>(part);
 
             if(!model.IsInitialized)

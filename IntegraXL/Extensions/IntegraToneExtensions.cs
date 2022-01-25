@@ -79,6 +79,81 @@ namespace IntegraXL.Extensions
         }
 
         /// <summary>
+        /// Gets the expansion based on the MSB and LSB of the bank select.
+        /// </summary>
+        /// <typeparam name="T">The instance type specifier.</typeparam>
+        /// <param name="instance">The instance providing the MSB and LSB.</param>
+        /// <returns>The associated expansion.</returns>
+        public static IntegraExpansions GetExpansion<T>(this T instance) where T : IBankSelect
+        {
+            switch (instance.MSB)
+            {
+                case 0x5C:
+                case 0x5D:
+
+                    switch (instance.LSB)
+                    {
+                        case 0x00: return IntegraExpansions.SRX01;
+                        case 0x01: return IntegraExpansions.SRX02;
+                        case 0x02: return IntegraExpansions.SRX03;
+                        case 0x03: return IntegraExpansions.SRX04;
+
+                        case 0x04:
+                        case 0x05:
+                        case 0x06: return IntegraExpansions.SRX05;
+
+                        case 0x07:
+                        case 0x08:
+                        case 0x09:
+                        case 0x0A: return IntegraExpansions.SRX06;
+
+                        case 0x0B:
+                        case 0x0C:
+                        case 0x0D:
+                        case 0x0E: return IntegraExpansions.SRX07;
+
+                        case 0x0F:
+                        case 0x10:
+                        case 0x11:
+                        case 0x12: return IntegraExpansions.SRX08;
+
+                        case 0x13:
+                        case 0x14:
+                        case 0x15:
+                        case 0x16: return IntegraExpansions.SRX09;
+
+                        case 0x17: return IntegraExpansions.SRX10;
+                        case 0x18: return IntegraExpansions.SRX11;
+                        case 0x1A: return IntegraExpansions.SRX12;
+                    }
+
+                    return IntegraExpansions.Off;
+
+                case 0x59:
+
+                    switch (instance.LSB)
+                    {
+                        case 0x60: return IntegraExpansions.ExSN01;
+                        case 0x61: return IntegraExpansions.ExSN02;
+                        case 0x62: return IntegraExpansions.ExSN03;
+                        case 0x63: return IntegraExpansions.ExSN04;
+                        case 0x64: return IntegraExpansions.ExSN05;
+                        case 0x65: return IntegraExpansions.ExSN06;
+                    }
+
+                    return IntegraExpansions.Off;
+
+                case 0x60:
+                case 0x61:
+
+                    return IntegraExpansions.ExPCM;
+
+                default:
+                    return IntegraExpansions.Off;
+            }
+        }
+
+        /// <summary>
         /// Gets the tone's type defined by the <see cref="IntegraToneTypes"/> enumeration.
         /// </summary>
         /// <param name="instance">The <see cref="IBankSelect"/> implementing instance.</param>
@@ -174,6 +249,29 @@ namespace IntegraXL.Extensions
                 IntegraToneBanks.GM2Drum       => typeof(GM2DrumKits),
                 _ => null,
             };
+        }
+
+        /// <summary>
+        /// Gets wheter the tone is editable based on its most significant request byte.
+        /// </summary>
+        /// <param name="msb">The most significant byte of the tone's request.</param>
+        /// <returns>True if the tone is editable.</returns>
+        public static bool IsEditable(byte msb)
+        {
+            switch (msb)
+            {
+                // ExPCM
+                case 0x60:
+                case 0x61:
+
+                // GM2
+                case 0x78:
+                case 0x79:
+                    return false;
+
+                default:
+                    return true;
+            }
         }
     }
 }
