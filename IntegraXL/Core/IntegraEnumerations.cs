@@ -1,10 +1,5 @@
 ﻿using IntegraXL.Common;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IntegraXL.Core
 {
@@ -16,25 +11,25 @@ namespace IntegraXL.Core
         {
             get
             {
-                List<string> values = new List<string>();
+                List<string> values = new();
 
                 for (int i = 0; i < 50; i++)
                 {
-                    values.Add((((double)i / 10)).ToString("0.0 [ms]"));
+                    values.Add((((double)i / 10)).ToString("0.0"));
                 }
 
                 for (int i = 0; i < 10; i++)
                 {
-                    values.Add((5.0 + i * 0.5).ToString("0.0 [ms]"));
+                    values.Add((5.0 + i * 0.5).ToString("0.0"));
                 }
 
                 for (int i = 0; i < 40; i++)
                 {
-                    values.Add((10.0 + i).ToString("0.0 [ms]"));
+                    values.Add((10.0 + i).ToString("0.0"));
                 }
                 for (int i = 0; i < 26; i++)
                 {
-                    values.Add((50.0 + (i * 2)).ToString("0.0 [ms]"));
+                    values.Add((50.0 + (i * 2)).ToString("0.0"));
                 }
 
                 return values;
@@ -48,11 +43,11 @@ namespace IntegraXL.Core
         {
             get
             {
-                List<string> values = new List<string>();
+                List<string> values = new();
 
                 for (int i = 0; i < 64; i++)
                 {
-                    values.Add(i.ToString("00"));
+                    values.Add(i.ToString());
                 }
 
                 values.Add("Full");
@@ -68,13 +63,13 @@ namespace IntegraXL.Core
         {
             get
             {
-                List<string> values = new List<string>();
+                List<string> values = new();
 
                 values.Add("Off");
 
                 for (int i = 1; i < 17; i++)
                 {
-                    values.Add($"Part {i.ToString("00")}");
+                    values.Add($"Part {i}");
                 }
 
                 return values;
@@ -88,15 +83,15 @@ namespace IntegraXL.Core
     [TypeConverter(typeof(DescriptionConverter))]
     public enum Parts : byte
     {
-        [Description("Part 01")] Part01 = 0x00,
-        [Description("Part 02")] Part02 = 0x01,
-        [Description("Part 03")] Part03 = 0x02,
-        [Description("Part 04")] Part04 = 0x03,
-        [Description("Part 05")] Part05 = 0x04,
-        [Description("Part 06")] Part06 = 0x05,
-        [Description("Part 07")] Part07 = 0x06,
-        [Description("Part 08")] Part08 = 0x07,
-        [Description("Part 09")] Part09 = 0x08,
+        [Description("Part 1")]  Part01 = 0x00,
+        [Description("Part 2")]  Part02 = 0x01,
+        [Description("Part 3")]  Part03 = 0x02,
+        [Description("Part 4")]  Part04 = 0x03,
+        [Description("Part 5")]  Part05 = 0x04,
+        [Description("Part 6")]  Part06 = 0x05,
+        [Description("Part 7")]  Part07 = 0x06,
+        [Description("Part 8")]  Part08 = 0x07,
+        [Description("Part 9")]  Part09 = 0x08,
         [Description("Part 10")] Part10 = 0x09,
         [Description("Part 11")] Part11 = 0x0A,
         [Description("Part 12")] Part12 = 0x0B,
@@ -109,15 +104,15 @@ namespace IntegraXL.Core
     [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraChannels : byte
     {
-        [Description("Channel 01")] Channel01 = 0x00,
-        [Description("Channel 02")] Channel02 = 0x01,
-        [Description("Channel 03")] Channel03 = 0x02,
-        [Description("Channel 04")] Channel04 = 0x03,
-        [Description("Channel 05")] Channel05 = 0x04,
-        [Description("Channel 06")] Channel06 = 0x05,
-        [Description("Channel 07")] Channel07 = 0x06,
-        [Description("Channel 08")] Channel08 = 0x07,
-        [Description("Channel 09")] Channel09 = 0x08,
+        [Description("Channel 1")]  Channel01 = 0x00,
+        [Description("Channel 2")]  Channel02 = 0x01,
+        [Description("Channel 3")]  Channel03 = 0x02,
+        [Description("Channel 4")]  Channel04 = 0x03,
+        [Description("Channel 5")]  Channel05 = 0x04,
+        [Description("Channel 6")]  Channel06 = 0x05,
+        [Description("Channel 7")]  Channel07 = 0x06,
+        [Description("Channel 8")]  Channel08 = 0x07,
+        [Description("Channel 9")]  Channel09 = 0x08,
         [Description("Channel 10")] Channel10 = 0x09,
         [Description("Channel 11")] Channel11 = 0x0A,
         [Description("Channel 12")] Channel12 = 0x0B,
@@ -135,7 +130,6 @@ namespace IntegraXL.Core
         [Description("SuperNATURAL Acoustic Tone")] SuperNATURALAcousticTone    = 0x020000,
         [Description("SuperNATURAL Drum Kit")]      SuperNATURALDrumkit         = 0x030000,
         [Description("PCM Drum Kit")]               PCMDrumkit                  = 0x100000,
-        //[Description("Undefined")]                  Undefined                   = 0xFFFFFF
     }
 
     [TypeConverter(typeof(DescriptionConverter))]
@@ -183,18 +177,31 @@ namespace IntegraXL.Core
         On  = 0x01
     }
 
+    public enum IntegraRateNoteSwitch
+    {
+        Hz   = 0,
+        Note = 1
+    }
+
+    public enum IntegraRateMSecSwitch
+    {
+        MSec = 0,
+        Note = 1
+    }
+
+
     [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraControlChannels : byte
     {
-        [Description("01")]  Channel01,
-        [Description("02")]  Channel02,
-        [Description("03")]  Channel03,
-        [Description("04")]  Channel04,
-        [Description("05")]  Channel05,
-        [Description("06")]  Channel06,
-        [Description("07")]  Channel07,
-        [Description("08")]  Channel08,
-        [Description("09")]  Channel09,
+        [Description("1")]   Channel01,
+        [Description("2")]   Channel02,
+        [Description("3")]   Channel03,
+        [Description("4")]   Channel04,
+        [Description("5")]   Channel05,
+        [Description("6")]   Channel06,
+        [Description("7")]   Channel07,
+        [Description("8")]   Channel08,
+        [Description("9")]   Channel09,
         [Description("10")]  Channel10,
         [Description("11")]  Channel11,
         [Description("12")]  Channel12,
@@ -589,29 +596,56 @@ namespace IntegraXL.Core
     [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraNoteRates : byte
     {
-        [Description("\uE014\uEB9E\U0000E833")] _164T = 0x00,
-        [Description("")]  _164  = 0x01,
-        [Description("r£")]  _132T = 0x02,
-        [Description("r")]   _132  = 0x03,
-        [Description("x£")]  _116T = 0x04,
-        [Description("r.")]  _132D = 0x05,
-        [Description("x")]   _116  = 0x06,
-        [Description("e£")]  _18T  = 0x07,
-        [Description("x.")]  _116D = 0x08,
-        [Description("e")]   _18   = 0x09,
-        [Description("q£")]  _14T  = 0x0A,
-        [Description("e.")]  _18D  = 0x0B,
-        [Description("q")]   _14   = 0x0C,
-        [Description("h£")]  _12T  = 0x0D,
-        [Description("q.")]  _14D  = 0x0E,
-        [Description("h")]   _12   = 0x0F,
-        [Description("w£")]  _1T   = 0x10,
-        [Description("h.")]  _12D  = 0x11,
-        [Description("w")]   _1    = 0x12,
-        [Description("W£")]  _2T   = 0x13,
-        [Description("w.")]  _1D   = 0x14,
-        [Description("W")]   _2    = 0x15,
+        [Description("\U0001D163\U00002083")] _164T = 0x00,
+        [Description("\U0001D163")]           _164  = 0x01,
+        [Description("\U0001D162\U00002083")] _132T = 0x02,
+        [Description("\U0001D162")]           _132  = 0x03,
+        [Description("\U0001D161\U00002083")] _116T = 0x04,
+        [Description("\U0001D162\U0001D16D")] _132D = 0x05,
+        [Description("\U0001D161")]           _116  = 0x06,
+        [Description("\U0001D160\U00002083")] _18T  = 0x07,
+        [Description("\U0001D161\U0001D16D")] _116D = 0x08,
+        [Description("\U0001D160")]           _18   = 0x09,
+        [Description("\U0001D15F\U00002083")] _14T  = 0x0A,
+        [Description("\U0001D161\U0001D16D")] _18D  = 0x0B,
+        [Description("\U0001D15F")]           _14   = 0x0C,
+        [Description("\U0001D15E\U00002083")] _12T  = 0x0D,
+        [Description("\U0001D15F\U0001D16D")] _14D  = 0x0E,
+        [Description("\U0001D15E")]           _12   = 0x0F,
+        [Description("\U0001D15D\U00002083")] _1T   = 0x10,
+        [Description("\U0001D15E\U0001D16D")] _12D  = 0x11,
+        [Description("\U0001D15D")]           _1    = 0x12,
+        [Description("\U0001D15C\U00002083")] _2T   = 0x13,
+        [Description("\U0001D15D\U0001D16D")] _1D   = 0x14,
+        [Description("\U0001D15C")]           _2    = 0x15
     }
+
+    //[TypeConverter(typeof(DescriptionConverter))]
+    //public enum IntegraNoteRates : byte
+    //{
+    //    [Description("\uE014\uEB9E\U0000E833")] _164T = 0x00,
+    //    [Description("")]  _164  = 0x01,
+    //    [Description("r£")]  _132T = 0x02,
+    //    [Description("r")]   _132  = 0x03,
+    //    [Description("x£")]  _116T = 0x04,
+    //    [Description("r.")]  _132D = 0x05,
+    //    [Description("x")]   _116  = 0x06,
+    //    [Description("e£")]  _18T  = 0x07,
+    //    [Description("x.")]  _116D = 0x08,
+    //    [Description("e")]   _18   = 0x09,
+    //    [Description("q£")]  _14T  = 0x0A,
+    //    [Description("e.")]  _18D  = 0x0B,
+    //    [Description("q")]   _14   = 0x0C,
+    //    [Description("h£")]  _12T  = 0x0D,
+    //    [Description("q.")]  _14D  = 0x0E,
+    //    [Description("h")]   _12   = 0x0F,
+    //    [Description("w£")]  _1T   = 0x10,
+    //    [Description("h.")]  _12D  = 0x11,
+    //    [Description("w")]   _1    = 0x12,
+    //    [Description("W£")]  _2T   = 0x13,
+    //    [Description("w.")]  _1D   = 0x14,
+    //    [Description("W")]   _2    = 0x15,
+    //}
 
     #endregion
 

@@ -1,15 +1,12 @@
 ﻿using IntegraXL.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IntegraXL.Models
 {
     [Integra(0x18000800, 0x00000010)]
     public class StudioSetCommonMotionalSurround : IntegraModel<StudioSetCommonMotionalSurround>
     {
+        #region Fields: INTEGRA-7
+
         [Offset(0x0000)] private bool _MotionalSurroundSwitch;
         [Offset(0x0001)] private IntegraRoomTypes _RoomType;
         [Offset(0x0002)] private byte _AmbienceLevel;
@@ -24,8 +21,17 @@ namespace IntegraXL.Models
         [Offset(0x000B)] private IntegraControlChannels _ExtPartControlChannel;
         [Offset(0x000C)] private byte _MotionalSurroundDepth;
 
+        #endregion
 
+        #region Constructor
+
+#pragma warning disable IDE0051 // Remove unused private members
         private StudioSetCommonMotionalSurround(Integra device) : base(device) { }
+#pragma warning restore IDE0051 // Remove unused private members
+
+        #endregion
+
+        #region Properties: INTEGRA-7
 
         [Offset(0x0000)]
         public bool MotionalSurroundSwitch
@@ -170,19 +176,25 @@ namespace IntegraXL.Models
             }
         }
 
-        public virtual IEnumerable<IntegraRoomTypes> RoomTypes
+        #endregion
+
+        #region Enumerations
+
+        public IEnumerable<IntegraRoomTypes> RoomTypes
         {
             get { return Enum.GetValues(typeof(IntegraRoomTypes)).Cast<IntegraRoomTypes>(); }
         }
 
-        public virtual IEnumerable<IntegraRoomSizes> RoomSizes
+        public IEnumerable<IntegraRoomSizes> RoomSizes
         {
             get { return Enum.GetValues(typeof(IntegraRoomSizes)).Cast<IntegraRoomSizes>(); }
         }
 
-        public virtual IEnumerable<IntegraControlChannels> ControlChannels
+        public IEnumerable<IntegraControlChannels> ControlChannels
         {
             get { return Enum.GetValues(typeof(IntegraControlChannels)).Cast<IntegraControlChannels>(); }
         }
+
+        #endregion
     }
 }

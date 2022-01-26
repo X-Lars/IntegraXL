@@ -55,27 +55,6 @@ namespace IntegraXL.Extensions
             {
                 throw new ArgumentOutOfRangeException($"[{nameof(IntegraToneExtensions)}.{nameof(ToneBank)}] 0x{instance.MSB:X2}{instance.MSB:X2}");
             }
-
-            if (Enum.IsDefined(typeof(IntegraToneBanks), (ushort)(bank & 0xFFF0)))
-            {
-
-                // Check for tone banks that multi address range tone banks
-                // 
-                if (Enum.IsDefined(typeof(IntegraToneBanks), bank))
-                {
-                    // Get the tone bank based on the full address
-                    return (IntegraToneBanks)bank;
-                }
-                else
-                {
-                    return (IntegraToneBanks)(bank & 0xFFF0);
-                }
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException($"[{nameof(IntegraToneExtensions)}.{nameof(ToneBank)}]");
-                //return IntegraToneBanks.Undefined;
-            }
         }
 
         /// <summary>

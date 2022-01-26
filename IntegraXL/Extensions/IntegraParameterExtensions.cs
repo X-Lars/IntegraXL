@@ -1,6 +1,12 @@
-﻿namespace IntegraXL.Extensions
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace IntegraXL.Extensions
 {
-    public static class IntegraMFXExtensions
+    public static class IntegraParameterExtensions
     {
         /// <summary>
         /// Deserializes an MFX parameter.
@@ -35,6 +41,18 @@
                 Array.Reverse(bytes);
 
             return BitConverter.ToInt32(bytes, 0);
+        }
+
+        public static int DeserializeFeedback(this int value)
+        {
+            // TODO: Check Clamp value
+            return (value * 2) - 98;
+        }
+
+        public static int SerializeFeedback(this int value)
+        {
+            // TODO: Check Clamp value
+            return (value + 98) / 2;
         }
     }
 }

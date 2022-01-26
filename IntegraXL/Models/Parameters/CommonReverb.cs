@@ -1,4 +1,5 @@
-﻿using IntegraXL.Extensions;
+﻿using IntegraXL.Core;
+using IntegraXL.Extensions;
 
 namespace IntegraXL.Models.Parameters
 {
@@ -12,7 +13,7 @@ namespace IntegraXL.Models.Parameters
     /// 07: Spread <br/>
     /// 08: Tone <br/>
     /// </remarks>
-    public sealed class CommonReverb : CommonReverbOff
+    public sealed class CommonReverb : IntegraMFXParameter
     {
         public CommonReverb(StudioSetCommonReverb provider) : base(provider) { }
 
@@ -26,6 +27,7 @@ namespace IntegraXL.Models.Parameters
             }
         }
 
+        // TODO: Clamp
         public double Time
         {
             get { return this[2] * 0.1; }

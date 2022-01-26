@@ -1,30 +1,33 @@
 ﻿
+using IntegraXL.Core;
+using IntegraXL.Extensions;
+
 namespace IntegraXL.Models.Parameters
 {
     /// <remarks>
     /// 00: Character <br/>
     /// 03: Time <br/>
     /// </remarks>
-    public sealed class CommonReverbGM2 : CommonReverbOff
+    public sealed class CommonReverbGM2 : IntegraMFXParameter
     {
         public CommonReverbGM2(StudioSetCommonReverb provider) : base(provider) { }
 
-        public byte Character
+        public int Character
         {
-            get { return (byte)this[0]; }
+            get { return this[0]; }
             set
             {
-                this[0] = value;
+                this[0] = value.Clamp(0, 5);
                 NotifyPropertyChanged();
             }
         }
 
-        public byte Time
+        public int Time
         {
-            get { return (byte)this[3]; }
+            get { return this[3]; }
             set
             {
-                this[3] = value;
+                this[3] = value.Clamp();
                 NotifyPropertyChanged();
             }
         }

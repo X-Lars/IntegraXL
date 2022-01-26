@@ -1,6 +1,7 @@
 ﻿using IntegraXL.Extensions;
 using IntegraXL.Interfaces;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace IntegraXL.Core
@@ -19,7 +20,7 @@ namespace IntegraXL.Core
         /// Creates a new <see cref="IntegraMFXParameter"/> instance.
         /// </summary>
         /// <param name="provider">The parameter provider.</param>
-        public IntegraMFXParameter(IParameterProvider provider) : base(provider) { }
+        public IntegraMFXParameter(IntegraModel provider) : base(provider) { }
 
         #endregion
 
@@ -59,10 +60,15 @@ namespace IntegraXL.Core
         /// Creates a new <see cref="IntegraParameter"/> instance.
         /// </summary>
         /// <param name="provider">The parameter provider.</param>
-        public IntegraParameter(IParameterProvider provider)
+        public IntegraParameter(IntegraModel provider)
         {
-            Provider = provider;
+            Debug.Assert(provider.GetType().GetInterfaces().Contains(typeof(IParameterProvider)));
+
+            Provider = (IParameterProvider)provider;
+
+            provider.PropertyChanged += ProviderPropertyChanged;
         }
+
 
         #endregion
 
@@ -77,6 +83,21 @@ namespace IntegraXL.Core
         {
             get { return Provider[index]; }
             set { Provider[index] = value; }
+        }
+
+        #endregion
+
+        #region Event Handlers
+        
+        /// <summary>
+        /// Handles the property changed event of the provider.
+        /// </summary>
+        /// <param name="sender">The provider that raised the event.</param>
+        /// <param name="e">The event data.</param>
+        /// <remarks><i>Enables the UI to bind to the property name when the data context is set to <see cref="IParameterProvider.Parameter"/>.</i></remarks>
+        private void ProviderPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            NotifyPropertyChanged(string.Empty);
         }
 
         #endregion

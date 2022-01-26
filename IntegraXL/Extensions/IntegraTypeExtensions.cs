@@ -35,8 +35,7 @@ namespace IntegraXL.Extensions
 
         public static int Clamp(this int value, int min = 0, int max = 127)
         {
-            Debug.Assert(min <= max);
-            Debug.Assert(max < 128);
+            Debug.Assert(min < max);
 
             value = Math.Min(value, max);
             value = Math.Max(value, min);

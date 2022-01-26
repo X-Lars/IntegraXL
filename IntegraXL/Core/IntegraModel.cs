@@ -156,6 +156,10 @@ namespace IntegraXL.Core
                                 // Increment the field offset by four bytes
                                 uint offset = (uint)(field.Key + (i * 4));
 
+                            // Some structures are varable length depending on the type
+                            if (offset + 4 > data.Length)
+                                break;
+                                
                                 // Read four bytes from the system exclusive data
                                 for (int j = 0; j < bytes.Length; j++)
                                 {
@@ -290,7 +294,7 @@ namespace IntegraXL.Core
                 fields.TryGetValue(fieldOffset, out FieldInfo field);
 
                 // TODO: should never be null?
-                // TODO: Indexed properties not catched
+                // TODO: Create cached property entry for each indexed property
                 if(field == null)
                 {
                     for (int i = fieldOffset; i > 0; i--)
@@ -499,7 +503,17 @@ namespace IntegraXL.Core
             Requests.Add(new IntegraRequest(attribute.Request));
         }
 
-        
+        protected void Reinitialize()
+        {
+            Debug.Print($"[{nameof(IntegraModel)}] {nameof(Reinitialize)}<{GetType().Name}>()");
+
+            if(!IsConnected)
+                Connect();
+
+            IsInitialized = false;
+
+            var b = Initialize();
+        }
 
         /// <summary>
         /// Requests the device to initialize the model.
@@ -619,7 +633,7 @@ namespace IntegraXL.Core
 
         #endregion
 
-        #region Method
+        #region Methods
 
         /// <summary>
         /// Gets a hash code based on the model's address.

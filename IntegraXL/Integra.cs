@@ -113,7 +113,7 @@ namespace IntegraXL
                 if(_IsInitialized != value)
                 {
                     _IsInitialized = value;
-                    NotifyPropertyChanged();
+                    NotifyPropertyChanged(string.Empty);
                 }
             }
         }
@@ -308,12 +308,12 @@ namespace IntegraXL
         /// <returns>An awaitable <see cref="Task"/> that returns nothing.</returns>
         private async Task InitializeInstance()
         {
-            Setup = await GetModel<Setup>();
-            VirtualSlots = await GetModel<VirtualSlots>();
-            StudioSets = await GetModel<StudioSets>();
-            SelectedTones = await GetModel<IntegraTones>();
+            Setup          = await GetModel<Setup>();
+            VirtualSlots   = await GetModel<VirtualSlots>();
+            StudioSets     = await GetModel<StudioSets>();
+            SelectedTones  = await GetModel<IntegraTones>();
 
-            StudioSet = await GetModel<StudioSet>();
+            StudioSet      = await GetModel<StudioSet>();
 
             //TemporaryTones = await GetModel<TemporaryTones>();
 

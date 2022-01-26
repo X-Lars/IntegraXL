@@ -1,5 +1,6 @@
 ﻿using IntegraXL.Core;
-using IntegraXL.Validation;
+using IntegraXL.Interfaces;
+using IntegraXL.Models.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace IntegraXL.Models
 {
     [Integra(0x00000200, 0x00000111, 145)]
-    public class MFX : IntegraModel<MFX>
+    public class MFX : IntegraModel<MFX>, IParameterProvider
     {
         IntegraValidator? _Validator;
 
@@ -38,7 +39,6 @@ namespace IntegraXL.Models
 
         public MFX(TemporaryTone temporaryTone) : base(temporaryTone.Device)
         {
-            //Address; += temporaryTone.Address;
             Debug.Print($"[{nameof(MFX)}] Contructor: {Address:X4}, 0x{Size:X4}");
         }
 
@@ -53,9 +53,9 @@ namespace IntegraXL.Models
                 if (_Type != value)
                 {
                     _Type = value;
-                    //SetValidator();
+
                     NotifyPropertyChanged();
-                    //Initialize();
+                    Reinitialize();
                 }
             }
         }
@@ -257,20 +257,19 @@ namespace IntegraXL.Models
         }
 
         [Offset(0x0011)]
-        public double this[int index]
+        public int this[int index]
         {
             get
             {
-                return _Validator.Get(index, _Parameters[index]);
+                return _Parameters[index];
             }
 
             set
             {
-                if (_Validator.Get(index, _Parameters[index]) != value)
+                if (_Parameters[index] != value)
                 {
-                    _Parameters[index] = _Validator.Set(index, value);
-
-                    NotifyPropertyChanged("Item[]", index);
+                    _Parameters[index] = value;
+                    NotifyPropertyChanged("Item", index);
                 }
             }
         }
@@ -279,23 +278,23 @@ namespace IntegraXL.Models
 
         #region Methods
 
+        public IntegraParameter? Parameter { get; set; }
         /// <summary>
         /// Sets the parameter validator for the <see cref="Type"/>.
         /// </summary>
-        private void SetValidator()
+        private void SetParameterProvider()
         {
-            Debug.Print($"Set Validator: {Type}");
             switch(Type)
             {
-                case IntegraMFXTypes.Equalizer: _Validator = new Equalizer(); break;
+                case IntegraMFXTypes.Equalizer: Parameter = new Thru(this); break;
 
                     // TODO: Remove default? No validation?
                 default: 
-                    _Validator = new Thru();
+                    Parameter = new Thru(this);
                     break;
             }
 
-            //NotifyPropertyChanged(string.Empty);
+            NotifyPropertyChanged(string.Empty);
         }
 
         #endregion
@@ -337,7 +336,7 @@ namespace IntegraXL.Models
             // After initialization the MFX type
             if (base.Initialize(data))
             {
-                SetValidator();
+                SetParameterProvider();
             }
             
             return IsInitialized;
@@ -350,6 +349,14 @@ namespace IntegraXL.Models
             //return base.GetModelHash() & 0xFFF00F00;
         }
 
+        #endregion
+
+        #region Enumerations
+
+        public static IEnumerable<IntegraMFXTypes> Types
+        {
+            get { return Enum.GetValues(typeof(IntegraMFXTypes)).Cast<IntegraMFXTypes>(); }
+        }
         #endregion
     }
 }

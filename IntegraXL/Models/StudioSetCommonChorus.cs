@@ -1,22 +1,38 @@
 ﻿using IntegraXL.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using IntegraXL.Interfaces;
+using IntegraXL.Models.Parameters;
+using System.Diagnostics;
 
 namespace IntegraXL.Models
 {
     [Integra(0x18000400, 0x00000054)]
-    public class StudioSetCommonChorus : IntegraModel<StudioSetCommonChorus>
+    public class StudioSetCommonChorus : IntegraModel<StudioSetCommonChorus>, IParameterProvider
     {
-        //IntegraMFXValidator _Validator = new CommonOff();
+        #region Properties: INTEGRA-7
 
         [Offset(0x0000)] private IntegraChorusTypes _Type;
         [Offset(0x0001)] private byte _ChorusLevel;
         [Offset(0x0002)] private IntegraStudioSetCommonOutputAssigns _OutputAssign;
         [Offset(0x0003)] private IntegraChorusOutputSelections _OutputSelect;
-        [Offset(0x0004)] private int[] _Parameters = new int[20];
+        [Offset(0x0004)] private readonly int[] _Parameters = new int[20];
 
+        #endregion
+
+        #region Constructor
+
+#pragma warning disable IDE0051 // Remove unused private members
         private StudioSetCommonChorus(Integra device) : base(device) { }
+#pragma warning restore IDE0051 // Remove unused private members
+
+        #endregion
+
+        #region Properties
+
+        public IntegraParameter? Parameter { get; set; }
+
+        #endregion
+
+        #region Properties: INTEGRA-7
 
         [Offset(0x0000)]
         public IntegraChorusTypes Type
@@ -25,8 +41,9 @@ namespace IntegraXL.Models
             set
             {
                 _Type = value;
+
                 NotifyPropertyChanged();
-                //Initialize();
+                Reinitialize();
             }
         }
 
@@ -63,94 +80,111 @@ namespace IntegraXL.Models
             }
         }
 
-        //[Offset(0x0004)]
-        //public double this[int index]
-        //{
-        //    get 
-        //    { 
-        //        return _Validator.GetMFXParameter(index, _Parameters[index]);  
-        //    }
-        //    set
-        //    {
-        //        if (_Validator.GetMFXParameter(index, _Parameters[index]) != value)
-        //        {
-        //            _Parameters[index] = _Validator.SetMFXParameter(index, value);
-        //            NotifyPropertyChanged("Item[]", index);
-        //        }
-        //    }
-        //}
+        [Offset(0x0004)]
+        public int this[int index]
+        {
+            get
+            {
+                return _Parameters[index];
+            }
+            set
+            {
+                if(_Parameters[index] != value)
+                {
+                    _Parameters[index] = value;
+                    NotifyPropertyChanged("Item", index);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void ReceivedParameter(IntegraSystemExclusive e)
+        {
+            Debug.Assert(e.Data.Length == 4);
+
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(e.Data);
+
+            int value = BitConverter.ToInt32(e.Data, 0);
+            int index = (e.Address - Address - 4) / 4;
+            Debug.Print(index.ToString());
+            _Parameters[index] = value;
+
+            NotifyPropertyChanged(string.Empty);
+        }
+
+        private void SetParameterProvider()
+        {
+            switch(Type)
+            {
+                case IntegraChorusTypes.Chorus:    Parameter = new CommonChorus(this); break;
+                case IntegraChorusTypes.Delay:     Parameter = new CommonDelay(this); break;
+                case IntegraChorusTypes.GM2Chorus: Parameter = new CommonChorusGM2(this); break;
+
+                default:
+                    Parameter = new CommonChorusOff(this);
+                    break;
+            };
+
+            NotifyPropertyChanged(string.Empty);
+        }
+
+        #endregion
+
+        #region Overrides: Model
+
+        protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
+        {
+            if (e.SystemExclusive.Address == Address)
+            {
+                // Always initialize, when the address is received the type has changed
+                Initialize(e.SystemExclusive.Data);
+            }
+            else if (e.SystemExclusive.Address.InRange(Address, Address + Size))
+            {
+                if (e.SystemExclusive.Address - Address >= 0x00000004)
+                {
+                    ReceivedParameter(e.SystemExclusive);
+                }
+                else
+                {
+                    ReceivedProperty(e.SystemExclusive);
+                }
+
+            }
+        }
 
         protected override bool Initialize(byte[] data)
         {
-            if (!IsInitialized)
-            {
-                base.Initialize(data);
+            IsInitialized = false;
 
-                SetValidation(Type);
-            }
+            base.Initialize(data);
 
-            return IsInitialized;
+            SetParameterProvider();
+
+            return IsInitialized = true;
         }
 
-        /// <summary>
-        /// Sets the MFX model to use for parameter conversion and validation.
-        /// </summary>
-        /// <param name="type">An <see cref="IntegraMFXTypes"/> specifying the model to bind.</param>
-        private void SetValidation(IntegraChorusTypes type)
-        {
-            //switch (type)
-            //{
-            //    case IntegraChorusTypes.Chorus:    _Validator = new CommonChorus();      break;
-            //    case IntegraChorusTypes.Delay:     _Validator = new CommonChorusDelay(); break;
-            //    case IntegraChorusTypes.GM2Chorus: _Validator = new CommonChorusGM2();   break;
-
-            //    default:
-            //        _Validator = new CommonOff();
-            //        break;
-            //}
-        }
+        #endregion
 
         #region Enumerations
 
-
-        public virtual IEnumerable<IntegraChorusTypes> ChorusTypes
+        public static IEnumerable<IntegraChorusTypes> Types
         {
             get { return Enum.GetValues(typeof(IntegraChorusTypes)).Cast<IntegraChorusTypes>(); }
         }
 
-        public virtual IEnumerable<IntegraChorusOutputSelections> ChorusOutputs
-        {
-            get { return Enum.GetValues(typeof(IntegraChorusOutputSelections)).Cast<IntegraChorusOutputSelections>(); }
-        }
-
-        public virtual IEnumerable<IntegraStudioSetCommonOutputAssigns> OutputAssigns
+        public static IEnumerable<IntegraStudioSetCommonOutputAssigns> OutputAssigns
         {
             get { return Enum.GetValues(typeof(IntegraStudioSetCommonOutputAssigns)).Cast<IntegraStudioSetCommonOutputAssigns>(); }
         }
 
-        public virtual List<string> PreDelayValues
+        public static IEnumerable<IntegraChorusOutputSelections> OutputSelects
         {
-            get { return IntegraPreDelay.Values; }
-        }
-
-        public virtual IEnumerable<IntegraChorusFilterTypes> ChorusFilterTypes
-        {
-            get { return Enum.GetValues(typeof(IntegraChorusFilterTypes)).Cast<IntegraChorusFilterTypes>(); }
-        }
-
-        public virtual IEnumerable<IntegraMidFrequencies> ChorusCutoffFrequencies
-        {
-            get { return Enum.GetValues(typeof(IntegraMidFrequencies)).Cast<IntegraMidFrequencies>(); }
-        }
-
-        public virtual IEnumerable<IntegraDelayHFDamps> HFDamps
-        {
-            get { return Enum.GetValues(typeof(IntegraDelayHFDamps)).Cast<IntegraDelayHFDamps>(); }
-        }
-
-        public virtual IEnumerable<IntegraNoteRates> NoteRates
-        {
-            get { return Enum.GetValues(typeof(IntegraNoteRates)).Cast<IntegraNoteRates>(); }
+            get { return Enum.GetValues(typeof(IntegraChorusOutputSelections)).Cast<IntegraChorusOutputSelections>(); }
         }
 
         #endregion

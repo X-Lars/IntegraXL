@@ -70,6 +70,7 @@ namespace IntegraXL.Extensions
                 Debug.Assert(field.GetCustomAttribute<OffsetAttribute>() != null);
 
                 cachedFields.TryAdd(field.GetCustomAttribute<OffsetAttribute>().Value, field);
+
             }
 
             if (cachedFields.Any())

@@ -8,6 +8,6 @@ namespace IntegraXL.Interfaces
     public interface IParameterProvider
     {
         int this[int index] { get; set; }
-        IntegraParameter Parameter { get; set; }
+        IntegraParameter? Parameter { get; set; }
     }
 }
