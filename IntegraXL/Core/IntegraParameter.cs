@@ -1,18 +1,24 @@
 ﻿using IntegraXL.Extensions;
 using IntegraXL.Interfaces;
+using IntegraXL.Models;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace IntegraXL.Core
 {
+    public abstract class IntegraSNAParameter : IntegraParameter<byte>
+    {
+        protected IntegraSNAParameter(SuperNATURALAcousticToneCommon provider) : base(provider) { }
+    }
+
     /// <summary>
     /// Provides functionality to name and validate properties contained in a model's indexer property.
     /// </summary>
     /// <remarks>
     /// <i>(De)serializes the property values to and from INTEGRA-7 MFX parameters.</i>
     /// </remarks>
-    public abstract class IntegraMFXParameter : IntegraParameter
+    public abstract class IntegraMFXParameter : IntegraParameter<int>
     {
         #region Constructor
 
@@ -43,14 +49,14 @@ namespace IntegraXL.Core
     /// <summary>
     /// Provides functionality to name and validate properties contained in a model's indexer property.
     /// </summary>
-    public abstract class IntegraParameter : INotifyPropertyChanged
+    public abstract class IntegraParameter<T> : INotifyPropertyChanged
     {
         #region Fields
 
         /// <summary>
         /// Stores a reference to the parameter provider.
         /// </summary>
-        protected IParameterProvider Provider;
+        protected IParameterProvider<T> Provider;
 
         #endregion
 
@@ -62,9 +68,9 @@ namespace IntegraXL.Core
         /// <param name="provider">The parameter provider.</param>
         public IntegraParameter(IntegraModel provider)
         {
-            Debug.Assert(provider.GetType().GetInterfaces().Contains(typeof(IParameterProvider)));
+            Debug.Assert(provider.GetType().GetInterfaces().Contains(typeof(IParameterProvider<T>)));
 
-            Provider = (IParameterProvider)provider;
+            Provider = (IParameterProvider<T>)provider;
 
             provider.PropertyChanged += ProviderPropertyChanged;
         }
@@ -79,7 +85,7 @@ namespace IntegraXL.Core
         /// </summary>
         /// <param name="index">The index of the parameter.</param>
         /// <returns>The parameter value.</returns>
-        public virtual int this[int index]
+        public virtual T this[int index]
         {
             get { return Provider[index]; }
             set { Provider[index] = value; }

@@ -125,11 +125,11 @@ namespace IntegraXL.Core
     [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraToneTypes : uint
     {
-        [Description("PCM Synth Tone")]             PCMSynthTone                = 0x000000,
-        [Description("SuperNATURAL Synth Tone")]    SuperNATURALSynthTone       = 0x010000,
-        [Description("SuperNATURAL Acoustic Tone")] SuperNATURALAcousticTone    = 0x020000,
-        [Description("SuperNATURAL Drum Kit")]      SuperNATURALDrumkit         = 0x030000,
-        [Description("PCM Drum Kit")]               PCMDrumkit                  = 0x100000,
+        [Description("PCM Synth Tone")]             PCMSynthTone                = 0x00000000,
+        [Description("SuperNATURAL Synth Tone")]    SuperNATURALSynthTone       = 0x00010000,
+        [Description("SuperNATURAL Acoustic Tone")] SuperNATURALAcousticTone    = 0x00020000,
+        [Description("SuperNATURAL Drum Kit")]      SuperNATURALDrumkit         = 0x00030000,
+        [Description("PCM Drum Kit")]               PCMDrumkit                  = 0x00100000,
     }
 
     [TypeConverter(typeof(DescriptionConverter))]
@@ -620,6 +620,23 @@ namespace IntegraXL.Core
         [Description("\U0001D15C")]           _2    = 0x15
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraScaleKey : byte
+    {
+        [Description("C")]           C     = 0x00,
+        [Description("D\U0001D12D")] DFlat = 0x01,
+        [Description("D")]           D     = 0x02,
+        [Description("E\U0001D12D")] EFlat = 0x03,
+        [Description("E")]           E     = 0x04,
+        [Description("F")]           F     = 0x05,
+        [Description("G\U0001D12D")] GFlat = 0x06,
+        [Description("G")]           G     = 0x07,
+        [Description("A\U0001D12D")] AFlat = 0x08,
+        [Description("A")]           A     = 0x09,
+        [Description("B\U0001D12D")] BFlat = 0x0A,
+        [Description("B")]           B     = 0x0B,
+    }
+
     //[TypeConverter(typeof(DescriptionConverter))]
     //public enum IntegraNoteRates : byte
     //{
@@ -769,6 +786,220 @@ namespace IntegraXL.Core
 
     #endregion
 
+    #region SuperNATURALAcousticTone Parameters
+
+    [TypeConverter (typeof(DescriptionConverter))]
+    public enum SNANuance : byte
+    {
+        [Description("Type 1")] Type1 = 0x00,
+        [Description("Type 2")] Type2 = 0x01,
+        [Description("Type 3")] Type3 = 0x02
+    }
+
+    public enum SNAPercussionSoft : byte
+    {
+        Normal = 0x00,
+        Soft   = 0x01
+    }
+
+    public enum SNAPercussionSlow : byte
+    {
+        Fast = 0x00,
+        Slow = 0x01
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum SNAPercussionHarmonic : byte
+    {
+        [Description("Second")] SND = 0x00,
+        [Description("Third")] TRD = 0x01
+    }
+
+    public enum SNAPlayScale : byte
+    {
+        Chroma,
+        Major,
+        Minor,
+        Seventh,
+        Diminish,
+        Whole,
+        HarmonicMinor
+    }
+
+    public enum SNAPortaGliss : byte
+    {
+        Porta,
+        Gliss
+    }
+    #endregion
+
+    #region SuperNATURALAcousticTone Variations
+
+    public enum VarBellMallet1 : byte
+    {
+        Off = 0x00,
+        DeadStroke = 0x01
+    }
+
+    public enum VarBellMallet2 : byte
+    {
+        Off = 0x00,
+        DeadStroke = 0x01,
+        TremoloSw = 0x02
+    }
+
+    public enum VarBellMallet3 : byte
+    {
+        Off = 0x00,
+        Mute = 0x01,
+        Tremolo = 0x02
+    }
+
+    public enum VarGuitar1 : byte
+    {
+        Off = 0x00,
+        Mute = 0x01,
+        Harmonics = 0x02
+    }
+
+    public enum VarGuitar2 : byte
+    {
+        Off = 0x00,
+        Rasugueado = 0x01,
+        Harmonics = 0x02
+    }
+
+    public enum VarGuitar3 : byte
+    {
+        Off = 0x00,
+        FingerPicking = 0x01,
+        OctaveTone = 0x02
+    }
+
+    public enum VarBass1 : byte
+    {
+        Off = 0x00,
+        Staccato = 0x01,
+        Harmonics = 0x02
+    }
+
+    public enum VarBass2 : byte
+    {
+        Off = 0x00,
+        Slap = 0x01,
+        Harmonics = 0x02
+    }
+
+    public enum VarBass3 : byte
+    {
+        Off = 0x00,
+        BridgeMute = 0x01,
+        Harmonics = 0x02
+    }
+
+    public enum VarHarp : byte
+    {
+        Off = 0x00,
+        Nail = 0x01
+    }
+
+    public enum VarShamisen : byte
+    {
+        Off = 0x00,
+        Strum = 0x01,
+        UpPicking = 0x02,
+        AutoBend = 0x03
+    }
+
+    public enum VarKoto: byte
+    {
+        Off = 0x00,
+        Tremolo = 0x01,
+        Ornament = 0x02
+    }
+
+    public enum VarKalimba : byte
+    {
+        Off = 0x00,
+        Buzz = 0x01
+    }
+
+    public enum VarStrings1 : byte
+    {
+        Off = 0x00,
+        Staccato = 0x01,
+        Pizzicato = 0x02,
+        Tremolo = 0x03
+    }
+
+    public enum VarStrings2 : byte
+    {
+        Off = 0x00,
+        Staccato = 0x01,
+        Ornament = 0x02
+    }
+
+    public enum VarBrass1 : byte
+    {
+        Off = 0x00,
+        Staccato = 0x01,
+    }
+
+    public enum VarBrass2 : byte
+    {
+        Off = 0x00,
+        Staccato = 0x01,
+        Fall = 0x02
+    }
+
+    public enum VarPipes : byte
+    {
+        Off = 0x00,
+        Ornament = 0x02
+    }
+
+    public enum VarWind2 : byte
+    {
+        Off = 0x00,
+        Staccato = 0x01,
+        Flutter = 0x02
+    }
+
+    public enum VarWind3 : byte
+    {
+        Off = 0x00,
+        Cut = 0x01,
+        Ornament = 0x02
+    }
+
+    public enum VarWind4 : byte
+    {
+        Off,
+        Staccato,
+        Fall,
+        SubTone
+    }
+
+    public enum VarChoir : byte
+    {
+        Off,
+        VoiceWoo
+    }
+
+    public enum VarTimpani : byte
+    {
+        Off,
+        Flam,
+        AccentRoll
+    }
+
+    public enum VarSteelDrum: byte
+    {
+        Off,
+        Mute
+    }
+
+    #endregion
 
     #region PCMSynthToneCommon
 

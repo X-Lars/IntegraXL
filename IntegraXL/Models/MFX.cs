@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace IntegraXL.Models
 {
     [Integra(0x00000200, 0x00000111, 145)]
-    public class MFX : IntegraModel<MFX>, IParameterProvider
+    public class MFX : IntegraModel<MFX>, IParameterProvider<int>
     {
         IntegraValidator? _Validator;
 
@@ -39,7 +39,7 @@ namespace IntegraXL.Models
 
         public MFX(TemporaryTone temporaryTone) : base(temporaryTone.Device)
         {
-            Debug.Print($"[{nameof(MFX)}] Contructor: {Address:X4}, 0x{Size:X4}");
+            //Debug.Print($"[{nameof(MFX)}] Contructor: {Address:X4}, 0x{Size:X4}");
         }
 
         #region Properties : INTEGRA-7
@@ -278,7 +278,7 @@ namespace IntegraXL.Models
 
         #region Methods
 
-        public IntegraParameter? Parameter { get; set; }
+        public IntegraParameter<int>? Parameter { get; set; }
         /// <summary>
         /// Sets the parameter validator for the <see cref="Type"/>.
         /// </summary>
@@ -309,7 +309,7 @@ namespace IntegraXL.Models
             {
                 if (e.SystemExclusive.Data.Length == Size)
                 {
-                    Debug.Print("*** MFX: Full ***");
+                    //Debug.Print("*** MFX: Full ***");
                     Initialize(e.SystemExclusive.Data);
                 }
                 else 
@@ -317,7 +317,7 @@ namespace IntegraXL.Models
                     IntegraAddress offset = new IntegraAddress(0x00000111);
                     if (e.SystemExclusive.Address.InRange(Address, (int)(Address + offset)))
                     {
-                        Debug.Print("*** MFX: Parameters ***");
+                        //Debug.Print("*** MFX: Parameters ***");
                         // Parameter data received
                         ReceivedProperty(e.SystemExclusive);
                     }
@@ -357,6 +357,7 @@ namespace IntegraXL.Models
         {
             get { return Enum.GetValues(typeof(IntegraMFXTypes)).Cast<IntegraMFXTypes>(); }
         }
+
         #endregion
     }
 }

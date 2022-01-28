@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace IntegraXL.Models
 {
     [Integra(0x18000400, 0x00000054)]
-    public class StudioSetCommonChorus : IntegraModel<StudioSetCommonChorus>, IParameterProvider
+    public class StudioSetCommonChorus : IntegraModel<StudioSetCommonChorus>, IParameterProvider<int>
     {
         #region Properties: INTEGRA-7
 
@@ -28,7 +28,7 @@ namespace IntegraXL.Models
 
         #region Properties
 
-        public IntegraParameter? Parameter { get; set; }
+        public IntegraParameter<int>? Parameter { get; set; }
 
         #endregion
 

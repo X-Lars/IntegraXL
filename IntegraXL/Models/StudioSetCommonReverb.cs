@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace IntegraXL.Models
 {
     [Integra(0x18000600, 0x00000063)]
-    public class StudioSetCommonReverb : IntegraModel<StudioSetCommonReverb>, IParameterProvider
+    public class StudioSetCommonReverb : IntegraModel<StudioSetCommonReverb>, IParameterProvider<int>
     {
         #region Fields: INTEGRA-7
 
@@ -27,7 +27,7 @@ namespace IntegraXL.Models
 
         #region Properties
 
-        public IntegraParameter? Parameter { get; set; }
+        public IntegraParameter<int>? Parameter { get; set; }
 
         #endregion
 
@@ -159,7 +159,7 @@ namespace IntegraXL.Models
                 {
                     ReceivedProperty(e.SystemExclusive);
                 }
-                
+
             }
 
         }

@@ -140,15 +140,18 @@ namespace IntegraXL.Models
 
             Type = _Tone.Type;
 
+            //Debug.Assert(Part != Parts.Part15);
             switch (Type)
             {
                 case IntegraToneTypes.SuperNATURALAcousticTone:
                     SuperNATURALAcousticTone = new SuperNATURALAcousticTone(this);
                     MFX.Address |= SuperNATURALAcousticTone.Address;
+                    Debug.Print($"{nameof(TemporaryTone)}] {nameof(InitializeToneAsync)} {Part}: {SuperNATURALAcousticTone.Address}");
                     break;
                 case IntegraToneTypes.SuperNATURALSynthTone:
                     SuperNATURALSynthTone = new SuperNATURALSynthTone(this);
                     MFX.Address |= SuperNATURALSynthTone.Address;
+                    Debug.Print($"{nameof(TemporaryTone)}] {nameof(InitializeToneAsync)} {Part}: {SuperNATURALSynthTone.Address}");
                     break;
                 case IntegraToneTypes.SuperNATURALDrumkit:
                     SuperNATURALDrumKit = new SuperNATURALDrumKit(this);

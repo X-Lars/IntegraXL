@@ -5,9 +5,9 @@ namespace IntegraXL.Interfaces
     /// <summary>
     /// Provides a contract for models containing an indexed parameter array.
     /// </summary>
-    public interface IParameterProvider
+    public interface IParameterProvider<T>
     {
-        int this[int index] { get; set; }
-        IntegraParameter? Parameter { get; set; }
+        T this[int index] { get; set; }
+        IntegraParameter<T>? Parameter { get; set; }
     }
 }

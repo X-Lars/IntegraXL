@@ -1,5 +1,6 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Extensions;
+using IntegraXL.Interfaces;
 using System;
 using System.Diagnostics;
 using System.Reflection;
@@ -8,7 +9,7 @@ using System.Text;
 namespace IntegraXL.Models
 {
     [Integra(0x00000000, 0x00000046)]
-    public sealed class SuperNATURALAcousticToneCommon : IntegraModel<SuperNATURALAcousticToneCommon>
+    public sealed class SuperNATURALAcousticToneCommon : IntegraModel<SuperNATURALAcousticToneCommon>, IParameterProvider<byte>
     {
         [Offset(0x0000)] byte[] _ToneName = new byte[12];
         [Offset(0x0010)] byte _ToneLevel;
@@ -38,6 +39,8 @@ namespace IntegraXL.Models
             //Device = device;
             //Initialize();
         }
+        public IntegraParameter<byte>? Parameter { get; set; }
+
 
         [Offset(0x0000)]
         public string ToneName
@@ -292,6 +295,7 @@ namespace IntegraXL.Models
                 {
                     _InstNumber = value;
                     NotifyPropertyChanged();
+                    Reinitialize();
                 }
             }
         }
@@ -305,9 +309,95 @@ namespace IntegraXL.Models
                 if (_ModifyParameter[index] != value)
                 {
                     _ModifyParameter[index] = value;
-                    NotifyPropertyChanged("Item[]", index);
+                    NotifyPropertyChanged("Item", index);
                 }
             }
         }
+
+        #region Methods
+
+        // TODO: No loop / remove completely
+        private void ReceivedParameter(IntegraSystemExclusive e)
+        {
+            
+            int index = (e.Address - Address - 0x00000022);
+
+            for (int i = 0; i < e.Data.Length; i++)
+            {
+                _ModifyParameter[index] = e.Data[i];
+            }
+
+            NotifyPropertyChanged(string.Empty);
+        }
+
+        private void SetParameterProvider()
+        {
+            // TODO: Get Type 
+            //switch (Type)
+            //{
+            //    case IntegraReverbTypes.Room1:
+            //    case IntegraReverbTypes.Room2:
+            //    case IntegraReverbTypes.Hall1:
+            //    case IntegraReverbTypes.Hall2:
+            //    case IntegraReverbTypes.Plate:
+            //        Parameter = new CommonReverb(this);
+            //        break;
+
+            //    case IntegraReverbTypes.GM2:
+            //        Parameter = new CommonReverbGM2(this);
+            //        break;
+
+            //    default:
+            //        Parameter = new CommonReverbOff(this);
+            //        break;
+            //}
+
+            NotifyPropertyChanged(string.Empty);
+        }
+
+        #endregion
+
+        #region Overrides: Model
+
+        protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
+        {
+            //base.SystemExclusiveReceived(sender, e);
+            if (e.SystemExclusive.Address == Address)
+            {
+                //Debug.Assert(Address != 0x1c220000);
+                if (e.SystemExclusive.Data.Length == Size)
+                    // Always initialize, the the first property offset = 0 and determines the type
+                    Initialize(e.SystemExclusive.Data);
+            }
+            else if (e.SystemExclusive.Address.InRange(Address, Address + Size))
+            {
+                if (e.SystemExclusive.Address - Address >= 0x00000022)
+                {
+                    ReceivedParameter(e.SystemExclusive);
+                }
+                else
+                {
+                    ReceivedProperty(e.SystemExclusive);
+                }
+
+            }
+
+        }
+
+        protected override bool Initialize(byte[] data)
+        {
+            IsInitialized = false;
+            //Debug.Assert(data[33] < 0);
+            base.Initialize(data);
+
+            Parameter = this.GetParameterType();
+            NotifyPropertyChanged(string.Empty);
+
+            Debug.Print($"[{GetType().Name}] Parameter Type: {Parameter.GetType().Name}");
+
+            return IsInitialized = true;
+        }
+
+        #endregion
     }
 }

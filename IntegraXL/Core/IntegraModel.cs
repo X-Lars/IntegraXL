@@ -351,6 +351,9 @@ namespace IntegraXL.Core
                         {
                             array.SetValue(systemExclusive.Data[dataOffset], a);
                             dataOffset++;
+
+                            if (dataOffset + 1 > systemExclusive.Data.Length)
+                                break;
                         }
                     }
                     else if (arrayType == typeof(int))
