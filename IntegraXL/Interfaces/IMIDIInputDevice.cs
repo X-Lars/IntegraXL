@@ -6,8 +6,11 @@ namespace IntegraXL.Interfaces
     {
         public event EventHandler<LongMessageEventArgs> LongMessageReceived;
 
+        public void Open();
+        public void Close();
         public void Start();
 
         public void LongMessageEventHandler(object sender, LongMessageEventArgs e);
+
     }
 }

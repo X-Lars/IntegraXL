@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 [assembly: InternalsVisibleTo("IntegraXLTest")]
 
@@ -168,6 +163,8 @@ namespace IntegraXL.Core
         //{
         //    throw new NotImplementedException();
         //}
+
+
         /// <summary>
         /// Overloads the + operator to add two INTEGRA-7 addresses to create an offset.
         /// </summary>

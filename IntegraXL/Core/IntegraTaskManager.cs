@@ -7,16 +7,16 @@ namespace IntegraXL.Core
     {
         private BlockingCollection<Task<bool>> _RequestsQueue = new();
         private bool _IsIdle = true;
-
+        
         /// <summary>
         /// Initializes and starts the task manager.
         /// </summary>
         internal void Initialize()
         {
-            var taskManager = new Thread(new ThreadStart(Execute));
+            var thread = new Thread(new ThreadStart(Execute));
 
-            taskManager.IsBackground = true;
-            taskManager.Start();
+            thread.IsBackground = true;
+            thread.Start();
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace IntegraXL.Core
         /// </summary>
         private async void Execute()
         {
-            foreach (var task in _RequestsQueue.GetConsumingEnumerable(CancellationToken.None))
+            foreach (var task in _RequestsQueue.GetConsumingEnumerable())
             {
                 _IsIdle = false;
 

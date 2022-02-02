@@ -6,6 +6,7 @@ namespace IntegraXL.Common
     /// <summary>
     /// Defines an UI bindable command.
     /// </summary>
+    // TODO: REMOVE 
     public class UICommand : ICommand
     {
         #region Fields

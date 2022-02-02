@@ -3,6 +3,7 @@ using System.Windows.Input;
 
 namespace IntegraXL.Common
 {
+    // TODO: REMOVE
     public class UICommandAsync : ICommand
     {
         #region Fields

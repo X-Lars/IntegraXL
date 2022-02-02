@@ -29,7 +29,17 @@ namespace IntegraXL
         /// <summary>
         /// 
         /// </summary>
+        private IntegraStatus _Status = new();
+
+        /// <summary>
+        /// 
+        /// </summary>
         private ConcurrentDictionary<int, IntegraModel> _Models = new();
+
+        /// <summary>
+        /// Stores the <i>zero based</i> device ID.
+        /// </summary>
+        private byte _DeviceID;
 
         /// <summary>
         /// 
@@ -50,6 +60,9 @@ namespace IntegraXL
         /// Stores the command to preview the active tone.
         /// </summary>
         private ICommand _PreviewCommand;
+
+        private CancellationTokenSource _ModelCTS;
+        private CancellationToken _ModelCancellationToken;
 
         #endregion
 
@@ -77,17 +90,129 @@ namespace IntegraXL
         /// <summary>
         /// 
         /// </summary>
+        /// <remarks><i>
+        /// - Creates required models (Uninitialized)<br/>
+        /// </i></remarks>
+        public Integra()
+        {
+            CreateModels();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <remarks><i>
+        /// - Creates required models (Uninitialized)<br/>
+        /// - Sets the connection<br/>
+        /// - Sets the device ID<br/>
+        /// - Binds the connection event handlers<br/>
+        /// - Initializes the task manager<br/>
+        /// </i></remarks>
+        public Integra(IntegraConnection connection) : this()
+        {
+            SetConnection(connection);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="connection"></param>
         /// <exception cref="IntegraException"></exception>
-        private Integra(IntegraConnection connection)
+        /// <remarks><i>
+        /// - Sets the connection<br/>
+        /// - Sets the device ID<br/>
+        /// - Binds the connection event handlers<br/>
+        /// - Initializes the task manager<br/>
+        /// </i></remarks>
+        public void SetConnection(IntegraConnection connection)
         {
+            if(_Connection != null)
+            {
+                // TODO: Connection Change
+            }
+                
             if (connection == null)
-                throw new IntegraException($"[{nameof(Integra)}.Constructor]\nConnection is null.");
-            
+                throw new IntegraException($"[{nameof(Integra)}.{nameof(SetConnection)}]");
+
+            DeviceID = connection.ID;
+
             _Connection = connection;
             _Connection.SystemExclusiveReceived += OnSystemExclusiveReceived;
-            DeviceID = connection.ID;
+            _Connection.ConnectionChanged += OnConnectionChanged;
+
             _TaskManager.Initialize();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks><i>
+        /// - Invalidates the connection<br/>
+        /// - Sets the <see cref="IsConnected"/> property
+        /// </i></remarks>
+        public async Task<bool> Connect()
+        {
+            if (_Connection == null)
+                return IsConnected = false;
+
+            await _Connection.Invalidate();
+
+            if(_Connection.Status == ConnectionStatus.Connected)
+            {
+                return IsConnected = true;
+            }
+
+            return IsConnected = false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks><i>
+        /// - Invalidates the connection if not connected<br/>
+        /// - Initializes all uninitialized cached models<br/>
+        /// - Sets the <see cref="IsInitialized"/> property<br/>
+        /// </i></remarks>
+        public async Task<bool> Initialize()
+        {
+            if (_Connection == null)
+                return IsInitialized = false;
+
+            if (_Connection.Status != ConnectionStatus.Connected)
+            {
+                await Connect();
+
+                if (!IsConnected)
+                    return IsInitialized = false;
+            }
+
+            foreach (var model in _Models.Values.Where(x => x.IsInitialized == false))
+            {
+                await model.Initialize();
+            }
+
+            return IsInitialized = true;
+        }
+
+        private void OnConnectionChanged(object? sender, IntegraConnectionStatusEventArgs e)
+        {
+            Debug.Print($"[{nameof(Integra)}] Connection Changed => {e.Status}");
+
+            if(e.Status != ConnectionStatus.Connected)
+            {
+                // Cancel running tasks
+                // Disconnect models
+                // Mark models out of sync
+            }
+            else
+            {
+                // Cancel running tasks
+                // Disconnect models
+                // Mark models out of sync
+            }
         }
 
 
@@ -98,8 +223,34 @@ namespace IntegraXL
         /// <summary>
         /// Gets the device ID.
         /// </summary>
-        /// <remarks><i>Equals the connection ID.</i></remarks>
-        internal byte DeviceID { get; }
+        public int DeviceID 
+        { 
+            // Device ID is zero based
+            get => _DeviceID + 1; 
+
+            private set
+            {
+                if(_DeviceID != value)
+                {
+                    _DeviceID = (byte)value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private bool _IsConnected;
+        public bool IsConnected
+        {
+            get => _IsConnected;
+            private set
+            {
+                if(_IsConnected != value)
+                {
+                    _IsConnected = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         /// Gets whether the nescesary models are initialized and the INTEGRA-7 is ready for operation.
@@ -114,6 +265,19 @@ namespace IntegraXL
                 {
                     _IsInitialized = value;
                     NotifyPropertyChanged(string.Empty);
+                }
+            }
+        }
+
+        public IntegraStatus Status
+        {
+            get { return _Status; }
+            set
+            {
+                if(_Status != value)
+                {
+                    _Status = value;
+                    NotifyPropertyChanged();
                 }
             }
         }
@@ -292,36 +456,37 @@ namespace IntegraXL
 
         #region Methods
 
-        public static async Task<Integra> CreateInstance(IntegraConnection connection)
+        private void CreateModels()
         {
-            Integra instance = new (connection);
-
-            // TODO: Unnescesary ?
-            await instance.InitializeInstance();
-
-            return instance;
+            Setup         = CreateModel<Setup>();
+            VirtualSlots  = CreateModel<VirtualSlots>();
+            StudioSets    = CreateModel<StudioSets>();
+            SelectedTones = CreateModel<IntegraTones>();
+            StudioSet     = CreateModel<StudioSet>();
         }
 
         /// <summary>
         /// Initializes the nescesary models to operate.
         /// </summary>
         /// <returns>An awaitable <see cref="Task"/> that returns nothing.</returns>
-        private async Task InitializeInstance()
+        private async Task<bool> InitializeInstance()
         {
+
+            Status.Task = "Initializing";
+
             Setup          = await GetModel<Setup>();
             VirtualSlots   = await GetModel<VirtualSlots>();
             StudioSets     = await GetModel<StudioSets>();
             SelectedTones  = await GetModel<IntegraTones>();
-
             StudioSet      = await GetModel<StudioSet>();
 
-            TemporaryTones = await GetModel<TemporaryTones>();
+            //TemporaryTones = await GetModel<TemporaryTones>();
 
             //TemporaryTone = await GetModel<TemporaryTone>(Parts.Part01);
             //await TemporaryTone.Initialize();
             //TemporaryTone = await GetModel<TemporaryTone>(Parts.Part01);
-
-            IsInitialized = true;
+            Status.Task = "Ready";
+            return IsInitialized = true;
         }
 
         #region Model Instantiation
@@ -384,9 +549,14 @@ namespace IntegraXL
 
             TModel model = CreateModel<TModel>(part);
 
-            if(!model.IsInitialized)
+            try
             {
-                await model.Initialize();
+                if (!model.IsInitialized)
+                    await model.Initialize();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
 
             return model;
@@ -487,7 +657,7 @@ namespace IntegraXL
                 foreach (var request in model.Requests)
                 {
                     IntegraSystemExclusive systemExclusive = new (model.Address, request);
-                    systemExclusive.DeviceID = DeviceID;
+                    systemExclusive.DeviceID = _DeviceID;
                     _Connection.SendSystemExclusiveMessage(systemExclusive);
                 }
 
@@ -498,7 +668,13 @@ namespace IntegraXL
 
                 //CompleteProgress(model);
                 return true;
-            });
+            }, _ModelCancellationToken);
+
+            task.ContinueWith((t) =>
+            {
+                Debug.Print($"[{nameof(Integra)}] {nameof(InitializeModel)}<{model.GetType().Name}>() CANCELLED");
+            }, TaskContinuationOptions.OnlyOnCanceled);
+
 
             // TODO: Error handling / Time out to prevent application lock
             _TaskManager.Enqueue(task);
@@ -516,7 +692,7 @@ namespace IntegraXL
             Task<bool> task = new (() =>
             {
                 IntegraSystemExclusive systemExclusive = new(0x0F003000, instance.Requests[0]);
-                systemExclusive.DeviceID = DeviceID;
+                systemExclusive.DeviceID = _DeviceID;
                 _Connection.SendSystemExclusiveMessage(systemExclusive);
 
                 while (instance.IsLoading)
@@ -567,7 +743,7 @@ namespace IntegraXL
             // TODO: Check if taskmanager is nescessary for sending
             Task<bool> task = new (() =>
             {
-                systemExclusive.DeviceID = DeviceID;
+                systemExclusive.DeviceID = _DeviceID;
                 
                 _Connection.SendSystemExclusiveMessage(systemExclusive);
                 return true;

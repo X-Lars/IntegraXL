@@ -56,7 +56,8 @@ namespace IntegraXL.Models
             MFX = new MFX(this);
             _Tone = device.CreateModel<IntegraTone>(Part);
 
-            InitializeToneAsync();
+            // TODO: Remove from constructor
+            //InitializeToneAsync();
 
         }
 
@@ -174,6 +175,46 @@ namespace IntegraXL.Models
 
         #region Overrides: Model
 
+        internal async override Task<bool> Initialize()
+        {
+            _Tone.Changed -= ToneChanged;
+
+            if (!_Tone.IsInitialized)
+                await Device.InitializeModel(_Tone);
+
+            _Tone.Changed += ToneChanged;
+
+            Type = _Tone.Type;
+
+            switch (Type)
+            {
+                case IntegraToneTypes.SuperNATURALAcousticTone:
+                    SuperNATURALAcousticTone = new SuperNATURALAcousticTone(this);
+                    MFX.Address |= SuperNATURALAcousticTone.Address;
+                    Debug.Print($"{nameof(TemporaryTone)}] {nameof(InitializeToneAsync)} {Part}: {SuperNATURALAcousticTone.Address}");
+                    break;
+                case IntegraToneTypes.SuperNATURALSynthTone:
+                    SuperNATURALSynthTone = new SuperNATURALSynthTone(this);
+                    MFX.Address |= SuperNATURALSynthTone.Address;
+                    Debug.Print($"{nameof(TemporaryTone)}] {nameof(InitializeToneAsync)} {Part}: {SuperNATURALSynthTone.Address}");
+                    break;
+                case IntegraToneTypes.SuperNATURALDrumkit:
+                    SuperNATURALDrumKit = new SuperNATURALDrumKit(this);
+                    MFX.Address |= SuperNATURALDrumKit.Address;
+                    break;
+                case IntegraToneTypes.PCMSynthTone:
+                    PCMSynthTone = new PCMSynthTone(this);
+                    MFX.Address |= PCMSynthTone.Address;
+                    break;
+                case IntegraToneTypes.PCMDrumkit:
+                    PCMDrumKit = new PCMDrumKit(this);
+                    MFX.Address |= PCMDrumKit.Address;
+                    break;
+            }
+
+            return await base.Initialize();
+        }
+
         protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
         {
             //base.SystemExclusiveReceived(sender, e);
@@ -197,9 +238,9 @@ namespace IntegraXL.Models
                         return PCMSynthTone != null && PCMSynthTone.IsInitialized;
                     case IntegraToneTypes.PCMDrumkit:
                         return PCMDrumKit != null && PCMDrumKit.IsInitialized;
+                    default:
+                        return false;
                 }
-
-                return false;
             }
 
             protected internal set => base.IsInitialized = value;

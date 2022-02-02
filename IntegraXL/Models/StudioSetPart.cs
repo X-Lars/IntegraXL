@@ -122,7 +122,7 @@ namespace IntegraXL.Models
         {
             _Tone = device.CreateModel<IntegraTone>(Part);
 
-            InitializeToneAsync();
+            //InitializeToneAsync();
         }
 
         #endregion
@@ -130,6 +130,14 @@ namespace IntegraXL.Models
         /// <summary>
         /// Initializes the associated tone.
         /// </summary>
+        /// 
+        internal async override Task<bool> Initialize()
+        {
+            if (!_Tone.IsInitialized)
+                await Device.InitializeModel(_Tone);
+
+            return await base.Initialize();
+        }
         private async void InitializeToneAsync()
         {
             // Prevents duplicate event listeners although the method should be called only once
