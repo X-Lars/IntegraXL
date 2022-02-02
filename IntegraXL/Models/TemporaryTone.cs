@@ -56,6 +56,7 @@ namespace IntegraXL.Models
             MFX = new MFX(this);
             _Tone = device.CreateModel<IntegraTone>(Part);
 
+            // TODO: Remove from constructor
             InitializeToneAsync();
 
         }

@@ -315,7 +315,7 @@ namespace IntegraXL
 
             StudioSet      = await GetModel<StudioSet>();
 
-            TemporaryTones = await GetModel<TemporaryTones>();
+            //TemporaryTones = await GetModel<TemporaryTones>();
 
             //TemporaryTone = await GetModel<TemporaryTone>(Parts.Part01);
             //await TemporaryTone.Initialize();
