@@ -1,159 +1,95 @@
 ﻿using IntegraXL.Interfaces;
 using System.Collections.Concurrent;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace IntegraXL.Core
 {
+    /// <summary>
+    /// Manages creation and tracking of all INTEGRA-7 connections
+    /// </summary>
+    /// <remarks>
+    /// <b>IMPORTANT</b><br/>
+    /// <i>The INTEGRA-7 doesn't transmit device ID changes, do not change the device ID on the physical device when running.</i><br/>
+    /// <i>This results in unresponsive models with corrupt data.</i>
+    /// </remarks>
     public static class IntegraConnectionManager
     {
-       
-            #region Constants
+        #region Fields
 
-            /// <summary>
-            /// Defines the time in milliseconds to wait for a respons before the connection is considered lost.
-            /// </summary>
-            private const int DEVICE_CONNECTION_TIMEOUT = 1000;
+        /// <summary>
+        /// Stores a references to all connections.
+        /// </summary>
+        private static ConcurrentDictionary<int, IntegraConnection> _Connections = new();
 
-            #endregion
+        #endregion
 
-            #region Fields
+        #region Properties
 
-            /// <summary>
-            /// Stores a references to all connections.
-            /// </summary>
-            private static ConcurrentDictionary<int, IntegraConnection> _Connections = new();
+        /// <summary>
+        /// Provides a list of all available connections.
+        /// </summary>
+        /// <remarks><i>Connection property changes are noticed.</i></remarks>
+        [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
+        public static readonly ObservableCollection<IntegraConnection> Connections = new ObservableCollection<IntegraConnection>();
 
-            /// <summary>
-            /// Stores the device ID for filtering the universal non realtime messages.
-            /// </summary>
-            private static byte _DeviceID;
+        #endregion
 
-            /// <summary>
-            /// Tracks wheter the connection is valid.
-            /// </summary>
-            private static bool _IsConnected = false;
+        #region Methods
 
-            #endregion
+        /// <summary>
+        /// Gets the connection for the specified device ID.
+        /// </summary>
+        /// <param name="deviceID">The <i>zero based</i> INTEGRA-7 device ID.</param>
+        /// <returns>The existing connection or null.</returns>
+        /// <exception cref="IntegraException"></exception>
+        public static IntegraConnection? GetConnection(byte deviceID)
+        {
+            if (deviceID < 16 || deviceID > 31)
+                throw new IntegraException($"[{nameof(IntegraConnectionManager)}]\nDevice ID {deviceID} out of range. [16..31]");
 
-            public static async Task<IntegraConnection> CreateConnection(IMIDIOutputDevice midiOutputDevice, IMIDIInputDevice midiInputDevice, byte deviceID = 16)
+            if (_Connections.TryGetValue(deviceID, out IntegraConnection? existingConnection))
             {
-                _DeviceID = deviceID;
-
-                if (_Connections.TryGetValue(_DeviceID, out IntegraConnection existingConnection))
-                {
-                    return existingConnection;
-                }
-
-                IntegraConnection connection = new IntegraConnection(midiOutputDevice, midiInputDevice, _DeviceID);
-
-                try
-                {
-                    connection.Open();
-                }
-                catch (Exception e)
-                {
-                    throw new IntegraException($"[{nameof(IntegraConnectionManager)}.{nameof(CreateConnection)}]\nError opening the MIDI output device.", e);
-                }
-
-                if (await InvalidateConnection(connection))
-                {
-
-                    if (_Connections.TryAdd(connection.ID, connection))
-                    {
-                        return connection;
-                    }
-                    else
-                    {
-                        throw new IntegraException($"[{nameof(IntegraConnectionManager)}.{nameof(CreateConnection)}]\nError adding connection.");
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        connection.Close();
-                    }
-                    catch (Exception e)
-                    {
-                        throw new IntegraException($"[{nameof(IntegraConnectionManager)}.{nameof(CreateConnection)}]\nError closing the MIDI devices.", e);
-                    }
-
-
-                    return null;
-                }
+                return existingConnection;
             }
 
-            /// <summary>
-            /// Invalidates the specified connection.
-            /// </summary>
-            /// <param name="connection">The connection to invalidate.</param>
-            /// <returns>An awaitable task that returns true if the connection is valid.</returns>
-            private static async Task<bool> InvalidateConnection(IntegraConnection connection)
+            return null;
+        }
+
+        /// <summary>
+        /// Creates a new managed connection.
+        /// </summary>
+        /// <param name="deviceID">The <i>zero based</i> INTEGRA-7 device ID.</param>
+        /// <param name="midiOutputDevice">The MIDI output device to associate with the connection.</param>
+        /// <param name="midiInputDevice">The MIDI input device to associate with the connection.</param>
+        /// <returns>The newly created connection.</returns>
+        /// <exception cref="IntegraException"></exception>
+        public static IntegraConnection CreateConnection(byte deviceID, IMIDIOutputDevice midiOutputDevice, IMIDIInputDevice midiInputDevice)
+        {
+            if(deviceID < 16 || deviceID > 31)
+                throw new IntegraException($"[{nameof(IntegraConnectionManager)}]\nDevice ID {deviceID} out of range. [16..31]");
+
+            if (_Connections.ContainsKey(deviceID))
+                throw new IntegraException($"[{nameof(IntegraConnectionManager)}]\nA connection for #{deviceID} already exists.");
+
+            IntegraConnection connection = new (deviceID, midiOutputDevice, midiInputDevice);
+
+            if (_Connections.TryAdd(deviceID, connection))
             {
-                Debug.Print($"{nameof(IntegraConnectionManager)}.{nameof(InvalidateConnection)} #{_DeviceID}");
+                Debug.Print($"[{nameof(IntegraConnectionManager)}.{nameof(CreateConnection)}] #{deviceID} | SX: {midiOutputDevice.Name} | RX: {midiInputDevice.Name}");
 
-                int connectionTime = 0;
-                int connectionResolution = DEVICE_CONNECTION_TIMEOUT / 100;
+                // Raises property changed event for the property in the static collection
+                connection.ConnectionChanged += (s, e) => Connections.First(x => x == s).NotifyPropertyChanged(string.Empty);
 
-                connection.IsOpen = false;
+                Connections.Add(connection);
 
-                await Task.Factory.StartNew(() =>
-                {
-                    try
-                    {
-                        connection.SendSystemExclusiveMessage(new byte[] { 0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7 });
-                    }
-                    catch (Exception)
-                    {
-                        return false;
-                    }
-
-                    while (!connection.IsOpen)
-                    {
-                        connectionTime += connectionResolution;
-
-                        int progress = 100 - (DEVICE_CONNECTION_TIMEOUT - connectionTime) / connectionResolution;
-
-                        // TODO: Report progress
-                        Thread.Sleep(connectionResolution);
-
-                        if (connectionTime >= DEVICE_CONNECTION_TIMEOUT)
-                        {
-                            return false;
-                        }
-                    }
-
-                    return true;
-                });
-
-                return connection.IsOpen;
+                return connection;
             }
 
-            /// <summary>
-            /// Handles received MIDI long messages by filtering MIDI identity responses for the current device ID.
-            /// </summary>
-            /// <param name="sender"></param>
-            /// <param name="e"></param>
-            /// <remarks><i>When an identity response is received for the current device ID the connection is considered valid.</i></remarks>
-            private static void SystemExclusiveReceived(object sender, EventArgs e)
-            {
-                //Debug.Print($"{nameof(DeviceConnectionManager)}.{nameof(UniversalNonRealtimeReceived)} {string.Join(" ", (e.Data).Select(x => string.Format("{0:X2}", x)))}");
-                _IsConnected = true;
-                
-                //// TODO: Replace endless loop
-                //if (e.Data.Length == 15)
-                //if (e.Data[0] == 0xF0) // System exclusive status
-                //if (e.Data[1] == 0x7E) // Universal non-realtime ID
-                //if (e.Data[2] == _DeviceID) // Device ID
-                //if (e.Data[3] == 0x06) // General information
-                //if (e.Data[4] == 0x02) // Identity reply
-                //if (e.Data[5] == 0x41) // Roland ID
-                //if (e.Data[6] == 0x64 && e.Data[7] == 0x02) // Device family code
-                //if (e.Data[8] == 0x00 && e.Data[9] == 0x00) // Device family number code
-                //{ 
-                //    _IsConnected = true;
-                //}
-            }
-        
+            throw new IntegraException($"[{nameof(IntegraConnectionManager)}]\nUnable to add connection #{deviceID}.");
+        }
+
+        #endregion
     }
 }

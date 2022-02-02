@@ -98,7 +98,7 @@ namespace IntegraXL.Models
         {
             StartupExpansions = device.CreateModel<StartupExpansions>();
 
-            InitializeStartupExpansions();
+            //InitializeStartupExpansions();
         }
 
         private async void InitializeStartupExpansions()
@@ -452,6 +452,13 @@ namespace IntegraXL.Models
 
         #region Overrides
 
+        internal async override Task<bool> Initialize()
+        {
+            if (!StartupExpansions.IsInitialized)
+                await StartupExpansions.Initialize();
+
+            return await base.Initialize();
+        }
         /// <summary>
         /// Handles system exclusive events by exact matching virtual slot specific addresses.
         /// </summary>

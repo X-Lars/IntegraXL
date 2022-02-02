@@ -71,4 +71,14 @@ namespace IntegraXL.Core
 
         public VirtualSlotsState State { get; }
     }
+
+    public class IntegraConnectionStatusEventArgs : IntegraEventArgs
+    {
+        public IntegraConnectionStatusEventArgs(ConnectionStatus status)
+        {
+            Status = status;
+        }
+
+        public ConnectionStatus Status { get; }
+    }
 }

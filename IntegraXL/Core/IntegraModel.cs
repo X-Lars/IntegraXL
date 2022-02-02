@@ -535,7 +535,7 @@ namespace IntegraXL.Core
         /// <remarks><i>Models are connected by default on instantiation.</i></remarks>
         internal void Connect()
         {
-            Debug.Print($"[{nameof(IntegraModel)}] {nameof(Connect)}<{GetType().Name}>()");
+            //Debug.Print($"[{nameof(IntegraModel)}] {nameof(Connect)}<{GetType().Name}>()");
             Device.SystemExclusiveReceived += SystemExclusiveReceived;
             IsConnected = true;
         }
@@ -545,7 +545,7 @@ namespace IntegraXL.Core
         /// </summary>
         internal void Disconnect()
         {
-            Debug.Print($"[{nameof(IntegraModel)}] {nameof(Disconnect)}<{GetType().Name}>()");
+            //Debug.Print($"[{nameof(IntegraModel)}] {nameof(Disconnect)}<{GetType().Name}>()");
             Device.SystemExclusiveReceived -= SystemExclusiveReceived;
             IsConnected = false;
         }
