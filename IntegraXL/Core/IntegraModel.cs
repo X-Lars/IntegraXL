@@ -526,7 +526,15 @@ namespace IntegraXL.Core
         {
             Debug.Print($"[{nameof(IntegraModel)}] {nameof(Initialize)}<{GetType().Name}>()");
 
-            return await Device.InitializeModel(this);
+            //try
+            //{
+                return await Device.InitializeModel(this);
+            //}
+            //catch(TaskCanceledException)
+            //{
+            //    Debug.Print($"[{nameof(IntegraModel)}<{GetType().Name}>] Initialization cancelled");
+            //    return false;
+            //}
         }
 
         /// <summary>

@@ -13,16 +13,16 @@ namespace IntegraXL.Core
         /// <summary> Connection ready for data transmission. </summary>
         Connected = 0,
 
-        /// <summary> Connection not ready. </summary>
+        /// <summary> Connection could not be made. </summary>
         Disconnected = 1,
 
         /// <summary> Connection is validating. </summary>
         Validating = 2,
 
-        /// <summary> Connection error. </summary>
+        /// <summary> Connection error, MIDI error. </summary>
         Error = 32,
 
-        /// <summary> Connection not validated, initial state. </summary>
+        /// <summary> Connection not validated, initial state or cancelled validation. </summary>
         Unknown = 64
     }
 
@@ -61,6 +61,16 @@ namespace IntegraXL.Core
         /// Stores the connection status.
         /// </summary>
         private ConnectionStatus _ConnectionStatus;
+
+        /// <summary>
+        /// Lock for thread safe access to the connection's MIDI devices.
+        /// </summary>
+        public static readonly object _DeviceLock = new object();
+
+        /// <summary>
+        /// Cancellation token provider to cancel running validation tasks.
+        /// </summary>
+        private static CancellationTokenSource _CTS = new();
 
         #endregion
 
@@ -115,7 +125,7 @@ namespace IntegraXL.Core
         public byte ID { get; }
 
         /// <summary>
-        /// Gets wheter the connection is valid.
+        /// Gets wheter the connection is ready.
         /// </summary>
         [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
         public bool IsConnected
@@ -136,13 +146,13 @@ namespace IntegraXL.Core
                 if(_ConnectionStatus != value)
                 {
                     Debug.Print($"[{nameof(IntegraConnection)} #{ID}] {nameof(Status)} = {value}");
-
+                    var previous = _ConnectionStatus;
                     _ConnectionStatus = value;
                     
                     NotifyPropertyChanged();
                     NotifyPropertyChanged(nameof(IsConnected));
 
-                    ConnectionChanged?.Invoke(this, new IntegraConnectionStatusEventArgs(value));
+                    ConnectionChanged?.Invoke(this, new IntegraConnectionStatusEventArgs(value, previous));
                 }
             }
         }
@@ -175,20 +185,23 @@ namespace IntegraXL.Core
         /// Opens the connection's MIDI input and output devices.
         /// </summary>
         /// <exception cref="IntegraException"></exception>
-        internal void Open()
+        internal void OpenMidiConnection()
         {
             if (_IsOpen) return;
 
             try
             {
-                _MidiOutputDevice.Open();
-                _MidiInputDevice.Open();
-                _MidiInputDevice.LongMessageReceived += LongMessageReceived;
-                _MidiInputDevice.Start();
+                lock (_DeviceLock)
+                {
+                    _MidiOutputDevice.Open();
+                    _MidiInputDevice.Open();
+                    _MidiInputDevice.LongMessageReceived += LongMessageReceived;
+                    _MidiInputDevice.Start();
+                }
             }
             catch (Exception ex)
             {
-                throw new IntegraException($"[{nameof(IntegraConnection)}.{nameof(Open)}]\nError opening connection #{ID}", ex);
+                throw new IntegraException($"[{nameof(IntegraConnection)}.{nameof(OpenMidiConnection)}]\nError opening connection #{ID}", ex);
             }
 
             _IsOpen = true;
@@ -198,7 +211,7 @@ namespace IntegraXL.Core
         /// Closes the connection's MIDI input and output devices.
         /// </summary>
         /// <exception cref="IntegraException"></exception>
-        internal void Close()
+        internal void CloseMidiConnection()
         {
             if (!_IsOpen) return;
 
@@ -206,17 +219,64 @@ namespace IntegraXL.Core
 
             try
             {
-                _MidiInputDevice.Close();
-                _MidiInputDevice.LongMessageReceived -= LongMessageReceived;
-                _MidiOutputDevice.Close();
+                lock (_DeviceLock)
+                {
+                    _MidiInputDevice.Close();
+                    _MidiInputDevice.LongMessageReceived -= LongMessageReceived;
+                    _MidiOutputDevice.Close();
+                }
             }
             catch (Exception ex)
             {
 
-                throw new IntegraException($"[{nameof(IntegraConnection)}.{nameof(Close)}]\nError closing connection #{ID}", ex);
+                throw new IntegraException($"[{nameof(IntegraConnection)}.{nameof(CloseMidiConnection)}]\nError closing connection #{ID}", ex);
             }
 
             _IsOpen = false;
+        }
+
+        /// <summary>
+        /// Opens the connections's MIDI output device.
+        /// </summary>
+        internal void OpenMidiOutputDevice()
+        {
+            lock(_DeviceLock)
+                _MidiOutputDevice.Open();
+        }
+
+        /// <summary>
+        /// Opens the connection's MIDI input device.
+        /// </summary>
+        internal void OpenMidiInputDevice()
+        {
+            lock (_DeviceLock)
+            {
+                _MidiInputDevice.Open();
+                _MidiInputDevice.LongMessageReceived += LongMessageReceived;
+                _MidiInputDevice.Start();
+            }
+        }
+
+        /// <summary>
+        /// Closes the connection's MIDI output device.
+        /// </summary>
+        internal void CloseMidiOutputDevice()
+        {
+            lock(_DeviceLock)
+                _MidiOutputDevice.Close();
+
+        }
+
+        /// <summary>
+        /// Closes the connection's MIDI input device.
+        /// </summary>
+        internal void CloseMidiInputDevice()
+        {
+            lock (_DeviceLock)
+            {
+                _MidiInputDevice.Close();
+                _MidiInputDevice.LongMessageReceived -= LongMessageReceived;
+            }
         }
 
         /// <summary>
@@ -226,9 +286,13 @@ namespace IntegraXL.Core
         /// <exception cref="IntegraException"></exception>
         internal void SendSystemExclusiveMessage(byte[] syx)
         {
+            if (!IsConnected)
+                return;
+
             try
             {
                 Debug.Print($"SX {string.Join(" ", syx.Select(x => string.Format("{0:X2}", x)))}");
+                lock(_DeviceLock)
                 _MidiOutputDevice.SendLongMessage(syx);
             }
             catch (Exception ex)
@@ -266,10 +330,6 @@ namespace IntegraXL.Core
                         {
                             Debug.Print($"RX {systemExclusive}");
                             SystemExclusiveReceived?.Invoke(this, new IntegraSystemExclusiveEventArgs(systemExclusive));
-                        }
-                        else
-                        {
-                            Debug.Print($"SKIP {systemExclusive}");
                         }
                     }
                     catch (Exception ex)
@@ -330,12 +390,14 @@ namespace IntegraXL.Core
             if (midiInputDevice == null)
                 throw new IntegraException($"[{nameof(IntegraConnection)}]\nMIDI Input device = NULL");
 
-            Close();
+            _CTS.Cancel();
+
+            CloseMidiConnection();
 
             _MidiOutputDevice = midiOutputDevice;
             _MidiInputDevice  = midiInputDevice;
 
-            Open();
+            OpenMidiConnection();
 
             NotifyPropertyChanged(nameof(MidiOutputDevice));
             NotifyPropertyChanged(nameof(MidiInputDevice));
@@ -353,13 +415,16 @@ namespace IntegraXL.Core
             if (midiOutputDevice == null)
                 throw new IntegraException($"[{nameof(IntegraConnection)}]\nMIDI Output device = NULL");
 
-            Close();
+            _CTS.Cancel();
+
+            CloseMidiOutputDevice();
 
             _MidiOutputDevice = midiOutputDevice;
 
-            Open();
+            OpenMidiOutputDevice();
 
             NotifyPropertyChanged(nameof(MidiOutputDevice));
+
             return Invalidate();
         }
 
@@ -373,11 +438,13 @@ namespace IntegraXL.Core
             if (midiInputDevice == null)
                 throw new IntegraException($"[{nameof(IntegraConnection)}]\nMIDI Input device = NULL");
 
-            Close();
+            _CTS.Cancel();
+
+            CloseMidiInputDevice();
 
             _MidiInputDevice = midiInputDevice;
 
-            Open();
+            OpenMidiInputDevice();
 
             NotifyPropertyChanged(nameof(MidiInputDevice));
 
@@ -390,41 +457,59 @@ namespace IntegraXL.Core
         /// <returns>An awaitable task that returns the connection status.</returns>
         public Task<ConnectionStatus> Invalidate()
         {
+            if(!_CTS.TryReset())
+                _CTS = new CancellationTokenSource();
+
             Status = ConnectionStatus.Validating;
-
-            int connectionTime = 0;
-            int connectionResolution = DEVICE_CONNECTION_TIMEOUT / 100;
-
-            Open();
 
             return Task<ConnectionStatus>.Factory.StartNew(() =>
             {
                 try
                 {
-                    SendSystemExclusiveMessage(new byte[] { 0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7 });
-                }
-                catch (Exception ex)
-                {
-                    return Status = ConnectionStatus.Error;
-                }
+                    _CTS.Token.ThrowIfCancellationRequested();
 
-                while (!IsConnected)
-                {
-                    connectionTime += connectionResolution;
+                    int connectionTime = 0;
+                    int connectionResolution = DEVICE_CONNECTION_TIMEOUT / 100;
 
-                    int progress = 100 - (DEVICE_CONNECTION_TIMEOUT - connectionTime) / connectionResolution;
-
-                    //TODO: Report progress
-                    Thread.Sleep(connectionResolution);
-
-                    if (connectionTime >= DEVICE_CONNECTION_TIMEOUT)
+                    try
                     {
-                        return Status = ConnectionStatus.Disconnected;
+                        OpenMidiConnection();
+                        //SendSystemExclusiveMessage(new byte[] { 0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7 }); // Idenity request broadcast
+                        //SendSystemExclusiveMessage(new byte[] { 0xF0, 0x7E, ID, 0x06, 0x01, 0xF7 }); // Identity request device specific
+
+                        _MidiOutputDevice.SendLongMessage(new byte[] { 0xF0, 0x7E, ID, 0x06, 0x01, 0xF7 });
                     }
+                    catch (Exception ex)
+                    {
+                        return Status = ConnectionStatus.Error;
+                    }
+
+                    while (!IsConnected)
+                    {
+                        _CTS.Token.ThrowIfCancellationRequested();
+
+                        connectionTime += connectionResolution;
+
+                        int progress = 100 - (DEVICE_CONNECTION_TIMEOUT - connectionTime) / connectionResolution;
+
+                        //TODO: Report progress
+                        Thread.Sleep(connectionResolution);
+
+                        if (connectionTime >= DEVICE_CONNECTION_TIMEOUT)
+                        {
+                            return Status = ConnectionStatus.Disconnected;
+                        }
+                    }
+
+                    return Status = ConnectionStatus.Connected;
+                }
+                catch(OperationCanceledException)
+                {
+                    Debug.Print($"[{nameof(IntegraConnection)}.{nameof(Invalidate)}] #{ID} Cancelled");
+                    return Status = ConnectionStatus.Unknown;
                 }
 
-                return Status = ConnectionStatus.Connected;
-            });
+            }, _CTS.Token);
         }
 
         #endregion

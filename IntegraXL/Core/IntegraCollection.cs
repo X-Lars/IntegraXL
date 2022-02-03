@@ -110,7 +110,15 @@ namespace IntegraXL.Core
         internal protected void Add(T item)
         {
             Collection.Add(item);
-            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add));
+
+            if (Integra.UIContext != null)
+            {
+                Integra.UIContext.Post(o => CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item)), null);
+            }
+            else
+            {
+                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
+            }
         }
 
         #endregion

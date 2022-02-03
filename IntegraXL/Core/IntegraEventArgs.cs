@@ -74,11 +74,13 @@ namespace IntegraXL.Core
 
     public class IntegraConnectionStatusEventArgs : IntegraEventArgs
     {
-        public IntegraConnectionStatusEventArgs(ConnectionStatus status)
+        public IntegraConnectionStatusEventArgs(ConnectionStatus status, ConnectionStatus previous)
         {
             Status = status;
+            Previous = previous;
         }
 
         public ConnectionStatus Status { get; }
+        public ConnectionStatus Previous { get; }
     }
 }

@@ -32,7 +32,7 @@ namespace IntegraXL.Core
         /// </summary>
         /// <remarks><i>Connection property changes are noticed.</i></remarks>
         [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
-        public static readonly ObservableCollection<IntegraConnection> Connections = new ObservableCollection<IntegraConnection>();
+        public static readonly ObservableCollection<IntegraConnection> Connections = new();
 
         #endregion
 
@@ -81,8 +81,14 @@ namespace IntegraXL.Core
 
                 // Raises property changed event for the property in the static collection
                 connection.ConnectionChanged += (s, e) => Connections.First(x => x == s).NotifyPropertyChanged(string.Empty);
+                
 
-                Connections.Add(connection);
+                Connections.Clear();
+
+                foreach(var item in _Connections.Values.OrderBy(x => x.ID))
+                {
+                    Connections.Add(item);
+                }
 
                 return connection;
             }

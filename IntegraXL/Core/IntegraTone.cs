@@ -26,7 +26,7 @@ namespace IntegraXL.Core
         {
             for (int i = 0; i < Count; i++)
             {
-                await this[i].Initialize();
+                 await this[i].Initialize();
             }
 
             return IsInitialized = true;

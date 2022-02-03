@@ -19,7 +19,7 @@ namespace IntegraXL
         /// <summary>
         /// Stores the associated connection.
         /// </summary>
-        private IntegraConnection _Connection;
+        private IntegraConnection? _Connection;
 
         /// <summary>
         /// 
@@ -61,8 +61,12 @@ namespace IntegraXL
         /// </summary>
         private ICommand _PreviewCommand;
 
-        private CancellationTokenSource _ModelCTS;
-        private CancellationToken _ModelCancellationToken;
+        /// <summary>
+        /// 
+        /// </summary>
+        internal static readonly SynchronizationContext? UIContext = SynchronizationContext.Current;
+
+        private CancellationTokenSource _ModelCTS = new ();
 
         #endregion
 
@@ -127,14 +131,15 @@ namespace IntegraXL
         /// </i></remarks>
         public void SetConnection(IntegraConnection connection)
         {
-            if(_Connection != null)
-            {
-                // TODO: Connection Change
-            }
-                
             if (connection == null)
                 throw new IntegraException($"[{nameof(Integra)}.{nameof(SetConnection)}]");
 
+            if (_Connection != null)
+            {
+                // TODO: Connection Change
+                return;
+            }
+                
             DeviceID = connection.ID;
 
             _Connection = connection;
@@ -156,15 +161,10 @@ namespace IntegraXL
         {
             if (_Connection == null)
                 return IsConnected = false;
-
+            
             await _Connection.Invalidate();
 
-            if(_Connection.Status == ConnectionStatus.Connected)
-            {
-                return IsConnected = true;
-            }
-
-            return IsConnected = false;
+            return IsConnected = _Connection.IsConnected;
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace IntegraXL
             if (_Connection == null)
                 return IsInitialized = false;
 
-            if (_Connection.Status != ConnectionStatus.Connected)
+            if (!_Connection.IsConnected)
             {
                 await Connect();
 
@@ -189,26 +189,37 @@ namespace IntegraXL
                     return IsInitialized = false;
             }
 
-            foreach (var model in _Models.Values.Where(x => x.IsInitialized == false))
+            _ModelCTS = new CancellationTokenSource();
+
+            try
             {
-                await model.Initialize();
+                // Initialize collections first to reduce SX and duplicate calls
+                foreach (var model in _Models.Values.Where(x => x.IsInitialized == false && x.GetType().IsSubclassOf(typeof(IntegraCollection))))
+                {
+                    await model.Initialize();
+                }
+
+                // Initialize remaining models
+                foreach (var model in _Models.Values.Where(x => x.IsInitialized == false))
+                {
+                    await model.Initialize();
+                }
             }
+            catch(TaskCanceledException)
+            {
+                return IsInitialized = false;
+            }
+
+            _ModelCTS = new CancellationTokenSource();
 
             return IsInitialized = true;
         }
 
         private void OnConnectionChanged(object? sender, IntegraConnectionStatusEventArgs e)
         {
-            Debug.Print($"[{nameof(Integra)}] Connection Changed => {e.Status}");
-
-            if(e.Status != ConnectionStatus.Connected)
+            if (e.Previous == ConnectionStatus.Connected)
             {
-                // Cancel running tasks
-                // Disconnect models
-                // Mark models out of sync
-            }
-            else
-            {
+                _ModelCTS.Cancel();
                 // Cancel running tasks
                 // Disconnect models
                 // Mark models out of sync
@@ -646,38 +657,53 @@ namespace IntegraXL
         {
             Debug.Print($"[{nameof(Integra)}] {nameof(InitializeModel)}<{model.GetType().Name}>()");
 
-            //if (!model.IsConnected)
-            //    model.Connect();
-
-            Task<bool> task = new (() =>
+            Task<bool> task = new ( () =>
             {
-                //InitProgress(model);
-                Debug.Print($"[{nameof(IntegraTaskManager)}] Task: {model.GetType().Name}");
+            try
+            {
+                _ModelCTS.Token.ThrowIfCancellationRequested();
 
-                foreach (var request in model.Requests)
+                    //InitProgress(model);
+                    Debug.Print($"[{nameof(IntegraTaskManager)}] Task: {model.GetType().Name}");
+
+                    foreach (var request in model.Requests)
+                    {
+                        IntegraSystemExclusive systemExclusive = new(model.Address, request);
+                        systemExclusive.DeviceID = _DeviceID;
+
+                        if (_Connection == null)
+                            return false;
+
+                        _Connection.SendSystemExclusiveMessage(systemExclusive);
+                    }
+
+                    while (!model.IsInitialized)
+                    {
+                        _ModelCTS.Token.ThrowIfCancellationRequested();
+                        //await Task.Delay(100);
+                        Thread.Sleep(100);
+                    }
+
+                    //CompleteProgress(model);
+                    return true;
+                }
+                catch (OperationCanceledException)
                 {
-                    IntegraSystemExclusive systemExclusive = new (model.Address, request);
-                    systemExclusive.DeviceID = _DeviceID;
-                    _Connection.SendSystemExclusiveMessage(systemExclusive);
+                    return false;
                 }
 
-                while (!model.IsInitialized)
-                {
-                    Thread.Sleep(100);
-                }
+            }, _ModelCTS.Token);
 
-                //CompleteProgress(model);
-                return true;
-            }, _ModelCancellationToken);
-
-            task.ContinueWith((t) =>
-            {
-                Debug.Print($"[{nameof(Integra)}] {nameof(InitializeModel)}<{model.GetType().Name}>() CANCELLED");
-            }, TaskContinuationOptions.OnlyOnCanceled);
-
+            //task.ContinueWith((t) =>
+            //{
+            //    Debug.Print($"[{nameof(Integra)}] {nameof(InitializeModel)}<{model.GetType().Name}>() CANCELLED");
+            //    return false;
+            //}, TaskContinuationOptions.OnlyOnCanceled);
 
             // TODO: Error handling / Time out to prevent application lock
+            //if(!_ModelCTS.IsCancellationRequested)
             _TaskManager.Enqueue(task);
+
 
             return task;
         }
@@ -701,7 +727,7 @@ namespace IntegraXL
                 }
 
                 return true;
-            });
+            },_ModelCTS.Token);
 
             _TaskManager.Enqueue(task);
 
@@ -747,6 +773,7 @@ namespace IntegraXL
                 
                 _Connection.SendSystemExclusiveMessage(systemExclusive);
                 return true;
+
             });
 
             _TaskManager.Enqueue(task);
