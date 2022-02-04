@@ -22,11 +22,11 @@ namespace IntegraXL.Core
 
         #region Overrides
 
-        internal override async Task<bool> Initialize()
+        internal override async Task<bool> InitializeAsync()
         {
             for (int i = 0; i < Count; i++)
             {
-                 await this[i].Initialize();
+                 await this[i].InitializeAsync();
             }
 
             return IsInitialized = true;
@@ -82,6 +82,7 @@ namespace IntegraXL.Core
         public IntegraToneBanks ToneBank { get; private set; }
         public IntegraToneTypes Type { get; private set; } 
         public bool IsEditable { get; private set; }
+        public int? Variation { get; private set; }
 
         [Offset(0x0000)]
         public IBankSelect BankSelect
@@ -129,16 +130,54 @@ namespace IntegraXL.Core
                 {
                     if(e.SystemExclusive.Data[0] == MSB && e.SystemExclusive.Data[1] == LSB && e.SystemExclusive.Data[2] == PC)
                     {
-                        // TODO: Check ID for single request tone banks?
-                        int id = ((LSB % 64) * 128) + PC + 1;
+                        int id = PC + 1;
+
+                        if (ToneBank != IntegraToneBanks.GM2Tone)
+                        {
+                            id += ((LSB - (int)ToneBank & 0x00FF) % 64 * 128);
+                            Variation = null;
+                        }
+                        else
+                        {
+                            Variation = LSB;
+                        }
+
                         ToneTemplate? info = Activator.CreateInstance(typeof(ToneTemplate), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { id, e.SystemExclusive.Data }, null) as ToneTemplate;
 
                         Debug.Assert(info != null);
-                        ID = id;
-                        Name = info.Name;
+
+                        ID       = id;
+                        Name     = info.Name;
                         Category = info.Category;
-                        
+
                         NotifyPropertyChanged(string.Empty);
+                        //if (ToneBank != IntegraToneBanks.GM2Tone)
+                        //{
+                        //    var bankLSB = (int)ToneBank & 0x00FF;
+
+                        //    int id = ((LSB - bankLSB) % 64 * 128) + PC + 1;
+                        //    //int id = ((LSB % 64) * 128) + PC + 1;
+
+                        //    ToneTemplate? info = Activator.CreateInstance(typeof(ToneTemplate), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { id, e.SystemExclusive.Data }, null) as ToneTemplate;
+
+                        //    Debug.Assert(info != null);
+                        //    ID = id;
+                        //    Name = info.Name;
+                        //    Variation = null;
+                        //    Category = info.Category;
+                        //}
+                        //else
+                        //{
+                        //    int id = PC + 1;
+                        //    ToneTemplate? info = Activator.CreateInstance(typeof(ToneTemplate), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { id, e.SystemExclusive.Data }, null) as ToneTemplate;
+                        //    Debug.Assert(info != null);
+                        //    ID = id;
+                        //    Name = info.Name;
+                        //    Variation = LSB;
+                        //    Category = info.Category;
+                        //}
+
+                        //NotifyPropertyChanged(string.Empty);
                     }
                 }
             }
@@ -155,15 +194,14 @@ namespace IntegraXL.Core
             _data[1] = data[1];
             _data[2] = data[2];
 
-            // Get IBankSelect dependent properties
-            Type     = this.ToneType(); // REQUIRED: Type is required by the temporary tone
-            ToneBank = this.ToneBank();
+            IsEditable = this.IsEditable(); // REQUIRED: IsEditable is required by the temporary tone
+            Type       = this.ToneType();   // REQUIRED: Type is required by the temporary tone
+            ToneBank   = this.ToneBank();   // REQUIRED: Required to determine the tone ID
 
-            // Required data is initialized
+            // Required functional data is initialized
             Changed?.Invoke(this, new IntegraToneChangedEventArgs(this, Part));
 
-            //NotifyPropertyChanged(string.Empty);
-            // Optional data is async
+            // Request optional data
             RequestToneTemplate();
 
             return IsInitialized = true;
@@ -178,7 +216,6 @@ namespace IntegraXL.Core
         /// </summary>
         private void RequestToneTemplate()
         {
-            Debug.Print($"[{nameof(IntegraTone)}({Part})] SX");
             // TODO: check if expansion is loaded
             Device.TransmitSystemExclusive(new IntegraSystemExclusive(0x0F000402, new IntegraRequest(MSB, LSB, PC, 0x01)));
         }

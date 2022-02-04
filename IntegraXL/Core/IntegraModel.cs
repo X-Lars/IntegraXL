@@ -1,4 +1,5 @@
 ﻿using IntegraXL.Extensions;
+using IntegraXL.Models;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
@@ -84,6 +85,7 @@ namespace IntegraXL.Core
 
         protected override bool Initialize(byte[] data)
         {
+            Debug.Assert(typeof(TModel) != typeof(PCMSynthToneCommon));
             // TODO: Combine received property into the initialize method
             //if (!IsInitialized)
             //{
@@ -515,26 +517,26 @@ namespace IntegraXL.Core
 
             IsInitialized = false;
 
-            var b = Initialize();
+            var b = InitializeAsync();
         }
 
         /// <summary>
         /// Requests the device to initialize the model.
         /// </summary>
         /// <returns>An awaitable task that returns true if the model is initialized.</returns>
-        internal virtual async Task<bool> Initialize()
+        internal virtual async Task<bool> InitializeAsync()
         {
-            Debug.Print($"[{nameof(IntegraModel)}] {nameof(Initialize)}<{GetType().Name}>()");
+            Debug.Print($"[{nameof(IntegraModel)}<{GetType().Name}>.{nameof(InitializeAsync)}()]");
 
-            //try
-            //{
+            try
+            {
                 return await Device.InitializeModel(this);
-            //}
-            //catch(TaskCanceledException)
-            //{
-            //    Debug.Print($"[{nameof(IntegraModel)}<{GetType().Name}>] Initialization cancelled");
-            //    return false;
-            //}
+            }
+            catch (TaskCanceledException)
+            {
+                Debug.Print($"[{nameof(IntegraModel)}<{GetType().Name}>.{nameof(InitializeAsync)}()] Cancelled");
+                return false;
+            }
         }
 
         /// <summary>

@@ -1,11 +1,10 @@
 ﻿using IntegraXL.Core;
-using IntegraXL.Models;
 using System.Text;
 
 namespace IntegraXL.Templates
 {
     /// <summary>
-    /// Defines a structure to hold immutable studio set info.
+    /// Defines a structure to hold immutable studio set data.
     /// </summary>
     [Integra(0x0F000302, 0x00000015)]
     public sealed class StudioSetTemplate : IntegraTemplate<StudioSetTemplate>

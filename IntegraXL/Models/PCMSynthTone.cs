@@ -1,6 +1,4 @@
 ﻿using IntegraXL.Core;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace IntegraXL.Models
 {
@@ -18,17 +16,33 @@ namespace IntegraXL.Models
         {
             Address += tone.Address;
 
-            //Requests.Add(GetType().GetCustomAttribute<ModelAddress>().Request);
+            IsEditable = tone.IsEditable;
 
-            Common = new PCMSynthToneCommon(this);
-            //PMT = new PCMSynthTonePMT(this);
-            //Partials = new IntegraPCMSynthTonePartialCollection(this);
-            //Common02 = new PCMSynthToneCommon02(this);
+            if (IsEditable)
+            {
+                Common = new PCMSynthToneCommon(this);
+                //PMT = new PCMSynthTonePMT(this);
+                //Partials = new IntegraPCMSynthTonePartialCollection(this);
+                //Common02 = new PCMSynthToneCommon02(this);
+            }
+            else
+            {
+                IsInitialized = true;
+            }
         }
+
+        public bool IsEditable { get; private set; }
 
         public override bool IsInitialized 
         { 
-            get => Common.IsInitialized; 
+            get
+            {
+                if (!IsEditable)
+                    return true;
+
+                return Common.IsInitialized;
+            }
+
             protected internal set => base.IsInitialized = value; 
         }
 

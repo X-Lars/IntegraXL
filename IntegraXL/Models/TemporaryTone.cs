@@ -21,6 +21,28 @@ namespace IntegraXL.Models
 #pragma warning restore IDE0051 // Remove unused private members
 
         #endregion
+
+        #region Overrides: Model
+
+        internal override async Task<bool> InitializeAsync()
+        {
+            try
+            {
+                // IMPORTANT! Determin the tone types before making the initialization request
+                foreach (var tone in this)
+                {
+                   await tone.InitializeToneTypeAsync();
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                return false;
+            }
+
+            return await base.InitializeAsync();
+        }
+
+        #endregion
     }
 
     /// <summary>
@@ -53,12 +75,7 @@ namespace IntegraXL.Models
             // 0x00, 0x20, 0x40, 0x60, 0x00, ...
             Address[1] += (byte)((int)part % 4 * 0x20);
 
-            MFX = new MFX(this);
             _Tone = device.CreateModel<IntegraTone>(Part);
-
-            // TODO: Remove from constructor
-            InitializeToneAsync();
-
         }
 
         #region Properties
@@ -68,6 +85,11 @@ namespace IntegraXL.Models
         /// </summary>
         public IntegraToneTypes Type { get; private set; }
 
+        /// <summary>
+        /// Gets wheter the temporary tone can be modified by the user.
+        /// </summary>
+        public bool IsEditable { get; private set; }
+
         #endregion
 
         #region Properties: INTEGRA-7
@@ -76,7 +98,7 @@ namespace IntegraXL.Models
         /// Gets the SuperNATURAL acoustic tone model.
         /// </summary>
         /// <remarks>
-        /// <b>IMPORTANT:</b><br/>
+        /// <b>IMPORTANT</b><br/>
         /// <i>Can return <see langword="null"/>, check the <see cref="Type"/> property first.</i>
         /// </remarks>
         public SuperNATURALAcousticTone? SuperNATURALAcousticTone { get; private set; }
@@ -85,7 +107,7 @@ namespace IntegraXL.Models
         /// Gets the SuperNATURAL Synth tone model.
         /// </summary>
         /// <remarks>
-        /// <b>IMPORTANT:</b><br/>
+        /// <b>IMPORTANT</b><br/>
         /// <i>Can return <see langword="null"/>, check the <see cref="Type"/> property first.</i>
         /// </remarks>
         public SuperNATURALSynthTone? SuperNATURALSynthTone { get; private set; }
@@ -94,7 +116,7 @@ namespace IntegraXL.Models
         /// Gets the SuperNATURAL drum kit model.
         /// </summary>
         /// <remarks>
-        /// <b>IMPORTANT:</b><br/>
+        /// <b>IMPORTANT</b><br/>
         /// <i>Can return <see langword="null"/>, check the <see cref="Type"/> property first.</i>
         /// </remarks>
         public SuperNATURALDrumKit? SuperNATURALDrumKit { get; private set; }
@@ -103,7 +125,7 @@ namespace IntegraXL.Models
         /// Gets the PCM synth tone model.
         /// </summary>
         /// <remarks>
-        /// <b>IMPORTANT:</b><br/>
+        /// <b>IMPORTANT</b><br/>
         /// <i>Can return <see langword="null"/>, check the <see cref="Type"/> property first.</i>
         /// </remarks>
         public PCMSynthTone? PCMSynthTone { get; private set; }
@@ -112,7 +134,7 @@ namespace IntegraXL.Models
         /// Gets the PCM drum kit model.
         /// </summary>
         /// <remarks>
-        /// <b>IMPORTANT:</b><br/>
+        /// <b>IMPORTANT</b><br/>
         /// <i>Can return <see langword="null"/>, check the <see cref="Type"/> property first.</i>
         /// </remarks>
         public PCMDrumKit? PCMDrumKit { get; private set; }
@@ -120,105 +142,98 @@ namespace IntegraXL.Models
         /// <summary>
         /// Gets the tone MFX model.
         /// </summary>
-        public MFX MFX { get; private set; }
+        public MFX? MFX { get; private set; }
 
         #endregion
 
         #region Methods
 
         /// <summary>
-        /// Initializes the temporary tone type and binds the tone changed event listener.
+        /// Determines, creates and initializes the specific type of <see cref="TemporaryTone"/>.
         /// </summary>
-        private async void InitializeToneAsync()
+        /// <returns></returns>
+        /// <exception cref="IntegraException"></exception>
+        /// <remarks>
+        /// <b>IMPORTANT</b><br/>
+        /// <i>This method has to be called before the initialization request is made.</i><br/><br/>
+        /// - Determines the type of temporary tone<br/>
+        /// - Binds the tone changed event<br/>
+        /// - Sets the associated property<br/>
+        /// - Sets the associated MFX address<br/>
+        /// </remarks>
+        internal async Task<bool> InitializeToneTypeAsync()
         {
-            // Prevents duplicate event listeners although the method should be called only once
-            _Tone.Changed -= ToneChanged;
+            try
+            {
+                // Prevents duplicate event listeners although the method should be called only once
+                _Tone.Changed -= ToneChanged;
 
-            if (!_Tone.IsInitialized)
-                await Device.InitializeModel(_Tone);
+                // TODO: Can return false
+                if (!_Tone.IsInitialized)
+                    await Device.InitializeModel(_Tone);
 
-            _Tone.Changed += ToneChanged;
+                _Tone.Changed += ToneChanged;
 
-            Type = _Tone.Type;
+                Type       = _Tone.Type;
+                IsEditable = _Tone.IsEditable; // REQUIRED: Required by the child models
+            }
+            catch (TaskCanceledException)
+            {
+                return false;
+            }
 
-            //Debug.Assert(Part != Parts.Part15);
+            // TODO: Handle expansion tones that are not loaded
+
+            MFX = new MFX(this);
+
             switch (Type)
             {
                 case IntegraToneTypes.SuperNATURALAcousticTone:
                     SuperNATURALAcousticTone = new SuperNATURALAcousticTone(this);
                     MFX.Address |= SuperNATURALAcousticTone.Address;
-                    Debug.Print($"{nameof(TemporaryTone)}] {nameof(InitializeToneAsync)} {Part}: {SuperNATURALAcousticTone.Address}");
                     break;
+
                 case IntegraToneTypes.SuperNATURALSynthTone:
                     SuperNATURALSynthTone = new SuperNATURALSynthTone(this);
                     MFX.Address |= SuperNATURALSynthTone.Address;
-                    Debug.Print($"{nameof(TemporaryTone)}] {nameof(InitializeToneAsync)} {Part}: {SuperNATURALSynthTone.Address}");
                     break;
+
                 case IntegraToneTypes.SuperNATURALDrumkit:
                     SuperNATURALDrumKit = new SuperNATURALDrumKit(this);
                     MFX.Address |= SuperNATURALDrumKit.Address;
                     break;
+
                 case IntegraToneTypes.PCMSynthTone:
                     PCMSynthTone = new PCMSynthTone(this);
                     MFX.Address |= PCMSynthTone.Address;
                     break;
+
                 case IntegraToneTypes.PCMDrumkit:
                     PCMDrumKit = new PCMDrumKit(this);
                     MFX.Address |= PCMDrumKit.Address;
                     break;
+
+                default:
+                    throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(InitializeToneTypeAsync)}({Part})]\nUnspecified temporary tone type.");
             }
 
-            Debug.Print($"{nameof(TemporaryTone)}] {nameof(InitializeToneAsync)} MFX: {MFX.Address}");
+            return true;
         }
 
         #endregion
 
         #region Overrides: Model
 
-        internal async override Task<bool> Initialize()
+        internal async override Task<bool> InitializeAsync()
         {
-            _Tone.Changed -= ToneChanged;
+            if (!await InitializeToneTypeAsync())
+                return false;
 
-            if (!_Tone.IsInitialized)
-                await Device.InitializeModel(_Tone);
-
-            _Tone.Changed += ToneChanged;
-
-            Type = _Tone.Type;
-
-            switch (Type)
-            {
-                case IntegraToneTypes.SuperNATURALAcousticTone:
-                    SuperNATURALAcousticTone = new SuperNATURALAcousticTone(this);
-                    MFX.Address |= SuperNATURALAcousticTone.Address;
-                    Debug.Print($"{nameof(TemporaryTone)}] {nameof(InitializeToneAsync)} {Part}: {SuperNATURALAcousticTone.Address}");
-                    break;
-                case IntegraToneTypes.SuperNATURALSynthTone:
-                    SuperNATURALSynthTone = new SuperNATURALSynthTone(this);
-                    MFX.Address |= SuperNATURALSynthTone.Address;
-                    Debug.Print($"{nameof(TemporaryTone)}] {nameof(InitializeToneAsync)} {Part}: {SuperNATURALSynthTone.Address}");
-                    break;
-                case IntegraToneTypes.SuperNATURALDrumkit:
-                    SuperNATURALDrumKit = new SuperNATURALDrumKit(this);
-                    MFX.Address |= SuperNATURALDrumKit.Address;
-                    break;
-                case IntegraToneTypes.PCMSynthTone:
-                    PCMSynthTone = new PCMSynthTone(this);
-                    MFX.Address |= PCMSynthTone.Address;
-                    break;
-                case IntegraToneTypes.PCMDrumkit:
-                    PCMDrumKit = new PCMDrumKit(this);
-                    MFX.Address |= PCMDrumKit.Address;
-                    break;
-            }
-
-            return await base.Initialize();
+            return await base.InitializeAsync();
         }
 
-        protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
-        {
-            //base.SystemExclusiveReceived(sender, e);
-        }
+        protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e) { }
+
         /// <summary>
         /// Gets wheter the temorary tone is initialized.
         /// </summary>
@@ -230,14 +245,19 @@ namespace IntegraXL.Models
                 {
                     case IntegraToneTypes.SuperNATURALAcousticTone:
                         return SuperNATURALAcousticTone != null && SuperNATURALAcousticTone.IsInitialized;
+
                     case IntegraToneTypes.SuperNATURALSynthTone:
                         return SuperNATURALSynthTone != null && SuperNATURALSynthTone.IsInitialized;
+
                     case IntegraToneTypes.SuperNATURALDrumkit:
                         return SuperNATURALDrumKit != null && SuperNATURALDrumKit.IsInitialized;
+
                     case IntegraToneTypes.PCMSynthTone:
                         return PCMSynthTone != null && PCMSynthTone.IsInitialized;
+
                     case IntegraToneTypes.PCMDrumkit:
                         return PCMDrumKit != null && PCMDrumKit.IsInitialized;
+
                     default:
                         return false;
                 }

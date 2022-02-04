@@ -8,6 +8,7 @@ namespace IntegraXL.Core
     /// <summary>
     /// Defines the possible <see cref="IntegraConnection"/> status values.
     /// </summary>
+    [Flags]
     public enum ConnectionStatus
     {
         /// <summary> Connection ready for data transmission. </summary>
@@ -286,9 +287,6 @@ namespace IntegraXL.Core
         /// <exception cref="IntegraException"></exception>
         internal void SendSystemExclusiveMessage(byte[] syx)
         {
-            if (!IsConnected)
-                return;
-
             try
             {
                 Debug.Print($"SX {string.Join(" ", syx.Select(x => string.Format("{0:X2}", x)))}");
@@ -297,6 +295,7 @@ namespace IntegraXL.Core
             }
             catch (Exception ex)
             {
+                // TODO: Device handle can be invalid
                 throw new IntegraException($"[{nameof(IntegraConnection)}.{nameof(SendSystemExclusiveMessage)}]\nError sending system exclusive.\nConnection #{ID}", ex);
             }
         }
@@ -415,6 +414,8 @@ namespace IntegraXL.Core
             if (midiOutputDevice == null)
                 throw new IntegraException($"[{nameof(IntegraConnection)}]\nMIDI Output device = NULL");
 
+            // TODO: ? Call Change() method
+
             _CTS.Cancel();
 
             CloseMidiOutputDevice();
@@ -438,6 +439,7 @@ namespace IntegraXL.Core
             if (midiInputDevice == null)
                 throw new IntegraException($"[{nameof(IntegraConnection)}]\nMIDI Input device = NULL");
 
+            // TODO: ? Call Change() method
             _CTS.Cancel();
 
             CloseMidiInputDevice();
@@ -457,12 +459,14 @@ namespace IntegraXL.Core
         /// <returns>An awaitable task that returns the connection status.</returns>
         public Task<ConnectionStatus> Invalidate()
         {
+            // TOOD: ? Make static
+
             if(!_CTS.TryReset())
                 _CTS = new CancellationTokenSource();
 
             Status = ConnectionStatus.Validating;
 
-            return Task<ConnectionStatus>.Factory.StartNew(() =>
+            return Task<ConnectionStatus>.Run(async () =>
             {
                 try
                 {
@@ -493,7 +497,8 @@ namespace IntegraXL.Core
                         int progress = 100 - (DEVICE_CONNECTION_TIMEOUT - connectionTime) / connectionResolution;
 
                         //TODO: Report progress
-                        Thread.Sleep(connectionResolution);
+                        await Task.Delay(connectionResolution, _CTS.Token);
+                        //Thread.Sleep(connectionResolution);
 
                         if (connectionTime >= DEVICE_CONNECTION_TIMEOUT)
                         {
@@ -506,6 +511,9 @@ namespace IntegraXL.Core
                 catch(OperationCanceledException)
                 {
                     Debug.Print($"[{nameof(IntegraConnection)}.{nameof(Invalidate)}] #{ID} Cancelled");
+
+                    // TODO: ? Add cancelled status
+
                     return Status = ConnectionStatus.Unknown;
                 }
 

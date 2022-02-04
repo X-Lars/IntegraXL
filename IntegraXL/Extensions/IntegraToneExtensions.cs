@@ -231,15 +231,15 @@ namespace IntegraXL.Extensions
         }
 
         /// <summary>
-        /// Gets wheter the tone is editable based on its most significant request byte.
+        /// Gets wheter the tone is editable by the user.
         /// </summary>
-        /// <param name="msb">The most significant byte of the tone's request.</param>
+        /// <param name="instance">The most significant byte of the tone's request.</param>
         /// <returns>True if the tone is editable.</returns>
-        public static bool IsEditable(byte msb)
+        public static bool IsEditable(this IBankSelect instance)
         {
-            switch (msb)
+            switch (instance.MSB)
             {
-                // ExPCM
+                // ExPCM Expansion
                 case 0x60:
                 case 0x61:
 

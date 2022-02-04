@@ -8,29 +8,35 @@ namespace IntegraXL.Core
     /// </summary>
     public class IntegraTaskManager
     {
-        private BlockingCollection<Task<bool>> _RequestsQueue = new BlockingCollection<Task<bool>>();
+        private readonly BlockingCollection<Task<bool>> _RequestsQueue = new ();
 
         /// <summary>
         /// Initializes and starts the task manager.
         /// </summary>
         internal void Initialize()
         {
-            var thread = new Thread(new ThreadStart(Execute));
-
-            thread.IsBackground = true;
-            thread.Name = "TaskManager Thread";
+            var thread = new Thread(new ThreadStart(Execute))
+            {
+                IsBackground = true,
+                Name = "TaskManager Thread"
+            };
             thread.Start();
         }
 
-        public bool IsCancelled { get; private set; }
         /// <summary>
         /// Enqueues a task based request to the task manager queue.
         /// </summary>
         /// <param name="task">The task to enqueue for execution.</param>
-        internal void Enqueue(Task<bool> task)
+        internal void Enqueue(Task<bool> task, CancellationToken token)
         {
-            if (!task.IsCompleted && !task.IsCanceled)
-                _RequestsQueue.Add(task);
+            try
+            {
+                _RequestsQueue.Add(task, token);
+            }
+            catch(OperationCanceledException)
+            {
+                Debug.Print($"[{nameof(IntegraTaskManager)}.{nameof(Enqueue)}] Cancelled");
+            }
         }
 
         /// <summary>
@@ -42,8 +48,8 @@ namespace IntegraXL.Core
             {
                 try
                 {
-                    if (!task.IsCompleted)
-                        task.Start();
+                    //if (!task.IsCompleted)
+                    task.Start();
 
                     await task;
                 }

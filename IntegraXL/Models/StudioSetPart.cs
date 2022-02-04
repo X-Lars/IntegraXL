@@ -2,6 +2,7 @@
 using IntegraXL.Extensions;
 using IntegraXL.Interfaces;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace IntegraXL.Models
 {
@@ -131,13 +132,24 @@ namespace IntegraXL.Models
         /// Initializes the associated tone.
         /// </summary>
         /// 
-        internal async override Task<bool> Initialize()
+        internal async override Task<bool> InitializeAsync()
         {
-            if (!_Tone.IsInitialized)
-                await Device.InitializeModel(_Tone);
+            Debug.Print($"[{nameof(IntegraModel)}<{GetType().Name}>.{nameof(InitializeAsync)}()]");
 
-            return await base.Initialize();
+            try
+            {
+                if (!_Tone.IsInitialized)
+                    await Device.InitializeModel(_Tone);
+
+                return await base.InitializeAsync();
+            }
+            catch(TaskCanceledException)
+            {
+                Debug.Print($"[{nameof(IntegraModel)}<{GetType().Name}>.{nameof(InitializeAsync)}()] Cancelled");
+                return false;
+            }
         }
+
         private async void InitializeToneAsync()
         {
             // Prevents duplicate event listeners although the method should be called only once

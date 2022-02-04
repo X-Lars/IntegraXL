@@ -707,8 +707,8 @@ namespace IntegraXL.Core
         [Description("SRX-12 PCM Expansion Tone")]                  SRX12Tone       = 0x5D1A,
         [Description("SuperNATURAL Synth User Tone")]               SNSUserTone     = 0x5F00,
         [Description("SuperNATURAL Synth Preset Tone")]             SNSPresetTone   = 0x5F40,
-        [Description("ExPCM PCM Expansion Drum Kit")]               ExPCMDrum       = 0x6000,
-        [Description("ExPCM PCM Expansion Tone")]                   ExPCMTone       = 0x6100,
+        [Description("ExPCM Expansion Drum Kit")]                   ExPCMDrum       = 0x6000,
+        [Description("ExPCM Expansion Tone")]                       ExPCMTone       = 0x6100,
         [Description("GM2 Drum Kit")]                               GM2Drum         = 0x7800,
         [Description("GM2 Tone")]                                   GM2Tone         = 0x7900,
     }

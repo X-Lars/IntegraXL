@@ -155,6 +155,10 @@ namespace IntegraXL.Core
             }
 
             checkSum %= 128;
+
+            if (checkSum == 0)
+                return Checksum = 0;
+
             checkSum  = 128 - checkSum;
 
             return Checksum = (byte)checkSum;

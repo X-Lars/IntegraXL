@@ -15,17 +15,35 @@ namespace IntegraXL.Models
         public PCMDrumKit(TemporaryTone tone) : base(tone.Device)
         {
             Address += tone.Address;
-            
-            Common = new PCMDrumKitCommon(this);
 
-            //CompEQ = new DrumKitCommonCompEQ(this);
-            //Partials = new IntegraPCMDrumKitPartialCollection(this);
-            //Common02 = new PCMDrumKitCommon02(this);
+            IsEditable = tone.IsEditable;
+
+            if (IsEditable)
+            {
+                Common = new PCMDrumKitCommon(this);
+
+                //CompEQ = new DrumKitCommonCompEQ(this);
+                //Partials = new IntegraPCMDrumKitPartialCollection(this);
+                //Common02 = new PCMDrumKitCommon02(this);
+            }
+            else
+            {
+                IsInitialized = true;
+            }
         }
+
+        public bool IsEditable { get; private set; }
 
         public override bool IsInitialized 
         { 
-            get => Common.IsInitialized; 
+            get
+            {
+                if (!IsEditable)
+                    return true;
+
+                return Common.IsInitialized;
+            }
+
             protected internal set => base.IsInitialized = value; 
         }
 

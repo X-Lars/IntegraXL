@@ -191,26 +191,31 @@ namespace IntegraXL
 
             _ModelCTS = new CancellationTokenSource();
 
-            try
-            {
+            //try
+            //{
                 // Initialize collections first to reduce SX and duplicate calls
                 foreach (var model in _Models.Values.Where(x => x.IsInitialized == false && x.GetType().IsSubclassOf(typeof(IntegraCollection))))
                 {
-                    await model.Initialize();
+                    if(!_ModelCTS.IsCancellationRequested)
+                    await model.InitializeAsync();
                 }
 
                 // Initialize remaining models
                 foreach (var model in _Models.Values.Where(x => x.IsInitialized == false))
                 {
-                    await model.Initialize();
+                if(!_ModelCTS.IsCancellationRequested)
+                    await model.InitializeAsync();
                 }
-            }
-            catch(TaskCanceledException)
-            {
-                return IsInitialized = false;
-            }
 
-            _ModelCTS = new CancellationTokenSource();
+            if (_ModelCTS.IsCancellationRequested)
+                return IsInitialized = false;
+            //}
+            //catch(TaskCanceledException)
+            //{
+            //    return IsInitialized = false;
+            //}
+
+            //_ModelCTS = new CancellationTokenSource();
 
             return IsInitialized = true;
         }
@@ -474,6 +479,7 @@ namespace IntegraXL
             StudioSets    = CreateModel<StudioSets>();
             SelectedTones = CreateModel<IntegraTones>();
             StudioSet     = CreateModel<StudioSet>();
+            TemporaryTones = CreateModel<TemporaryTones>();
         }
 
         /// <summary>
@@ -563,7 +569,7 @@ namespace IntegraXL
             try
             {
                 if (!model.IsInitialized)
-                    await model.Initialize();
+                    await model.InitializeAsync();
             }
             catch (Exception ex)
             {
@@ -589,7 +595,7 @@ namespace IntegraXL
             IntegraToneBank model = CreateToneBank(type);
 
             if(!model.IsInitialized)
-                await model.Initialize();
+                await model.InitializeAsync();
 
             return model;
         }
@@ -648,6 +654,8 @@ namespace IntegraXL
             return InitializeModel(model);
         }
 
+
+
         /// <summary>
         /// Initializes an INTEGRA-7 model with data.
         /// </summary>
@@ -657,12 +665,8 @@ namespace IntegraXL
         {
             Debug.Print($"[{nameof(Integra)}] {nameof(InitializeModel)}<{model.GetType().Name}>()");
 
-            Task<bool> task = new ( () =>
+            Task<bool> task = new (() =>
             {
-            try
-            {
-                _ModelCTS.Token.ThrowIfCancellationRequested();
-
                     //InitProgress(model);
                     Debug.Print($"[{nameof(IntegraTaskManager)}] Task: {model.GetType().Name}");
 
@@ -671,26 +675,25 @@ namespace IntegraXL
                         IntegraSystemExclusive systemExclusive = new(model.Address, request);
                         systemExclusive.DeviceID = _DeviceID;
 
-                        if (_Connection == null)
-                            return false;
+                    //if (_Connection == null)
+                    //    return false;
 
-                        _Connection.SendSystemExclusiveMessage(systemExclusive);
+                    _Connection.SendSystemExclusiveMessage(systemExclusive);
                     }
 
                     while (!model.IsInitialized)
                     {
-                        _ModelCTS.Token.ThrowIfCancellationRequested();
-                        //await Task.Delay(100);
-                        Thread.Sleep(100);
+                    if (_ModelCTS.IsCancellationRequested)
+                        return false;
+                        //_ModelCTS.Token.ThrowIfCancellationRequested();
+                        //await Task.Delay(100, _ModelCTS.Token);
+
+                        //Task.Delay(100);
+                        //Thread.Sleep(100);
                     }
 
                     //CompleteProgress(model);
                     return true;
-                }
-                catch (OperationCanceledException)
-                {
-                    return false;
-                }
 
             }, _ModelCTS.Token);
 
@@ -702,7 +705,7 @@ namespace IntegraXL
 
             // TODO: Error handling / Time out to prevent application lock
             //if(!_ModelCTS.IsCancellationRequested)
-            _TaskManager.Enqueue(task);
+            _TaskManager.Enqueue(task, _ModelCTS.Token);
 
 
             return task;
@@ -729,7 +732,7 @@ namespace IntegraXL
                 return true;
             },_ModelCTS.Token);
 
-            _TaskManager.Enqueue(task);
+            _TaskManager.Enqueue(task, _ModelCTS.Token);
 
             return task;
         }
@@ -774,9 +777,9 @@ namespace IntegraXL
                 _Connection.SendSystemExclusiveMessage(systemExclusive);
                 return true;
 
-            });
+            }, _ModelCTS.Token);
 
-            _TaskManager.Enqueue(task);
+            _TaskManager.Enqueue(task, _ModelCTS.Token);
         }
 
         #endregion

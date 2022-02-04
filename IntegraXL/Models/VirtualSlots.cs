@@ -446,12 +446,12 @@ namespace IntegraXL.Models
 
         #region Overrides
 
-        internal async override Task<bool> Initialize()
+        internal async override Task<bool> InitializeAsync()
         {
             if (!StartupExpansions.IsInitialized)
-                await StartupExpansions.Initialize();
+                await StartupExpansions.InitializeAsync();
 
-            return await base.Initialize();
+            return await base.InitializeAsync();
         }
         /// <summary>
         /// Handles system exclusive events by exact matching virtual slot specific addresses.

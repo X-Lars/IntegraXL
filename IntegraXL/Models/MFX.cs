@@ -1,13 +1,6 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Interfaces;
 using IntegraXL.Models.Parameters;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IntegraXL.Models
 {
@@ -39,8 +32,18 @@ namespace IntegraXL.Models
 
         public MFX(TemporaryTone temporaryTone) : base(temporaryTone.Device)
         {
+            IsEditable = temporaryTone.IsEditable;
+
+            if(!IsEditable)
+            {
+                IsInitialized = true;
+                Type = IntegraMFXTypes.Thru;
+                SetParameterProvider();
+            }
             //Debug.Print($"[{nameof(MFX)}] Contructor: {Address:X4}, 0x{Size:X4}");
         }
+
+        public bool IsEditable { get; private set; }
 
         #region Properties : INTEGRA-7
 

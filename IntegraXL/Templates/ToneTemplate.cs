@@ -5,7 +5,7 @@ using System.Text;
 namespace IntegraXL.Templates
 {
     /// <summary>
-    /// Defines a structure to hold immutable tone info.
+    /// Defines a structure to hold immutable tone data.
     /// </summary>
     [Integra(0x0F000402, 0x00000015)]
     public sealed class ToneTemplate : IntegraTemplate<ToneTemplate>, IBankSelect
@@ -22,9 +22,10 @@ namespace IntegraXL.Templates
         {
             MSB = data[0];
             LSB = data[1];
-            PC = data[2];
+            PC  = data[2];
+
             Category = (IntegraToneCategories)data[3];
-            Name = Encoding.ASCII.GetString(data, 5, 12);
+            Name     = Encoding.ASCII.GetString(data, 5, 12);
         }
 #pragma warning restore IDE0051 // Remove unused private members
 
