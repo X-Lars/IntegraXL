@@ -15,7 +15,7 @@ namespace IntegraXL.Templates
         /// <summary>
         /// Creates and initializes a new <see cref="ToneTemplate"/> instance.
         /// </summary>
-        /// <param name="id">The ID of the tone.</param>
+        /// <param name="id">The ID of the template for display purpose.</param>
         /// <param name="data">The data to initialize the template.</param>
 #pragma warning disable IDE0051 // Remove unused private members
         private ToneTemplate(int id, byte[] data) : base(id, data)
@@ -44,7 +44,6 @@ namespace IntegraXL.Templates
         public IntegraToneCategories Category { get; }
 
         #endregion
-
 
         #region Interface: IBankSelect
 
@@ -81,9 +80,9 @@ namespace IntegraXL.Templates
         #region Overrides: Object
 
         /// <summary>
-        /// Provides a user friendly <see cref="string"/> representation of the template.
+        /// Provides string that represents the current template.
         /// </summary>
-        /// <returns>A user friendly <see cref="string"/> representation of the template.</returns>
+        /// <returns>A string that represents the current template.</returns>
         public override string ToString()
         {
             return $"{ID:0000} {Name, -15} [{Category}] (0x{MSB:X2} 0x{LSB:X2} 0x{PC:X2})";

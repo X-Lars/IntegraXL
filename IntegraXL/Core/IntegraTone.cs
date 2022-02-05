@@ -7,21 +7,28 @@ using System.Reflection;
 
 namespace IntegraXL.Core
 {
+    /// <summary>
+    /// Collection of all selected INTEGRA-7 tones.
+    /// </summary>
     [Integra(0x18002006, 0x00000003, 16)]
     public sealed class IntegraTones : IntegraPartialCollection<IntegraTone> 
     {
         #region Constructor
 
         /// <summary>
-        /// 
+        /// Creates a new <see cref="IntegraTones"/> instance.
         /// </summary>
-        /// <param name="device"></param>
+        /// <param name="device">The device to connect the collection.</param>
         internal IntegraTones(Integra device) : base(device) { }
 
         #endregion
 
-        #region Overrides
+        #region Overrides: Model
 
+        /// <summary>
+        /// Initializes the <see cref="IntegraTones"/> collection.
+        /// </summary>
+        /// <returns>An awaitable task that returns always true.</returns>
         internal override async Task<bool> InitializeAsync()
         {
             for (int i = 0; i < Count; i++)
@@ -32,6 +39,10 @@ namespace IntegraXL.Core
             return IsInitialized = true;
         }
 
+        /// <summary>
+        /// Gets the unique identifier for the collection.
+        /// </summary>
+        /// <returns>A unique identifier for the collection.</returns>
         protected internal override int GetUID()
         {
             return (int)(0xFF0000FF | (Address | 0x00FFFF00));
@@ -43,14 +54,14 @@ namespace IntegraXL.Core
     /// <summary>
     /// Defines a model to receive, set and delegate tone selection.
     /// </summary>
-    /// <remarks><i>The model covers the <see cref="StudioSetPart.ToneBankSelectMSB"/>, <see cref="StudioSetPart.ToneBankSelectLSB"/> and <see cref="StudioSetPart.ToneProgramNumber"/> properties.</i></remarks>
+    /// <remarks><i>The model covers the <see cref="StudioSetPart.Tone"/> property.</i></remarks>
     [Integra(0x18002006, 0x00000003)]
     public sealed class IntegraTone : IntegraPartial<IntegraTone>, IBankSelect
     {
         #region Fields: INTEGRA-7
 
         [Offset(0x0000)]
-        private byte[] _data = new byte[3];
+        private byte[] _BankSelect = new byte[3];
 
         #endregion
 
@@ -70,19 +81,54 @@ namespace IntegraXL.Core
         /// </summary>
         /// <param name="device">The device to connect the model.</param>
         /// <param name="part">The model's associated part.</param>
+#pragma warning disable IDE0051 // Remove unused private members
         private IntegraTone(Integra device, Parts part) : base(device, part) { }
+#pragma warning restore IDE0051 // Remove unused private members
 
         #endregion
 
         #region Properties
-        
+
+        /// <summary>
+        /// Gets the ID of the tone.
+        /// </summary>
+        /// <remarks><i>For display purpose only, do not use for calculations.</i></remarks>
         public int ID { get; private set; }
-        public new string? Name { get; private set; }
+
+        /// <summary>
+        /// Gets the tone name.
+        /// </summary>
+        public override string Name { get; protected set; } = string.Empty;
+
+        /// <summary>
+        /// Gets the tone category.
+        /// </summary>
         public IntegraToneCategories Category { get; private set; }
+
+        /// <summary>
+        /// Gets the tone bank.
+        /// </summary>
         public IntegraToneBanks ToneBank { get; private set; }
+
+        /// <summary>
+        /// Gets the tone type.
+        /// </summary>
         public IntegraToneTypes Type { get; private set; } 
+
+        /// <summary>
+        /// Gets wheter the tone is editable.
+        /// </summary>
         public bool IsEditable { get; private set; }
+
+        /// <summary>
+        /// Gets the tone variation.
+        /// </summary>
+        /// <remarks><i>Only for GM2 tone bank and drum kit.</i></remarks>
         public int? Variation { get; private set; }
+
+        #endregion
+
+        #region Properties: INTEGRA-7
 
         [Offset(0x0000)]
         public IBankSelect BankSelect
@@ -90,29 +136,30 @@ namespace IntegraXL.Core
             get => this;
             set
             {
-                if(value != null & !this.Equals(value))
+                if (value != null & !this.Equals(value))
                 {
                     Initialize(new byte[] { value.MSB, value.LSB, value.PC });
                     NotifyPropertyChanged();
                 }
             }
         }
-        #region Properties: INTEGRA-7
-
-        //[Offset(0x0000)]
-        public byte MSB { get { return _data[0]; } }
-
-        //[Offset(0x0001)]
-        public byte LSB { get { return _data[1]; } }
-
-        //[Offset(0x0002)]
-        public byte PC { get { return _data[2]; } }
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Requests the tone template.
+        /// </summary>
+        private void RequestToneTemplate()
+        {
+            // TODO: check if expansion is loaded
+            Device.TransmitSystemExclusive(new IntegraSystemExclusive(0x0F000402, new IntegraRequest(MSB, LSB, PC, 0x01)));
+        }
+
         #endregion
 
-        #region Overrides
+        #region Overrides: Model
 
         protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
         {
@@ -132,14 +179,21 @@ namespace IntegraXL.Core
                     {
                         int id = PC + 1;
 
-                        if (ToneBank != IntegraToneBanks.GM2Tone)
+                        switch(ToneBank)
                         {
-                            id += ((LSB - (int)ToneBank & 0x00FF) % 64 * 128);
-                            Variation = null;
-                        }
-                        else
-                        {
-                            Variation = LSB;
+                            case IntegraToneBanks.GM2Tone:
+                                Variation = LSB;
+                                break;
+
+                            case IntegraToneBanks.GM2Drum:
+                                id = 1;
+                                Variation = PC;
+                                break;
+
+                            default:
+                                id += ((LSB - (int)ToneBank & 0x00FF) % 64 * 128);
+                                Variation = null;
+                                break;
                         }
 
                         ToneTemplate? info = Activator.CreateInstance(typeof(ToneTemplate), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { id, e.SystemExclusive.Data }, null) as ToneTemplate;
@@ -151,33 +205,6 @@ namespace IntegraXL.Core
                         Category = info.Category;
 
                         NotifyPropertyChanged(string.Empty);
-                        //if (ToneBank != IntegraToneBanks.GM2Tone)
-                        //{
-                        //    var bankLSB = (int)ToneBank & 0x00FF;
-
-                        //    int id = ((LSB - bankLSB) % 64 * 128) + PC + 1;
-                        //    //int id = ((LSB % 64) * 128) + PC + 1;
-
-                        //    ToneTemplate? info = Activator.CreateInstance(typeof(ToneTemplate), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { id, e.SystemExclusive.Data }, null) as ToneTemplate;
-
-                        //    Debug.Assert(info != null);
-                        //    ID = id;
-                        //    Name = info.Name;
-                        //    Variation = null;
-                        //    Category = info.Category;
-                        //}
-                        //else
-                        //{
-                        //    int id = PC + 1;
-                        //    ToneTemplate? info = Activator.CreateInstance(typeof(ToneTemplate), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { id, e.SystemExclusive.Data }, null) as ToneTemplate;
-                        //    Debug.Assert(info != null);
-                        //    ID = id;
-                        //    Name = info.Name;
-                        //    Variation = LSB;
-                        //    Category = info.Category;
-                        //}
-
-                        //NotifyPropertyChanged(string.Empty);
                     }
                 }
             }
@@ -190,9 +217,9 @@ namespace IntegraXL.Core
         /// <returns>Always true.</returns>
         protected override bool Initialize(byte[] data)
         {
-            _data[0] = data[0];
-            _data[1] = data[1];
-            _data[2] = data[2];
+            _BankSelect[0] = data[0];
+            _BankSelect[1] = data[1];
+            _BankSelect[2] = data[2];
 
             IsEditable = this.IsEditable(); // REQUIRED: IsEditable is required by the temporary tone
             Type       = this.ToneType();   // REQUIRED: Type is required by the temporary tone
@@ -209,26 +236,41 @@ namespace IntegraXL.Core
 
         #endregion
 
-        #region Methods
+        #region Overrides: Object
 
         /// <summary>
-        /// Generates a request to the device to get the tone template.
+        /// Provides string that represents the current tone.
         /// </summary>
-        private void RequestToneTemplate()
+        /// <returns>A string that represents the current tone.</returns>
+        public override string ToString()
         {
-            // TODO: check if expansion is loaded
-            Device.TransmitSystemExclusive(new IntegraSystemExclusive(0x0F000402, new IntegraRequest(MSB, LSB, PC, 0x01)));
+            return $"{ID:0000} {Name,-15} [{Category}] (0x{MSB:X2} 0x{LSB:X2} 0x{PC:X2})";
         }
 
         #endregion
 
-        #region Interfaces: IBankSelect
+        #region Interface: IBankSelect
 
         /// <summary>
-        /// Gets whether this <see cref="IBankSelect"/> interface equals the provided <see cref="IBankSelect"/> interface.
+        /// Gets the (M)ost (S)ignificant (B)yte to select the tone.
         /// </summary>
-        /// <param name="compare">The <see cref="IBankSelect"/> interface to compare.</param>
-        /// <returns>True if both <see cref="IBankSelect"/> interfaces have equal property values.</returns>
+        public byte MSB { get { return _BankSelect[0]; } }
+
+        /// <summary>
+        /// Gets the (L)east (S)ignificant (B)yte to select the tone.
+        /// </summary>
+        public byte LSB { get { return _BankSelect[1]; } }
+
+        /// <summary>
+        /// Gets the (P)rogram (C)hange byte to select the tone.
+        /// </summary>
+        public byte PC { get { return _BankSelect[2]; } }
+
+        /// <summary>
+        /// Gets whether the current <see cref="IBankSelect"/> interface data equals the provided <see cref="IBankSelect"/> interface data.
+        /// </summary>
+        /// <param name="bankSelect">The interface to compare.</param>
+        /// <returns>True if both <see cref="IBankSelect"/> interfaces have equal data.</returns>
         public bool Equals(IBankSelect? bankSelect)
         {
             if (bankSelect is null)
@@ -239,13 +281,5 @@ namespace IntegraXL.Core
 
         #endregion
 
-        /// <summary>
-        /// Provides a user friendly <see cref="string"/> representation of the model.
-        /// </summary>
-        /// <returns>A user friendly <see cref="string"/> representation of the model.</returns>
-        public override string ToString()
-        {
-            return $"{ID:0000} {Name, -15} [{Category}] (0x{MSB:X2} 0x{LSB:X2} 0x{PC:X2})";
-        }
     }
 }

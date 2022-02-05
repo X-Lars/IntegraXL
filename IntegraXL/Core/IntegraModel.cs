@@ -600,7 +600,7 @@ namespace IntegraXL.Core
         /// <summary>
         /// Gets the name of the model.
         /// </summary>
-        public string Name { get; protected set; }
+        public virtual string Name { get; protected set; }
         
         /// <summary>
         /// Gets the fixed model size in bytes or the fixed item count for collection types.<br/>

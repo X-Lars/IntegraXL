@@ -12,17 +12,18 @@ namespace IntegraXL.Templates
         #region Constructor
 
         /// <summary>
-        /// Creates and initializes a new <see cref="StudioSetTemplate"/>.
+        /// Creates and initializes a new <see cref="StudioSetTemplate"/> instance.
         /// </summary>
-        /// <param name="id">The ID of the studio set.</param>
+        /// <param name="id">The ID of the template for display purpose.</param>
         /// <param name="data">The data to initialize the template.</param>
 #pragma warning disable IDE0051 // Remove unused private members
         private StudioSetTemplate(int id, byte[] data) : base(id, data)
         {
-            Name = Encoding.ASCII.GetString(data, 5, 16);
             MSB  = data[0];
             LSB  = data[1];
             PC   = data[2];
+
+            Name = Encoding.ASCII.GetString(data, 5, 16);
         }
 #pragma warning restore IDE0051 // Remove unused private members
 
@@ -36,17 +37,17 @@ namespace IntegraXL.Templates
         public string Name { get; }
 
         /// <summary>
-        /// Gets the (M)ost (S)ignificant (B)yte to request the studio set.
+        /// Gets the (M)ost (S)ignificant (B)yte to select the studio set.
         /// </summary>
         public byte MSB { get; }
 
         /// <summary>
-        /// Gets the (L)east (S)ignificant (B)yte to request the studio set.
+        /// Gets the (L)east (S)ignificant (B)yte to select the studio set.
         /// </summary>
         public byte LSB { get; }
 
         /// <summary>
-        /// Gets the (P)rogram (C)hange to request the studio set.
+        /// Gets the (P)rogram (C)hange to select the studio set.
         /// </summary>
         public byte PC { get; }
 
@@ -55,12 +56,12 @@ namespace IntegraXL.Templates
         #region Overrides: Object
 
         /// <summary>
-        /// Provides a user friendly <see cref="string"/> representation of the template.
+        /// Provides string that represents the current template.
         /// </summary>
-        /// <returns>A user friendly <see cref="string"/> representation of the template.</returns>
+        /// <returns>A string that represents the current template.</returns>
         public override string ToString()
         {
-            return $"{ID:0000} {Name, -15} (0x{MSB:X2} 0x{LSB:X2} 0x{PC:X2})";
+            return $"{ID:00} {Name, -15} (0x{MSB:X2} 0x{LSB:X2} 0x{PC:X2})";
         }
 
         #endregion
