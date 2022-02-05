@@ -231,23 +231,10 @@ namespace IntegraXL.Core
         /// <returns>True if both <see cref="IBankSelect"/> interfaces have equal property values.</returns>
         public bool Equals(IBankSelect? bankSelect)
         {
-            if (bankSelect == null)
+            if (bankSelect is null)
                 return false;
 
             return MSB == bankSelect.MSB && LSB == bankSelect.LSB && PC == bankSelect.PC;
-        }
-
-        /// <summary>
-        /// Gets whether this <see cref="IBankSelect.MSB"/>, <see cref="IBankSelect.LSB"/> and <see cref="IBankSelect.PC"/> equal the <paramref name="bytes"/> array.
-        /// </summary>
-        /// <param name="compare">The <see cref="byte"/>[] array to compare.</param>
-        /// <returns>True if this <see cref="IBankSelect"/> interface property values equal the <paramref name="bytes"/> array in <i>respective</i> order.</returns>
-        public bool Equals(byte[]? bytes)
-        {
-            if (bytes == null || bytes.Length != 3)
-                return false;
-
-            return MSB == bytes[0] && LSB == bytes[1] && PC == bytes[3];
         }
 
         #endregion

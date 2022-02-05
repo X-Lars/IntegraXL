@@ -7,11 +7,13 @@ using System.Diagnostics;
 namespace IntegraXL.Models
 {
     /// <summary>
-    /// Defines a collection of all INTEGRA-7 studio set parts.
+    /// Collection of all INTEGRA-7 studio set part models.
     /// </summary>
     [Integra(0x18002000, 0x00001000)]
     public sealed class StudioSetParts : IntegraPartialCollection<StudioSetPart>
     {
+        #region Constructor
+
         /// <summary>
         /// Creates a new <see cref="StudioSetParts"/> collection instance.
         /// </summary>
@@ -19,6 +21,8 @@ namespace IntegraXL.Models
 #pragma warning disable IDE0051 // Remove unused private members
         private StudioSetParts(Integra device) : base(device) { }
 #pragma warning restore IDE0051 // Remove unused private members
+
+        #endregion
     }
 
     /// <summary>
@@ -27,18 +31,21 @@ namespace IntegraXL.Models
     [Integra(0x18002000, 0x0000004D)]
     public sealed class StudioSetPart : IntegraPartial<StudioSetPart>
     {
+        #region Fields
+
         /// <summary>
         /// Stores a reference to the associated tone.
         /// </summary>
-        private IntegraTone _Tone;
+        private readonly IntegraTone _Tone;
 
         #region Fields: INTEGRA-7
 
         [Offset(0x0000)] private IntegraChannels _ReceiveChannel;
         [Offset(0x0001)] private IntegraSwitch _ReceiveSwitch;
 
-        // TODO: Combine MSB, LSB & PC to one field
+        // Combines the MSB, LSB & PC into one field
         [Offset(0x0006)] private byte[] _BankSelect = new byte[3];
+
         //[Offset(0x0006)] private byte _ToneBankSelectMSB;
         //[Offset(0x0007)] private byte _ToneBankSelectLSB;
         //[Offset(0x0008)] private byte _ToneProgramNumber;
@@ -112,6 +119,8 @@ namespace IntegraXL.Models
 
         #endregion
 
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -122,45 +131,10 @@ namespace IntegraXL.Models
         private StudioSetPart(Integra device, Parts part) : base(device, part) 
         {
             _Tone = device.CreateModel<IntegraTone>(Part);
-
-            //InitializeToneAsync();
         }
 
         #endregion
-
-        /// <summary>
-        /// Initializes the associated tone.
-        /// </summary>
-        /// 
-        internal async override Task<bool> InitializeAsync()
-        {
-            Debug.Print($"[{nameof(IntegraModel)}<{GetType().Name}>.{nameof(InitializeAsync)}()]");
-
-            try
-            {
-                if (!_Tone.IsInitialized)
-                    await Device.InitializeModel(_Tone);
-
-                return await base.InitializeAsync();
-            }
-            catch(TaskCanceledException)
-            {
-                Debug.Print($"[{nameof(IntegraModel)}<{GetType().Name}>.{nameof(InitializeAsync)}()] Cancelled");
-                return false;
-            }
-        }
-
-        private async void InitializeToneAsync()
-        {
-            // Prevents duplicate event listeners although the method should be called only once
-            //_Tone.Changed -= ToneChanged;
-
-            if (!_Tone.IsInitialized)
-                await Device.InitializeModel(_Tone);
-
-            //_Tone.Changed += ToneChanged;
-        }
-
+        
         #region Properties: INTEGRA-7
 
         [Offset(0x0000)]
@@ -212,37 +186,37 @@ namespace IntegraXL.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <remarks><i>The select MSB, LSB and PC are combined in the <see cref="Tone"/> property.</i></remarks>
+        /// <remarks><i>The bank select properties are combined in the <see cref="Tone"/> property.</i></remarks>
         //[Offset(0x0006)]
         [Bindable(BindableSupport.No)]
         public byte ToneBankSelectMSB
         {
             get => Tone.MSB;
-            set => throw new NotImplementedException($"[{nameof(StudioSetPart)}({Part})]\nUse the {nameof(Tone)}.{nameof(Tone.MSB)} property instead.");
+            set => throw new NotImplementedException($"[{nameof(StudioSetPart)}({Part}).{nameof(ToneBankSelectMSB)}]\nUse the {nameof(Tone)}.{nameof(Tone.MSB)} property instead.");
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <remarks><i>The select MSB, LSB and PC are combined in the <see cref="Tone"/> property.</i></remarks>
+        /// <remarks><i>The bank select properties are combined in the <see cref="Tone"/> property.</i></remarks>
         //[Offset(0x0007)]
         [Bindable(BindableSupport.No)]
         public byte ToneBankSelectLSB
         {
             get => Tone.LSB;
-            set => throw new NotImplementedException($"[{nameof(StudioSetPart)}({Part})]\nUse the {nameof(Tone)}.{nameof(Tone.LSB)} property instead.");
+            set => throw new NotImplementedException($"[{nameof(StudioSetPart)}({Part}).{nameof(ToneBankSelectLSB)}]\nUse the {nameof(Tone)}.{nameof(Tone.LSB)} property instead.");
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <remarks><i>The select MSB, LSB and PC are combined in the <see cref="Tone"/> property.</i></remarks>
+        /// <remarks><i>The bank select properties are combined in the <see cref="Tone"/> property.</i></remarks>
         //[Offset(0x0008)]
         [Bindable(BindableSupport.No)]
         public byte ToneProgramNumber
         {
             get => Tone.PC;
-            set => throw new NotImplementedException($"[{nameof(StudioSetPart)}({Part})]\nUse the {nameof(Tone)}.{nameof(Tone.PC)} property instead.");
+            set => throw new NotImplementedException($"[{nameof(StudioSetPart)}({Part}).{nameof(ToneProgramNumber)}]\nUse the {nameof(Tone)}.{nameof(Tone.PC)} property instead.");
         }
 
         [Offset(0x0009)]
@@ -1085,6 +1059,31 @@ namespace IntegraXL.Models
                     _MotionalSurroundAmbienceSendLevel = value.Serialize();
                     NotifyPropertyChanged();
                 }
+            }
+        }
+
+        #endregion
+
+        #region Overrides: Model
+
+        /// <summary>
+        /// Initializes the studio set part.
+        /// </summary>
+        /// <returns>An awaitable task that returns true if the studio set part is initialized.</returns>
+        internal async override Task<bool> InitializeAsync()
+        {
+            Debug.Print($"[{nameof(IntegraModel)}<{GetType().Name}>.{nameof(InitializeAsync)}()]");
+
+            try
+            {
+                if (!_Tone.IsInitialized)
+                    await Device.InitializeModel(_Tone);
+
+                return await base.InitializeAsync();
+            }
+            catch (TaskCanceledException)
+            {
+                return false;
             }
         }
 

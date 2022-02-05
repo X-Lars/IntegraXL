@@ -13,7 +13,7 @@ namespace IntegraXL.Templates
         #region Constructor
 
         /// <summary>
-        /// Creates and initializes a new <see cref="ToneTemplate"/>.
+        /// Creates and initializes a new <see cref="ToneTemplate"/> instance.
         /// </summary>
         /// <param name="id">The ID of the tone.</param>
         /// <param name="data">The data to initialize the template.</param>
@@ -49,47 +49,31 @@ namespace IntegraXL.Templates
         #region Interface: IBankSelect
 
         /// <summary>
-        /// Gets the (M)ost (S)ignificant (B)yte to request the tone.
+        /// Gets the (M)ost (S)ignificant (B)yte to select the tone.
         /// </summary>
         public byte MSB { get; }
 
         /// <summary>
-        /// Gets the (L)east (S)ignificant (B)yte to request the tone.
+        /// Gets the (L)east (S)ignificant (B)yte to select the tone.
         /// </summary>
         public byte LSB { get; }
 
         /// <summary>
-        /// Gets the (P)rogram (C)hange to request the tone.
+        /// Gets the (P)rogram (C)hange byte to select the tone.
         /// </summary>
         public byte PC { get; }
 
         /// <summary>
-        /// Gets whether this <see cref="IBankSelect"/> interface equals the provided <see cref="IBankSelect"/> interface.
+        /// Gets whether the current <see cref="IBankSelect"/> interface data equals the provided <see cref="IBankSelect"/> interface data.
         /// </summary>
-        /// <param name="compare">The <see cref="IBankSelect"/> interface to compare.</param>
-        /// <returns>True if both <see cref="IBankSelect"/> interfaces have equal property values.</returns>
-        public bool Equals(IBankSelect? compare)
+        /// <param name="bankSelect">The interface to compare.</param>
+        /// <returns>True if both <see cref="IBankSelect"/> interfaces have equal data.</returns>
+        public bool Equals(IBankSelect? bankSelect)
         {
-            if (compare == null)
+            if (bankSelect is null)
                 return false;
 
-            return MSB == compare.MSB && LSB == compare.LSB && PC == compare.PC;
-        }
-
-        /// <summary>
-        /// Gets whether this <see cref="IBankSelect.MSB"/>, <see cref="IBankSelect.LSB"/> and <see cref="IBankSelect.PC"/> equal the bytes of the provided <see cref="byte"/>[] array.
-        /// </summary>
-        /// <param name="compare">The <see cref="byte"/>[] array to compare.</param>
-        /// <returns>True if this <see cref="IBankSelect"/> interface property values equal the <see cref="byte"/>[] array in <i>respective</i> order.</returns>
-        public bool Equals(byte[]? compare)
-        {
-            if (compare == null)
-                return false;
-
-            if (compare.Length != 3)
-                return false;
-
-            return MSB == compare[0] && LSB == compare[1] && PC == compare[2];
+            return MSB == bankSelect.MSB && LSB == bankSelect.LSB && PC == bankSelect.PC;
         }
 
         #endregion

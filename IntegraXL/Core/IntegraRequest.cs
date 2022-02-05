@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines an address based structure to specify parameters to generate a data request to the INTEGRA-7.
     /// </summary>
-    public class IntegraRequest : IntegraAddress
+    public sealed class IntegraRequest : IntegraAddress
     {
         #region Constructor
 

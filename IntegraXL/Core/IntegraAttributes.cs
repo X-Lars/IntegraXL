@@ -1,44 +1,21 @@
-﻿
-using System.Diagnostics;
-
-namespace IntegraXL.Core
+﻿namespace IntegraXL.Core
 {
-
     /// <summary>
     /// Attribute to ensure required values are provided to generate an INTEGRA-7 model, template or collection initialization request.
     /// </summary>
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class IntegraAttribute : Attribute
     {
         #region Constructor
 
         /// <summary>
-        /// Creates and initializes a new <see cref="IntegraAttribute"/>, decorates the class as INTEGRA-7 collection.
+        /// Creates and initializes a new <see cref="IntegraAttribute"/> instance.
         /// </summary>
         public IntegraAttribute(int address, int request, int size = 0)
         {
-            //Debug.Assert(address != 0);
-            //Debug.Assert(request != 0 || size != 0);
-
             Address = address;
-
-            if (request != 0)
-            {
-                Request = request;
-            }
-            else
-            {
-                Request = size;
-            }
-                
-            if(size != 0)
-            {
-                Size = size;
-            }
-            else
-            {
-                Size = ((request & 0x00000F00) >> 8) * 128 + (request & 0x000000FF);
-            }
-           
+            Request = request != 0 ? request : size;
+            Size    = size != 0 ? size : ((request & 0x00000F00) >> 8) * 128 + (request & 0x000000FF);
         }
 
         #endregion
@@ -46,12 +23,12 @@ namespace IntegraXL.Core
         #region Properties
 
         /// <summary>
-        /// Gets the physical INTEGRA-7 address of the model, template or collection.
+        /// Gets the physical INTEGRA-7 memory address of the model, template or collection.
         /// </summary>
         public int Address { get; }
 
         /// <summary>
-        /// Gets the request to generate an INTEGRA-7 initialization request.
+        /// Gets the parameters to generate an INTEGRA-7 data request to initialize the model, template or collection.
         /// </summary>
         public int Request { get; }
 
@@ -64,23 +41,31 @@ namespace IntegraXL.Core
     }
 
     /// <summary>
-    /// Specifies the offset of a property or field into the containing model.
+    /// Attribute to mark a field or property as INTEGRA-7 property and specify its offset into the containing model's address.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
     internal class OffsetAttribute : Attribute
     {
-        /// <summary>
-        /// Creates and initalizes a new offset attribute.
-        /// </summary>
-        /// <param name="offset">The offset into the containing model.</param>
-        public OffsetAttribute(short offset)
-        {
-            Value = ((((offset & 0xFF00) >> 8) * 128) + offset & 0x00FF);
-        }
+        #region Constructor
 
         /// <summary>
-        /// Gets the offset into the containing model of the associated property or field.
+        /// Creates and initalizes a new <see cref="OffsetAttribute"/> instance.
+        /// </summary>
+        /// <param name="offset">The offset into the containing model's address.</param>
+        public OffsetAttribute(short offset)
+        {
+            Value = (((offset & 0xFF00) >> 8) * 128) + offset & 0x00FF;
+        }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the offset into the containing model's address.
         /// </summary>
         public int Value { get; }
+
+        #endregion
     }
 }
