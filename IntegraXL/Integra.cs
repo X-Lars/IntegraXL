@@ -533,23 +533,23 @@ namespace IntegraXL
 
             Debug.Assert(instance != null);
 
-            if (_Models.TryGetValue(instance.GetModelHash(), out IntegraModel? model))
+            if (_Models.TryGetValue(instance.GetUID(), out IntegraModel? model))
             {
                 Debug.Print($"[{nameof(Integra)}] {nameof(CreateModel)}<{typeof(TModel).Name}>({part}) From Cache");
                 
-                // IMPORTANT: Disconnect to remove the device event listener to free all references to the newly created instance?
+                // IMPORTANT: ? Disconnect to remove the device event listener to free all references to the newly created instance?
                 instance.Disconnect();
                 instance = null;
 
                 return (TModel)model;
             }
 
-            if(!_Models.TryAdd(instance.GetModelHash(), instance))
+            if(!_Models.TryAdd(instance.GetUID(), instance))
             {
                 throw new IntegraException("Integra model cache model");
             }
 
-            Debug.Print($"[{nameof(Integra)}] {nameof(CreateModel)}<{typeof(TModel).Name}>({part}) New Cache Entry: 0x{instance.GetModelHash():X4}");
+            Debug.Print($"[{nameof(Integra)}] {nameof(CreateModel)}<{typeof(TModel).Name}>({part}) New Cache Entry: 0x{instance.GetUID():X4}");
 
             return (TModel)instance;
         }
@@ -618,7 +618,7 @@ namespace IntegraXL
 
             Debug.Assert(instance != null);
 
-            if (_Models.TryGetValue(instance.GetModelHash(), out IntegraModel? model))
+            if (_Models.TryGetValue(instance.GetUID(), out IntegraModel? model))
             {
                 Debug.Print($"[{nameof(Integra)}] {nameof(CreateToneBank)}({type}) From Cache");
 
@@ -629,12 +629,12 @@ namespace IntegraXL
                 return (IntegraToneBank)model;
             }
 
-            if (!_Models.TryAdd(instance.GetModelHash(), instance))
+            if (!_Models.TryAdd(instance.GetUID(), instance))
             {
                 throw new IntegraException("Integra model cache model");
             }
 
-            Debug.Print($"[{nameof(Integra)}] {nameof(CreateToneBank)}({type}) New Cache Entry: 0x{instance.GetModelHash():X4}");
+            Debug.Print($"[{nameof(Integra)}] {nameof(CreateToneBank)}({type}) New Cache Entry: 0x{instance.GetUID():X4}");
 
             return instance;
         }

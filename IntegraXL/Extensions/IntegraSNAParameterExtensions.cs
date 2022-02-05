@@ -4,7 +4,7 @@ using IntegraXL.Models.Parameters;
 
 namespace IntegraXL.Extensions
 {
-    public static class IntegraSNAExtensions
+    public static class IntegraSNAParameterExtensions
     {
         public static IntegraParameter<byte> GetParameterType(this SuperNATURALAcousticToneCommon instance)
         {

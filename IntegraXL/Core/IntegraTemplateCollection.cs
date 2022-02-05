@@ -101,7 +101,7 @@ namespace IntegraXL.Core
         /// <i>The first two bytes of the offset represent the bank select MSB and LSB.</i><br/>
         /// <i>The last two bytes are maxed out to specify a template collection.</i><br/>
         /// </remarks>
-        protected internal override int GetModelHash()
+        protected internal override int GetUID()
         {
             return Requests[0] | 0x0000FFFF;
         }

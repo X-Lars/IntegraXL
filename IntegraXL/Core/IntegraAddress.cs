@@ -1,92 +1,116 @@
-﻿using System.Diagnostics;
-using System.Runtime.CompilerServices;
-
-[assembly: InternalsVisibleTo("IntegraXLTest")]
-
-namespace IntegraXL.Core
+﻿namespace IntegraXL.Core
 {
     /// <summary>
-    /// - Ensures that individual bytes are within the MIDI range of 0x7F.
+    /// Defines a structure to reference a physical INTEGRA-7 memory address.
     /// </summary>
+    /// <remarks><i>
+    /// - Implicitly assignable from and to </i><see cref="int"/><i> and </i><see cref="byte"/>[].<i><br/>
+    /// - Provides arithmetic and logical operator overloads.<br/>
+    /// - Ensures that individual bytes are within the MIDI range.</i> [0x00..0x7F]<i><br/>
+    /// </i></remarks>
     public class IntegraAddress
     {
+        #region Fields
+
+        /// <summary>
+        /// Stores the indiviual address bytes.
+        /// </summary>
+        private readonly byte[] _Bytes = new byte[4];
+
+        #endregion
+
         #region Constructor
 
-        internal IntegraAddress() { }
+        /// <summary>
+        /// Creates a new <see cref="IntegraAddress"/> instance with default value.
+        /// </summary>
+        /// <remarks><i>Defaults to 0x00000000.</i></remarks>
+        public IntegraAddress() { }
 
-        internal IntegraAddress(int address)
+        /// <summary>
+        /// Creates a new <see cref="IntegraAddress"/> instance initialized with the specified address.
+        /// </summary>
+        /// <param name="address">The address to initialize.</param>
+        /// <remarks><i>The address is split into a byte array and requires each byte to be within the MIDI range.</i> [0x00..0x7F]</remarks>
+        public IntegraAddress(int address)
         {
-            this[0] = (byte)((address & 0xFF000000) >> 24);
-            this[1] = (byte)((address & 0xFF0000) >> 16);
-            this[2] = (byte)((address & 0xFF00) >> 8);
-            this[3] = (byte)((address & 0xFF));
+            try
+            {
+                this[0] = (byte)((address & 0xFF000000) >> 24);
+                this[1] = (byte)((address & 0xFF0000) >> 16);
+                this[2] = (byte)((address & 0xFF00) >> 8);
+                this[3] = (byte)((address & 0xFF));
+            }
+            catch { throw; }
         }
 
-        internal IntegraAddress(byte[] address)
+        /// <summary>
+        /// Creates a new <see cref="IntegraAddress"/> instance initialized with the specified address.
+        /// </summary>
+        /// <param name="address">The address to initialize.</param>
+        /// <remarks><i>The address is required to be 4 bytes in length and requires each byte to be within the MIDI range.</i> [0x00..0x7F]</remarks>
+        public IntegraAddress(byte[] address)
         {
-            Debug.Assert(address.Length == 4);
-
-            this[0] = address[0];
-            this[1] = address[1];
-            this[2] = address[2];
-            this[3] = address[3];
+            try
+            {
+                this[0] = address[0];
+                this[1] = address[1];
+                this[2] = address[2];
+                this[3] = address[3];
+            }
+            catch { throw; }
         }
 
         #endregion
 
         #region Properties
 
-        internal byte this[int index]
+        /// <summary>
+        /// Gets the address byte at the specified index.
+        /// </summary>
+        /// <param name="index">The index of the address byte.</param>
+        /// <returns>The address byte at the specified index.</returns>
+        /// <exception cref="IndexOutOfRangeException"></exception>
+        /// <exception cref="OverflowException"></exception>
+        public byte this[int index]
         {
-            get { return Address[index]; }
+            get { return _Bytes[index]; }
 
             set 
             {
-                Debug.Assert(index >= 0 && index < 4, $"[{nameof(IntegraAddress)}[{index}]]\nIndex out of range [0..3].");
-                Debug.Assert(value <= 0x7F, $"[{nameof(IntegraAddress)}[{index}]]\nValue out of range [0x00..0x7F]. {this}");
+                if(index < 0 || index > 3)
+                    throw new IndexOutOfRangeException($"[{nameof(IntegraAddress)}[{index}]]\nThe index is out of range [0..3].");
 
-                Address[index] = value;
-            }
-        }
+                if (value > IntegraConstants.MAX_MIDI_VALUE)
+                    throw new OverflowException($"[{nameof(IntegraAddress)}[{index}]]\nThe value exceeds the maximum MIDI value of 0x{IntegraConstants.MAX_MIDI_VALUE:X2}.");
 
-        internal byte[] Address { get; } = new byte[4];
-
-        #endregion
-
-        #region Methods
-
-        internal bool InRange(IntegraAddress min, IntegraAddress max)
-        {
-            if (min > max)
-            {
-                return this >= max && this <= min;
-            }
-            else
-            {
-                return this >= min && this <= max;
+                _Bytes[index] = value;
             }
         }
 
         #endregion
 
-        #region Conversion
+        #region Operators
 
         /// <summary>
-        /// Implicitly converts an <see cref="IntegraAddress"/> to a <see cref="byte"/>[].
+        /// Implicitly makes an <see cref="IntegraAddress"/> assignable to a <see cref="byte"/>[].
         /// </summary>
-        public static implicit operator byte[](IntegraAddress instance) => instance.Address;
+        /// <param name="rhs">The right hand side address.</param>
+        public static implicit operator byte[](IntegraAddress rhs) => rhs._Bytes;
 
         /// <summary>
-        /// Implicitly creates a new <see cref="IntegraAddress"/> from a <see cref="byte"/>[].
+        /// Implicitly makes a <see cref="byte"/>[] assignable to a new <see cref="IntegraAddress"/> instance.
         /// </summary>
-        public static implicit operator IntegraAddress(byte[] address) => new IntegraAddress(address);
+        /// <param name="rhs">The right hand side address bytes.</param>
+        public static implicit operator IntegraAddress(byte[] rhs) => new (rhs);
 
         /// <summary>
-        /// Implicitly converts an <see cref="IntegraAddress"/> to an <see cref="int"/>.
+        /// Implicitly makes an <see cref="IntegraAddress"/> assignable to an <see cref="int"/>.
         /// </summary>
-        public static implicit operator int(IntegraAddress instance)
+        /// <param name="rhs">The right hand side address.</param>
+        public static implicit operator int(IntegraAddress rhs)
         {
-            IntegraAddress address = new IntegraAddress(instance.Address);
+            IntegraAddress address = new (rhs._Bytes);
 
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(address);
@@ -95,85 +119,78 @@ namespace IntegraXL.Core
         }
 
         /// <summary>
-        /// Implicitly creates a new <see cref="IntegraAddress"/> from an <see cref="int"/>.
+        /// Implicitly makes an <see cref="int"/> assignable to a new <see cref="IntegraAddress"/> instance.
         /// </summary>
-        public static implicit operator IntegraAddress(int address)
+        /// <param name="rhs">The right hand side integer address.</param>
+        public static implicit operator IntegraAddress(int rhs)
         {
-            byte[] bytes = BitConverter.GetBytes(address);
+            byte[] bytes = BitConverter.GetBytes(rhs);
 
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(bytes);
 
-            return new IntegraAddress(bytes);
+            return new (bytes);
         }
 
-        #endregion
-
-        #region Operator Overloads
-
         /// <summary>
-        /// Overloads the == operator to compare two INTEGRA-7 addresses.
+        /// Overloads the equality operator to compare two addresses.
         /// </summary>
-        /// <param name="lhs">The address to compare.</param>
-        /// <param name="rhs">The address to compare to.</param>
-        /// <returns>True if the addresses refer to the same INTEGRA-7 address, false otherwise.</returns>
+        /// <param name="lhs">The left hand side address.</param>
+        /// <param name="rhs">The right hand side address.</param>
+        /// <returns>True if the addresses reference to the same physical address.</returns>
         public static bool operator ==(IntegraAddress lhs, IntegraAddress rhs)
         {
-            // Object cast is important to prevent stack overflow
-            if ((object)lhs == null)
-                return (object)rhs == null;
+            // IMPORTANT: Object cast is required to prevent stack overflow
+            if (lhs is null)
+                return rhs is null;
 
             return lhs.Equals(rhs);
         }
 
         /// <summary>
-        /// Overloads the != operator to compare two INTEGRA-7 addresses.
+        /// Overloads the inequality operator to compare two addresses.
         /// </summary>
-        /// <param name="lhs">The address to compare.</param>
-        /// <param name="rhs">The address to compare to.</param>
-        /// <returns>True if the addresses don't refer to the same INTEGRA-7 address, false otherwise.</returns>
+        /// <param name="lhs">The left hand side address.</param>
+        /// <param name="rhs">The right hand side address.</param>
+        /// <returns>True if the addresses don't reference to the same physical address.</returns>
         public static bool operator !=(IntegraAddress lhs, IntegraAddress rhs)
         {
             return !(lhs == rhs);
         }
 
         /// <summary>
-        /// Overloads the &lt; operator to compare two INTEGRA-7 addresses.
+        /// Overloads the smaller than operator to compare two addresses.
         /// </summary>
-        /// <param name="lhs">The address to compare.</param>
-        /// <param name="rhs">The address to compare to.</param>
-        /// <returns>True if the left hand side address is smaller, false otherwise.</returns>
+        /// <param name="lhs">The left hand side address.</param>
+        /// <param name="rhs">The right hand side address.</param>
+        /// <returns>True if the left hand side address is smaller.</returns>
         public static bool operator <(IntegraAddress lhs, IntegraAddress rhs)
         {
             return (int)lhs < (int)rhs;
         }
 
         /// <summary>
-        /// Overloads the &gt; operator to compare two INTEGRA-7 addresses.
+        /// Overloads the greater than operator to compare two addresses.
         /// </summary>
-        /// <param name="lhs">The address to compare.</param>
-        /// <param name="rhs">The address to compare to.</param>
-        /// <returns>True if the left hand side address is greater, false otherwise.</returns>
+        /// <param name="lhs">The left hand side address.</param>
+        /// <param name="rhs">The right hand side address.</param>
+        /// <returns>True if the left hand side address is greater.</returns>
         public static bool operator >(IntegraAddress lhs, IntegraAddress rhs)
         {
             return (int)lhs > (int)rhs;
         }
 
-        //public static IntegraAddress operator -(IntegraAddress lhs, IntegraAddress rhs)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-
         /// <summary>
-        /// Overloads the + operator to add two INTEGRA-7 addresses to create an offset.
+        /// Overloads the addition operator to add two addresses.
         /// </summary>
-        /// <param name="lhs">The address to apply the offset.</param>
-        /// <param name="rhs">The address specifying the offset.</param>
-        /// <returns>A new <see cref="IntegraAddress"/> with the offset applied.</returns>
+        /// <param name="lhs">The left hand side address.</param>
+        /// <param name="rhs">The right hand side address.</param>
+        /// <returns>A new <see cref="IntegraAddress"/> with summed result.</returns>
+        /// <exception cref="OverflowException"/>
+        /// <remarks><i>Adds two addresses maintaining the per byte maximum MIDI range.</i> [0x00 ... 0x7F]</remarks>
         public static IntegraAddress operator +(IntegraAddress lhs, IntegraAddress rhs)
         {
-            byte[] sum = new IntegraAddress(lhs.Address);
+            byte[] sum = new IntegraAddress(lhs._Bytes);
 
             sum[0] += rhs[0];
             sum[1] += rhs[1];
@@ -199,42 +216,44 @@ namespace IntegraXL.Core
             }
 
             if (sum[0] > IntegraConstants.MAX_MIDI_VALUE)
-                throw new OverflowException($"[{nameof(IntegraAddress)}]\nAddress addition results to a MIDI overflow.");
+                throw new OverflowException($"[{nameof(IntegraAddress)}]\nAddition of {lhs} and {rhs} results in a MIDI overflow.");
 
             return sum;
         }
 
         #endregion
 
-        #region Overrides
+        #region Overrides: Object
 
         /// <summary>
-        /// Determines whether the specified object and this class refer to the same INTEGRA-7 address.
+        /// Determines whether the specified object references the the same physical address.
         /// </summary>
-        /// <param name="obj">The object to compare for equality.</param>
-        /// <returns>True if the object and this class refer to the same address, false otherwise.</returns>
-        public override bool Equals(object? obj)
+        /// <param name="obj">The object to compare with the current address.</param>
+        /// <returns>True if the specified object references the same physical address.</returns>
+        public sealed override bool Equals(object? obj)
         {
-            IntegraAddress? address = obj as IntegraAddress;
-
-            if (address is null)
+            if (obj is not IntegraAddress address)
                 return false;
 
-            return Address.SequenceEqual(address.Address);
+            return _Bytes.SequenceEqual(address._Bytes);
         }
 
         /// <summary>
-        /// Override to retreive a hash code based on the INTEGRA-7 address associated with this class.
+        /// Returns the default hash function code for the current address.
         /// </summary>
-        /// <returns>The hash code for the address.</returns>
-        public override int GetHashCode()
+        /// <returns>A hash code for the current address.</returns>
+        public sealed override int GetHashCode()
         {
             return base.GetHashCode();
         }
 
+        /// <summary>
+        /// Returns a string that represents the current address.
+        /// </summary>
+        /// <returns>A string representation of the current address.</returns>
         public override string ToString()
         {
-            return "0x" + ((int)this).ToString("X4");
+            return $"0x {(int)this:X4}";
         }
 
         #endregion

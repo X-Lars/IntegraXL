@@ -19,9 +19,9 @@ namespace IntegraXL.Core
 
         public Parts Part { get; }
 
-        protected internal override int GetModelHash()
+        protected internal override int GetUID()
         {
-            return base.GetModelHash() | (int)Part << 8;
+            return base.GetUID() | (int)Part << 8;
         }
     }
 }

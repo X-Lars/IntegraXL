@@ -1,120 +1,65 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace IntegraXL.Core
+﻿namespace IntegraXL.Core
 {
+    /// <summary>
+    /// Defines an address based structure to specify parameters to generate a data request to the INTEGRA-7.
+    /// </summary>
     public class IntegraRequest : IntegraAddress
     {
         #region Constructor
 
+        /// <summary>
+        /// Creates a new <see cref="IntegraRequest"/> instance with default value.
+        /// </summary>
+        /// <remarks><i>Defaults to 0x00000000.</i></remarks>
         public IntegraRequest() : base() { }
 
-        public IntegraRequest(int request) : base(request) { }
-        //{
-        //    this[0] = (byte)((request & 0xFF000000) >> 24);
-        //    this[1] = (byte)((request & 0xFF0000) >> 16);
-        //    this[2] = (byte)((request & 0xFF00) >> 8);
-        //    this[3] = (byte)((request & 0xFF));
-        //}
+        /// <summary>
+        /// Creates a new <see cref="IntegraRequest"/> instance initialized with the specified address.
+        /// </summary>
+        /// <param name="address">The address to initialize.</param>
+        /// <remarks><i>The address is split into a byte array and requires each byte to be within the MIDI range.</i> [0x00..0x7F]</remarks>
+        public IntegraRequest(int address) : base(address) { }
 
-        public IntegraRequest(byte[] request) : base(request) { }
-        //{
-        //    this[0] = request[0];
-        //    this[1] = request[1];
-        //    this[2] = request[2];
-        //    this[3] = request[3];
-        //}
+        /// <summary>
+        /// Creates a new <see cref="IntegraRequest"/> instance initialized with the specified address.
+        /// </summary>
+        /// <param name="address">The address to initialize.</param>
+        /// <remarks><i>The address is required to be 4 bytes in length and requires each byte to be within the MIDI range.</i> [0x00..0x7F]</remarks>
+        public IntegraRequest(byte[] address) : base(address) { }
 
+        /// <summary>
+        /// Creates a new <see cref="IntegraRequest"/> instance initialized with the specified individual address bytes.
+        /// </summary>
+        /// <param name="byte01">The address MSB.</param>
+        /// <param name="byte02">The second address byte.</param>
+        /// <param name="byte03">The third address byte.</param>
+        /// <param name="byte04">The address LSB.</param>
+        /// <remarks><i>All bytes are required to be within the MIDI range.</i> [0x00..0x7F]</remarks>
         public IntegraRequest(byte byte01, byte byte02, byte byte03, byte byte04) : base(new byte[] { byte01, byte02, byte03, byte04 }) { }
-        //{
-        //    this[0] = byte01;
-        //    this[1] = byte02;
-        //    this[2] = byte03;
-        //    this[3] = byte04;
-        //}
 
         #endregion
 
         #region Properties
 
-        //public byte this[int index]
-        //{
-        //    get { return Request[index]; }
-
-        //    set 
-        //    {
-        //        if (value > 0x7F)
-        //            throw new IntegraException($"[{nameof(IntegraRequest)}[{index}]]\nValue out of range [0x00..0x7F].");
-
-        //        Request[index] = value; 
-        //    }
-        //}
-
-        //public byte[] Request { get; } = new byte[4];
-
         /// <summary>
-        /// Gets the size based on the least significant 16 bits of the request.
+        /// Gets the size of the request based on the last 16 bits of the request.
         /// </summary>
+        /// <remarks><i>The size returned is the MIDI size.</i></remarks>
         public int Size
         {
-            get { return (this[2] * 128 + this[3]); }
+            get { return this[2] * 128 + this[3]; }
         }
 
+        /// <summary>
+        /// Gets the (M)ost (S)ignificant (B)yte of the first 16 bits of the request.
+        /// </summary>
         public byte MSB { get { return this[0]; } }
+
+        /// <summary>
+        /// Gets the (L)east (S)ignificant (B)yte of the first 16 bits of the request.
+        /// </summary>
         public byte LSB { get { return this[1]; } }
 
         #endregion
-
-        #region Conversion
-
-        /// <summary>
-        /// Implicitly converts an <see cref="IntegraRequest"/> to a <see cref="byte"/>[].
-        /// </summary>
-        /// <param name="instance">The <see cref="IntegraAddress"/> to convert.</param>
-        //public static implicit operator byte[](IntegraRequest instance) => instance.Request;
-
-        /// <summary>
-        /// Implicitly creates a new <see cref="IntegraRequest"/> from a <see cref="byte"/>[].
-        /// </summary>
-        /// <param name="address">The <see cref="byte"/>[] to convert.</param>
-        //public static implicit operator IntegraRequest(byte[] request) => new IntegraRequest(request);
-
-        /// <summary>
-        /// Overloads the assignment operator to implicitly convert an unsigned integer to an INTEGRA-7 request.
-        /// </summary>
-        /// <param name="request">The unsigned integer to assign to the request.</param>
-        //public static implicit operator IntegraRequest(int request)
-        //{
-        //    byte[] bytes = BitConverter.GetBytes(request);
-
-        //    if (BitConverter.IsLittleEndian)
-        //        Array.Reverse(bytes);
-
-        //    return new IntegraRequest(bytes);
-        //}
-
-        /// <summary>
-        /// Implicitly converts an <see cref="IntegraRequest"/> to an <see cref="int"/>.
-        /// </summary>
-        //public static implicit operator int(IntegraRequest instance)
-        //{
-        //    IntegraRequest request = new IntegraRequest(instance.Request);
-
-        //    if (BitConverter.IsLittleEndian)
-        //        Array.Reverse(request);
-
-        //    return BitConverter.ToInt32(request, 0);
-        //}
-
-        #endregion
-
-        //public override string ToString()
-        //{
-        //    return "0x" + ((int)this).ToString("X4");
-        //}
-
     }
 }

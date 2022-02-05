@@ -1,6 +1,6 @@
 ﻿namespace IntegraXL.Extensions
 {
-    public static class IntegraParameterExtensions
+    public static class IntegraMFXParameterExtensions
     {
         /// <summary>
         /// Deserializes an MFX parameter.

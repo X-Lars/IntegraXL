@@ -76,10 +76,10 @@ namespace IntegraXL.Core
         /// </summary>
         /// <returns>A hash code for the collection.</returns>
         /// <remarks><i>The LSB is maxed out to specify a collection.</i></remarks>
-        protected internal override int GetModelHash()
+        protected internal override int GetUID()
         {
             // Base hash conflicts with the first element of the collection
-            return base.GetModelHash() | 0xFF;
+            return base.GetUID() | 0xFF;
         }
 
         #endregion

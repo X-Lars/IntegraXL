@@ -1,4 +1,5 @@
 ﻿using IntegraXL.Core;
+using IntegraXL.Extensions;
 using IntegraXL.Interfaces;
 using IntegraXL.Models.Parameters;
 using System.Diagnostics;

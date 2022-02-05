@@ -1,4 +1,5 @@
 ﻿using IntegraXL.Core;
+using IntegraXL.Extensions;
 using IntegraXL.Interfaces;
 using IntegraXL.Models.Parameters;
 
@@ -345,10 +346,10 @@ namespace IntegraXL.Models
             return IsInitialized;
         }
 
-        protected internal override int GetModelHash()
+        protected internal override int GetUID()
         {
             // TODO: Check uniqueness
-            return (int)(base.GetModelHash() | 0xFFF00F00);
+            return (int)(base.GetUID() | 0xFFF00F00);
             //return base.GetModelHash() & 0xFFF00F00;
         }
 

@@ -12,7 +12,7 @@ namespace IntegraXL.Core
         #region Fields
 
         /// <summary>
-        /// Tracks wheter <see cref="TModel"/> is cached.
+        /// Tracks wheter <see cref="TModel"/> type is cached.
         /// </summary>
         private static bool _IsCached = false;
 
@@ -37,7 +37,7 @@ namespace IntegraXL.Core
         #region Properties
 
         /// <summary>
-        /// Gets wheter the <see cref="TModel"/> is cached.
+        /// Gets wheter the <see cref="TModel"/> type is cached.
         /// </summary>
         public static bool IsCached
         {
@@ -85,7 +85,6 @@ namespace IntegraXL.Core
 
         protected override bool Initialize(byte[] data)
         {
-            Debug.Assert(typeof(TModel) != typeof(PCMSynthToneCommon));
             // TODO: Combine received property into the initialize method
             //if (!IsInitialized)
             //{
@@ -407,7 +406,7 @@ namespace IntegraXL.Core
 
                 if (!string.IsNullOrEmpty(property))
                 {
-                    Debug.Print($"RX [{GetType().Name}] {property} = {field.GetValue(this)} {GetModelHash():X4}");
+                    Debug.Print($"RX [{GetType().Name}] {property} = {field.GetValue(this)} {GetUID():X4}");
 
                     base.NotifyPropertyChanged(property);
                 }
@@ -543,9 +542,8 @@ namespace IntegraXL.Core
         /// Connects the model to the device to (re)enable receiving system exclusive messages.
         /// </summary>
         /// <remarks><i>Models are connected by default on instantiation.</i></remarks>
-        internal void Connect()
+        internal protected void Connect()
         {
-            //Debug.Print($"[{nameof(IntegraModel)}] {nameof(Connect)}<{GetType().Name}>()");
             Device.SystemExclusiveReceived += SystemExclusiveReceived;
             IsConnected = true;
         }
@@ -555,7 +553,6 @@ namespace IntegraXL.Core
         /// </summary>
         internal void Disconnect()
         {
-            //Debug.Print($"[{nameof(IntegraModel)}] {nameof(Disconnect)}<{GetType().Name}>()");
             Device.SystemExclusiveReceived -= SystemExclusiveReceived;
             IsConnected = false;
         }
@@ -577,13 +574,6 @@ namespace IntegraXL.Core
         protected abstract bool Initialize(byte[] data);
 
         #endregion
-
-        // Initialize data
-        // Receive parameter
-        // Send parameter
-        // Save
-        // Load
-        // State
 
         #region Properties
 
@@ -610,13 +600,13 @@ namespace IntegraXL.Core
         /// <summary>
         /// Gets the name of the model.
         /// </summary>
-        public string Name { get; internal set; }
+        public string Name { get; protected set; }
         
         /// <summary>
         /// Gets the fixed model size in bytes or the fixed item count for collection types.<br/>
         /// </summary>
         /// <remarks>
-        /// <i><b>IMPORTANT!</b></i><br/>
+        /// <b>IMPORTANT</b><br/>
         /// <i>The size is not serialized to the MIDI range.</i>
         /// </remarks>
         public int Size { get; protected set; }
@@ -633,12 +623,8 @@ namespace IntegraXL.Core
             {
                 if(_IsInitialized != value)
                 {
-                    //if (value == true)
-                    //    Debug.Print($"[{GetType().Name}.{nameof(IsInitialized)}] {value}");
-
                     _IsInitialized = value;
 
-                    // Raise the property changed event for all properties without transmission
                     NotifyPropertyChanged(string.Empty);
                 }
             }
@@ -649,12 +635,25 @@ namespace IntegraXL.Core
         #region Methods
 
         /// <summary>
-        /// Gets a hash code based on the model's address.
+        /// Gets the unique identifier based on the model's address.
         /// </summary>
-        /// <returns>A hash code for the model.</returns>
-        internal protected virtual int GetModelHash()
+        /// <returns>A unique identifier for the current model.</returns>
+        internal protected virtual int GetUID()
         {
             return Address;
+        }
+
+        #endregion
+
+        #region Overrides: Object
+
+        /// <summary>
+        /// Returns a string that represents the current model.
+        /// </summary>
+        /// <returns>A string representation of the current model.</returns>
+        public override string ToString()
+        {
+            return $"{Name} 0x{GetUID():X4}";
         }
 
         #endregion
@@ -670,8 +669,7 @@ namespace IntegraXL.Core
         /// Method to invoke when a property is changed.
         /// </summary>
         /// <param name="propertyName">The name of the property, defaults to the caller member name.</param>
-        /// <param name="index">Not used.</param>
-        /// <remarks>
+        /// <param name="index">Unused optional parameter for indexed properties.</param>
         protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = "", int? index = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
