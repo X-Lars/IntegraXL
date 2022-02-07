@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IntegraXL.Models.Parameters
 {
-    public sealed class Thru : IntegraMFXParameter
+    public sealed class Thru : IntegraMFXMapper
     {
         public Thru(MFX provider) : base(provider) { }
     }

@@ -5,33 +5,44 @@ namespace IntegraXL.Extensions
 {
     public static class IntegraTypeExtensions
     {
+        #region Extensions: Array
 
-        public static T[] Part<T>(this T[] array, int index, int length)
+        /// <summary>
+        /// Copies a part of the current array to a new array.
+        /// </summary>
+        /// <typeparam name="TArray">The array type specifier.</typeparam>
+        /// <param name="array">The source array.</param>
+        /// <param name="index">The copy start index.</param>
+        /// <param name="length">The number of elements to copy.</param>
+        /// <returns>A partial copy of the current array.</returns>
+        public static TArray[] GetArrayPart<TArray>(this TArray[] array, int index, int length)
         {
-            T[] result = new T[length];
+            TArray[] result = new TArray[length];
 
             Array.Copy(array, index, result, 0, length);
 
             return result;
         }
 
+        #endregion
+
+        #region Extensions: Byte
+
         /// <summary>
-        /// Serializes a <see cref="byte"/> to a MIDI byte.
+        /// Clamps the current <see cref="byte"/> to the specified minimum and maximum value within the MIDI range.
         /// </summary>
-        /// <param name="value">The value to serialize.</param>
+        /// <param name="value">The value to clamp.</param>
         /// <param name="min">The minimum value.</param>
-        /// <param name="max">The maximum value.</param>
-        /// <returns></returns>
-        public static byte Serialize(this byte value, byte min = 0, byte max = 127)
+        /// <param name="max">The maximum value, defaults to the maximum MIDI value.</param>
+        /// <returns>The current value if it doesn't exceed the provided or MIDI range, the minimum or maximum otherwise.</returns>
+        public static byte Clamp(this byte value, byte min = 0, byte max = 127)
         {
             Debug.Assert(min <= max);
             Debug.Assert(max < 128);
-
-            value = Math.Min(value, max);
-            value = Math.Max(value, min);
-
-            return value;
+            return Math.Max(Math.Min(value, max), min);
         }
+
+        #endregion
 
         public static int Clamp(this int value, int min = 0, int max = 127)
         {

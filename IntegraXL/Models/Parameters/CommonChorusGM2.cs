@@ -12,7 +12,7 @@ namespace IntegraXL.Models.Parameters
     /// 05: Depth <br/>
     /// 06: Reverb Send Level<br/>
     /// </remarks>
-    public sealed class CommonChorusGM2 : IntegraMFXParameter
+    public sealed class CommonChorusGM2 : IntegraMFXMapper
     {
         public CommonChorusGM2(StudioSetCommonChorus provider) : base(provider) { }
 

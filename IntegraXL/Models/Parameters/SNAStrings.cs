@@ -11,7 +11,7 @@ namespace IntegraXL.Models.Parameters
     /// INT: 049 Cello 2<br/>
     /// INT: 050 Contrabass<br/>
     /// </i></remarks>
-    public abstract class SNAStringsBase : IntegraSNAParameter
+    public abstract class SNAStringsBase : IntegraSNAMapper
     {
         public SNAStringsBase(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -84,7 +84,7 @@ namespace IntegraXL.Models.Parameters
     /// INT: 053 Strings<br/>
     /// INT: 054 Marcato Strings<br/>
     /// </i></remarks>
-    public sealed class SNAStrings3 : IntegraSNAParameter
+    public sealed class SNAStrings3 : IntegraSNAMapper
     {
         public SNAStrings3(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 

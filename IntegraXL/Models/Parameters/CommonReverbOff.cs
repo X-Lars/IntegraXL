@@ -2,7 +2,7 @@
 
 namespace IntegraXL.Models.Parameters
 {
-    public class CommonReverbOff : IntegraMFXParameter
+    public class CommonReverbOff : IntegraMFXMapper
     {
         public CommonReverbOff(StudioSetCommonReverb provider) : base(provider) { }
     }

@@ -16,7 +16,7 @@ namespace IntegraXL.Core
     }
 
     /// <summary>
-    /// Defines event arguments containing an <see cref="IntegraSystemExclusive"/> message.
+    /// Defines event arguments for <see cref="IntegraSystemExclusive"/> messages.
     /// </summary>
     public class IntegraSystemExclusiveEventArgs : IntegraEventArgs
     {
@@ -32,7 +32,7 @@ namespace IntegraXL.Core
     {
         public IntegraPartChangedEventArgs(Parts part, Parts previous)
         {
-            Part     = part;
+            Part = part;
             Previous = previous;
         }
 
@@ -52,6 +52,19 @@ namespace IntegraXL.Core
         public Parts Part { get; }
     }
 
+    public class IntegraTypeChangedEventArgs : IntegraEventArgs
+    {
+        public IntegraTypeChangedEventArgs(Type type)
+        {
+            Type = type;
+        }
+
+        public Type Type { get; }
+    }
+
+    /// <summary>
+    /// Defines event arguments for MIDI long messages.
+    /// </summary>
     public class LongMessageEventArgs : EventArgs
     {
         public LongMessageEventArgs(byte[] data)

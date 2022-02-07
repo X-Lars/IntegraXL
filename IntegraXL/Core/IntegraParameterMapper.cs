@@ -7,26 +7,33 @@ using System.Runtime.CompilerServices;
 
 namespace IntegraXL.Core
 {
-    public abstract class IntegraSNAParameter : IntegraParameter<byte>
+    /// <summary>
+    /// Base class for all <see cref="SuperNATURALAcousticTone"/> parameter mappers enables naming and validation of the <see cref="SuperNATURALAcousticTone"/> indexer property.
+    /// </summary>
+    public abstract class IntegraSNAMapper : IntegraParameterMapper<byte>
     {
-        protected IntegraSNAParameter(SuperNATURALAcousticToneCommon provider) : base(provider) { }
+        /// <summary>
+        /// Creates a new <see cref="IntegraSNAMapper"/> instance.
+        /// </summary>
+        /// <param name="provider">The model that provides the parameters.</param>
+        protected IntegraSNAMapper(SuperNATURALAcousticToneCommon provider) : base(provider) { }
     }
 
     /// <summary>
-    /// Provides functionality to name and validate properties contained in a model's indexer property.
+    /// Base class for all <see cref="MFX"/> parameter mappers enables naming and validation of the <see cref="MFX"/> indexer property.
     /// </summary>
     /// <remarks>
     /// <i>(De)serializes the property values to and from INTEGRA-7 MFX parameters.</i>
     /// </remarks>
-    public abstract class IntegraMFXParameter : IntegraParameter<int>
+    public abstract class IntegraMFXMapper : IntegraParameterMapper<int>
     {
         #region Constructor
 
         /// <summary>
-        /// Creates a new <see cref="IntegraMFXParameter"/> instance.
+        /// Creates a new <see cref="IntegraMFXMapper"/> instance.
         /// </summary>
-        /// <param name="provider">The parameter provider.</param>
-        public IntegraMFXParameter(IntegraModel provider) : base(provider) { }
+        /// <param name="provider">The model that provides the parameters.</param>
+        public IntegraMFXMapper(IParameterProvider<int> provider) : base(provider) { }
 
         #endregion
 
@@ -47,32 +54,32 @@ namespace IntegraXL.Core
     }
 
     /// <summary>
-    /// Provides functionality to name and validate properties contained in a model's indexer property.
+    /// Base class for all parameter mappers enables naming and validation of parameters provided by a model's indexer property.
     /// </summary>
-    public abstract class IntegraParameter<T> : INotifyPropertyChanged
+    /// <typeparam name="TIndexer">The parameter indexer property type.</typeparam>
+    public abstract class IntegraParameterMapper<TIndexer> : INotifyPropertyChanged
     {
         #region Fields
 
         /// <summary>
-        /// Stores a reference to the parameter provider.
+        /// Stores a reference to the to the model providing the parameter indexer property.
         /// </summary>
-        protected IParameterProvider<T> Provider;
+        protected IParameterProvider<TIndexer> Provider;
 
         #endregion
 
         #region Constructor
 
         /// <summary>
-        /// Creates a new <see cref="IntegraParameter"/> instance.
+        /// Creates a new <see cref="IntegraParameterMapper{TIndexer}"/> instance.
         /// </summary>
-        /// <param name="provider">The parameter provider.</param>
-        public IntegraParameter(IntegraModel provider)
+        /// <param name="provider">The model providing the parameter indexer property.</param>
+        public IntegraParameterMapper(IParameterProvider<TIndexer> provider)
         {
-            Debug.Assert(provider.GetType().GetInterfaces().Contains(typeof(IParameterProvider<T>)));
+            Debug.Assert(provider.GetType().GetInterfaces().Contains(typeof(IParameterProvider<TIndexer>)));
 
-            Provider = (IParameterProvider<T>)provider;
-
-            provider.PropertyChanged += ProviderPropertyChanged;
+            Provider = provider;
+            Provider.PropertyChanged += ProviderPropertyChanged;
         }
 
 
@@ -85,7 +92,7 @@ namespace IntegraXL.Core
         /// </summary>
         /// <param name="index">The index of the parameter.</param>
         /// <returns>The parameter value.</returns>
-        public virtual T this[int index]
+        public virtual TIndexer this[int index]
         {
             get { return Provider[index]; }
             set { Provider[index] = value; }
@@ -103,6 +110,7 @@ namespace IntegraXL.Core
         /// <remarks><i>Enables the UI to bind to the property name when the data context is set to <see cref="IParameterProvider.Parameter"/>.</i></remarks>
         private void ProviderPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
+            // TODO: Raise on indexer property only
             NotifyPropertyChanged(string.Empty);
         }
 
@@ -119,7 +127,6 @@ namespace IntegraXL.Core
         /// Method to invoke when a property is changed.
         /// </summary>
         /// <param name="propertyName">The name of the property, defaults to the caller member name.</param>
-        /// <remarks>
         protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

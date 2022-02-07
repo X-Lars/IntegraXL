@@ -24,17 +24,17 @@ namespace IntegraXL
         /// <summary>
         /// 
         /// </summary>
-        private IntegraTaskManager _TaskManager = new();
+        private readonly IntegraTaskManager _TaskManager = new();
 
         /// <summary>
         /// 
         /// </summary>
-        private IntegraStatus _Status = new();
+        private IntegraStatus _Status;
 
         /// <summary>
         /// 
         /// </summary>
-        private ConcurrentDictionary<int, IntegraModel> _Models = new();
+        private readonly ConcurrentDictionary<int, IntegraModel> _Models = new();
 
         /// <summary>
         /// Stores the <i>zero based</i> device ID.
@@ -45,6 +45,11 @@ namespace IntegraXL
         /// 
         /// </summary>
         private bool _IsInitialized;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private bool _IsConnected;
 
         /// <summary>
         /// Stores the selected active part.
@@ -66,7 +71,10 @@ namespace IntegraXL
         /// </summary>
         internal static readonly SynchronizationContext? UIContext = SynchronizationContext.Current;
 
-        private CancellationTokenSource _ModelCTS = new ();
+        /// <summary>
+        /// Stores the cancellation token source that cancels all task.
+        /// </summary>
+        private CancellationTokenSource _CTS = new ();
 
         #endregion
 
@@ -99,6 +107,7 @@ namespace IntegraXL
         /// </i></remarks>
         public Integra()
         {
+            _Status = new (this);
             CreateModels();
         }
 
@@ -189,33 +198,24 @@ namespace IntegraXL
                     return IsInitialized = false;
             }
 
-            _ModelCTS = new CancellationTokenSource();
+            _CTS = new CancellationTokenSource();
 
-            //try
-            //{
-                // Initialize collections first to reduce SX and duplicate calls
-                foreach (var model in _Models.Values.Where(x => x.IsInitialized == false && x.GetType().IsSubclassOf(typeof(IntegraCollection))))
-                {
-                    if(!_ModelCTS.IsCancellationRequested)
+            // Initialize collections first to reduce SX and duplicate calls
+            foreach (var model in _Models.Values.Where(x => x.IsInitialized == false && x.GetType().IsSubclassOf(typeof(IntegraCollection))))
+            {
+                if(!_CTS.IsCancellationRequested)
                     await model.InitializeAsync();
-                }
+            }
 
-                // Initialize remaining models
-                foreach (var model in _Models.Values.Where(x => x.IsInitialized == false))
-                {
-                if(!_ModelCTS.IsCancellationRequested)
+            // Initialize remaining models
+            foreach (var model in _Models.Values.Where(x => x.IsInitialized == false))
+            {
+                if(!_CTS.IsCancellationRequested)
                     await model.InitializeAsync();
-                }
+            }
 
-            if (_ModelCTS.IsCancellationRequested)
+            if (_CTS.IsCancellationRequested)
                 return IsInitialized = false;
-            //}
-            //catch(TaskCanceledException)
-            //{
-            //    return IsInitialized = false;
-            //}
-
-            //_ModelCTS = new CancellationTokenSource();
 
             return IsInitialized = true;
         }
@@ -224,10 +224,7 @@ namespace IntegraXL
         {
             if (e.Previous == ConnectionStatus.Connected)
             {
-                _ModelCTS.Cancel();
-                // Cancel running tasks
-                // Disconnect models
-                // Mark models out of sync
+                _CTS.Cancel();
             }
         }
 
@@ -254,7 +251,6 @@ namespace IntegraXL
             }
         }
 
-        private bool _IsConnected;
         public bool IsConnected
         {
             get => _IsConnected;
@@ -350,7 +346,12 @@ namespace IntegraXL
         /// <summary>
         /// Gets the collection of selected tones for all parts.
         /// </summary>
-        public IntegraTones SelectedTones { get; private set; }
+        public IntegraTones? SelectedTones { get; private set; }
+
+        /// <summary>
+        /// Gets the collection of temporary tones for all parts.
+        /// </summary>
+        public TemporaryTones? TemporaryTones { get; private set; }
 
         /// <summary>
         /// Gets or sets the active part.
@@ -371,14 +372,10 @@ namespace IntegraXL
                     var previous = _SelectedPart;
                     var preview  = IsPreviewing;
 
-                    // Clamp to part index 0..15
-                    value = Math.Min(value, 15);
-                    value = Math.Max(value, 0);
-
                     if (preview)
                         Preview = false;
 
-                    _SelectedPart = value;
+                    _SelectedPart = value.Clamp(0, 15);
 
                     if (preview)
                         Preview = true;
@@ -428,7 +425,6 @@ namespace IntegraXL
             }
         }
 
-        public TemporaryTones TemporaryTones { get; private set; }
         #endregion
 
         #endregion
@@ -683,7 +679,7 @@ namespace IntegraXL
 
                     while (!model.IsInitialized)
                     {
-                    if (_ModelCTS.IsCancellationRequested)
+                    if (_CTS.IsCancellationRequested)
                         return false;
                         //_ModelCTS.Token.ThrowIfCancellationRequested();
                         //await Task.Delay(100, _ModelCTS.Token);
@@ -695,7 +691,7 @@ namespace IntegraXL
                     //CompleteProgress(model);
                     return true;
 
-            }, _ModelCTS.Token);
+            }, _CTS.Token);
 
             //task.ContinueWith((t) =>
             //{
@@ -705,7 +701,7 @@ namespace IntegraXL
 
             // TODO: Error handling / Time out to prevent application lock
             //if(!_ModelCTS.IsCancellationRequested)
-            _TaskManager.Enqueue(task, _ModelCTS.Token);
+            _TaskManager.Enqueue(task, _CTS.Token);
 
 
             return task;
@@ -730,9 +726,9 @@ namespace IntegraXL
                 }
 
                 return true;
-            },_ModelCTS.Token);
+            },_CTS.Token);
 
-            _TaskManager.Enqueue(task, _ModelCTS.Token);
+            _TaskManager.Enqueue(task, _CTS.Token);
 
             return task;
         }
@@ -777,9 +773,9 @@ namespace IntegraXL
                 _Connection.SendSystemExclusiveMessage(systemExclusive);
                 return true;
 
-            }, _ModelCTS.Token);
+            }, _CTS.Token);
 
-            _TaskManager.Enqueue(task, _ModelCTS.Token);
+            _TaskManager.Enqueue(task, _CTS.Token);
         }
 
         #endregion

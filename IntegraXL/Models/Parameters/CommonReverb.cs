@@ -13,7 +13,7 @@ namespace IntegraXL.Models.Parameters
     /// 07: Spread <br/>
     /// 08: Tone <br/>
     /// </remarks>
-    public sealed class CommonReverb : IntegraMFXParameter
+    public sealed class CommonReverb : IntegraMFXMapper
     {
         public CommonReverb(StudioSetCommonReverb provider) : base(provider) { }
 

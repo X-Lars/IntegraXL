@@ -9,7 +9,7 @@ namespace IntegraXL.Models.Parameters
     /// <remarks><i>
     /// INT: 029 TW Organ
     /// </i></remarks>
-    public sealed class SNAOrgan : IntegraSNAParameter
+    public sealed class SNAOrgan : IntegraSNAMapper
     {
         public SNAOrgan(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 

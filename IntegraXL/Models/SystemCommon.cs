@@ -5,10 +5,9 @@ namespace IntegraXL.Models
     [Integra(0x02000000, 0x0000002F)]
     public class SystemCommon : IntegraModel<SystemCommon>
     {
-        #region Fields
+        #region Fields: INTEGRA-7
 
-        [Offset(0x0000)] private byte[] _MasterTuneData = new byte[4];
-
+        [Offset(0x0000)] private readonly byte[] _MasterTuneData = new byte[4];
         [Offset(0x0004)] private byte _MasterKeyShift;
         [Offset(0x0005)] private byte _MasterLevel;
         [Offset(0x0006)] private bool _ScaleTuneSwitch;
@@ -20,7 +19,6 @@ namespace IntegraXL.Models
         [Offset(0x0024)] private bool _ControlSourceSelect;
         [Offset(0x0025)] private bool _SystemClockSource;
         [Offset(0x0026)] private byte[] _SystemTempoData = new byte[2];
-
         [Offset(0x0028)] private bool _TempoAssignSource;
         [Offset(0x0029)] private bool _ReceiveProgramChange;
         [Offset(0x002A)] private bool _ReceiveBankSelect;
@@ -35,7 +33,9 @@ namespace IntegraXL.Models
 
         #region Constructor
 
+#pragma warning disable IDE0051 // Remove unused private members
         private SystemCommon(Integra device) : base(device) { }
+#pragma warning restore IDE0051 // Remove unused private members
 
         #endregion
 

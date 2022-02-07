@@ -2,6 +2,7 @@
 using IntegraXL.Extensions;
 using IntegraXL.Interfaces;
 using IntegraXL.Models.Parameters;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace IntegraXL.Models
@@ -20,15 +21,13 @@ namespace IntegraXL.Models
 
         #region Constructor
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="device"></param>
 #pragma warning disable IDE0051 // Remove unused private members
         private StudioSetCommonReverb(Integra device) : base(device) { }
 #pragma warning restore IDE0051 // Remove unused private members
-
-        #endregion
-
-        #region Properties
-
-        public IntegraParameter<int>? Parameter { get; set; }
 
         #endregion
 
@@ -45,7 +44,7 @@ namespace IntegraXL.Models
                     _Type = value;
 
                     NotifyPropertyChanged();
-                    Reinitialize();
+                    ReinitializeAsync();
                 }
             }
         }
@@ -98,6 +97,21 @@ namespace IntegraXL.Models
 
         #endregion
 
+        #region Interfaces: IParameterProvider
+
+        /// <summary>
+        /// Event raised when the reverb type is changed.
+        /// </summary>
+        public event EventHandler<IntegraTypeChangedEventArgs>? TypeChanged;
+
+        /// <summary>
+        /// Gets the reverb parameters.
+        /// </summary>
+        [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
+        public IntegraParameterMapper<int>? Parameters { get; private set; }
+
+        #endregion
+
         #region Methods
 
         private void ReceivedParameter(IntegraSystemExclusive e)
@@ -124,15 +138,15 @@ namespace IntegraXL.Models
                 case IntegraReverbTypes.Hall1: 
                 case IntegraReverbTypes.Hall2:
                 case IntegraReverbTypes.Plate:
-                    Parameter = new CommonReverb(this); 
+                    Parameters = new CommonReverb(this); 
                     break;
 
                 case IntegraReverbTypes.GM2:
-                    Parameter = new CommonReverbGM2(this);
+                    Parameters = new CommonReverbGM2(this);
                     break;
 
                 default:
-                    Parameter = new CommonReverbOff(this);
+                    Parameters = new CommonReverbOff(this);
                     break;
             }
 

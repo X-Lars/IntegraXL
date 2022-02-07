@@ -54,7 +54,7 @@ namespace IntegraXL.Models
         /// <summary>
         /// Stores a reference to the associated tone.
         /// </summary>
-        private IntegraTone _Tone;
+        private readonly IntegraTone _Tone;
 
         /// <summary>
         /// Creates a new <see cref="TemporaryTone"/> instance.

@@ -1,15 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IntegraXL.Core
 {
     public class IntegraStatus : INotifyPropertyChanged
     {
+        private readonly Integra _Device;
+
+        public IntegraStatus(Integra device)
+        {
+            _Device = device;
+            _Device.PropertyChanged += DevicePropertyChanged;
+        }
+
+        
         private int _Progress;
         private string _Task = string.Empty;
 
@@ -32,6 +36,14 @@ namespace IntegraXL.Core
             }
         }
 
+        #region Event Handlers
+
+        private void DevicePropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
+        #endregion
 
         #region Interfaces: INotifyPropertyChanged
 

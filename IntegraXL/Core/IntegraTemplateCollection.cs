@@ -23,10 +23,6 @@ namespace IntegraXL.Core
         /// </remarks>
         internal protected IntegraTemplateCollection(Integra device) : base(device) 
         {
-            IntegraAttribute? attribute = GetType().GetCustomAttribute<IntegraAttribute>();
-
-            Debug.Assert(attribute != null);
-
             for (int size = Size, i = 0; size > 0; size -= 0x40, i++)
             {
                 // request[0] = 0x57, 0x00, 0x00, 0x40;   0.. 63
@@ -34,7 +30,7 @@ namespace IntegraXL.Core
                 // request[2] = 0x57, 0x01, 0x00, 0x40; 128..191
                 // request[3] = 0x57, 0x01, 0x40, 0x40; 192..255
 
-                IntegraRequest request = new IntegraRequest(attribute.Request);
+                IntegraRequest request = new (Attribute.Request);
 
                 request[1] += (byte)(i / 2);
                 request[2]  = (byte)(i % 2 * 0x40);

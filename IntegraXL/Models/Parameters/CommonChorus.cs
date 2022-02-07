@@ -14,7 +14,7 @@ namespace IntegraXL.Models.Parameters
     /// 08: Phase <br/>
     /// 09: Feedback <br/>
     /// </remarks>
-    public sealed class CommonChorus : IntegraMFXParameter
+    public sealed class CommonChorus : IntegraMFXMapper
     {
         public CommonChorus(StudioSetCommonChorus provider) : base(provider) { }
 

@@ -2,7 +2,7 @@
 
 namespace IntegraXL.Models.Parameters
 {
-    public class CommonChorusOff : IntegraMFXParameter
+    public class CommonChorusOff : IntegraMFXMapper
     {
         public CommonChorusOff(StudioSetCommonChorus provider) : base(provider) { }
     }

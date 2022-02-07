@@ -14,7 +14,7 @@ namespace IntegraXL.Models.Parameters
     /// INT 008: Concert Mono<br/>
     /// INT 009: Honky-tonk<br/>
     /// </i></remarks>
-    public sealed class SNAPiano : IntegraSNAParameter
+    public sealed class SNAPiano : IntegraSNAMapper
     {
         public SNAPiano(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 

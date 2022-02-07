@@ -22,7 +22,7 @@ namespace IntegraXL.Models.Parameters
     /// INT: 031 Italian Accordion<br/>
     /// INT: 033 Bandoneon<br/>
     /// </i></remarks>
-    public sealed class SNANoise : IntegraSNAParameter
+    public sealed class SNANoise : IntegraSNAMapper
     {
         public SNANoise(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -40,7 +40,7 @@ namespace IntegraXL.Models.Parameters
     /// <remarks><i>
     /// INT: 032 Harmonica
     /// </i></remarks>
-    public sealed class SNAHarmonica : IntegraSNAParameter
+    public sealed class SNAHarmonica : IntegraSNAMapper
     {
         public SNAHarmonica(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
