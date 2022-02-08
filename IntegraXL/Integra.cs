@@ -787,10 +787,6 @@ namespace IntegraXL
 
         #endregion
 
-        
-
-
-
         #region Event Handlers
 
         private void OnSystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)

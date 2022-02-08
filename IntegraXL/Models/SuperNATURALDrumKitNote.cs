@@ -1,5 +1,6 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Extensions;
+using IntegraXL.Templates;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
@@ -58,12 +59,13 @@ namespace IntegraXL.Models
         {
             throw new NotImplementedException();
         }
+
     }
 
     [Integra(0x00001000, 0x00000013)]
     public class SuperNATURALDrumKitNote : IntegraModel<SuperNATURALDrumKitNote>
     {
-        private int _Note;
+        private IntegraSNDNotes _Note;
 
         #region Fields: INTEGRA-7
 
@@ -96,18 +98,28 @@ namespace IntegraXL.Models
             int offset = (msb + lsb);
 
             Address += offset;
-            Note = note;
+            Note = (IntegraSNDNotes)note;
         }
 
         #endregion
 
-        public int Note
+        public IntegraSNDNotes Note
         {
             get { return _Note; }
-            set
+            private set
             {
                 _Note = value;
                 NotifyPropertyChanged();
+            }
+        }
+
+        public string NoteName
+        {
+            get
+            {
+                WaveformTemplate template = IntegraWaveformLookup.Template(IntegraWaveFormTypes.SND,IntegraWaveFormBanks.INT, InstNumber);
+
+                return template.Name;
             }
         }
 

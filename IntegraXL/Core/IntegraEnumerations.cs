@@ -159,6 +159,42 @@ namespace IntegraXL.Core
 
     #endregion
 
+    #region Waveforms
+
+    public enum IntegraWaveFormBanks : int
+    {
+        INT    = 0,
+        SRX01  = 1,
+        SRX02  = 2,
+        SRX03  = 3,
+        SRX04  = 4,
+        SRX05  = 5,
+        SRX06  = 6,
+        SRX07  = 7,
+        SRX08  = 8,
+        SRX09  = 9,
+        SRX10  = 10,
+        SRX11  = 11,
+        SRX12  = 12,
+        EXSN01 = 21,
+        EXSN02 = 22,
+        EXSN03 = 23,
+        EXSN04 = 24,
+        EXSN05 = 25,
+        EXSN06 = 26
+    }
+
+
+    public enum IntegraWaveFormTypes : int
+    {
+        PCM = 0,
+        SNA = 1,
+        SND = 2,
+        SNS = 3
+    }
+
+    #endregion
+
     #region Virtual Slots
 
     public enum VirtualSlotsState : uint
@@ -1028,6 +1064,73 @@ namespace IntegraXL.Core
         [Description("1")]   CompEQ04 = 0x04,
         [Description("2")]   CompEQ05 = 0x05,
         [Description("3")]   CompEQ06 = 0x06,
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraSNDNotes : byte
+    {
+        [Description("1 E\U0001D12D")] N0,
+        [Description("1 E")]           N1,
+        [Description("1 F")]           N2,
+        [Description("1 F\U0001D130")] N3,
+        [Description("1 G")]           N4,
+        [Description("1 G\U0001D130")] N5,
+        [Description("1 A")]           N6,
+        [Description("1 B\U0001D12D")] N7,
+        [Description("1 B")]           N8,
+        [Description("2 C")]           N9,
+        [Description("2 C\U0001D130")] N10,
+        [Description("2 D")]           N11,
+        [Description("2 E\U0001D12D")] N12,
+        [Description("2 E")]           N13,
+        [Description("2 F")]           N14,
+        [Description("2 F\U0001D130")] N15,
+        [Description("2 G")]           N16,
+        [Description("2 G\U0001D130")] N17,
+        [Description("2 A")]           N18,
+        [Description("2 B\U0001D12D")] N19,
+        [Description("2 B")]           N20,
+        [Description("2 C")]           N21,
+        [Description("3 C\U0001D130")] N22,
+        [Description("3 D")]           N23,
+        [Description("3 E\U0001D12D")] N24,
+        [Description("3 E")]           N25,
+        [Description("3 F")]           N26,
+        [Description("3 F\U0001D130")] N27,
+        [Description("3 G")]           N28,
+        [Description("3 G\U0001D130")] N29,
+        [Description("3 A")]           N30,
+        [Description("3 B\U0001D12D")] N31,
+        [Description("3 B")]           N32,
+        [Description("4 C")]           N33,
+        [Description("4 C\U0001D130")] N34,
+        [Description("4 D")]           N35,
+        [Description("4 E\U0001D12D")] N36,
+        [Description("4 E")]           N37,
+        [Description("4 F")]           N38,
+        [Description("4 F\U0001D130")] N39,
+        [Description("4 G")]           N40,
+        [Description("4 G\U0001D130")] N41,
+        [Description("4 A")]           N42,
+        [Description("4 B\U0001D12D")] N43,
+        [Description("4 B")]           N44,
+        [Description("5 C")]           N45,
+        [Description("5 C\U0001D130")] N46,
+        [Description("5 D")]           N47,
+        [Description("5 E\U0001D12D")] N48,
+        [Description("5 E")]           N49,
+        [Description("5 F")]           N50,
+        [Description("5 F\U0001D130")] N51,
+        [Description("5 G")]           N52,
+        [Description("5 G\U0001D130")] N53,
+        [Description("5 A")]           N54,
+        [Description("5 B\U0001D12D")] N55,
+        [Description("5 B")]           N56,
+        [Description("6 C")]           N57,
+        [Description("6 C\U0001D130")] N58,
+        [Description("6 D")]           N59,
+        [Description("6 E\U0001D12D")] N60,
+        [Description("6 E")]           N61
     }
 
     #endregion

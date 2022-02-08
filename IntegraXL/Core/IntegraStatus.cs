@@ -5,61 +5,64 @@ namespace IntegraXL.Core
 {
     public class IntegraStatus : INotifyPropertyChanged
     {
-        public IntegraStatus() { }
-
         private int _Progress;
         private string _Message = string.Empty;
         private string _Text = string.Empty;
         private string _Operation = string.Empty;
 
+        public IntegraStatus() { }
+
+        /// <summary>
+        /// Gets the a description of the current operation.
+        /// </summary>
         public string Operation
         {
             get => _Operation;
-            set
+            internal set
             {
                 _Operation = value;
                 NotifyPropertyChanged();
             }
         }
 
+        /// <summary>
+        /// Gets the progress of the current operation.
+        /// </summary>
         public int Progress
         {
             get => _Progress;
-            set
+            internal set
             {
                 _Progress = value;
                 NotifyPropertyChanged();
             }
         }
 
+        /// <summary>
+        /// Gets the user message for the current operation.
+        /// </summary>
         public string Message
         {
             get => _Message;
-            set
+            internal set
             {
                 _Message = value;
                 NotifyPropertyChanged();
             }
         }
 
-        #region Event Handlers
-
-        private void DevicePropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
-
+        /// <summary>
+        /// Gets the status text.
+        /// </summary>
         public string Text
         {
             get => _Text;
-            set
+            internal set
             {
                 _Text = value;
                 NotifyPropertyChanged();
             }
         }
-
-        #endregion
 
         #region Interfaces: INotifyPropertyChanged
 

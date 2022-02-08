@@ -1,38 +1,31 @@
 ﻿using IntegraXL.Core;
-using IntegraXL.Extensions;
-using System.Diagnostics;
 
 namespace IntegraXL.Models
 {
     [Integra(0x00030000, 0x00100000)]
     public class SuperNATURALDrumKit : IntegraModel<SuperNATURALDrumKit>
     {
-        //private IntegraSuperNATURALDrumKitNoteCollection _Notes;
-
-        public SuperNATURALDrumKit(TemporaryTone tone) : base(tone.Device)
+        internal SuperNATURALDrumKit(TemporaryTone tone) : base(tone.Device)
         {
             Address += tone.Address;
-            //Requests.Add(GetType().GetCustomAttribute<ModelAddress>().Request);
 
             Common = new SuperNATURALDrumKitCommon(this);
             CompEQ = new DrumKitCommonCompEQ(this);
             Notes  = new SuperNATURALDrumKitNotes(this);
         }
 
-        //public override bool IsInitialized
-        //{
-        //    get { return Notes != null && Notes.IsInitialized; }
-        //}
-        public override bool IsInitialized 
-        { 
-            // TODO: Notes is initialized
-            get => Notes.IsInitialized; 
-
-            protected internal set => base.IsInitialized = value; 
-        }
-
+        
         public SuperNATURALDrumKitCommon Common { get; }
         public DrumKitCommonCompEQ CompEQ { get; }
         public SuperNATURALDrumKitNotes Notes { get; }
+
+        #region Overrides: Model
+
+        public override bool IsInitialized
+        {
+            get => Notes.IsInitialized;
+        }
+
+        #endregion
     }
 }

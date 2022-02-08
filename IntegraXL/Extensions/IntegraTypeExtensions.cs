@@ -113,7 +113,7 @@ namespace IntegraXL.Extensions
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(values);
 
-
+            // TODO: ? Remove logical AND's ?
             return (values[0] & 0x0F) << 12 | (values[1] & 0x0F) << 8 | (values[2] & 0x0F) << 4 | (values[3] & 0x0F);
         }
 

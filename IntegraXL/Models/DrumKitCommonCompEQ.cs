@@ -1,5 +1,4 @@
 ﻿using IntegraXL.Core;
-using System.Reflection;
 
 namespace IntegraXL.Models
 {
@@ -126,7 +125,7 @@ namespace IntegraXL.Models
 
         #region Constructor
 
-        public DrumKitCommonCompEQ(IntegraModel drumKit) : base(drumKit.Device)
+        internal DrumKitCommonCompEQ(IntegraModel drumKit) : base(drumKit.Device)
         {
             Address += drumKit.Address;
         }

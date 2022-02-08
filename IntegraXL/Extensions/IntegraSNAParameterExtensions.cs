@@ -27,7 +27,7 @@ namespace IntegraXL.Extensions
 
             if (((instance.InstNumber == 4 || instance.InstNumber == 7) && instance.InstVariation != 64) || (instance.InstNumber == 21 || instance.InstNumber == 23))
             {
-                return new SNANoise(instance);
+                return new SNAKeys(instance);
 
                 // INT 010 Pure Vintage EP1
                 // INT 011 Pure Vintage EP2
@@ -58,7 +58,7 @@ namespace IntegraXL.Extensions
                 // INT 049 Cello 2
                 // INT 050 Contrabass
 
-                return new SNAStrings1(instance);
+                return new SNAStringsStaccatoPizzicatoTremolo(instance);
             }
 
             if(instance.InstNumber >= 68 && instance.InstNumber <=73)
@@ -72,7 +72,7 @@ namespace IntegraXL.Extensions
                 // ExSN2 006 Bass Clarinet
                 // ExSN2 007 Flute2
 
-                return new SNAWind1(instance);
+                return new SNAWindStaccatoExt(instance);
             }
 
             if (instance.InstVariation == 65)
@@ -93,15 +93,15 @@ namespace IntegraXL.Extensions
                     // INT 026 Marimba
                     // INT 027 Xylophone
                     // INT 028 Tubular Bells
-                    return new SNABellMallet1(instance);
+                    return new SNABellMalletDeadStroke(instance);
 
                 case 11:
                     // INT 025 Vibraphone
-                    return new SNABellMallet2(instance);
+                    return new SNABellMalletDeadStrokTremoloSwitch(instance);
 
                 case 15:
                     // ExSN1 001 Santoor
-                    return new SNABellMallet3(instance);
+                    return new SNABellMalletMuteTremolo(instance);
 
                 case 22:
                     // INT 032 Harmonica
@@ -112,11 +112,11 @@ namespace IntegraXL.Extensions
                     // INT 034 Nylon Guitar
                     // ExSN4 002 Nylon Guitar 2
                     if (instance.InstVariation == 0 || instance.InstVariation == 3)
-                        return new SNAGuitar1(instance);
+                        return new SNAGuitarMuteHarmonics(instance);
 
                     // INT 035 Flamenco Guitar
                     // ExSN4 001 Ukulele
-                    return instance.InstVariation == 1 ? new SNAGuitar2(instance) : new SNAUkele(instance);
+                    return instance.InstVariation == 1 ? new SNAFlamencoGuitar(instance) : new SNAUkele(instance);
 
                 case 25:
                     if (instance.InstVariation == 2)
@@ -125,19 +125,19 @@ namespace IntegraXL.Extensions
 
                     else if (instance.InstVariation == 3)
                         // ExSN4 005 SteelFing Guitar
-                        return new SNAGuitar3(instance);
+                        return new SNAGuitarFingerPickingOctaveTone(instance);
                     else
                         //INT 036 SteelStr Guitar
                         //ExSN4 003 12th Steel Gtr
                         //ExSN4 006 SteelStr Guitar2
-                        return new SNAGuitar1(instance);
+                        return new SNAGuitarMuteHarmonics(instance);
 
                 case 26:
                     // INT 037Jazz Guitar
                     // ExSN3 001 TC Guitar w / Fing
                     // ExSN3 002 335Guitar w/ Fing
 
-                    return instance.InstVariation == 0 ? new SNAElectricGuitar2(instance) : new SNAGuitar3(instance);
+                    return instance.InstVariation == 0 ? new SNAElectricGuitarFingerPickingOctaveTone(instance) : new SNAGuitarFingerPickingOctaveTone(instance);
 
                 case 27:
                     // INT 038 ST Guitar Half
@@ -147,7 +147,7 @@ namespace IntegraXL.Extensions
                     // ExSN3 004 LP Guitar Front
                     // ExSN3 005 335 Guitar Half
 
-                    return new SNAElectricGuitar1(instance);
+                    return new SNAElectricGuitarMuteHarmonics(instance);
 
                 case 32:
                 case 35:
@@ -155,24 +155,24 @@ namespace IntegraXL.Extensions
                     // INT 044 Fretless Bass
                     // ExSN3 006 Acoustic Bass 2
 
-                    return new SNABass1(instance);
+                    return new SNABassStaccatoHarmonics(instance);
 
                 case 33:
                     //INT 042 Fingered Bass
                     //ExSN3 007 Fingered Bass 2
 
-                    return new SNABass2(instance);
+                    return new SNABassSlapHarmonics(instance);
 
                 case 34:
                     // INT 043 Picked Bass
                     // ExSN3 008 Picked Bass 2
 
-                    return new SNABass3(instance);
+                    return new SNABassBridgeMuteHarmonics(instance);
 
                 case 46:
                     // INT 051 Harp
                     // ExSN1 002 Yang Chin
-                    return instance.InstVariation == 0 ? new SNAHarp(instance) : new SNABellMallet3(instance);
+                    return instance.InstVariation == 0 ? new SNAHarp(instance) : new SNABellMalletMuteTremolo(instance);
 
                 case 47:
                     // INT 052 Timpani
@@ -182,7 +182,7 @@ namespace IntegraXL.Extensions
                     // INT 053 Strings
                     // INT 054 Marcato Strings
 
-                    return new SNAStrings3(instance);
+                    return new SNAStringsExt(instance);
 
                 case 52:
                     // INT 055 London Choir
@@ -203,7 +203,7 @@ namespace IntegraXL.Extensions
                     // ExSN5 003 Trumpet 2
                     // ExSN5 004 Mariachi Tp
 
-                    return new SNABrass2(instance);
+                    return new SNABrassStaccatoFall(instance);
 
                 case 58:
                 case 60:
@@ -212,7 +212,7 @@ namespace IntegraXL.Extensions
                     // ExSN5 010 French Horn 2
                     // ExSN5 011 Mute French Horn
 
-                    return new SNABrass1(instance);
+                    return new SNABrassStaccato(instance);
 
                 case 64:
                 case 65:
@@ -236,13 +236,13 @@ namespace IntegraXL.Extensions
                     // ExSN2 010 Tenor Recorder
                     // ExSN2 011 Bass Recorder
 
-                    return new SNAWind5(instance);
+                    return new SNAWindStaccato(instance);
 
                 case 75:
                     // INT 071 Panflute
                     // ExSN1 003 Tin Whistle
 
-                    return instance.InstVariation == 0 ? new SNAWind2(instance) : new SNAWind4(instance);
+                    return instance.InstVariation == 0 ? new SNAPanFlute(instance) : new SNATinWhistle(instance);
 
                 case 77:
                 case 79:
@@ -253,7 +253,7 @@ namespace IntegraXL.Extensions
                     // ExSN2 014 Ocarina Alto
                     // ExSN2 015 Ocarina Bass
 
-                    return new SNAWind3(instance);
+                    return new SNAWindStaccatoOrnament(instance);
 
                 case 104:
                     // INT 073 Sitar
@@ -286,7 +286,7 @@ namespace IntegraXL.Extensions
 
                     // INT 076 Erhu
                     // ExSN1 010 Sarangi
-                    return instance.InstVariation == 1 ? new SNAStrings2(instance) : new SNASitar(instance);
+                    return instance.InstVariation == 1 ? new SNAStringsStaccatoOrnament(instance) : new SNASitar(instance);
 
                 case 114:
                     // INT 077 Steel Drums
