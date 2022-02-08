@@ -42,6 +42,13 @@ namespace IntegraXL.Core
             }
         }
 
+        #region Event Handlers
+
+        private void DevicePropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
         public string Text
         {
             get => _Text;

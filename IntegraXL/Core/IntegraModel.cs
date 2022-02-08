@@ -552,6 +552,11 @@ namespace IntegraXL.Core
         internal protected IntegraAttribute Attribute { get; }
 
         /// <summary>
+        /// Gets the model's <see cref="IntegraAttribute"/>.
+        /// </summary>
+        internal protected IntegraAttribute Attribute { get; }
+
+        /// <summary>
         /// Gets wheter the model is connected to the device.
         /// </summary>
         public bool IsConnected { get; private set; }
