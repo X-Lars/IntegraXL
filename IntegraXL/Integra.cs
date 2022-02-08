@@ -109,7 +109,7 @@ namespace IntegraXL
         /// </i></remarks>
         public Integra()
         {
-            _Status = new (this);
+            _Status = new ();
             CreateModels();
         }
 

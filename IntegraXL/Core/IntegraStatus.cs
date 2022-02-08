@@ -14,7 +14,7 @@ namespace IntegraXL.Core
 
         public string Operation
         {
-            get => $"{_Operation}";
+            get => _Operation;
             set
             {
                 _Operation = value;
@@ -58,6 +58,8 @@ namespace IntegraXL.Core
                 NotifyPropertyChanged();
             }
         }
+
+        #endregion
 
         #region Interfaces: INotifyPropertyChanged
 
