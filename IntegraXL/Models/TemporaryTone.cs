@@ -42,6 +42,11 @@ namespace IntegraXL.Models
             return await base.InitializeAsync();
         }
 
+        protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
+        {
+            //base.SystemExclusiveReceived(sender, e);
+        }
+
         #endregion
     }
 
@@ -54,7 +59,7 @@ namespace IntegraXL.Models
         /// <summary>
         /// Stores a reference to the associated tone.
         /// </summary>
-        private IntegraTone _Tone;
+        private readonly IntegraTone _Tone;
 
         /// <summary>
         /// Creates a new <see cref="TemporaryTone"/> instance.

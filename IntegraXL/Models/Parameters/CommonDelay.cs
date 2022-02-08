@@ -19,7 +19,7 @@ namespace IntegraXL.Models.Parameters
     /// 12: Right Level <br/>
     /// 13: Center Level <br/>
     /// </remarks>
-    public sealed class CommonDelay : IntegraMFXParameter
+    public sealed class CommonDelay : IntegraMFXMapper
     {
         public CommonDelay(StudioSetCommonChorus provider) : base(provider) { }
 

@@ -21,7 +21,7 @@ namespace IntegraXL.Models.Parameters
     /// ExSN5: 0010 French Horn 2<br/>
     /// ExSN5: 0011 Mute French Horn<br/>
     /// </i></remarks>
-    public abstract class SNABrassBase : IntegraSNAParameter
+    public abstract class SNABrassBase : IntegraSNAMapper
     {
         public SNABrassBase(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 

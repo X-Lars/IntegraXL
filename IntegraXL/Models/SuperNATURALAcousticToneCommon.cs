@@ -2,6 +2,7 @@
 using IntegraXL.Extensions;
 using IntegraXL.Interfaces;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
@@ -11,6 +12,8 @@ namespace IntegraXL.Models
     [Integra(0x00000000, 0x00000046)]
     public sealed class SuperNATURALAcousticToneCommon : IntegraModel<SuperNATURALAcousticToneCommon>, IParameterProvider<byte>
     {
+        #region Fields: INTEGRA-7
+
         [Offset(0x0000)] byte[] _ToneName = new byte[12];
         [Offset(0x0010)] byte _ToneLevel;
         [Offset(0x0011)] IntegraMonyPolySwitch _MonoPoly;
@@ -31,16 +34,18 @@ namespace IntegraXL.Models
         [Offset(0x0021)] byte _InstNumber;
         [Offset(0x0022)] byte[] _ModifyParameter = new byte[32];
 
+        #endregion
+
+        #region Constructor
+
         internal SuperNATURALAcousticToneCommon(SuperNATURALAcousticTone tone) : base(tone.Device) 
         {
             Address = tone.Address;
-            //Size = GetType().GetCustomAttribute<ModelAddress>().Size;
-            //Debug.Print($"SuperNATURALAcousticToneCommon {Address}");
-            //Device = device;
-            //Initialize();
         }
-        public IntegraParameter<byte>? Parameter { get; set; }
 
+        #endregion
+
+        #region Properties: INTEGRA-7
 
         [Offset(0x0000)]
         public string ToneName
@@ -295,7 +300,7 @@ namespace IntegraXL.Models
                 {
                     _InstNumber = value;
                     NotifyPropertyChanged();
-                    Reinitialize();
+                    ReinitializeAsync();
                 }
             }
         }
@@ -313,6 +318,23 @@ namespace IntegraXL.Models
                 }
             }
         }
+
+        #endregion
+
+        #region Interfaces: IParameterProvider
+
+        /// <summary>
+        /// Event raised when the instrument type is changed.
+        /// </summary>
+        public event EventHandler<IntegraTypeChangedEventArgs>? TypeChanged;
+
+        /// <summary>
+        /// Gets the tone parameters.
+        /// </summary>
+        [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
+        public IntegraParameterMapper<byte>? Parameters { get; private set; }
+
+        #endregion
 
         #region Methods
 
@@ -390,10 +412,10 @@ namespace IntegraXL.Models
             //Debug.Assert(data[33] < 0);
             base.Initialize(data);
 
-            Parameter = this.GetParameterType();
+            Parameters = this.GetParameterType();
             NotifyPropertyChanged(string.Empty);
 
-            Debug.Print($"[{GetType().Name}] Parameter Type: {Parameter.GetType().Name}");
+            Debug.Print($"[{GetType().Name}] Parameter Type: {Parameters.GetType().Name}");
 
             return IsInitialized = true;
         }

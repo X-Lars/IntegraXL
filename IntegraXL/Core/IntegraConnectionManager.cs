@@ -63,9 +63,10 @@ namespace IntegraXL.Core
         /// <param name="deviceID">The <i>zero based</i> INTEGRA-7 device ID.</param>
         /// <param name="midiOutputDevice">The MIDI output device to associate with the connection.</param>
         /// <param name="midiInputDevice">The MIDI input device to associate with the connection.</param>
+        /// <param name="progress">The optional progress report method.</param>
         /// <returns>The newly created connection.</returns>
         /// <exception cref="IntegraException"></exception>
-        public static IntegraConnection CreateConnection(byte deviceID, IMIDIOutputDevice midiOutputDevice, IMIDIInputDevice midiInputDevice)
+        public static IntegraConnection CreateConnection(byte deviceID, IMIDIOutputDevice midiOutputDevice, IMIDIInputDevice midiInputDevice, IProgress<int>? progress = null)
         {
             if(deviceID < 16 || deviceID > 31)
                 throw new IntegraException($"[{nameof(IntegraConnectionManager)}]\nDevice ID {deviceID} out of range. [16..31]");
@@ -73,7 +74,7 @@ namespace IntegraXL.Core
             if (_Connections.ContainsKey(deviceID))
                 throw new IntegraException($"[{nameof(IntegraConnectionManager)}]\nA connection for #{deviceID} already exists.");
 
-            IntegraConnection connection = new (deviceID, midiOutputDevice, midiInputDevice);
+            IntegraConnection connection = new (deviceID, midiOutputDevice, midiInputDevice, progress);
 
             if (_Connections.TryAdd(deviceID, connection))
             {
@@ -82,7 +83,6 @@ namespace IntegraXL.Core
                 // Raises property changed event for the property in the static collection
                 connection.ConnectionChanged += (s, e) => Connections.First(x => x == s).NotifyPropertyChanged(string.Empty);
                 
-
                 Connections.Clear();
 
                 foreach(var item in _Connections.Values.OrderBy(x => x.ID))

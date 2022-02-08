@@ -1,17 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IntegraXL.Core
 {
     public class IntegraStatus : INotifyPropertyChanged
     {
+        public IntegraStatus() { }
+
         private int _Progress;
-        private string _Task = string.Empty;
+        private string _Message = string.Empty;
+        private string _Text = string.Empty;
+        private string _Operation = string.Empty;
+
+        public string Operation
+        {
+            get => $"{_Operation}";
+            set
+            {
+                _Operation = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public int Progress
         {
@@ -22,16 +31,26 @@ namespace IntegraXL.Core
                 NotifyPropertyChanged();
             }
         }
-        public string Task
+
+        public string Message
         {
-            get => _Task;
+            get => _Message;
             set
             {
-                _Task = value;
+                _Message = value;
                 NotifyPropertyChanged();
             }
         }
 
+        public string Text
+        {
+            get => _Text;
+            set
+            {
+                _Text = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         #region Interfaces: INotifyPropertyChanged
 
@@ -45,7 +64,7 @@ namespace IntegraXL.Core
         /// </summary>
         /// <param name="propertyName">The name of the property, defaults to the name of the property.</param>
         /// <param name="index">The index of the property, if applicable.</param>
-        public virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = "", int? index = null)
+        public virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 

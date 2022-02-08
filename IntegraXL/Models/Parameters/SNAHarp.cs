@@ -5,7 +5,7 @@ namespace IntegraXL.Models.Parameters
     /// <remarks><i>
     /// INT: 051 Harp
     /// </i></remarks>
-    public sealed class SNAHarp : IntegraSNAParameter
+    public sealed class SNAHarp : IntegraSNAMapper
     {
         public SNAHarp(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 

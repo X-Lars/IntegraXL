@@ -1,10 +1,12 @@
 ﻿using IntegraXL.Core;
+using System.Diagnostics.CodeAnalysis;
 
 namespace IntegraXL.Models
 {
     [Integra(0x18001000, 0x00001000)]
     public sealed class StudioSetMidis : IntegraPartialCollection<StudioSetMidi>
     {
+        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "The class is created by reflection.")]
         private StudioSetMidis(Integra device) : base(device) { }
     }
 
@@ -12,7 +14,7 @@ namespace IntegraXL.Models
     /// Defines the INTEGRA-7 studio set MIDI model.
     /// </summary>
     [Integra(0x18001000, 0x00000001)]
-    public class StudioSetMidi : IntegraPartial<StudioSetMidi>
+    public sealed class StudioSetMidi : IntegraPartial<StudioSetMidi>
     {
         #region Fields: INTEGRA-7
 
@@ -23,14 +25,12 @@ namespace IntegraXL.Models
         #region Constructor
 
         /// <summary>
-        /// Creates a new instance of INTEGRA-7 studio set MIDI model.
+        /// Creates a new <see cref="StudioSetMidi"/> instance.
         /// </summary>
+        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "The class is created by reflection.")]
         private StudioSetMidi(Integra device, Parts part) : base(device, part) { }
-        
 
         #endregion
-
-        #region Properties
 
         #region Properties: INTEGRA-7
 
@@ -40,12 +40,17 @@ namespace IntegraXL.Models
             get { return _PhaseLock; }
             set
             {
-                _PhaseLock = value;
-                NotifyPropertyChanged();
+                if (_PhaseLock != value)
+                {
+                    _PhaseLock = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         #endregion
+
+        #region Overrides: Model
 
         protected override bool Initialize(byte[] data)
         {

@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Reflection;
 
 namespace IntegraXL.Core
@@ -10,7 +9,7 @@ namespace IntegraXL.Core
     /// Base class for all INTEGRA-7 collections.
     /// </summary>
     /// <remarks>
-    /// <b>Important:</b><br/>
+    /// <b>Important</b><br/>
     /// <i>Only intended for internal use.</i><br/>
     /// <i>Use the strongly typed <see cref="IntegraCollection{T}"/> instead.</i>
     /// </remarks>
@@ -29,20 +28,20 @@ namespace IntegraXL.Core
     }
 
     /// <summary>
-    /// Base class for all INTEGRA-7 collections.
+    /// Base class for all INTEGRA-7 model and template collections.
     /// </summary>
-    /// <typeparam name="T">The collection type specifier.</typeparam>
+    /// <typeparam name="TItem">The collection type specifier.</typeparam>
     /// <remarks>
     /// <i>The type must be derived from either <see cref="IntegraModel{T}"/> or <see cref="IntegraTemplate"/>.</i>
     /// </remarks>
-    public abstract class IntegraCollection<T> : IntegraCollection, IEnumerable<T>, INotifyCollectionChanged where T : class
+    public abstract class IntegraCollection<TItem> : IntegraCollection, IEnumerable<TItem>, INotifyCollectionChanged where TItem : class
     {
         #region Fields
 
         /// <summary>
         /// Stores the internal collection of items.
         /// </summary>
-        private ObservableCollection<T> _Collection = new();
+        private readonly ObservableCollection<TItem> _Collection = new();
 
         /// <summary>
         /// Stores the item's size in bytes.
@@ -57,19 +56,24 @@ namespace IntegraXL.Core
         /// Creates a new <see cref="IntegraCollection{T}"/> instance.
         /// </summary>
         /// <param name="device">The device to connect the collection.</param>
-        /// <remarks>
-        /// <i>Requires derived collections to be decorated with the <see cref="IntegraAttribute"/>.</i><br/>
-        /// <i>Requires the collection's items to be derived from either <see cref="IntegraModel"/> or <see cref="IntegraTemplate"/>.</i>
-        /// </remarks>
+        /// <remarks><i>
+        /// - Requires derived collections to be decorated with the <see cref="IntegraAttribute"/>.<br/>
+        /// - Requires the collection's items to be derived from either <see cref="IntegraModel"/> or <see cref="IntegraTemplate"/>.<br/>
+        /// - Derived collection needs to add its request(s) to the <see cref="IntegraModel.Requests"/> list.<br/>
+        /// </i></remarks>
         internal IntegraCollection(Integra device) : base(device) 
         {
-            Debug.Assert(typeof(T).IsSubclassOf(typeof(IntegraModel<T>)) || typeof(T).IsSubclassOf(typeof(IntegraTemplate)));
+            if (!typeof(TItem).IsSubclassOf(typeof(IntegraModel<TItem>)) && !typeof(TItem).IsSubclassOf(typeof(IntegraTemplate)))
+                throw new IntegraException($"[{nameof(IntegraCollection)}]\n" +
+                                           $"{GetType().Name}: Unsupported type.\n" +
+                                           $"The collection type must derive from either {nameof(IntegraModel)} or {nameof(IntegraTemplate)}.");
 
-            IntegraAttribute? attribute = typeof(T).GetCustomAttribute<IntegraAttribute>();
+            var typeAttribute = typeof(TItem).GetCustomAttribute<IntegraAttribute>() ??
+                throw new IntegraException($"[{nameof(IntegraCollection)}]\n" +
+                                           $"{GetType().Name}: Attribute missing.\n" +
+                                           $"The type <{typeof(TItem).Name}> requires an {nameof(IntegraAttribute)}.");
 
-            Debug.Assert(attribute != null);
-
-            _ItemSize = attribute.Size;
+            _ItemSize = typeAttribute.Size;
         }
 
         #endregion
@@ -79,7 +83,7 @@ namespace IntegraXL.Core
         /// <summary>
         /// Gets the collection of items.
         /// </summary>
-        public ObservableCollection<T> Collection
+        public ObservableCollection<TItem> Collection
         {
             get { return _Collection; }
         }
@@ -94,7 +98,7 @@ namespace IntegraXL.Core
         /// </summary>
         /// <param name="index">The index of the item.</param>
         /// <returns>The item at the specified index.</returns>
-        public T this[int index]
+        public TItem this[int index]
         {
             get { return _Collection[index]; }
         }
@@ -107,7 +111,7 @@ namespace IntegraXL.Core
         /// Adds the specified item to the collection.
         /// </summary>
         /// <param name="item">The item to add to the collection.</param>
-        internal protected void Add(T item)
+        internal protected void Add(TItem item)
         {
             Collection.Add(item);
 
@@ -144,17 +148,17 @@ namespace IntegraXL.Core
         }
 
         /// <summary>
-        /// Must be overridden to handle system exclusive messages.
+        /// Event handler for received system exclusive messages.
         /// </summary>
         /// <param name="sender">The device that raised the event.</param>
-        /// <param name="e">The system exclusive message data.</param>
+        /// <param name="e">The event's associated data.</param>
         protected abstract override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e);
 
         /// <summary>
-        /// Must be overriden to define data initialization logic.
+        /// Method to initialize the collection data..
         /// </summary>
-        /// <param name="data">Should be the data part of received system exclusive messages.</param>
-        /// <returns>Should return true if the collection is initialized.</returns>
+        /// <param name="data">The data to initialize the collection.</param>
+        /// <returns>Must return true if the collection is initialized.</returns>
         protected abstract override bool Initialize(byte[] data);
 
         #endregion
@@ -170,7 +174,7 @@ namespace IntegraXL.Core
 
         #region Interfaces: IEnumerable
 
-        public IEnumerator<T> GetEnumerator()
+        public IEnumerator<TItem> GetEnumerator()
         {
             return Collection.GetEnumerator();
         }

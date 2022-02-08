@@ -2,7 +2,9 @@
 using IntegraXL.Extensions;
 using IntegraXL.Interfaces;
 using IntegraXL.Models.Parameters;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace IntegraXL.Models
 {
@@ -21,15 +23,12 @@ namespace IntegraXL.Models
 
         #region Constructor
 
-#pragma warning disable IDE0051 // Remove unused private members
+        /// <summary>
+        /// Creates a new <see cref="StudioSetCommonChorus"/> instance.
+        /// </summary>
+        /// <param name="device"></param>
+        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "The class is created by reflection.")]
         private StudioSetCommonChorus(Integra device) : base(device) { }
-#pragma warning restore IDE0051 // Remove unused private members
-
-        #endregion
-
-        #region Properties
-
-        public IntegraParameter<int>? Parameter { get; set; }
 
         #endregion
 
@@ -44,7 +43,7 @@ namespace IntegraXL.Models
                 _Type = value;
 
                 NotifyPropertyChanged();
-                Reinitialize();
+                ReinitializeAsync();
             }
         }
 
@@ -100,6 +99,21 @@ namespace IntegraXL.Models
 
         #endregion
 
+        #region Interfaces: IParameterProvider
+
+        /// <summary>
+        /// Event raised when the chorus type is changed.
+        /// </summary>
+        public event EventHandler<IntegraTypeChangedEventArgs>? TypeChanged;
+
+        /// <summary>
+        /// Gets the chorus parameters.
+        /// </summary>
+        [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
+        public IntegraParameterMapper<int>? Parameters { get; private set; }
+
+        #endregion
+
         #region Methods
 
         private void ReceivedParameter(IntegraSystemExclusive e)
@@ -121,12 +135,12 @@ namespace IntegraXL.Models
         {
             switch(Type)
             {
-                case IntegraChorusTypes.Chorus:    Parameter = new CommonChorus(this); break;
-                case IntegraChorusTypes.Delay:     Parameter = new CommonDelay(this); break;
-                case IntegraChorusTypes.GM2Chorus: Parameter = new CommonChorusGM2(this); break;
+                case IntegraChorusTypes.Chorus:    Parameters = new CommonChorus(this); break;
+                case IntegraChorusTypes.Delay:     Parameters = new CommonDelay(this); break;
+                case IntegraChorusTypes.GM2Chorus: Parameters = new CommonChorusGM2(this); break;
 
                 default:
-                    Parameter = new CommonChorusOff(this);
+                    Parameters = new CommonChorusOff(this);
                     break;
             };
 

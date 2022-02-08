@@ -12,7 +12,7 @@ namespace IntegraXL.Models.Parameters
     /// ExSN3: 007 Fingered Bass 2<br/>
     /// ExSN3: 008 Picked Bass 2<br/>
     /// </i></remarks>
-    public abstract class SNABassBase : IntegraSNAParameter
+    public abstract class SNABassBase : IntegraSNAMapper
     {
         public SNABassBase(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 

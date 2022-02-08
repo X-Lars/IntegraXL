@@ -1,4 +1,5 @@
 ﻿using IntegraXL.Core;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace IntegraXL.Models
@@ -55,6 +56,7 @@ namespace IntegraXL.Models
 
         #region Constructor
 
+        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Class is created by reflection")]
         private StudioSetCommon(Integra device) : base(device) { }
 
         #endregion

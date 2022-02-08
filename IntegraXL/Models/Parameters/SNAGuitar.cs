@@ -15,7 +15,7 @@ namespace IntegraXL.Models.Parameters
     /// ExSN4: 005 SteelFing Guitar<br/>
     /// ExSN4: 006 SteelStr Guitar2<br/>
     /// </i></remarks>
-    public abstract class SNAGuitarBase : IntegraSNAParameter
+    public abstract class SNAGuitarBase : IntegraSNAMapper
     {
         public SNAGuitarBase(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -66,7 +66,7 @@ namespace IntegraXL.Models.Parameters
     /// <remarks><i>
     /// ExSN4: 004 Mandolin<br/>
     /// </i></remarks>
-    public sealed class SNAMandolin : IntegraSNAParameter
+    public sealed class SNAMandolin : IntegraSNAMapper
     {
         public SNAMandolin(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 

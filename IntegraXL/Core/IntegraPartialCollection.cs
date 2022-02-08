@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using IntegraXL.Extensions;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace IntegraXL.Core
@@ -58,7 +59,13 @@ namespace IntegraXL.Core
         /// <param name="sender">The device that raised the event.</param>
         /// <param name="e">The system exclusive message data.</param>
         /// <remarks><i>Defaults to do nothing.</i></remarks>
-        protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e) { }
+        protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e) 
+        { 
+            if(e.SystemExclusive.Address.InRange(this.First().Address, this.Last().Address))
+            {
+                Device.ReportProgress(this, Collection.Where(x => x.IsInitialized).Count(), Size - 1, e.SystemExclusive.Address.GetStudioSetPart());
+            }
+        }
 
         /// <summary>
         /// Initializes the collection with received system exclusive data.

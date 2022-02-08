@@ -3,7 +3,7 @@ using IntegraXL.Extensions;
 
 namespace IntegraXL.Models.Parameters
 {
-    public abstract class SNAWindBase : IntegraSNAParameter
+    public abstract class SNAWindBase : IntegraSNAMapper
     {
         public SNAWindBase(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -109,7 +109,7 @@ namespace IntegraXL.Models.Parameters
     /// INT: 074 Uilleann Pipes<br/>
     /// INT: 075 Bag Pipes<br/>
     /// </i></remarks>
-    public sealed class SNAPipes : IntegraSNAParameter
+    public sealed class SNAPipes : IntegraSNAMapper
     {
         public SNAPipes(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -260,7 +260,7 @@ namespace IntegraXL.Models.Parameters
     /// INT: 055 London Choir<br/>
     /// INT: 056 Boys Choir
     /// </i></remarks>
-    public sealed class SNAChoir : IntegraSNAParameter
+    public sealed class SNAChoir : IntegraSNAMapper
     {
         public SNAChoir(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 

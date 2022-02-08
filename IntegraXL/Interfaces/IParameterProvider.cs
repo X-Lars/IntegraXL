@@ -1,13 +1,30 @@
 ﻿using IntegraXL.Core;
+using System.ComponentModel;
 
 namespace IntegraXL.Interfaces
 {
     /// <summary>
-    /// Provides a contract for models containing an indexed parameter array.
+    /// Defines a contract for models containing a parameter array.
     /// </summary>
-    public interface IParameterProvider<T>
+    /// <typeparam name="TIndexer">The parameter indexer property type.</typeparam>
+    public interface IParameterProvider<TIndexer> : INotifyPropertyChanged
     {
-        T this[int index] { get; set; }
-        IntegraParameter<T>? Parameter { get; set; }
+        /// <summary>
+        /// The parameter indexer property.
+        /// </summary>
+        /// <param name="index">The index of the parameter.</param>
+        /// <returns>The parameter at the specified index.</returns>
+        TIndexer this[int index] { get; set; }
+
+        /// <summary>
+        /// Gets the parameter provider that names and validates the model's parameter indexer property.
+        /// </summary>
+        /// <remarks><i>The property name is for convenience to follows the Roland MIDI implementation naming as close as possible.</i></remarks>
+        IntegraParameterMapper<TIndexer>? Parameters { get; }
+
+        /// <summary>
+        /// Event to raise when the provider type is changed.
+        /// </summary>
+        event EventHandler<IntegraTypeChangedEventArgs>? TypeChanged;
     }
 }

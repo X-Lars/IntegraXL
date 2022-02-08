@@ -12,7 +12,7 @@ namespace IntegraXL.Models.Parameters
     /// ExSN1: 001 Santoor<br/>
     /// ExSN1: 002 Yang Chin<br/>
     /// </i></remarks>
-    public abstract class SNABellMalletBase : IntegraSNAParameter
+    public abstract class SNABellMalletBase : IntegraSNAMapper
     {
         public SNABellMalletBase(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 

@@ -6,7 +6,7 @@ namespace IntegraXL.Models.Parameters
     /// <remarks><i>
     /// INT: 052 Timpani
     /// </i></remarks>
-    public sealed class SNATimpani : IntegraSNAParameter
+    public sealed class SNATimpani : IntegraSNAMapper
     {
         public SNATimpani(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -40,7 +40,7 @@ namespace IntegraXL.Models.Parameters
     /// <remarks><i>
     /// INT: 077 Steel Drums
     /// </i></remarks>
-    public sealed class SNASteelDrums : IntegraSNAParameter
+    public sealed class SNASteelDrums : IntegraSNAMapper
     {
         public SNASteelDrums(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 

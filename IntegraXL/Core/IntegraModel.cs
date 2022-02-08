@@ -1,5 +1,4 @@
 ﻿using IntegraXL.Extensions;
-using IntegraXL.Models;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
@@ -20,16 +19,22 @@ namespace IntegraXL.Core
 
         #region Constructor
 
-        internal IntegraModel(Integra device) : this() 
-        {
-            Device = device;
-            Connect();
-        }
-        
-        private IntegraModel() : base()
+        /// <summary>
+        /// Creates and initializes a new <see cref="IntegraModel{TModel}"/> instance.<br/>
+        /// </summary>
+        /// <param name="device">The device to connect the model.</param>
+        /// <remarks><i>
+        /// - All derived classes require an <see cref="IntegraAttribute"/>.<br/>
+        /// - Sets the address, request and size from the <see cref="IntegraAttribute"/>.<br/>
+        /// - Collections are responsible for there own requests.<br/>
+        /// - Initializes the name with the type name.<br/>
+        /// - Connects the model to the device.<br/>
+        /// - Caches the model's <see cref="OffsetAttribute"/> decorated fields and properties.<br/>
+        /// </i></remarks>
+        internal IntegraModel(Integra device) : base(device) 
         {
             if (!IsCached)
-               IsCached = this.Cache();
+                IsCached = this.Cache();
         }
 
         #endregion
@@ -45,150 +50,13 @@ namespace IntegraXL.Core
             set
             {
                 if (_IsCached != value)
-                {
                     _IsCached = value;
-                }
             }
         }
 
         #endregion
 
-        protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
-        {
-            if (!IsCached)
-                return;
-
-            if (e.SystemExclusive.Address == Address)
-            {
-                if (e.SystemExclusive.Data.Length == Size)
-                {
-                    // Model data received
-                    if (Initialize(e.SystemExclusive.Data))
-                    {
-                        // Model is initialized
-                    }
-                }
-                else
-                {
-                    // TODO: 
-                    ReceivedProperty(e.SystemExclusive);
-                }
-                
-            }
-            else if (e.SystemExclusive.Address.InRange(Address, (int)(Address + Size)))
-            {
-
-                // Parameter data received
-                ReceivedProperty(e.SystemExclusive);
-            }
-        }
-
-        protected override bool Initialize(byte[] data)
-        {
-            // TODO: Combine received property into the initialize method
-            //if (!IsInitialized)
-            //{
-                foreach (var field in this.CachedFields())
-                {
-                    var fieldType = field.Value.FieldType;
-
-                    if (fieldType == typeof(byte))
-                    {
-                        field.Value.SetValue(this, data[field.Key]);
-                    }
-                    else if (fieldType == typeof(bool))
-                    {
-                        field.Value.SetValue(this, Convert.ToBoolean(data[field.Key]));
-                    }
-                    else if (fieldType == typeof(int))
-                    {
-                        byte[] bytes = new byte[4];
-
-                        for (int i = 0; i < bytes.Length; i++)
-                        {
-                            bytes[i] = data[field.Key + i];
-                        }
-
-                        if (BitConverter.IsLittleEndian)
-                            Array.Reverse(bytes);
-
-                        field.Value.SetValue(this, BitConverter.ToInt32(bytes, 0));
-                    }
-                    else if (fieldType.IsEnum)
-                    {
-                        Type type = field.Value.FieldType.GetEnumUnderlyingType();
-
-                        if (type == typeof(byte))
-                        {
-                            field.Value.SetValue(this, data[field.Key]);
-                        }
-                        else
-                        {
-                            throw new NotImplementedException();
-                        }
-                    }
-                    else if (fieldType.IsArray)
-                    {
-                        // Get the field array
-
-                        if (field.Value.GetValue(this) is not Array array)
-                            throw new NullReferenceException();
-
-                        // Get the type of array elements
-                        Type? type = array.GetType().GetElementType();
-
-                        if (type == null)
-                            throw new NullReferenceException();
-
-                        if (type == typeof(byte))
-                        {
-                            for (int i = 0; i < array.Length; i++)
-                            {
-                                array.SetValue(data[field.Key + i], i);
-                            }
-                        }
-                        else if (type == typeof(int))
-                        {
-                            for (int i = 0; i < array.Length; i++)
-                            {
-                                // Create byte array to extract the system exclusive data by four bytes
-                                byte[] bytes = new byte[4];
-
-                                // Increment the field offset by four bytes
-                                uint offset = (uint)(field.Key + (i * 4));
-
-                            // Some structures are varable length depending on the type
-                            if (offset + 4 > data.Length)
-                                break;
-                                
-                                // Read four bytes from the system exclusive data
-                                for (int j = 0; j < bytes.Length; j++)
-                                {
-                                    bytes[j] = (byte)((data[offset + j]) & 0x0F);
-                                }
-
-                                if (BitConverter.IsLittleEndian)
-                                    Array.Reverse(bytes);
-
-                                array.SetValue(BitConverter.ToInt32(bytes, 0), i);
-                            }
-                        }
-                        else
-                        {
-                            throw new NotImplementedException();
-                        }
-                    }
-                    else
-                    {
-                        throw new NotImplementedException();
-                    }
-
-                    // Update progress
-                }
-            //}
-
-            return IsInitialized = true;
-        }
+        #region Methods
 
         internal void TransmitProperty(string propertyName, int? index = null)
         {
@@ -413,6 +281,160 @@ namespace IntegraXL.Core
             }
         }
 
+        #endregion
+
+        #region Overrides: Model
+
+        protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
+        {
+            if (!IsCached)
+                return;
+
+            if (e.SystemExclusive.Address == Address)
+            {
+                if (e.SystemExclusive.Data.Length == Size)
+                {
+                    // Model data received
+                    if (Initialize(e.SystemExclusive.Data))
+                    {
+                        // Model is initialized
+                    }
+                }
+                else
+                {
+                    // TODO: 
+                    ReceivedProperty(e.SystemExclusive);
+                }
+
+            }
+            else if (e.SystemExclusive.Address.InRange(Address, (int)(Address + Size)))
+            {
+
+                // Parameter data received
+                ReceivedProperty(e.SystemExclusive);
+            }
+        }
+
+        /// <summary>
+        /// Initializes the model with data.
+        /// </summary>
+        /// <param name="data">The data to initialize the model.</param>
+        /// <returns>True if the model is initialized.</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        /// <exception cref="NullReferenceException"></exception>
+        protected override bool Initialize(byte[] data)
+        {
+            // TODO: Combine received property into the initialize method
+            //if (!IsInitialized)
+            //{
+            int fieldCount = this.CachedFields().Count;
+            double progress = 0;
+
+            foreach (var field in this.CachedFields())
+            {
+                var fieldType = field.Value.FieldType;
+
+                if (fieldType == typeof(byte))
+                {
+                    field.Value.SetValue(this, data[field.Key]);
+                }
+                else if (fieldType == typeof(bool))
+                {
+                    field.Value.SetValue(this, Convert.ToBoolean(data[field.Key]));
+                }
+                else if (fieldType == typeof(int))
+                {
+                    byte[] bytes = new byte[4];
+
+                    for (int i = 0; i < bytes.Length; i++)
+                    {
+                        bytes[i] = data[field.Key + i];
+                    }
+
+                    if (BitConverter.IsLittleEndian)
+                        Array.Reverse(bytes);
+
+                    field.Value.SetValue(this, BitConverter.ToInt32(bytes, 0));
+                }
+                else if (fieldType.IsEnum)
+                {
+                    Type type = field.Value.FieldType.GetEnumUnderlyingType();
+
+                    if (type == typeof(byte))
+                    {
+                        field.Value.SetValue(this, data[field.Key]);
+                    }
+                    else
+                    {
+                        throw new NotImplementedException();
+                    }
+                }
+                else if (fieldType.IsArray)
+                {
+                    // Get the field array
+
+                    if (field.Value.GetValue(this) is not Array array)
+                        throw new NullReferenceException();
+
+                    // Get the type of array elements
+                    Type? type = array.GetType().GetElementType();
+
+                    if (type == null)
+                        throw new NullReferenceException();
+
+                    if (type == typeof(byte))
+                    {
+                        for (int i = 0; i < array.Length; i++)
+                        {
+                            array.SetValue(data[field.Key + i], i);
+                        }
+                    }
+                    else if (type == typeof(int))
+                    {
+                        for (int i = 0; i < array.Length; i++)
+                        {
+                            // Create byte array to extract the system exclusive data by four bytes
+                            byte[] bytes = new byte[4];
+
+                            // Increment the field offset by four bytes
+                            uint offset = (uint)(field.Key + (i * 4));
+
+                            // Some structures are varable length depending on the type
+                            if (offset + 4 > data.Length)
+                                break;
+
+                            // Read four bytes from the system exclusive data
+                            for (int j = 0; j < bytes.Length; j++)
+                            {
+                                bytes[j] = (byte)((data[offset + j]) & 0x0F);
+                            }
+
+                            if (BitConverter.IsLittleEndian)
+                                Array.Reverse(bytes);
+
+                            array.SetValue(BitConverter.ToInt32(bytes, 0), i);
+                        }
+                    }
+                    else
+                    {
+                        throw new NotImplementedException();
+                    }
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+
+                progress++;
+
+                //Device.ReportProgress(this, progress, fieldCount);
+                // Update progress
+            }
+            //}
+
+            return IsInitialized = true;
+        }
+
         /// <summary>
         /// Method to invoke when a property is changed.
         /// </summary>
@@ -449,12 +471,12 @@ namespace IntegraXL.Core
             }
         }
 
-       
+        #endregion
     }
 
 
     /// <summary>
-    /// Base class for all MIDI enabled INTEGRA-7 data models.
+    /// Base class for all MIDI enabled INTEGRA-7 models.
     /// </summary>
     public abstract class IntegraModel : INotifyPropertyChanged
     {
@@ -473,59 +495,117 @@ namespace IntegraXL.Core
         /// Creates and initializes a new <see cref="IntegraModel"/> instance.<br/>
         /// </summary>
         /// <param name="device">The device to connect the model.</param>
-        internal IntegraModel(Integra device) : this()
+        /// <remarks><i>
+        /// - All derived classes require an <see cref="IntegraAttribute"/>.<br/>
+        /// - Sets the address, request and size from the <see cref="IntegraAttribute"/>.<br/>
+        /// - Collections are responsible for there own requests.<br/>
+        /// - Initializes the name with the type name.<br/>
+        /// - Connects the model to the device.<br/>
+        /// </i></remarks>
+        /// <exception cref="ArgumentNullException"></exception>
+        internal IntegraModel(Integra device)
         {
-            Device = device;
+            Device = device ?? 
+                throw new IntegraException($"[{nameof(IntegraModel)}]\n" +
+                                           $"{GetType().Name}: Device is null.");
+
+            Attribute = GetType().GetCustomAttribute<IntegraAttribute>() ??
+                throw new IntegraException($"[{nameof(IntegraModel)}]\n" +
+                                           $"{GetType().Name}: Attribute missing.\n" +
+                                           $"All {nameof(IntegraModel)} derived classes require an {nameof(IntegraAttribute)}.");
+
+            Name    = GetType().Name;
+            Size    = Attribute.Size;
+            Address = Attribute.Address;
+
             Connect();
-        }
 
-        /// <summary>
-        /// Creates and initializes a new <see cref="IntegraModel"/> instance.<br/>
-        /// </summary>
-        /// <remarks>
-        /// <i>All derived classes require an <see cref="IntegraAttribute"/>.</i><br/>
-        /// <i>Sets the address, request and size from the <see cref="IntegraAttribute"/>.</i><br/>
-        /// <i>Collections are responsible for there own requests.</i><br/>
-        /// <i>Initializes the name with the type name.</i>
-        /// </remarks>
-        protected IntegraModel()
-        {
-            Debug.Print($"[{nameof(IntegraModel)}] Contructor<{GetType().Name}>()]");
-
-            IntegraAttribute? attribute = GetType().GetCustomAttribute<IntegraAttribute>();
-
-            Debug.Assert(attribute != null);
-
-            Name = GetType().Name;
-            Size = attribute.Size;
-            Address = attribute.Address;
-
-            // Collections are responisble for generating the requests and are not cached
+            // Collections are responsible for generating the request(s)
             if (GetType().IsSubclassOf(typeof(IntegraCollection)))
                 return;
 
-            Requests.Add(new IntegraRequest(attribute.Request));
+            Requests.Add(new IntegraRequest(Attribute.Request));
         }
 
-        protected void Reinitialize()
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the physical INTEGRA-7 address of the model.
+        /// </summary>
+        public IntegraAddress Address { get; internal protected set; }
+
+        /// <summary>
+        /// Gets the list of requests to initialize the model.
+        /// </summary>
+        internal List<IntegraRequest> Requests { get; } = new();
+
+        /// <summary>
+        /// Gets the device associated with the model.
+        /// </summary>
+        internal protected Integra Device { get; private set; }
+
+        /// <summary>
+        /// Gets the model's <see cref="IntegraAttribute"/>.
+        /// </summary>
+        internal protected IntegraAttribute Attribute { get; }
+
+        /// <summary>
+        /// Gets wheter the model is connected to the device.
+        /// </summary>
+        public bool IsConnected { get; private set; }
+
+        /// <summary>
+        /// Gets the name of the model.
+        /// </summary>
+        /// <remarks><i>Defaults to the type name.</i></remarks>
+        public virtual string Name { get; protected set; }
+
+        /// <summary>
+        /// Gets the fixed model size in bytes or the fixed item count for collection types.<br/>
+        /// </summary>
+        /// <remarks>
+        /// <b>IMPORTANT</b><br/>
+        /// <i>The size is not serialized to the MIDI range.</i>
+        /// </remarks>
+        public int Size { get; internal protected set; }
+
+        /// <summary>
+        /// Gets wheter the model is initialized.
+        /// </summary>
+        /// <remarks><i>When set to true, property changed is raised for all properties.</i></remarks>
+        public virtual bool IsInitialized
         {
-            Debug.Print($"[{nameof(IntegraModel)}] {nameof(Reinitialize)}<{GetType().Name}>()");
+            get => _IsInitialized;
 
-            if(!IsConnected)
-                Connect();
+            internal protected set
+            {
+                if (_IsInitialized != value)
+                {
+                    _IsInitialized = value;
 
-            IsInitialized = false;
-
-            var b = InitializeAsync();
+                    NotifyPropertyChanged(string.Empty);
+                }
+            }
         }
 
+        #endregion
+
+        #region Methods
+        
         /// <summary>
         /// Requests the device to initialize the model.
         /// </summary>
         /// <returns>An awaitable task that returns true if the model is initialized.</returns>
+        /// <exception cref="NullReferenceException"></exception>
         internal virtual async Task<bool> InitializeAsync()
         {
-            Debug.Print($"[{nameof(IntegraModel)}<{GetType().Name}>.{nameof(InitializeAsync)}()]");
+            if (Device == null)
+                throw new NullReferenceException($"[{nameof(IntegraModel)}]\nThe device is null.");
+
+            if (!IsConnected)
+                Connect();
 
             try
             {
@@ -539,11 +619,28 @@ namespace IntegraXL.Core
         }
 
         /// <summary>
+        /// Requests the device to reinitialize the model.
+        /// </summary>
+        protected async void ReinitializeAsync()
+        {
+            IsInitialized = false;
+
+            await InitializeAsync();
+        }
+
+        /// <summary>
         /// Connects the model to the device to (re)enable receiving system exclusive messages.
         /// </summary>
         /// <remarks><i>Models are connected by default on instantiation.</i></remarks>
+        /// <exception cref="NullReferenceException"></exception>
         internal protected void Connect()
         {
+            if (Device == null)
+                throw new NullReferenceException($"[{nameof(IntegraModel)}]\nThe device is null.");
+
+            if (IsConnected)
+                return;
+
             Device.SystemExclusiveReceived += SystemExclusiveReceived;
             IsConnected = true;
         }
@@ -551,88 +648,32 @@ namespace IntegraXL.Core
         /// <summary>
         /// Disconnects the model from the device to disable receiving system exclusive messages.
         /// </summary>
+        /// <exception cref="NullReferenceException"
         internal void Disconnect()
         {
+            if (Device == null)
+                throw new NullReferenceException($"[{nameof(IntegraModel)}]\nThe device is null.");
+
+            if (!IsConnected)
+                return;
+
             Device.SystemExclusiveReceived -= SystemExclusiveReceived;
             IsConnected = false;
         }
 
         /// <summary>
-        /// Handles system exclusive messages filtered by exact adress and size matching.
+        /// Event handler for received system exclusive messages.
         /// </summary>
         /// <param name="sender">The device that raised the event.</param>
-        /// <param name="e">The system exclusive data.</param>
+        /// <param name="e">The event's associated data.</param>
         protected abstract void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e);
 
         /// <summary>
-        /// Initializes the model with data.
+        /// Method to initialize the model with data.
         /// </summary>
         /// <param name="data">The data to initialize the model.</param>
-        /// <returns>True if the model is initialized.</returns>
-        /// <exception cref="NotImplementedException"></exception>
-        /// <exception cref="NullReferenceException"></exception>
+        /// <returns>Must return true if the model is initialized.</returns>
         protected abstract bool Initialize(byte[] data);
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the physical INTEGRA-7 address of the model.
-        /// </summary>
-        public IntegraAddress Address { get; internal set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        internal List<IntegraRequest> Requests { get; } = new();
-
-        /// <summary>
-        /// Gets the device associated with the model.
-        /// </summary>
-        internal protected Integra Device { get; protected set; }
-
-        /// <summary>
-        /// Gets wheter the model is connected to the device.
-        /// </summary>
-        public bool IsConnected { get; private set; }
-
-        /// <summary>
-        /// Gets the name of the model.
-        /// </summary>
-        public virtual string Name { get; protected set; }
-        
-        /// <summary>
-        /// Gets the fixed model size in bytes or the fixed item count for collection types.<br/>
-        /// </summary>
-        /// <remarks>
-        /// <b>IMPORTANT</b><br/>
-        /// <i>The size is not serialized to the MIDI range.</i>
-        /// </remarks>
-        public int Size { get; protected set; }
-
-        /// <summary>
-        /// Gets wheter the model is initialized.
-        /// </summary>
-        /// <remarks><i>When set to true, property changed is raised for all properties.</i></remarks>
-        public virtual bool IsInitialized
-        {
-            get => _IsInitialized;
-
-            internal protected set
-            {
-                if(_IsInitialized != value)
-                {
-                    _IsInitialized = value;
-
-                    NotifyPropertyChanged(string.Empty);
-                }
-            }
-        }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Gets the unique identifier based on the model's address.
@@ -669,7 +710,7 @@ namespace IntegraXL.Core
         /// Method to invoke when a property is changed.
         /// </summary>
         /// <param name="propertyName">The name of the property, defaults to the caller member name.</param>
-        /// <param name="index">Unused optional parameter for indexed properties.</param>
+        /// <param name="index">Unimplemented optional parameter for indexed properties.</param>
         protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = "", int? index = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

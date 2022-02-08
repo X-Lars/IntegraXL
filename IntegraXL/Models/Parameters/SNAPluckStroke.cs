@@ -7,7 +7,7 @@ namespace IntegraXL.Models.Parameters
     /// INT: 073 Sitar
     /// ExSN1: 010 Sarangi
     /// </i></remarks>
-    public sealed class SNASitar : IntegraSNAParameter
+    public sealed class SNASitar : IntegraSNAMapper
     {
         public SNASitar(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -45,7 +45,7 @@ namespace IntegraXL.Models.Parameters
     /// ExSN1: 005 Tsugaru<br/>
     /// ExSN1: 006 Sansin<br/>
     /// </i></remarks>
-    public sealed class SNAShamisen : IntegraSNAParameter
+    public sealed class SNAShamisen : IntegraSNAMapper
     {
         public SNAShamisen(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -93,7 +93,7 @@ namespace IntegraXL.Models.Parameters
         public IEnumerable<VarShamisen>   Variations => Enum.GetValues(typeof(VarShamisen)).Cast<VarShamisen>();
     }
 
-    public sealed class SNAKoto : IntegraSNAParameter
+    public sealed class SNAKoto : IntegraSNAMapper
     {
         public SNAKoto(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -165,7 +165,7 @@ namespace IntegraXL.Models.Parameters
     /// <remarks><i>
     /// ExSN1: 008 Taishou Koto
     /// </i></remarks>  
-    public sealed class SNATaishou : IntegraSNAParameter
+    public sealed class SNATaishou : IntegraSNAMapper
     {
         public SNATaishou(SuperNATURALAcousticToneCommon provider) : base(provider)
         {
@@ -195,7 +195,7 @@ namespace IntegraXL.Models.Parameters
     /// <remarks><i>
     /// ExSN1: 009 Kalimba
     /// </i></remarks>  
-    public sealed class SNAKalimba : IntegraSNAParameter
+    public sealed class SNAKalimba : IntegraSNAMapper
     {
         public SNAKalimba(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 

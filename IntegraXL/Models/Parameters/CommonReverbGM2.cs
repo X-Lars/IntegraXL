@@ -8,7 +8,7 @@ namespace IntegraXL.Models.Parameters
     /// 00: Character <br/>
     /// 03: Time <br/>
     /// </remarks>
-    public sealed class CommonReverbGM2 : IntegraMFXParameter
+    public sealed class CommonReverbGM2 : IntegraMFXMapper
     {
         public CommonReverbGM2(StudioSetCommonReverb provider) : base(provider) { }
 

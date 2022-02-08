@@ -1001,6 +1001,37 @@ namespace IntegraXL.Core
 
     #endregion
 
+    #region SuperNATURAL DrumKit
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraNoteVariation : byte
+    {
+        // TODO: Enumeration descriptions
+        [Description("Off")] Off  = 0x00,
+        [Description("1")] Flam01 = 0x01,
+        [Description("2")] Flam02 = 0x02,
+        [Description("3")] Flam03 = 0x03,
+        [Description("1")] Buzz01 = 0x04,
+        [Description("2")] Buzz02 = 0x05,
+        [Description("3")] Buzz03 = 0x06,
+        [Description("3")] Roll   = 0x07,
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraNoteOutputAssign : byte
+    {
+        // TODO: Enumeration descriptions
+        [Description("Off")] Part     = 0x00,
+        [Description("1")]   CompEQ01 = 0x01,
+        [Description("2")]   CompEQ02 = 0x02,
+        [Description("3")]   CompEQ03 = 0x03,
+        [Description("1")]   CompEQ04 = 0x04,
+        [Description("2")]   CompEQ05 = 0x05,
+        [Description("3")]   CompEQ06 = 0x06,
+    }
+
+    #endregion
+
     #region PCMSynthToneCommon
 
     public enum IntegraTonePriority : byte

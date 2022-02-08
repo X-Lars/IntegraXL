@@ -37,7 +37,7 @@ namespace IntegraXL.Core
         /// <summary>
         /// Defines the time to wait for an identity reply in milliseconds before the connection is timed out.
         /// </summary>
-        private const int DEVICE_CONNECTION_TIMEOUT = 2000;
+        private const int DEVICE_CONNECTION_TIMEOUT = 1000;
 
         #endregion
 
@@ -73,6 +73,11 @@ namespace IntegraXL.Core
         /// </summary>
         private static CancellationTokenSource _CTS = new();
 
+        /// <summary>
+        /// Reference to the optional progress report function.
+        /// </summary>
+        private IProgress<int>? _Progress;
+
         #endregion
 
         #region Events
@@ -97,21 +102,18 @@ namespace IntegraXL.Core
         /// <param name="midiOutputDevice">The MIDI output device to associate with the connection.</param>
         /// <param name="midiInputDevice">The MIDI input device to associate with the connection.</param>
         /// <param name="deviceID">The <i>zero based</i> device ID.</param>
+        /// <param name="progress">The optional progress handler.</param>
         /// <exception cref="IntegraException">When the device ID is out of range.</exception>
-        internal IntegraConnection(byte deviceID, IMIDIOutputDevice midiOutputDevice, IMIDIInputDevice midiInputDevice)
+        internal IntegraConnection(byte deviceID, IMIDIOutputDevice midiOutputDevice, IMIDIInputDevice midiInputDevice, IProgress<int>? progress = null)
         {
-            if (midiOutputDevice == null)
-                throw new IntegraException($"[{nameof(IntegraConnection)}]\nMIDI Output device = NULL");
-
-            if (midiInputDevice == null)
-                throw new IntegraException($"[{nameof(IntegraConnection)}]\nMIDI Input device = NULL");
-
             ID = deviceID;
 
-            _MidiOutputDevice = midiOutputDevice;
-            _MidiInputDevice  = midiInputDevice;
+            _MidiOutputDevice = midiOutputDevice ?? throw new IntegraException($"[{nameof(IntegraConnection)}]\nMIDI Output device = NULL");
+            _MidiInputDevice  = midiInputDevice  ?? throw new IntegraException($"[{nameof(IntegraConnection)}]\nMIDI Input device = NULL");
+            _Progress         = progress;
 
             _ConnectionStatus = ConnectionStatus.Unknown;
+
         }
 
         #endregion
@@ -460,18 +462,17 @@ namespace IntegraXL.Core
         public Task<ConnectionStatus> Invalidate()
         {
             // TOOD: ? Make static
-
             if(!_CTS.TryReset())
                 _CTS = new CancellationTokenSource();
 
             Status = ConnectionStatus.Validating;
-
+            
             return Task<ConnectionStatus>.Run(async () =>
             {
                 try
                 {
                     _CTS.Token.ThrowIfCancellationRequested();
-
+                    
                     int connectionTime = 0;
                     int connectionResolution = DEVICE_CONNECTION_TIMEOUT / 100;
 
@@ -494,17 +495,19 @@ namespace IntegraXL.Core
 
                         connectionTime += connectionResolution;
 
-                        int progress = 100 - (DEVICE_CONNECTION_TIMEOUT - connectionTime) / connectionResolution;
+                        if (_Progress != null)
+                            _Progress.Report(100 - (DEVICE_CONNECTION_TIMEOUT - connectionTime) / connectionResolution);
 
-                        //TODO: Report progress
                         await Task.Delay(connectionResolution, _CTS.Token);
-                        //Thread.Sleep(connectionResolution);
 
                         if (connectionTime >= DEVICE_CONNECTION_TIMEOUT)
                         {
                             return Status = ConnectionStatus.Disconnected;
                         }
                     }
+
+                    if (_Progress != null)
+                        _Progress.Report(100);
 
                     return Status = ConnectionStatus.Connected;
                 }
@@ -513,6 +516,8 @@ namespace IntegraXL.Core
                     Debug.Print($"[{nameof(IntegraConnection)}.{nameof(Invalidate)}] #{ID} Cancelled");
 
                     // TODO: ? Add cancelled status
+                    if (_Progress != null)
+                        _Progress.Report(100);
 
                     return Status = ConnectionStatus.Unknown;
                 }

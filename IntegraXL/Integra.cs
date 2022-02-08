@@ -24,7 +24,7 @@ namespace IntegraXL
         /// <summary>
         /// 
         /// </summary>
-        private IntegraTaskManager _TaskManager = new();
+        private readonly IntegraTaskManager _TaskManager = new();
 
         /// <summary>
         /// 
@@ -34,7 +34,7 @@ namespace IntegraXL
         /// <summary>
         /// 
         /// </summary>
-        private ConcurrentDictionary<int, IntegraModel> _Models = new();
+        private readonly ConcurrentDictionary<int, IntegraModel> _Models = new();
 
         /// <summary>
         /// Stores the <i>zero based</i> device ID.
@@ -45,6 +45,11 @@ namespace IntegraXL
         /// 
         /// </summary>
         private bool _IsInitialized;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private bool _IsConnected;
 
         /// <summary>
         /// Stores the selected active part.
@@ -66,7 +71,12 @@ namespace IntegraXL
         /// </summary>
         internal static readonly SynchronizationContext? UIContext = SynchronizationContext.Current;
 
-        private CancellationTokenSource _ModelCTS = new ();
+        /// <summary>
+        /// Stores the cancellation token source that cancels all task.
+        /// </summary>
+        private CancellationTokenSource _CTS = new ();
+
+        private IProgress<IntegraStatus> _Progress;
 
         #endregion
 
@@ -176,8 +186,10 @@ namespace IntegraXL
         /// - Initializes all uninitialized cached models<br/>
         /// - Sets the <see cref="IsInitialized"/> property<br/>
         /// </i></remarks>
-        public async Task<bool> Initialize()
+        public async Task<bool> Initialize(IProgress<IntegraStatus>? progress = null)
         {
+            _Progress = progress;
+
             if (_Connection == null)
                 return IsInitialized = false;
 
@@ -189,33 +201,27 @@ namespace IntegraXL
                     return IsInitialized = false;
             }
 
-            _ModelCTS = new CancellationTokenSource();
+            _CTS = new CancellationTokenSource();
 
-            //try
-            //{
-                // Initialize collections first to reduce SX and duplicate calls
-                foreach (var model in _Models.Values.Where(x => x.IsInitialized == false && x.GetType().IsSubclassOf(typeof(IntegraCollection))))
+            // Initialize collections first to reduce SX and duplicate calls
+            foreach (var model in _Models.Values.Where(x => x.IsInitialized == false && x.GetType().IsSubclassOf(typeof(IntegraCollection))))
+            {
+                if (!_CTS.IsCancellationRequested)
                 {
-                    if(!_ModelCTS.IsCancellationRequested)
+                    ReportProgress($"Initializing {model.Name}", "Please wait...", 0, "");
                     await model.InitializeAsync();
                 }
+            }
 
-                // Initialize remaining models
-                foreach (var model in _Models.Values.Where(x => x.IsInitialized == false))
-                {
-                if(!_ModelCTS.IsCancellationRequested)
+            // Initialize remaining models
+            foreach (var model in _Models.Values.Where(x => x.IsInitialized == false))
+            {
+                if(!_CTS.IsCancellationRequested)
                     await model.InitializeAsync();
-                }
+            }
 
-            if (_ModelCTS.IsCancellationRequested)
+            if (_CTS.IsCancellationRequested)
                 return IsInitialized = false;
-            //}
-            //catch(TaskCanceledException)
-            //{
-            //    return IsInitialized = false;
-            //}
-
-            //_ModelCTS = new CancellationTokenSource();
 
             return IsInitialized = true;
         }
@@ -224,10 +230,7 @@ namespace IntegraXL
         {
             if (e.Previous == ConnectionStatus.Connected)
             {
-                _ModelCTS.Cancel();
-                // Cancel running tasks
-                // Disconnect models
-                // Mark models out of sync
+                _CTS.Cancel();
             }
         }
 
@@ -254,7 +257,6 @@ namespace IntegraXL
             }
         }
 
-        private bool _IsConnected;
         public bool IsConnected
         {
             get => _IsConnected;
@@ -298,6 +300,8 @@ namespace IntegraXL
             }
         }
 
+        public IProgress<IntegraStatus> Progress { get; set; }
+
         /// <summary>
         /// Gets whether the tone preview is running.
         /// </summary>
@@ -323,6 +327,7 @@ namespace IntegraXL
                 }
             }
         }
+        #endregion
 
         #region Properties: INTEGRA-7
 
@@ -340,7 +345,7 @@ namespace IntegraXL
         /// <summary>
         /// Gets the studio set model.
         /// </summary>
-        public StudioSet? StudioSet { get; private set;}
+        public StudioSet? StudioSet { get; private set; }
 
         /// <summary>
         /// Gets the virtual slots model.
@@ -350,7 +355,12 @@ namespace IntegraXL
         /// <summary>
         /// Gets the collection of selected tones for all parts.
         /// </summary>
-        public IntegraTones SelectedTones { get; private set; }
+        public IntegraTones? SelectedTones { get; private set; }
+
+        /// <summary>
+        /// Gets the collection of temporary tones for all parts.
+        /// </summary>
+        public TemporaryTones? TemporaryTones { get; private set; }
 
         /// <summary>
         /// Gets or sets the active part.
@@ -369,21 +379,17 @@ namespace IntegraXL
                 if (_SelectedPart != value)
                 {
                     var previous = _SelectedPart;
-                    var preview  = IsPreviewing;
-
-                    // Clamp to part index 0..15
-                    value = Math.Min(value, 15);
-                    value = Math.Max(value, 0);
+                    var preview = IsPreviewing;
 
                     if (preview)
                         Preview = false;
 
-                    _SelectedPart = value;
+                    _SelectedPart = value.Clamp(0, 15);
 
                     if (preview)
                         Preview = true;
 
-                    
+
                     PartChanged?.Invoke(this, new IntegraPartChangedEventArgs((Parts)value, (Parts)previous));
 
                     NotifyPropertyChanged();
@@ -417,19 +423,9 @@ namespace IntegraXL
 
         public TemporaryTone TemporaryTone
         {
-            get => _TemporaryTone;
-            private set
-            {
-                if(_TemporaryTone != value)
-                {
-                    _TemporaryTone = value;
-                    NotifyPropertyChanged();
-                }
-            }
+            get => TemporaryTones[SelectedPart];
+           
         }
-
-        public TemporaryTones TemporaryTones { get; private set; }
-        #endregion
 
         #endregion
 
@@ -474,39 +470,90 @@ namespace IntegraXL
 
         private void CreateModels()
         {
-            Setup         = CreateModel<Setup>();
-            VirtualSlots  = CreateModel<VirtualSlots>();
-            StudioSets    = CreateModel<StudioSets>();
-            SelectedTones = CreateModel<IntegraTones>();
-            StudioSet     = CreateModel<StudioSet>();
+            Setup          = CreateModel<Setup>();
+            VirtualSlots   = CreateModel<VirtualSlots>();
+            StudioSets     = CreateModel<StudioSets>();
+            SelectedTones  = CreateModel<IntegraTones>();
+            StudioSet      = CreateModel<StudioSet>();
             TemporaryTones = CreateModel<TemporaryTones>();
         }
 
         /// <summary>
-        /// Initializes the nescesary models to operate.
+        /// Toggles the tone preview on or off.
         /// </summary>
-        /// <returns>An awaitable <see cref="Task"/> that returns nothing.</returns>
-        private async Task<bool> InitializeInstance()
+        private void ExecutePreview()
         {
+            if (IsPreviewing)
+            {
+                TransmitSystemExclusive(new IntegraSystemExclusive(0x0F002000, 0x00000000, new byte[] { 0x00 }));
 
-            Status.Task = "Initializing";
+                IsPreviewing = false;
+            }
+            else
+            {
+                TransmitSystemExclusive(new IntegraSystemExclusive(0x0F002000, 0x00000000, new byte[] { (byte)(SelectedPart + 1) }));
 
-            Setup          = await GetModel<Setup>();
-            VirtualSlots   = await GetModel<VirtualSlots>();
-            StudioSets     = await GetModel<StudioSets>();
-            SelectedTones  = await GetModel<IntegraTones>();
-            StudioSet      = await GetModel<StudioSet>();
+                IsPreviewing = true;
+            }
 
-            //TemporaryTones = await GetModel<TemporaryTones>();
-
-            //TemporaryTone = await GetModel<TemporaryTone>(Parts.Part01);
-            //await TemporaryTone.Initialize();
-            //TemporaryTone = await GetModel<TemporaryTone>(Parts.Part01);
-            Status.Task = "Ready";
-            return IsInitialized = true;
+            NotifyPropertyChanged(nameof(IsPreviewing));
+            NotifyPropertyChanged(nameof(Preview));
         }
 
-        #region Model Instantiation
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="systemExclusive"></param>
+        /// <remarks><i>Sets the system exclusive device ID.</i></remarks>
+        internal void TransmitSystemExclusive(IntegraSystemExclusive systemExclusive)
+        {
+            // TODO: Check if taskmanager is nescessary for sending
+            Task<bool> task = new(() =>
+            {
+                systemExclusive.DeviceID = _DeviceID;
+
+                _Connection.SendSystemExclusiveMessage(systemExclusive);
+                return true;
+
+            }, _CTS.Token);
+
+            _TaskManager.Enqueue(task, _CTS.Token);
+        }
+
+
+        internal void ReportProgress(IntegraModel model, double current, int total, Parts? part = null)
+        {
+            Status.Operation = $"Initializing {model.Name} {part}";
+            Status.Progress = (int)(current / total * 100);
+
+            if (model.GetType().IsSubclassOf(typeof(IntegraCollection)))
+            {
+                Status.Text = $"{(int)current} of {total}";
+            }
+            else
+            {
+                Status.Text = $"{(int)current} byte";
+            }
+            
+            if (_Progress != null)
+                _Progress.Report(Status);
+
+        }
+
+        private void ReportProgress(string operation, string message, int progress = 0, string text = "Ready")
+        {
+            Status.Operation = operation;
+            Status.Progress  = progress;
+            Status.Message   = message;
+            Status.Text      = text;
+
+            if (_Progress != null)
+                _Progress.Report(Status);
+        }
+
+        #endregion
+
+        #region Methods: Model Instantiation
 
         /// <summary>
         /// Creates and caches a new INTEGRA-7 model or returns the model from cache if it exists.<br/>
@@ -536,7 +583,7 @@ namespace IntegraXL
             if (_Models.TryGetValue(instance.GetUID(), out IntegraModel? model))
             {
                 Debug.Print($"[{nameof(Integra)}] {nameof(CreateModel)}<{typeof(TModel).Name}>({part}) From Cache");
-                
+
                 // IMPORTANT: ? Disconnect to remove the device event listener to free all references to the newly created instance?
                 instance.Disconnect();
                 instance = null;
@@ -623,8 +670,8 @@ namespace IntegraXL
                 Debug.Print($"[{nameof(Integra)}] {nameof(CreateToneBank)}({type}) From Cache");
 
                 // IMPORTANT: Disconnect to remove the device event listener to free all references to the newly created instance?
-                instance.Disconnect();
-                instance = null;
+                //instance.Disconnect();
+                //instance = null;
 
                 return (IntegraToneBank)model;
             }
@@ -641,8 +688,7 @@ namespace IntegraXL
 
         #endregion
 
-
-        #region INTEGRA-7 Requests
+        #region Methods: Model Requests
 
         internal Task<bool> ReinitializeModel(IntegraModel model)
         {
@@ -683,7 +729,7 @@ namespace IntegraXL
 
                     while (!model.IsInitialized)
                     {
-                    if (_ModelCTS.IsCancellationRequested)
+                    if (_CTS.IsCancellationRequested)
                         return false;
                         //_ModelCTS.Token.ThrowIfCancellationRequested();
                         //await Task.Delay(100, _ModelCTS.Token);
@@ -695,7 +741,7 @@ namespace IntegraXL
                     //CompleteProgress(model);
                     return true;
 
-            }, _ModelCTS.Token);
+            }, _CTS.Token);
 
             //task.ContinueWith((t) =>
             //{
@@ -705,7 +751,7 @@ namespace IntegraXL
 
             // TODO: Error handling / Time out to prevent application lock
             //if(!_ModelCTS.IsCancellationRequested)
-            _TaskManager.Enqueue(task, _ModelCTS.Token);
+            _TaskManager.Enqueue(task, _CTS.Token);
 
 
             return task;
@@ -730,9 +776,9 @@ namespace IntegraXL
                 }
 
                 return true;
-            },_ModelCTS.Token);
+            },_CTS.Token);
 
-            _TaskManager.Enqueue(task, _ModelCTS.Token);
+            _TaskManager.Enqueue(task, _CTS.Token);
 
             return task;
         }
@@ -740,49 +786,9 @@ namespace IntegraXL
 
         #endregion
 
-        /// <summary>
-        /// Toggles the tone preview on or off.
-        /// </summary>
-        private void ExecutePreview()
-        {
-            if (IsPreviewing)
-            {
-                TransmitSystemExclusive(new IntegraSystemExclusive(0x0F002000, 0x00000000, new byte[] { 0x00 }));
+        
 
-                IsPreviewing = false;
-            }
-            else
-            {
-                TransmitSystemExclusive(new IntegraSystemExclusive(0x0F002000, 0x00000000, new byte[] { (byte)(SelectedPart + 1) }));
 
-                IsPreviewing = true;
-            }
-
-            NotifyPropertyChanged(nameof(IsPreviewing));
-            NotifyPropertyChanged(nameof(Preview));
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="systemExclusive"></param>
-        /// <remarks><i>Sets the system exclusive device ID.</i></remarks>
-        internal void TransmitSystemExclusive(IntegraSystemExclusive systemExclusive)
-        {
-            // TODO: Check if taskmanager is nescessary for sending
-            Task<bool> task = new (() =>
-            {
-                systemExclusive.DeviceID = _DeviceID;
-                
-                _Connection.SendSystemExclusiveMessage(systemExclusive);
-                return true;
-
-            }, _ModelCTS.Token);
-
-            _TaskManager.Enqueue(task, _ModelCTS.Token);
-        }
-
-        #endregion
 
         #region Event Handlers
 

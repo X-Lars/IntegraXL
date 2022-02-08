@@ -16,7 +16,7 @@ namespace IntegraXL.Models.Parameters
     /// 09: High Gain <br/>
     /// 10: Level <br/>
     /// </remarks>
-    public sealed class Equalizer : IntegraMFXParameter
+    public sealed class Equalizer : IntegraMFXMapper
     {
         public Equalizer(MFX provider) : base(provider) { }
 

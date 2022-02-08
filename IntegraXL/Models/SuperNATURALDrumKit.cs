@@ -1,6 +1,6 @@
 ﻿using IntegraXL.Core;
-using System.Reflection;
-using System.Threading.Tasks;
+using IntegraXL.Extensions;
+using System.Diagnostics;
 
 namespace IntegraXL.Models
 {
@@ -16,7 +16,7 @@ namespace IntegraXL.Models
 
             Common = new SuperNATURALDrumKitCommon(this);
             CompEQ = new DrumKitCommonCompEQ(this);
-            //Notes = new IntegraSuperNATURALDrumKitNoteCollection(this);
+            Notes  = new SuperNATURALDrumKitNotes(this);
         }
 
         //public override bool IsInitialized
@@ -26,24 +26,13 @@ namespace IntegraXL.Models
         public override bool IsInitialized 
         { 
             // TODO: Notes is initialized
-            get => CompEQ.IsInitialized; 
+            get => Notes.IsInitialized; 
 
             protected internal set => base.IsInitialized = value; 
         }
+
         public SuperNATURALDrumKitCommon Common { get; }
         public DrumKitCommonCompEQ CompEQ { get; }
-
-        //public IntegraSuperNATURALDrumKitNoteCollection Notes
-        //{
-        //    get { return _Notes; }
-        //    set
-        //    {
-        //        if(_Notes != value)
-        //        {
-        //            _Notes = value;
-        //            NotifyPropertyChanged();
-        //        }
-        //    }
-        //}
+        public SuperNATURALDrumKitNotes Notes { get; }
     }
 }

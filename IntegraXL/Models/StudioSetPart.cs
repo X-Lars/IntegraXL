@@ -175,9 +175,9 @@ namespace IntegraXL.Models
                     return;
 
                 _Tone.BankSelect = value;
-                _BankSelect[0] = value.MSB.Serialize();
-                _BankSelect[1] = value.LSB.Serialize();
-                _BankSelect[2] = value.PC.Serialize();
+                _BankSelect[0] = value.MSB.Clamp();
+                _BankSelect[1] = value.LSB.Clamp();
+                _BankSelect[2] = value.PC.Clamp();
 
                 NotifyPropertyChanged();
             }
@@ -227,7 +227,7 @@ namespace IntegraXL.Models
             {
                 if (_PartLevel != value)
                 {
-                    _PartLevel = value.Serialize();
+                    _PartLevel = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -241,7 +241,7 @@ namespace IntegraXL.Models
             {
                 if (_Pan != value)
                 {
-                    _Pan = value.Serialize();
+                    _Pan = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -311,7 +311,7 @@ namespace IntegraXL.Models
             {
                 if (_PitchBendRange != value)
                 {
-                    _PitchBendRange = value.Serialize(0, 25);
+                    _PitchBendRange = value.Clamp(0, 25);
                     NotifyPropertyChanged();
                 }
             }
@@ -496,7 +496,7 @@ namespace IntegraXL.Models
             {
                 if (_KeyboardRangeLower != value)
                 {
-                    _KeyboardRangeLower = value.Serialize();
+                    _KeyboardRangeLower = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -510,7 +510,7 @@ namespace IntegraXL.Models
             {
                 if (_KeyboardRangeUpper != value)
                 {
-                    _KeyboardRangeUpper = value.Serialize();
+                    _KeyboardRangeUpper = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -524,7 +524,7 @@ namespace IntegraXL.Models
             {
                 if (_KeyboardFadeWidthLower != value)
                 {
-                    _KeyboardFadeWidthLower = value.Serialize();
+                    _KeyboardFadeWidthLower = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -538,7 +538,7 @@ namespace IntegraXL.Models
             {
                 if (_KeyboardFadeWidthUpper != value)
                 {
-                    _KeyboardFadeWidthUpper = value.Serialize();
+                    _KeyboardFadeWidthUpper = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -552,7 +552,7 @@ namespace IntegraXL.Models
             {
                 if (_VelocityRangeLower != value)
                 {
-                    _VelocityRangeLower = value.Serialize();
+                    _VelocityRangeLower = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -566,7 +566,7 @@ namespace IntegraXL.Models
             {
                 if (_VelocityRangeUpper != value)
                 {
-                    _VelocityRangeUpper = value.Serialize();
+                    _VelocityRangeUpper = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -580,7 +580,7 @@ namespace IntegraXL.Models
             {
                 if (_VelocityFadeWidthLower != value)
                 {
-                    _VelocityFadeWidthLower = value.Serialize();
+                    _VelocityFadeWidthLower = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -594,7 +594,7 @@ namespace IntegraXL.Models
             {
                 if (_VelocityFadeWidthUpper != value)
                 {
-                    _VelocityFadeWidthUpper = value.Serialize();
+                    _VelocityFadeWidthUpper = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -622,7 +622,7 @@ namespace IntegraXL.Models
             {
                 if (_ChorusSendLevel != value)
                 {
-                    _ChorusSendLevel = value.Serialize();
+                    _ChorusSendLevel = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -636,7 +636,7 @@ namespace IntegraXL.Models
             {
                 if (_ReverbSendLevel != value)
                 {
-                    _ReverbSendLevel = value.Serialize();
+                    _ReverbSendLevel = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -1042,7 +1042,7 @@ namespace IntegraXL.Models
             {
                 if (_MotionalSurroundWidth != value)
                 {
-                    _MotionalSurroundWidth = value.Serialize();
+                    _MotionalSurroundWidth = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -1056,7 +1056,7 @@ namespace IntegraXL.Models
             {
                 if (_MotionalSurroundAmbienceSendLevel != value)
                 {
-                    _MotionalSurroundAmbienceSendLevel = value.Serialize();
+                    _MotionalSurroundAmbienceSendLevel = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }

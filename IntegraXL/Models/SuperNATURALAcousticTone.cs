@@ -14,6 +14,7 @@ namespace IntegraXL.Models
 
         internal SuperNATURALAcousticTone(TemporaryTone parent) : base(parent.Device)
         {
+            
             Address += parent.Address;
             Common = new SuperNATURALAcousticToneCommon(this);
             //_MFX = parent.MFX;// ?new MFX(temporaryTone);

@@ -1,4 +1,5 @@
 ﻿using IntegraXL.Core;
+using System.Diagnostics.CodeAnalysis;
 
 namespace IntegraXL.Models
 {
@@ -11,9 +12,10 @@ namespace IntegraXL.Models
         #region Constructor
 
         /// <summary>
-        /// Creates a new <see cref="StudioSet"/> model instance.
+        /// Creates a new <see cref="StudioSet"/> instance.
         /// </summary>
-        /// <param name="device">The device that manages the model.</param>
+        /// <param name="device">The device to connect the model.</param>
+        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "The class is created by reflection.")]
         private StudioSet(Integra device) : base(device)
         {
             Common                 = device.CreateModel<StudioSetCommon>();

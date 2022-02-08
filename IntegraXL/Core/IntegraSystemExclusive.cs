@@ -78,8 +78,8 @@ namespace IntegraXL.Core
         /// <exception cref="IntegraException"></exception>
         public IntegraSystemExclusive(byte[] raw)
         {
-            Address = raw.Part(SYX_ADDRESS_IDX, 4);
-            Data    = raw.Part(SYX_DATA_IDX, raw.Length - SYX_FIXED_SIZE);
+            Address = raw.GetArrayPart(SYX_ADDRESS_IDX, 4);
+            Data    = raw.GetArrayPart(SYX_DATA_IDX, raw.Length - SYX_FIXED_SIZE);
         }
 
         /// <summary>
@@ -202,9 +202,9 @@ namespace IntegraXL.Core
         #region Overrides: Object
 
         /// <summary>
-        /// Provides a user friendly hexadecimal string representation of the raw system exclusive message bytes.
+        /// Returns a hexadecimal string that represents the current system exclusive message.
         /// </summary>
-        /// <returns>A user friendly <see cref="string"/> representation of the system exclusive message.</returns>
+        /// <returns>A hexadecimal string that represents the current system exclusive message.</returns>
         public override string ToString()
         {
             return string.Join(" ", ((byte[])this).Select(x => string.Format("{0:X2}", x)));
