@@ -14,15 +14,19 @@ namespace IntegraXL.Core
 
         public static List<WaveformTemplate> Templates(IntegraWaveFormTypes type, IntegraWaveFormBanks bank)
         {
-            List<WaveformTemplate> templates = new();
-            Assembly myAssembly = Assembly.GetExecutingAssembly();
-            Stream myStream = myAssembly.GetManifestResourceStream("IntegraXL.Resources.WaveForms.csv");
-            //StreamReader reader = new (myStream);
-            using (StreamReader reader = new (myStream))
+            List<WaveformTemplate> waveforms = new();
+
+            Stream? stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("IntegraXL.Resources.WaveForms.csv");
+
+            if(stream == null)
+                throw new IntegraException($"[{nameof(IntegraWaveformLookup)}.{nameof(Templates)}]\nUnable to load the waveforms resource.");
+
+
+            using (StreamReader reader = new (stream))
             {
                 while (!reader.EndOfStream)
                 {
-                    WaveformTemplate template = Read(reader.ReadLine());
+                    WaveformTemplate template = LoadWaveform(reader.ReadLine());
 
                     if (template.Type != type)
                         continue;
@@ -30,19 +34,18 @@ namespace IntegraXL.Core
                     if (template.Bank != bank)
                         continue;
 
-                    templates.Add(template);
+                    waveforms.Add(template);
                 }
             }
 
-            return templates;
-            //return reader.ReadToEnd((@"IntegraXL.Resources.WaveForms.csv").Select(x => Read(x)).Where(x => x.Type == type).Where(x => x.Bank == bank).ToList();
+            return waveforms;
         }
 
-        public static WaveformTemplate Read(string line)
+        public static WaveformTemplate LoadWaveform(string line)
         {
             string[] values = line.Split('|');
 
-            WaveformTemplate template = new WaveformTemplate();
+            WaveformTemplate template = new();
 
             template.Type = (IntegraWaveFormTypes)Convert.ToInt32(values[0]);
             template.Bank = (IntegraWaveFormBanks)Convert.ToInt32(values[1]);

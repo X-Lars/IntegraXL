@@ -323,8 +323,8 @@ namespace IntegraXL.Core
                 // System Exclusive Message
                 case IntegraConstants.MIDI_MANUFACTURER_ID:
 
-                    try
-                    {
+                    //try
+                    //{
                         IntegraSystemExclusive systemExclusive = new (e.Data);
 
                         if (systemExclusive.DeviceID == ID)
@@ -332,11 +332,11 @@ namespace IntegraXL.Core
                             Debug.Print($"RX {systemExclusive}");
                             SystemExclusiveReceived?.Invoke(this, new IntegraSystemExclusiveEventArgs(systemExclusive));
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new IntegraException($"[{nameof(IntegraConnection)}.{nameof(LongMessageReceived)}]\nInvalid system exclusive message.", ex);
-                    }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    throw new IntegraException($"[{nameof(IntegraConnection)}.{nameof(LongMessageReceived)}]\nInvalid system exclusive message.", ex);
+                    //}
 
                     break;
 

@@ -196,6 +196,23 @@ namespace IntegraXL.Core
                     field.SetValue(this, Convert.ToBoolean(systemExclusive.Data[dataOffset]));
 
                 }
+                else if (field.FieldType == typeof(int))
+                {
+                    // TODO: Extension method
+                    byte[] bytes = new byte[4];
+
+                    for (int i = 0; i < bytes.Length; i++)
+                    {
+                        bytes[i] = systemExclusive.Data[dataOffset + i];
+                    }
+
+                    if (BitConverter.IsLittleEndian)
+                        Array.Reverse(bytes);
+
+                    field.SetValue(this, BitConverter.ToInt32(bytes, 0));
+                    //pro += 4;
+                    dataOffset += 3;
+                }
                 else if (field.FieldType.IsEnum)
                 {
                     Type type = field.FieldType.GetEnumUnderlyingType();
@@ -277,8 +294,11 @@ namespace IntegraXL.Core
                     Debug.Print($"RX [{GetType().Name}] {property} = {field.GetValue(this)} {GetUID():X4}");
 
                     base.NotifyPropertyChanged(property);
+                    //base.NotifyPropertyChanged(string.Empty);
                 }
             }
+
+            base.NotifyPropertyChanged(string.Empty);
         }
 
         #endregion
@@ -307,7 +327,7 @@ namespace IntegraXL.Core
                 }
 
             }
-            else if (e.SystemExclusive.Address.InRange(Address, (int)(Address + Size)))
+            else if (e.SystemExclusive.Address.InRange(Address, Address + Size.ToMidi()))
             {
 
                 // Parameter data received
@@ -522,7 +542,10 @@ namespace IntegraXL.Core
 
             // Collections are responsible for generating the request(s)
             if (GetType().IsSubclassOf(typeof(IntegraCollection)))
+            {
+                IsCollection = true;
                 return;
+            }
 
             Requests.Add(new IntegraRequest(Attribute.Request));
         }
@@ -570,6 +593,11 @@ namespace IntegraXL.Core
         /// <i>The size is not serialized to the MIDI range.</i>
         /// </remarks>
         public int Size { get; internal protected set; }
+
+        /// <summary>
+        /// Gets wheter the model represents a collection.
+        /// </summary>
+        public bool IsCollection { get; }
 
         /// <summary>
         /// Gets wheter the model is initialized.

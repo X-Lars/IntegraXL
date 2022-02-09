@@ -36,6 +36,8 @@ namespace IntegraXL.Core
     /// </remarks>
     public abstract class IntegraCollection<TItem> : IntegraCollection, IEnumerable<TItem>, INotifyCollectionChanged where TItem : class
     {
+        // TODO: Make thread safe
+
         #region Fields
 
         /// <summary>

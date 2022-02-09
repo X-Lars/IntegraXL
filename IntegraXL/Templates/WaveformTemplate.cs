@@ -8,6 +8,7 @@ namespace IntegraXL.Templates
         {
 
         }
+
         internal WaveformTemplate(IntegraWaveFormTypes type, IntegraWaveFormBanks bank, int id, string name) { }
 
         public IntegraWaveFormTypes Type { get; internal set; }

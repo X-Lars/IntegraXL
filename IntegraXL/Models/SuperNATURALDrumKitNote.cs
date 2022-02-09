@@ -48,10 +48,15 @@ namespace IntegraXL.Models
 
         protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
         {
+            // Prevents receiving of system exclusive messages before the collection is created
+            if (this.Count != Size)
+                return;
+
+            // TODO: Make collection thread safe
             // TODO: ? Collections are disconnected after initialization so it's safe to only match the address range
-            if(e.SystemExclusive.Address.InRange(this.First().Address, this.Last().Address))
+            if(e.SystemExclusive.Address.InRange(Collection.First().Address, Collection.Last().Address))
             {
-                Device.ReportProgress(this, Collection.Where(x => x.IsInitialized).Count(), Size - 1, e.SystemExclusive.Address.GetTemporaryTonePart());
+                Device.ReportProgress(this, Collection.Where(x => x.IsInitialized).Count(), Size, e.SystemExclusive.Address.GetTemporaryTonePart());
             }
         }
 
@@ -65,7 +70,7 @@ namespace IntegraXL.Models
     [Integra(0x00001000, 0x00000013)]
     public class SuperNATURALDrumKitNote : IntegraModel<SuperNATURALDrumKitNote>
     {
-        private IntegraSNDNotes _Note;
+        private IntegraSNDNotes _Index;
 
         #region Fields: INTEGRA-7
 
@@ -98,28 +103,20 @@ namespace IntegraXL.Models
             int offset = (msb + lsb);
 
             Address += offset;
-            Note = (IntegraSNDNotes)note;
+            Index = (IntegraSNDNotes)note;
         }
 
         #endregion
 
-        public IntegraSNDNotes Note
-        {
-            get { return _Note; }
-            private set
-            {
-                _Note = value;
-                NotifyPropertyChanged();
-            }
-        }
+        public IntegraSNDNotes Index { get; }
 
-        public string NoteName
+        public WaveformTemplate Waveform
         {
             get
             {
                 WaveformTemplate template = IntegraWaveformLookup.Template(IntegraWaveFormTypes.SND,IntegraWaveFormBanks.INT, InstNumber);
 
-                return template.Name;
+                return template;
             }
         }
 
@@ -128,11 +125,13 @@ namespace IntegraXL.Models
         [Offset(0x0000)]
         public int InstNumber
         {
-            get { return _InstNumber.DeserializeInt(); }
+            get { return _InstNumber.ToMidi(); }
             set
             {
                 _InstNumber = value.SerializeInt();
+
                 NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(Waveform));
             }
         }
 
@@ -185,7 +184,7 @@ namespace IntegraXL.Models
         public int Tune
         {
             // TODO: Calulate tune values -1200 / 1200 (8 / 248)
-            get { return _Tune.DeserializeInt(); }
+            get { return _Tune.ToMidi(); }
             set
             {
                 _Tune = value.SerializeInt();

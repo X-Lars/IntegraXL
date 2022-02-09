@@ -106,7 +106,7 @@ namespace IntegraXL.Extensions
             return (short)((value[0] & 0x0F) << 4 | (value[1] & 0x0F));
         }
 
-        public static int DeserializeInt(this int value)
+        public static int ToMidi(this int value)
         {
             byte[] values = BitConverter.GetBytes(value);
 

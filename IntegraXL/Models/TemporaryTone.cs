@@ -181,6 +181,8 @@ namespace IntegraXL.Models
 
                 Type       = _Tone.Type;
                 IsEditable = _Tone.IsEditable; // REQUIRED: Required by the child models
+
+                NotifyPropertyChanged(nameof(Type));
             }
             catch (TaskCanceledException)
             {

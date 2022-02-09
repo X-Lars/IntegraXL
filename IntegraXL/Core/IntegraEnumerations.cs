@@ -1369,6 +1369,234 @@ namespace IntegraXL.Core
         RES04    = 33
     }
 
+    public enum IntegraWaveGroupType : byte
+    {
+        INT        = 0x00,
+        SRX        = 0x01,
+        Reserved01 = 0x02,
+        Reserved02 = 0x03
+    }
+
+    public enum IntegraControlSwitch : byte
+    {
+        Off     = 0x00,
+        On      = 0x01,
+        Reverse = 0x02
+    }
+
+    public enum IntegraTVFFilterType : byte
+    {
+        OFF   = 0x00,
+        LPF   = 0x01,
+        BPF   = 0x02,
+        HPF   = 0x03,
+        PKG   = 0x04,
+        LPF02 = 0x05,
+        LPF03 = 0x06
+    }
+
+    public enum IntegraVelocityCurve : byte
+    {
+        Fixed   = 0x00,
+        Curve01 = 0x01,
+        Curve02 = 0x02,
+        Curve03 = 0x03,
+        Curve04 = 0x04,
+        Curve05 = 0x05,
+        Curve06 = 0x06,
+        Curve07 = 0x07,
+    }
+
+    public enum IntegraEnvelopeMode : byte
+    {
+        NoSustain = 0x00,
+        Sustain   = 0x01
+    }
+
+    public enum IntegraVelocityControl : byte
+    {
+        Off    = 0x00,
+        On     = 0x01,
+        Random = 0x02,
+        Cycle  = 0x03
+    }
+
+    #endregion
+
+    #region PCMSynthTonePartial
+
+    public enum IntegraPCMSynthToneParts : uint
+    {
+        [Description("Partial 01")] Partial01 = 0x00002000,
+        [Description("Partial 02")] Partial02 = 0x00002200,
+        [Description("Partial 03")] Partial03 = 0x00002400,
+        [Description("Partial 04")] Partial04 = 0x00002600,
+    }
+
+   
+    public enum IntegraDelayMode : byte
+    {
+        Normal       = 0x00,
+        Hold         = 0x01,
+        KeyOffNormal = 0x02,
+        KeyOffDecay  = 0x03
+    }
+
+    
+
+    public enum IntegraBiasDirection : byte
+    {
+        Lower      = 0x00,
+        Upper      = 0x01,
+        LowerUpper = 0x02,
+        All        = 0x03
+    }
+
+    public enum IntegraLFOWaveform : byte
+    {
+        SIN         = 0x00,
+        TRI         = 0x01,
+        SAWUP       = 0x02,
+        SAWDOWN     = 0x03,
+        SQR         = 0x04,
+        RND         = 0x05,
+        BENDUP      = 0x06,
+        BENDDOWN    = 0x07,
+        TRP         = 0x08,
+        SH          = 0x09,
+        CHS         = 0x0A,
+        VSIN        = 0x0B,
+        STEP        = 0x0C
+    }
+
+    public enum IntegraLFOFadeMode : byte
+    {
+        ONIN    = 0x00,
+        ONOUT   = 0x01,
+        OFFIN   = 0x02,
+        OFFOUT  = 0x03
+    }
+
+    #endregion
+
+    #region PCMDrumKitPartial
+
+    public enum IntegraAssignType : byte
+    {
+        Multi   = 0x00,
+        Single  = 0x01
+    }
+
+    public enum IntegraPartialOutputAssign : byte
+    {
+        Part     = 0x00,
+        CompEQ01 = 0x01,
+        CompEQ02 = 0x02,
+        CompEQ03 = 0x03,
+        CompEQ04 = 0x04,
+        CompEQ05 = 0x05,
+        CompEQ06 = 0x06
+    }
+
+    public enum IntegraPartialVelocityControl : byte
+    {
+        Off    = 0x00,
+        On     = 0x01,
+        Random = 0x02,
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraPCMNotes : byte
+    {   [Description("0 A")]           N0,
+        [Description("0 B\U0001D12D")] N1,
+        [Description("0 B")]           N2,
+        [Description("1 C")]           N3,
+        [Description("1 C\U0001D130")] N4,
+        [Description("1 D")]           N5,
+        [Description("1 E\U0001D12D")] N6,
+        [Description("1 E")]           N7,
+        [Description("1 F")]           N8,
+        [Description("1 F\U0001D130")] N9,
+        [Description("1 G")]           N10,
+        [Description("1 G\U0001D130")] N11,
+        [Description("1 A")]           N12,
+        [Description("1 B\U0001D12D")] N13,
+        [Description("1 B")]           N14,
+        [Description("2 C")]           N15,
+        [Description("2 C\U0001D130")] N16,
+        [Description("2 D")]           N17,
+        [Description("2 E\U0001D12D")] N18,
+        [Description("2 E")]           N19,
+        [Description("2 F")]           N20,
+        [Description("2 F\U0001D130")] N21,
+        [Description("2 G")]           N22,
+        [Description("2 G\U0001D130")] N23,
+        [Description("2 A")]           N24,
+        [Description("2 B\U0001D12D")] N25,
+        [Description("2 B")]           N26,
+        [Description("2 C")]           N27,
+        [Description("3 C\U0001D130")] N28,
+        [Description("3 D")]           N29,
+        [Description("3 E\U0001D12D")] N30,
+        [Description("3 E")]           N31,
+        [Description("3 F")]           N32,
+        [Description("3 F\U0001D130")] N33,
+        [Description("3 G")]           N34,
+        [Description("3 G\U0001D130")] N35,
+        [Description("3 A")]           N36,
+        [Description("3 B\U0001D12D")] N37,
+        [Description("3 B")]           N38,
+        [Description("4 C")]           N39,
+        [Description("4 C\U0001D130")] N40,
+        [Description("4 D")]           N41,
+        [Description("4 E\U0001D12D")] N42,
+        [Description("4 E")]           N43,
+        [Description("4 F")]           N44,
+        [Description("4 F\U0001D130")] N45,
+        [Description("4 G")]           N46,
+        [Description("4 G\U0001D130")] N47,
+        [Description("4 A")]           N48,
+        [Description("4 B\U0001D12D")] N49,
+        [Description("4 B")]           N50,
+        [Description("5 C")]           N51,
+        [Description("5 C\U0001D130")] N52,
+        [Description("5 D")]           N53,
+        [Description("5 E\U0001D12D")] N54,
+        [Description("5 E")]           N55,
+        [Description("5 F")]           N56,
+        [Description("5 F\U0001D130")] N57,
+        [Description("5 G")]           N58,
+        [Description("5 G\U0001D130")] N59,
+        [Description("5 A")]           N60,
+        [Description("5 B\U0001D12D")] N61,
+        [Description("5 B")]           N62,
+        [Description("6 C")]           N63,
+        [Description("6 C\U0001D130")] N64,
+        [Description("6 D")]           N65,
+        [Description("6 E\U0001D12D")] N66,
+        [Description("6 E")]           N67,
+        [Description("6 F")]           N68,
+        [Description("6 F\U0001D130")] N69,
+        [Description("6 G")]           N70,
+        [Description("6 G\U0001D130")] N71,
+        [Description("6 A")]           N72,
+        [Description("6 B\U0001D12D")] N73,
+        [Description("6 B")]           N74,
+        [Description("7 C")]           N75,
+        [Description("7 C\U0001D130")] N76,
+        [Description("7 D")]           N77,
+        [Description("7 E\U0001D12D")] N78,
+        [Description("7 E")]           N79,
+        [Description("7 F")]           N80,
+        [Description("7 F\U0001D130")] N81,
+        [Description("7 G")]           N82,
+        [Description("7 G\U0001D130")] N83,
+        [Description("7 A")]           N84,
+        [Description("7 B\U0001D12D")] N85,
+        [Description("7 B")]           N86,
+        [Description("8 C")]           N87
+    }
+
     #endregion
 
     #region MFX
@@ -1619,6 +1847,58 @@ namespace IntegraXL.Core
         [Description("14")]  Channel14,
         [Description("15")]  Channel15,
         [Description("16")]  Channel16,
+    }
+
+    #endregion
+
+    #region SuperNATURALSynthTonePartial
+
+    public enum IntegraSNSynthToneParts : int
+    {
+        [Description("Partial 01")] Partial01 = 0x00002000,
+        [Description("Partial 02")] Partial02 = 0x00002100,
+        [Description("Partial 03")] Partial03 = 0x00002200
+    }
+
+    public enum IntegraOSCWave : byte
+    {
+        SAW      = 0x00,
+        SQR      = 0x01,
+        PWSQR    = 0x02,
+        TRI      = 0x03,
+        SINE     = 0x04,
+        NOISE    = 0x05,
+        SUPERSAW = 0x06,
+        PCM      = 0x07
+    }
+
+    public enum IntegraOSCWaveVariation : byte
+    {
+        A = 0x00,
+        B = 0x01,
+        C = 0x02
+    }
+
+    public enum IntegraFilterMode : byte
+    {
+        BYPASS      = 0x00,
+        LPF         = 0x01,
+        HPF         = 0x02,
+        BPF         = 0x03,
+        PKG         = 0x04,
+        LPF02       = 0x05,
+        LPF03       = 0x06,
+        LPF04       = 0x07
+    }
+
+    public enum IntegraLFOShape : byte
+    {
+        TRI     = 0x00,
+        SIN     = 0x01,
+        SAW     = 0x02,
+        SQR     = 0x03,
+        SH      = 0x04,
+        RND     = 0x05
     }
 
     #endregion

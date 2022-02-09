@@ -395,6 +395,7 @@ namespace IntegraXL
 
                     NotifyPropertyChanged();
                     NotifyPropertyChanged(nameof(SelectedTone));
+                    NotifyPropertyChanged(nameof(TemporaryTone));
                 }
             }
         }
