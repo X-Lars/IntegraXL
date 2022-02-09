@@ -70,7 +70,7 @@ namespace IntegraXL.Models
     [Integra(0x00001000, 0x00000013)]
     public class SuperNATURALDrumKitNote : IntegraModel<SuperNATURALDrumKitNote>
     {
-        private IntegraSNDNotes _Index;
+        private IntegraSNDNoteIndex _Index;
 
         #region Fields: INTEGRA-7
 
@@ -103,12 +103,12 @@ namespace IntegraXL.Models
             int offset = (msb + lsb);
 
             Address += offset;
-            Index = (IntegraSNDNotes)note;
+            Index = (IntegraSNDNoteIndex)note;
         }
 
         #endregion
 
-        public IntegraSNDNotes Index { get; }
+        public IntegraSNDNoteIndex Index { get; }
 
         public WaveformTemplate Waveform
         {

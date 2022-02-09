@@ -69,7 +69,7 @@ namespace IntegraXL.Models
     {
         #region Fields
 
-        private IntegraPCMNotes _Index;
+        private IntegraPCMNoteIndex _Index;
 
         #endregion
 
@@ -289,14 +289,14 @@ namespace IntegraXL.Models
 
             //Address += offset;
             Address += addr;
-            Index = (IntegraPCMNotes)partial;
+            Index = (IntegraPCMNoteIndex)partial;
         }
 
         #endregion
 
         #region Properties
 
-        public IntegraPCMNotes Index
+        public IntegraPCMNoteIndex Index
         {
             get => _Index;
             set
