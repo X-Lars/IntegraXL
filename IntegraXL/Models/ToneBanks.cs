@@ -2,6 +2,8 @@
 
 namespace IntegraXL.Models
 {
+#pragma warning disable IDE0051 // Remove unused private members
+
     [Integra(0x0F000402, 0x58400000,   26)] public sealed class SNDPresetToneBank : IntegraToneBank { private SNDPresetToneBank(Integra device) : base(device) { Name = "SuperNATURAL Preset Drum Kits"; } }
     [Integra(0x0F000402, 0x59400000,  256)] public sealed class SNAPresetToneBank : IntegraToneBank { private SNAPresetToneBank(Integra device) : base(device) { Name = "SuperNATURAL Acoustic Preset Tones"; } }
     [Integra(0x0F000402, 0x5F400000, 1109)] public sealed class SNSPresetToneBank : IntegraToneBank { private SNSPresetToneBank(Integra device) : base(device) { Name = "SuperNATURAL Synth Preset Tones"; } }
@@ -64,5 +66,7 @@ namespace IntegraXL.Models
     }
 
     [Integra(0x0F000402, 0x78000000, 9)] public sealed class GM2DrumKits : IntegraToneBank { private GM2DrumKits(Integra device) : base(device) { Name = "GM2 Drum Kits"; } }
+
+#pragma warning restore IDE0051 // Remove unused private members
 
 }

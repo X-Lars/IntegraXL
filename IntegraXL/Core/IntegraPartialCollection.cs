@@ -21,7 +21,7 @@ namespace IntegraXL.Core
         /// <i>Requires the <see cref="IntegraAttribute.Address"/> to specify the address of the first partial.</i><br/>
         /// <i>Requires the <see cref="IntegraAttribute.Request"/> to specify the request to initialize all partials.</i>
         /// </remarks>
-        internal IntegraPartialCollection(Integra device) : base(device)
+        internal IntegraPartialCollection(Integra device, bool connect = true) : base(device, false)
         {
             IntegraAttribute? attribute = GetType().GetCustomAttribute<IntegraAttribute>();
 
@@ -37,6 +37,9 @@ namespace IntegraXL.Core
 
                 Add(item);
             }
+
+            if(connect)
+                Connect();
         }
 
         #endregion

@@ -12,10 +12,10 @@ namespace IntegraXL.Models
     {
         //private MFX _MFX;
 
-        internal SuperNATURALAcousticTone(TemporaryTone parent) : base(parent.Device)
+        internal SuperNATURALAcousticTone(TemporaryTone tone) : base(tone.Device)
         {
             
-            Address += parent.Address;
+            Address += tone.Address;
             Common = new SuperNATURALAcousticToneCommon(this);
             //_MFX = parent.MFX;// ?new MFX(temporaryTone);
         }

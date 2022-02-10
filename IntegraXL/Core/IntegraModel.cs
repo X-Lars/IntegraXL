@@ -31,7 +31,7 @@ namespace IntegraXL.Core
         /// - Connects the model to the device.<br/>
         /// - Caches the model's <see cref="OffsetAttribute"/> decorated fields and properties.<br/>
         /// </i></remarks>
-        internal IntegraModel(Integra device) : base(device) 
+        internal IntegraModel(Integra device, bool connect = true) : base(device, connect) 
         {
             if (!IsCached)
                 IsCached = this.Cache();
@@ -312,19 +312,19 @@ namespace IntegraXL.Core
 
             if (e.SystemExclusive.Address == Address)
             {
-                if (e.SystemExclusive.Data.Length == Size)
-                {
+                //if (e.SystemExclusive.Data.Length == Size)
+                //{
                     // Model data received
                     if (Initialize(e.SystemExclusive.Data))
                     {
                         // Model is initialized
                     }
-                }
-                else
-                {
-                    // TODO: 
-                    ReceivedProperty(e.SystemExclusive);
-                }
+                //}
+                //else
+                //{
+                //    // TODO: 
+                //    ReceivedProperty(e.SystemExclusive);
+                //}
 
             }
             else if (e.SystemExclusive.Address.InRange(Address, Address + Size.ToMidi()))
@@ -523,7 +523,7 @@ namespace IntegraXL.Core
         /// - Connects the model to the device.<br/>
         /// </i></remarks>
         /// <exception cref="ArgumentNullException"></exception>
-        internal IntegraModel(Integra device)
+        internal IntegraModel(Integra device, bool connect = true)
         {
             Device = device ?? 
                 throw new IntegraException($"[{nameof(IntegraModel)}]\n" +
@@ -538,7 +538,8 @@ namespace IntegraXL.Core
             Size    = Attribute.Size;
             Address = Attribute.Address;
 
-            Connect();
+            if(connect)
+                Connect();
 
             // Collections are responsible for generating the request(s)
             if (GetType().IsSubclassOf(typeof(IntegraCollection)))

@@ -17,7 +17,7 @@ namespace IntegraXL.Models
         /// Creates a new <see cref="SuperNATURALDrumKitNotes"/> instance.
         /// </summary>
         /// <param name="drumKit">The <see cref="SuperNATURALDrumKit"/> to connect the collection.</param>
-        internal SuperNATURALDrumKitNotes(SuperNATURALDrumKit drumKit) : base(drumKit.Device)
+        internal SuperNATURALDrumKitNotes(SuperNATURALDrumKit drumKit) : base(drumKit.Device, false)
         {
             Address += drumKit.Address;
 
@@ -33,6 +33,8 @@ namespace IntegraXL.Models
 
                 Add(note);
             }
+
+            Connect();
         }
 
         #endregion
@@ -48,10 +50,6 @@ namespace IntegraXL.Models
 
         protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
         {
-            // Prevents receiving of system exclusive messages before the collection is created
-            if (this.Count != Size)
-                return;
-
             // TODO: Make collection thread safe
             // TODO: ? Collections are disconnected after initialization so it's safe to only match the address range
             if(e.SystemExclusive.Address.InRange(Collection.First().Address, Collection.Last().Address))
@@ -70,8 +68,6 @@ namespace IntegraXL.Models
     [Integra(0x00001000, 0x00000013)]
     public class SuperNATURALDrumKitNote : IntegraModel<SuperNATURALDrumKitNote>
     {
-        private IntegraSNDNoteIndex _Index;
-
         #region Fields: INTEGRA-7
 
         [Offset(0x0000)] int _InstNumber;

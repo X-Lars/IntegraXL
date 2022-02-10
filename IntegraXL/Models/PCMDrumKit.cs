@@ -7,7 +7,7 @@ namespace IntegraXL.Models
     {
         private int _SelectedIndex;
 
-        public PCMDrumKit(TemporaryTone tone) : base(tone.Device)
+        public PCMDrumKit(TemporaryTone tone) : base(tone.Device, false)
         {
             Address += tone.Address;
 
@@ -44,7 +44,7 @@ namespace IntegraXL.Models
 
         public override bool IsInitialized 
         { 
-            get => Common02.IsInitialized;
+            get => !IsEditable || Common02.IsInitialized;
         }
 
         public PCMDrumKitCommon Common { get; }

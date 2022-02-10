@@ -3,6 +3,7 @@ using IntegraXL.Interfaces;
 using IntegraXL.Models;
 using IntegraXL.Templates;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace IntegraXL.Core
@@ -81,9 +82,8 @@ namespace IntegraXL.Core
         /// </summary>
         /// <param name="device">The device to connect the model.</param>
         /// <param name="part">The model's associated part.</param>
-#pragma warning disable IDE0051 // Remove unused private members
+        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Class is created by reflection.")]
         private IntegraTone(Integra device, Parts part) : base(device, part) { }
-#pragma warning restore IDE0051 // Remove unused private members
 
         #endregion
 
@@ -187,7 +187,7 @@ namespace IntegraXL.Core
 
                             case IntegraToneBanks.GM2Drum:
                                 id = 1;
-                                Variation = PC;
+                                //Variation = PC;
                                 break;
 
                             default:

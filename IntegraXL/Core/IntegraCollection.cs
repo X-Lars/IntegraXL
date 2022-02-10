@@ -24,7 +24,7 @@ namespace IntegraXL.Core
         /// <i>Only intended for internal use.</i><br/>
         /// <i>Use the strongly typed <see cref="IntegraCollection{T}"/> instead.</i>
         /// </remarks>
-        internal protected IntegraCollection(Integra device) : base(device) { }
+        internal protected IntegraCollection(Integra device, bool connect = true) : base(device, connect) { }
     }
 
     /// <summary>
@@ -62,8 +62,9 @@ namespace IntegraXL.Core
         /// - Requires derived collections to be decorated with the <see cref="IntegraAttribute"/>.<br/>
         /// - Requires the collection's items to be derived from either <see cref="IntegraModel"/> or <see cref="IntegraTemplate"/>.<br/>
         /// - Derived collection needs to add its request(s) to the <see cref="IntegraModel.Requests"/> list.<br/>
+        /// - Derived collection is disconnected by default.
         /// </i></remarks>
-        internal IntegraCollection(Integra device) : base(device) 
+        internal IntegraCollection(Integra device, bool connect = true) : base(device, connect) 
         {
             if (!typeof(TItem).IsSubclassOf(typeof(IntegraModel<TItem>)) && !typeof(TItem).IsSubclassOf(typeof(IntegraTemplate)))
                 throw new IntegraException($"[{nameof(IntegraCollection)}]\n" +

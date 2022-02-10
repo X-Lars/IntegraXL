@@ -5,7 +5,7 @@ namespace IntegraXL.Models
     [Integra(0x00000000, 0x00100000)]
     public class PCMSynthTone : IntegraModel<PCMSynthTone>
     {
-        public PCMSynthTone(TemporaryTone tone) : base(tone.Device)
+        public PCMSynthTone(TemporaryTone tone) : base(tone.Device, false)
         {
             Address += tone.Address;
 
@@ -35,8 +35,6 @@ namespace IntegraXL.Models
 
                 return Common02.IsInitialized;
             }
-
-            protected internal set => base.IsInitialized = value; 
         }
 
         public PCMSynthToneCommon Common { get; }

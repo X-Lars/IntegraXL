@@ -1,6 +1,4 @@
 ﻿using IntegraXL.Core;
-using IntegraXL.Common;
-
 using System.Diagnostics;
 using IntegraXL.Extensions;
 using System.Reflection;
@@ -11,28 +9,13 @@ namespace IntegraXL.Models
     [Integra(0x00002000, 0x00001000, 4)]
     public sealed class PCMSynthTonePartials : IntegraCollection<PCMSynthTonePartial>
     {
-        /// <summary>
-        /// Defines the number of partials.
-        /// </summary>
-        public const int PCM_SYNTH_TONE_PARTIAL_COUNT = 4;
-
-        /// <summary>
-        /// Defines the bit mask to filter partial addresses.
-        /// </summary>
-        private const uint PCM_SYNTH_TONE_PARTIAL_MASK = 0xFFFFF0FF;
-
-        /// <summary>
-        /// Tracks the number of initialized partials.
-        /// </summary>
-        private int _InitializationCounter = 0;
-
         #region Constructor
 
         /// <summary>
         /// Creates a new uninitialized MIDI enabled partial collection.
         /// </summary>
         /// <param name="device">The device for data transmission.</param>
-        internal PCMSynthTonePartials(PCMSynthTone tone) : base(tone.Device)
+        internal PCMSynthTonePartials(PCMSynthTone tone) : base(tone.Device, false)
         {
             Address = tone.Address;
 
@@ -40,7 +23,7 @@ namespace IntegraXL.Models
 
             Requests.Add(request);
 
-            for (int i = 0; i < PCM_SYNTH_TONE_PARTIAL_COUNT; i++)
+            for (int i = 0; i < Size; i++)
             {
                 PCMSynthTonePartial? partial = Activator.CreateInstance(typeof(PCMSynthTonePartial), BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { tone, i }, null) as PCMSynthTonePartial;
 
@@ -48,11 +31,18 @@ namespace IntegraXL.Models
 
                 Add(partial);
             }
+
+            Connect();
         }
 
         #endregion
 
         #region Overrides: IntegraModel
+
+        public override bool IsInitialized
+        {
+            get => Collection.Last().IsInitialized;
+        }
 
         protected override void SystemExclusiveReceived(object sender, IntegraSystemExclusiveEventArgs e)
         {
@@ -79,12 +69,6 @@ namespace IntegraXL.Models
     [Integra(0x00002000, 0x0000011A)]
     public class PCMSynthTonePartial : IntegraModel<PCMSynthTonePartial>
     {
-        #region Fields
-
-        private int _Partial;
-
-        #endregion
-
         #region Fields: INTEGRA-7
 
         #region Fields: General
@@ -284,18 +268,7 @@ namespace IntegraXL.Models
 
         #region Properties
 
-        public int Partial
-        {
-            get { return _Partial; }
-            set
-            {
-                if (_Partial != value)
-                {
-                    _Partial = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
+        public int Partial { get; }
 
         #endregion
 

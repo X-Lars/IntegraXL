@@ -15,7 +15,7 @@ namespace IntegraXL.Models
         /// Creates a new uninitialized MIDI enabled partial collection.
         /// </summary>
         /// <param name="device">The device for data transmission.</param>
-        internal SuperNATURALSynthTonePartials(SuperNATURALSynthTone tone) : base(tone.Device)
+        internal SuperNATURALSynthTonePartials(SuperNATURALSynthTone tone) : base(tone.Device, false)
         {
             Address = tone.Address;
 
@@ -31,6 +31,8 @@ namespace IntegraXL.Models
 
                 Add(partial);
             }
+
+            Connect();
         }
 
         #endregion
@@ -54,7 +56,7 @@ namespace IntegraXL.Models
             {
                 if(e.SystemExclusive.Address.InRange(this.First().Address, this.Last().Address))
                 {
-                    Device.ReportProgress(this, Collection.Where(x => x.IsInitialized).Count(), Size - 1, e.SystemExclusive.Address.GetTemporaryTonePart());
+                    Device.ReportProgress(this, Collection.Where(x => x.IsInitialized).Count(), Size , e.SystemExclusive.Address.GetTemporaryTonePart());
                 }
             }
         }

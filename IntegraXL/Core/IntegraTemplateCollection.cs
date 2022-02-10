@@ -38,6 +38,7 @@ namespace IntegraXL.Core
 
                 Requests.Add(request);
             }
+
         }
 
         #endregion

@@ -17,8 +17,8 @@ namespace IntegraXL.Models
         /// <summary>
         /// Creates a new uninitialized MIDI enabled partial collection.
         /// </summary>
-        /// <param name="device">The device for data transmission.</param>
-        internal PCMDrumKitPartials(PCMDrumKit drumKit) : base(drumKit.Device)
+        /// <param name="drumKit">The drum kit providing the device to initialize the collection.</param>
+        internal PCMDrumKitPartials(PCMDrumKit drumKit) : base(drumKit.Device, false)
         {
             Address += drumKit.Address;
 
@@ -34,26 +34,22 @@ namespace IntegraXL.Models
 
                 Add(partial);
             }
+
+            Connect();
         }
 
         #endregion
 
         public override bool IsInitialized
         {
-            get => Count == Size && this.Last().IsInitialized;
+            get => this.Last().IsInitialized;
         }
 
         protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
         {
-            if (Count != Size)
-                return;
-
-            if (!IsInitialized)
+            if(e.SystemExclusive.Address.InRange(this.First().Address, this.Last().Address))
             {
-                if(e.SystemExclusive.Address.InRange(this.First().Address, this.Last().Address))
-                {
-                    Device.ReportProgress(this, Collection.Where(x => x.IsInitialized).Count(), Size, e.SystemExclusive.Address.GetTemporaryTonePart());
-                }
+                Device.ReportProgress(this, Collection.Where(x => x.IsInitialized).Count(), Size, e.SystemExclusive.Address.GetTemporaryTonePart());
             }
         }
 
@@ -296,18 +292,7 @@ namespace IntegraXL.Models
 
         #region Properties
 
-        public IntegraPCMNoteIndex Index
-        {
-            get => _Index;
-            set
-            {
-                if(_Index != value)
-                {
-                    _Index = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
+        public IntegraPCMNoteIndex Index { get; }
 
         public WaveformTemplate Waveform01L => IntegraWaveformLookup.Template(IntegraWaveFormTypes.PCM, IntegraWaveFormBanks.INT, WMT01WaveNumberL);
         public WaveformTemplate Waveform01R => IntegraWaveformLookup.Template(IntegraWaveFormTypes.PCM, IntegraWaveFormBanks.INT, WMT01WaveNumberR);

@@ -16,7 +16,7 @@ namespace IntegraXL.Models
         /// </summary>
         /// <param name="device">The device to connect the model.</param>
         [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "The class is created by reflection.")]
-        private StudioSet(Integra device) : base(device)
+        private StudioSet(Integra device) : base(device, false)
         {
             Common                 = device.CreateModel<StudioSetCommon>();
             CommonChorus           = device.CreateModel<StudioSetCommonChorus>();
