@@ -2,6 +2,10 @@
 
 namespace IntegraXL.Models
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks><i>Shared by the <see cref="SuperNATURALDrumKit"/> and <see cref="PCMDrumKit"/> models.</i></remarks>
     [Integra(0x00000800, 0x00000054)]
     public class DrumKitCommonCompEQ : IntegraModel<DrumKitCommonCompEQ>
     {

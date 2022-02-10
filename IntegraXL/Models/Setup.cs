@@ -39,6 +39,7 @@ namespace IntegraXL.Models
             {
                 if (_SoundMode != value)
                 {
+                    // TODO: Implement Sound Mode Changed
                     _SoundMode = value;
                     NotifyPropertyChanged();
                 }
