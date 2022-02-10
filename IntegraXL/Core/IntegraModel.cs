@@ -327,7 +327,7 @@ namespace IntegraXL.Core
                 //}
 
             }
-            else if (e.SystemExclusive.Address.InRange(Address, Address + Size.ToMidi()))
+            else if (e.SystemExclusive.Address.InRange(Address, Address + Size))
             {
 
                 // Parameter data received

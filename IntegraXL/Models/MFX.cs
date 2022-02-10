@@ -371,10 +371,7 @@ namespace IntegraXL.Models
 
         #region Enumerations
 
-        public static IEnumerable<IntegraMFXTypes> Types
-        {
-            get { return Enum.GetValues(typeof(IntegraMFXTypes)).Cast<IntegraMFXTypes>(); }
-        }
+        public static IEnumerable<IntegraMFXTypes> Types => Enum.GetValues(typeof(IntegraMFXTypes)).Cast<IntegraMFXTypes>(); 
 
         #endregion
     }

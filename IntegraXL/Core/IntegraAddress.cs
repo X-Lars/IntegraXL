@@ -129,6 +129,30 @@
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(bytes);
 
+            for (int i = 3; i >= 0; i--)
+            {
+                if (bytes[3] > IntegraConstants.MAX_MIDI_VALUE)
+                {
+                    bytes[3] -= IntegraConstants.MAX_MIDI_VALUE + 1;
+                    bytes[2]++;
+                }
+
+                if (bytes[2] > IntegraConstants.MAX_MIDI_VALUE)
+                {
+                    bytes[2] -= IntegraConstants.MAX_MIDI_VALUE + 1;
+                    bytes[1]++;
+                }
+
+                if (bytes[1] > IntegraConstants.MAX_MIDI_VALUE)
+                {
+                    bytes[1] -= IntegraConstants.MAX_MIDI_VALUE + 1;
+                    bytes[0]++;
+                }
+
+                if (bytes[0] > IntegraConstants.MAX_MIDI_VALUE)
+                    throw new OverflowException($"[{nameof(IntegraAddress)}]\nAssigning the integer value {rhs} to the address results in a MIDI overflow.");
+            }
+
             return new (bytes);
         }
 

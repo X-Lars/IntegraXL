@@ -1,13 +1,16 @@
 ﻿namespace IntegraXL.Extensions
 {
-    public static class IntegraMFXParameterExtensions
+    internal static class IntegraMFXParameterExtensions
     {
         /// <summary>
         /// Deserializes an MFX parameter.
         /// </summary>
         /// <param name="value">The value to deserialize.</param>
-        /// <returns>A deserialized MFX parameter value.</returns>
-        public static int DeserializeMFX(this int value)
+        /// <returns>The integer value of the MFX parameter.</returns>
+        /// <remarks><i>
+        /// - Removes the MFX parameter byte.<br/>
+        /// </i></remarks>
+        internal static int DeserializeMFX(this int value)
         {
             byte[] bytes = BitConverter.GetBytes(value);
 
@@ -21,8 +24,11 @@
         /// Serializes a value to an MFX parameter.
         /// </summary>
         /// <param name="value">The value to serialize.</param>
-        /// <returns>A serialized MFX parameter.</returns>
-        public static int SerializeMFX(this int value)
+        /// <returns>The integer MFX parameter.</returns>
+        /// <remarks><i>
+        /// - Adds the MFX parameter byte.<br/>
+        /// </i></remarks>
+        internal static int SerializeMFX(this int value)
         {
             byte[] bytes = new byte[4];
 
@@ -37,13 +43,13 @@
             return BitConverter.ToInt32(bytes, 0);
         }
 
-        public static int DeserializeFeedback(this int value)
+        internal static int DeserializeFeedback(this int value)
         {
             // TODO: Check Clamp value
             return (value * 2) - 98;
         }
 
-        public static int SerializeFeedback(this int value)
+        internal static int SerializeFeedback(this int value)
         {
             // TODO: Check Clamp value
             return (value + 98) / 2;
