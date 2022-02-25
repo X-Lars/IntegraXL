@@ -66,13 +66,9 @@ namespace IntegraXL.Models
         /// </summary>
         /// <param name="device">The device to connect the model.</param>
         /// <param name="part">The associated part.</param>
-        internal TemporaryTone(Integra device, Parts part) : base(device, part) 
+        internal TemporaryTone(Integra device, Parts part) : base(device, part, false) 
         {
-            IntegraAttribute? attribute = GetType().GetCustomAttribute<IntegraAttribute>();
-
-            Debug.Assert(attribute != null);
-
-            Address = attribute.Address;
+            Address = Attribute.Address;
             
             // 0x19, 0x19, 0x19, 0x19, 0x20, ...
             Address[0] += (byte)((int)part >> 2); // >> 2 equals division by 4

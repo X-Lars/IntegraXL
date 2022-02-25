@@ -153,6 +153,10 @@ namespace IntegraXL.Core
 
             int offset = systemExclusive.Address - Address;
 
+            // Offset 0x0100
+            if (offset > 127)
+                offset -= 128;
+
             var fields = this.CachedFields();
             int indexer = 0;
             bool isIndexed = false;
@@ -312,19 +316,19 @@ namespace IntegraXL.Core
 
             if (e.SystemExclusive.Address == Address)
             {
-                //if (e.SystemExclusive.Data.Length == Size)
-                //{
+                if (e.SystemExclusive.Data.Length == Size)
+                {
                     // Model data received
                     if (Initialize(e.SystemExclusive.Data))
                     {
                         // Model is initialized
                     }
-                //}
-                //else
-                //{
-                //    // TODO: 
-                //    ReceivedProperty(e.SystemExclusive);
-                //}
+                }
+                else
+                {
+                    // TODO: 
+                    ReceivedProperty(e.SystemExclusive);
+                }
 
             }
             else if (e.SystemExclusive.Address.InRange(Address, Address + Size))

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace IntegraXL.Common
         List<string> Values { get; }
     }
 
-    public abstract class Enumeration : IEnumeration
+    public abstract class Enumeration : IEnumeration, IEnumerable<string>
     {
         public List<string> Values { get; }
 
@@ -23,5 +24,19 @@ namespace IntegraXL.Common
         {
             return Values[Value];
         }
+
+        #region Interfaces: IEnumerable
+
+        public IEnumerator<string> GetEnumerator()
+        {
+            return Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        #endregion
     }
 }

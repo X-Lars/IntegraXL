@@ -5,6 +5,8 @@ namespace IntegraXL.Models
     [Integra(0x00000000, 0x00100000)]
     public class PCMSynthTone : IntegraModel<PCMSynthTone>
     {
+        private IntegraPCMSynthToneParts _SelectedPartial = IntegraPCMSynthToneParts.Partial01;
+
         public PCMSynthTone(TemporaryTone tone) : base(tone.Device, false)
         {
             Address += tone.Address;
@@ -22,6 +24,28 @@ namespace IntegraXL.Models
             {
                 IsInitialized = true;
             }
+        }
+
+        
+        public IntegraPCMSynthToneParts SelectedPartial
+        {
+            get => _SelectedPartial;
+            set
+            {
+                if(_SelectedPartial != value)
+                {
+                    _SelectedPartial = value;
+
+                    NotifyPropertyChanged();
+                    NotifyPropertyChanged(nameof(Partial));
+                }
+            }
+        }
+
+
+        public PCMSynthTonePartial Partial
+        {
+            get => Partials[(int)_SelectedPartial];
         }
 
         public bool IsEditable { get; private set; }

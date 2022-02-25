@@ -76,6 +76,55 @@ namespace IntegraXL.Core
             }
         }
     }
+
+    public class IntegraExtendedRate : Enumeration
+    {
+        public new static List<string> Values
+        {
+            get
+            {
+                List<string> values = new();
+
+                for (int i = 0; i < 128; i++)
+                {
+                    values.Add($"{i}");
+                }
+
+                for (int i = 0; i < 22; i++)
+                {
+                    IntegraNoteRates rates = (IntegraNoteRates)i;
+                    values.Add($"{rates}");
+                }
+
+                return values;
+            }
+        }
+    }
+
+    public class IntegraPan : Enumeration
+    {
+        public new static List<string> Values
+        {
+            get
+            {
+                List<string> values = new();
+
+                for (int i = 64; i > 0; i--)
+                {
+                    values.Add($"L {i}");
+                }
+
+                values.Add($"0");
+
+                for (int i = 1; i < 64; i++)
+                {
+                    values.Add($"{i} R");
+                }
+
+                return values;
+            }
+        }
+    }
     #endregion
 
     #region Core
@@ -485,30 +534,30 @@ namespace IntegraXL.Core
     [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraLowFrequencies : byte
     {
-        [Description("200 [Hz]")] Hz200 = 0x00,
-        [Description("400 [Hz]")] Hz400 = 0x01
+        [Description("200")] Hz200 = 0x00,
+        [Description("400")] Hz400 = 0x01
     }
 
     [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraMidFrequencies : byte
     {
-        [Description("200 [Hz]")]  Hz200  = 0x00,
-        [Description("250 [Hz]")]  Hz250  = 0x01,
-        [Description("315 [Hz]")]  Hz315  = 0x02,
-        [Description("400 [Hz]")]  Hz400  = 0x03,
-        [Description("500 [Hz]")]  Hz500  = 0x04,
-        [Description("630 [Hz]")]  Hz630  = 0x05,
-        [Description("800 [Hz]")]  Hz800  = 0x06,
-        [Description("1000 [Hz]")] Hz1000 = 0x07,
-        [Description("1250 [Hz]")] Hz1250 = 0x08,
-        [Description("1600 [Hz]")] Hz1600 = 0x09,
-        [Description("2000 [Hz]")] Hz2000 = 0x0A,
-        [Description("2500 [Hz]")] Hz2500 = 0x0B,
-        [Description("3150 [Hz]")] Hz3150 = 0x0C,
-        [Description("4000 [Hz]")] Hz4000 = 0x0D,
-        [Description("5000 [Hz]")] Hz5000 = 0x0E,
-        [Description("6300 [Hz]")] Hz6300 = 0x0F,
-        [Description("8000 [Hz]")] Hz8000 = 0x10
+        [Description("200")]  Hz200  = 0x00,
+        [Description("250")]  Hz250  = 0x01,
+        [Description("315")]  Hz315  = 0x02,
+        [Description("400")]  Hz400  = 0x03,
+        [Description("500")]  Hz500  = 0x04,
+        [Description("630")]  Hz630  = 0x05,
+        [Description("800")]  Hz800  = 0x06,
+        [Description("1000")] Hz1000 = 0x07,
+        [Description("1250")] Hz1250 = 0x08,
+        [Description("1600")] Hz1600 = 0x09,
+        [Description("2000")] Hz2000 = 0x0A,
+        [Description("2500")] Hz2500 = 0x0B,
+        [Description("3150")] Hz3150 = 0x0C,
+        [Description("4000")] Hz4000 = 0x0D,
+        [Description("5000")] Hz5000 = 0x0E,
+        [Description("6300")] Hz6300 = 0x0F,
+        [Description("8000")] Hz8000 = 0x10
     }
 
     [TypeConverter(typeof(DescriptionConverter))]
@@ -524,9 +573,9 @@ namespace IntegraXL.Core
     [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraHighFrequencies : byte
     {
-        [Description("2000 [Hz]")] Hz2000,
-        [Description("4000 [Hz]")] Hz4000,
-        [Description("8000 [Hz]")] Hz8000
+        [Description("2000")] Hz2000,
+        [Description("4000")] Hz4000,
+        [Description("8000")] Hz8000
     }
 
     #endregion
@@ -637,23 +686,50 @@ namespace IntegraXL.Core
         [Description("\U0001D162\U00002083")] _132T = 0x02,
         [Description("\U0001D162")]           _132  = 0x03,
         [Description("\U0001D161\U00002083")] _116T = 0x04,
-        [Description("\U0001D162\U0001D16D")] _132D = 0x05,
+        [Description("\U0001D162.")]          _132D = 0x05,
         [Description("\U0001D161")]           _116  = 0x06,
         [Description("\U0001D160\U00002083")] _18T  = 0x07,
-        [Description("\U0001D161\U0001D16D")] _116D = 0x08,
+        [Description("\U0001D161.")]          _116D = 0x08,
         [Description("\U0001D160")]           _18   = 0x09,
         [Description("\U0001D15F\U00002083")] _14T  = 0x0A,
-        [Description("\U0001D161\U0001D16D")] _18D  = 0x0B,
+        [Description("\U0001D161.")]          _18D  = 0x0B,
         [Description("\U0001D15F")]           _14   = 0x0C,
         [Description("\U0001D15E\U00002083")] _12T  = 0x0D,
-        [Description("\U0001D15F\U0001D16D")] _14D  = 0x0E,
+        [Description("\U0001D15F.")]          _14D  = 0x0E,
         [Description("\U0001D15E")]           _12   = 0x0F,
         [Description("\U0001D15D\U00002083")] _1T   = 0x10,
-        [Description("\U0001D15E\U0001D16D")] _12D  = 0x11,
+        [Description("\U0001D15E.")]          _12D  = 0x11,
         [Description("\U0001D15D")]           _1    = 0x12,
         [Description("\U0001D15C\U00002083")] _2T   = 0x13,
-        [Description("\U0001D15D\U0001D16D")] _1D   = 0x14,
+        [Description("\U0001D15D.")]          _1D   = 0x14,
         [Description("\U0001D15C")]           _2    = 0x15
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraNoteRatesExt : byte
+    {
+        [Description("\U0001D163\U00002083")] _164T = 0x80,
+        [Description("\U0001D163")]           _164  = 0x81,
+        [Description("\U0001D162\U00002083")] _132T = 0x82,
+        [Description("\U0001D162")]           _132  = 0x83,
+        [Description("\U0001D161\U00002083")] _116T = 0x84,
+        [Description("\U0001D162.")]          _132D = 0x85,
+        [Description("\U0001D161")]           _116  = 0x86,
+        [Description("\U0001D160\U00002083")] _18T  = 0x87,
+        [Description("\U0001D161.")]          _116D = 0x88,
+        [Description("\U0001D160")]           _18   = 0x89,
+        [Description("\U0001D15F\U00002083")] _14T  = 0x8A,
+        [Description("\U0001D161.")]          _18D  = 0x8B,
+        [Description("\U0001D15F")]           _14   = 0x8C,
+        [Description("\U0001D15E\U00002083")] _12T  = 0x8D,
+        [Description("\U0001D15F.")]          _14D  = 0x8E,
+        [Description("\U0001D15E")]           _12   = 0x8F,
+        [Description("\U0001D15D\U00002083")] _1T   = 0x90,
+        [Description("\U0001D15E.")]          _12D  = 0x91,
+        [Description("\U0001D15D")]           _1    = 0x92,
+        [Description("\U0001D15C\U00002083")] _2T   = 0x93,
+        [Description("\U0001D15D.")]          _1D   = 0x94,
+        [Description("\U0001D15C")]           _2    = 0x95
     }
 
     [TypeConverter(typeof(DescriptionConverter))]
@@ -672,33 +748,6 @@ namespace IntegraXL.Core
         [Description("B\U0001D12D")] BFlat = 0x0A,
         [Description("B")]           B     = 0x0B,
     }
-
-    //[TypeConverter(typeof(DescriptionConverter))]
-    //public enum IntegraNoteRates : byte
-    //{
-    //    [Description("\uE014\uEB9E\U0000E833")] _164T = 0x00,
-    //    [Description("")]  _164  = 0x01,
-    //    [Description("r£")]  _132T = 0x02,
-    //    [Description("r")]   _132  = 0x03,
-    //    [Description("x£")]  _116T = 0x04,
-    //    [Description("r.")]  _132D = 0x05,
-    //    [Description("x")]   _116  = 0x06,
-    //    [Description("e£")]  _18T  = 0x07,
-    //    [Description("x.")]  _116D = 0x08,
-    //    [Description("e")]   _18   = 0x09,
-    //    [Description("q£")]  _14T  = 0x0A,
-    //    [Description("e.")]  _18D  = 0x0B,
-    //    [Description("q")]   _14   = 0x0C,
-    //    [Description("h£")]  _12T  = 0x0D,
-    //    [Description("q.")]  _14D  = 0x0E,
-    //    [Description("h")]   _12   = 0x0F,
-    //    [Description("w£")]  _1T   = 0x10,
-    //    [Description("h.")]  _12D  = 0x11,
-    //    [Description("w")]   _1    = 0x12,
-    //    [Description("W£")]  _2T   = 0x13,
-    //    [Description("w.")]  _1D   = 0x14,
-    //    [Description("W")]   _2    = 0x15,
-    //}
 
     #endregion
 
@@ -1391,20 +1440,21 @@ namespace IntegraXL.Core
         BPF   = 0x02,
         HPF   = 0x03,
         PKG   = 0x04,
-        LPF02 = 0x05,
-        LPF03 = 0x06
+        LPF2  = 0x05,
+        LPF3  = 0x06
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraVelocityCurve : byte
     {
-        Fixed   = 0x00,
-        Curve01 = 0x01,
-        Curve02 = 0x02,
-        Curve03 = 0x03,
-        Curve04 = 0x04,
-        Curve05 = 0x05,
-        Curve06 = 0x06,
-        Curve07 = 0x07,
+        [Description("Fixed")] Fixed   = 0x00,
+        [Description("1")]     Curve01 = 0x01,
+        [Description("2")]     Curve02 = 0x02,
+        [Description("3")]     Curve03 = 0x03,
+        [Description("4")]     Curve04 = 0x04,
+        [Description("5")]     Curve05 = 0x05,
+        [Description("6")]     Curve06 = 0x06,
+        [Description("7")]     Curve07 = 0x07
     }
 
     public enum IntegraEnvelopeMode : byte
@@ -1425,12 +1475,13 @@ namespace IntegraXL.Core
 
     #region PCMSynthTonePartial
 
-    public enum IntegraPCMSynthToneParts : uint
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraPCMSynthToneParts : byte
     {
-        [Description("Partial 01")] Partial01 = 0x00002000,
-        [Description("Partial 02")] Partial02 = 0x00002200,
-        [Description("Partial 03")] Partial03 = 0x00002400,
-        [Description("Partial 04")] Partial04 = 0x00002600,
+        [Description("1")] Partial01 = 0x00,
+        [Description("2")] Partial02 = 0x01,
+        [Description("3")] Partial03 = 0x02,
+        [Description("4")] Partial04 = 0x03,
     }
 
    
@@ -1443,15 +1494,16 @@ namespace IntegraXL.Core
     }
 
     
-
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraBiasDirection : byte
     {
-        Lower      = 0x00,
-        Upper      = 0x01,
-        LowerUpper = 0x02,
-        All        = 0x03
+        [Description("Lower")]         Lower      = 0x00,
+        [Description("Upper")]         Upper      = 0x01,
+        [Description("Lower & Upper")] LowerUpper = 0x02,
+        [Description("All")]           All        = 0x03
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraLFOWaveform : byte
     {
         SIN         = 0x00,
@@ -1469,13 +1521,22 @@ namespace IntegraXL.Core
         STEP        = 0x0C
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraLFOFadeMode : byte
     {
-        ONIN    = 0x00,
-        ONOUT   = 0x01,
-        OFFIN   = 0x02,
-        OFFOUT  = 0x03
+        [Description("ON <")]  ONIN    = 0x00,
+        [Description("ON >")]  ONOUT   = 0x01,
+        [Description("OFF <")] OFFIN   = 0x02,
+        [Description("OFF >")] OFFOUT  = 0x03
     }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraStepLFOType : byte
+    {
+        [Description("Type 1")] Type1 = 0x00,
+        [Description("Type 2")] Type2 = 0x01
+    }
+
 
     #endregion
 
@@ -1899,6 +1960,143 @@ namespace IntegraXL.Core
         SQR     = 0x03,
         SH      = 0x04,
         RND     = 0x05
+    }
+
+    #endregion
+
+    #region Misc
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraScales : byte
+    { 
+        [Description("C-")]           C_  = 0x00,
+        [Description("C\U0001D130-")] C_S = 0x01,
+        [Description("D-")]           D_  = 0x02,
+        [Description("E\U0001D12D-")] E_F = 0x03,
+        [Description("E-")]           E_  = 0x04,
+        [Description("F-")]           F_  = 0x05,
+        [Description("F\U0001D130-")] F_S = 0x06,
+        [Description("G-")]           G_  = 0x07,
+        [Description("G\U0001D130-")] G_S = 0x08,
+        [Description("A-")]           A_  = 0x09,
+        [Description("B\U0001D12D-")] B_F = 0x0A,
+        [Description("B-")]           B_  = 0x0B,
+        [Description("C0")]           C0  = 0x0C,
+        [Description("C\U0001D1300")] C0S = 0x0D,
+        [Description("D0")]           D0  = 0x0E,
+        [Description("E\U0001D12D0")] E0F = 0x0F,
+        [Description("E0")]           E0  = 0x10,
+        [Description("F0")]           F0  = 0x11,
+        [Description("F\U0001D1300")] F0S = 0x12,
+        [Description("G0")]           G0  = 0x13,
+        [Description("G\U0001D1300")] G0S = 0x14,
+        [Description("A0")]           A0  = 0x15,
+        [Description("B\U0001D12D0")] B0F = 0x16,
+        [Description("B0")]           B0  = 0x17,
+        [Description("C1")]           C1  = 0x18,
+        [Description("C\U0001D1301")] C1S = 0x19,
+        [Description("D1")]           D1  = 0x1A,
+        [Description("E\U0001D12D1")] E1F = 0x1B,
+        [Description("E1")]           E1  = 0x1C,
+        [Description("F1")]           F1  = 0x1D,
+        [Description("F\U0001D1301")] F1S = 0x1E,
+        [Description("G1")]           G1  = 0x1F,
+        [Description("G\U0001D1301")] G1S = 0x20,
+        [Description("A1")]           A1  = 0x21,
+        [Description("B\U0001D12D1")] B1F = 0x22,
+        [Description("B1")]           B1  = 0x23,
+        [Description("C2")]           C2  = 0x24,
+        [Description("C\U0001D1302")] C2S = 0x25,
+        [Description("D2")]           D2  = 0x26,
+        [Description("E\U0001D12D2")] E2F = 0x27,
+        [Description("E2")] E2    = 0x28,
+        [Description("F2")] F2    = 0x29,
+        [Description("F\U0001D1302")] FS2   = 0x2A,
+        [Description("G2")] G2    = 0x2B,
+        [Description("G\U0001D1302")] GS2   = 0x2C,
+        [Description("A2")] A2    = 0x2D,
+        [Description("B\U0001D12D2")] BF2   = 0x2E,
+        [Description("B2")] B2    = 0x2F,
+        [Description("C3")] C3    = 0x30,
+        [Description("C\U0001D1303")] CS3   = 0x31,
+        [Description("D3")] D3    = 0x32,
+        [Description("E\U0001D12D3")] EF3   = 0x33,
+        [Description("E3")] E3    = 0x34,
+        [Description("F3")] F3    = 0x35,
+        [Description("F\U0001D1303")] FS3   = 0x36,
+        [Description("G3")] G3    = 0x37,
+        [Description("G\U0001D1303")] GS3   = 0x38,
+        [Description("A3")] A3    = 0x39,
+        [Description("B\U0001D12D3")] BF3   = 0x3A,
+        [Description("B3")] B3    = 0x3B,
+        [Description("C4")] C4    = 0x3C,
+        [Description("C\U0001D1304")] CS4   = 0x3D,
+        [Description("D4")] D4    = 0x3E,
+        [Description("E\U0001D12D4")] EF4   = 0x3F,
+        [Description("E4")] E4    = 0x40,
+        [Description("F4")] F4    = 0x41,
+        [Description("F\U0001D1304")] FS4   = 0x42,
+        [Description("G4")] G4    = 0x43,
+        [Description("G\U0001D1304")] GS4   = 0x44,
+        [Description("A4")] A4    = 0x45,
+        [Description("B\U0001D12D4")] BF4   = 0x46,
+        [Description("B4")] B4    = 0x47,
+        [Description("C5")] C5    = 0x48,
+        [Description("C\U0001D1305")] CS5   = 0x49,
+        [Description("D5")] D5    = 0x4A,
+        [Description("E\U0001D12D5")] EF5   = 0x4B,
+        [Description("E5")] E5    = 0x4C,
+        [Description("F5")] F5    = 0x4D,
+        [Description("F\U0001D1305")] FS5   = 0x4E,
+        [Description("G5")] G5    = 0x4F,
+        [Description("G\U0001D1305")] GS5   = 0x50,
+        [Description("A5")] A5    = 0x51,
+        [Description("B\U0001D12D5")] BF5   = 0x52,
+        [Description("B5")] B5    = 0x53,
+        [Description("C6")] C6    = 0x54,
+        [Description("C\U0001D1306")] CS6   = 0x55,
+        [Description("D6")] D6    = 0x56,
+        [Description("E\U0001D12D6")] EF6   = 0x57,
+        [Description("E6")] E6    = 0x58,
+        [Description("F6")] F6    = 0x59,
+        [Description("F\U0001D1306")] FS6   = 0x5A,
+        [Description("G6")] G6    = 0x5B,
+        [Description("G\U0001D1306")] GS6   = 0x5C,
+        [Description("A6")] A6    = 0x5D,
+        [Description("B\U0001D12D6")] BF6   = 0x5E,
+        [Description("B6")] B6    = 0x5F,
+        [Description("C7")] C7    = 0x60,
+        [Description("C\U0001D1307")] CS7   = 0x61,
+        [Description("D7")] D7    = 0x62,
+        [Description("E\U0001D12D7")] EF7   = 0x63,
+        [Description("E7")] E7    = 0x64,
+        [Description("F7")] F7    = 0x65,
+        [Description("F\U0001D1307")] FS7   = 0x66,
+        [Description("G7")] G7    = 0x67,
+        [Description("G\U0001D1307")] GS7   = 0x68,
+        [Description("A7")] A7    = 0x69,
+        [Description("B\U0001D12D7")] BF7   = 0x6A,
+        [Description("B7")] B7    = 0x6B,
+        [Description("C8")] C8    = 0x6C,
+        [Description("C\U0001D1308")] CS8   = 0x6D,
+        [Description("D8")] D8    = 0x6E,
+        [Description("E\U0001D12D8")] EF8   = 0x6F,
+        [Description("E8")] E8    = 0x70,
+        [Description("F8")] F8    = 0x71,
+        [Description("F\U0001D1308")] FS8   = 0x72,
+        [Description("G8")] G8    = 0x73,
+        [Description("G\U0001D1308")] GS8   = 0x74,
+        [Description("A8")] A8    = 0x75,
+        [Description("B\U0001D12D8")] BF8   = 0x76,
+        [Description("B8")] B8    = 0x77,
+        [Description("C9")] C9    = 0x78,
+        [Description("C\U0001D1309")] CS9   = 0x79,
+        [Description("D9")] D9    = 0x7A,
+        [Description("E\U0001D12D9")] EF9   = 0x7B,
+        [Description("E9")] E9    = 0x7C,
+        [Description("F9")] F9    = 0x7D,
+        [Description("F\U0001D1309")] FS9   = 0x7E,
+        [Description("G9")] G9    = 0x7F,
     }
 
     #endregion

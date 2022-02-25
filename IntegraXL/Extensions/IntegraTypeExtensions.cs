@@ -54,6 +54,16 @@ namespace IntegraXL.Extensions
             return value;
         }
 
+        //public static short Clamp(this short value, short min = 0, short max = 127)
+        //{
+        //    Debug.Assert(min < max);
+
+        //    value = Math.Min(value, max);
+        //    value = Math.Max(value, min);
+
+        //    return value;
+        //}
+
         /// <summary>
         /// Serializes a signed <see cref="int"/> to a MIDI byte.
         /// </summary>
@@ -75,17 +85,52 @@ namespace IntegraXL.Extensions
         /// <param name="value">The value to deserialize.</param>
         /// <param name="offset">The offset to subtract.</param>
         /// <returns></returns>
-        /// <remarks><i>The offset is <b>subtracted</b> from the byte value.</i></remarks>
+        /// <remarks><i>The optional offset is <b>subtracted</b> from the byte value.</i></remarks>
         public static int Deserialize(this byte value, int offset = 0)
         {
             Debug.Assert(offset >= 0);
-            Debug.Assert(offset < 128);
+            Debug.Assert(offset <= 64);
 
             return value - offset;
         }
 
-        public static byte[] Serialize(this short value)
+        /// <summary>
+        /// Serializes a signd <see cref="int"/> to a MIDI byte divided by a factor.
+        /// </summary>
+        /// <param name="value">The value to serialize.</param>
+        /// <param name="offset">The offset to add.</param>
+        /// <param name="factor">The factor to divide.</param>
+        /// <returns></returns>
+        /// <remarks><i>The value is divided by the factor before the offset is added.</i></remarks>
+        public static byte Serialize(this int value, byte offset, int factor)
         {
+
+            Debug.Assert(((value / factor) + offset) >= 0);
+            Debug.Assert(((value / factor) + offset) < 128);
+
+            return (byte)((value / factor) + offset);
+        }
+
+        /// <summary>
+        /// Deserializes a MIDI byte to a signed <see cref="int"/> multiplied by a factor.
+        /// </summary>
+        /// <param name="value">The value to deserialize.</param>
+        /// <param name="offset">The offset to subtract.</param>
+        /// <param name="factor">The factor to multiply.</param>
+        /// <returns></returns>
+        /// <remarks><i>The offset is <b>subtracted</b> from the byte before the multiplication.</i></remarks>
+        public static int Deserialize(this byte value, int offset, int factor)
+        {
+            return (value - offset) * factor;
+        }
+
+        public static byte[] Serialize(this short value, short min = 0, short max = 127)
+        {
+            Debug.Assert(min < max);
+
+            value = Math.Min(value, max);
+            value = Math.Max(value, min);
+
             byte[] bytes = new byte[2];
 
             bytes[0] = (byte)((value >> 4) & 0x0F).Serialize();

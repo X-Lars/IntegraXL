@@ -133,22 +133,22 @@ namespace IntegraXL.Models
 
         #region Enumerations
 
-        public virtual IEnumerable<IntegraLowFrequencies> LowFrequencyValues
+        public virtual IEnumerable<IntegraLowFrequencies> LowFrequencies
         {
             get { return Enum.GetValues(typeof(IntegraLowFrequencies)).Cast<IntegraLowFrequencies>(); }
         }
 
-        public virtual IEnumerable<IntegraMidFrequencies> MidFrequencyValues
+        public virtual IEnumerable<IntegraMidFrequencies> MidFrequencies
         {
             get { return Enum.GetValues(typeof(IntegraMidFrequencies)).Cast<IntegraMidFrequencies>(); }
         }
 
-        public virtual IEnumerable<IntegraMidQs> MidQValues
+        public virtual IEnumerable<IntegraMidQs> MidQs
         {
             get { return Enum.GetValues(typeof(IntegraMidQs)).Cast<IntegraMidQs>(); }
         }
 
-        public virtual IEnumerable<IntegraHighFrequencies> HighFrequencyValues
+        public virtual IEnumerable<IntegraHighFrequencies> HighFrequencies
         {
             get { return Enum.GetValues(typeof(IntegraHighFrequencies)).Cast<IntegraHighFrequencies>(); }
         }

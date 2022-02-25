@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Diagnostics;
 using IntegraXL.Templates;
+using System.ComponentModel;
 
 namespace IntegraXL.Models
 {
@@ -63,11 +64,6 @@ namespace IntegraXL.Models
     [Integra(0x00001000, 0x00000143)]
     public class PCMDrumKitPartial : IntegraModel<PCMDrumKitPartial>
     {
-        #region Fields
-
-        private IntegraPCMNoteIndex _Index;
-
-        #endregion
 
         #region Fields: INTEGRA-7
 
@@ -292,6 +288,7 @@ namespace IntegraXL.Models
 
         #region Properties
 
+        [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
         public IntegraPCMNoteIndex Index { get; }
 
         public WaveformTemplate Waveform01L => IntegraWaveformLookup.Template(IntegraWaveFormTypes.PCM, IntegraWaveFormBanks.INT, WMT01WaveNumberL);
@@ -2074,35 +2071,5 @@ namespace IntegraXL.Models
         #endregion
 
         #endregion
-
-        protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
-        {
-            if (!IsCached)
-                return;
-
-            if (e.SystemExclusive.Address == Address)
-            {
-                if (e.SystemExclusive.Data.Length == Size)
-                {
-                    // Model data received
-                    if (Initialize(e.SystemExclusive.Data))
-                    {
-                        // Model is initialized
-                    }
-                }
-                else
-                {
-                    // TODO: 
-                    ReceivedProperty(e.SystemExclusive);
-                }
-
-            }
-            else if ((e.SystemExclusive.Address & 0xFFFFF000) == (Address & 0xFFFFF000))
-            {
-
-                // Parameter data received
-                ReceivedProperty(e.SystemExclusive);
-            }
-        }
     }
 }

@@ -41,7 +41,7 @@ namespace IntegraXL.Models
 
         public override bool IsInitialized
         {
-            get => Collection.Last().IsInitialized;
+            get => Collection.All(x => x.IsInitialized);
         }
 
         /// <summary>

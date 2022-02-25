@@ -245,6 +245,39 @@
             return sum;
         }
 
+        public static IntegraAddress operator -(IntegraAddress lhs, IntegraAddress rhs)
+        {
+            if (rhs > lhs)
+                return new IntegraAddress();
+
+            int[] difference = new int[4];
+
+            difference[0] = lhs[0] - rhs[0];
+            difference[1] = lhs[1] - rhs[1];
+            difference[2] = lhs[2] - rhs[2];
+            difference[3] = lhs[3] - rhs[3];
+
+            if (difference[3] < 0)
+            {
+                difference[3] += IntegraConstants.MAX_MIDI_VALUE;
+                difference[2]--;
+            }
+
+            if (difference[2] < 0)
+            {
+                difference[2] += IntegraConstants.MAX_MIDI_VALUE;
+                difference[1]--;
+            }
+
+            if (difference[1] < 0)
+            {
+                difference[1] += IntegraConstants.MAX_MIDI_VALUE;
+                difference[0]--;
+            }
+
+            return new IntegraAddress(new byte[] { (byte)difference[0], (byte)difference[1], (byte)difference[2], (byte)difference[3] });
+        }
+
         #endregion
 
         #region Overrides: Object

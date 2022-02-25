@@ -8,7 +8,7 @@ namespace IntegraXL.Core
     /// <typeparam name="TModel"></typeparam>
     public abstract class IntegraPartial<TModel> : IntegraModel<TModel>
     {
-        protected IntegraPartial(Integra device, Parts part) : base(device)
+        protected IntegraPartial(Integra device, Parts part, bool connect = true) : base(device, connect)
         {
             Debug.Print($"[{nameof(IntegraPartial<TModel>)}] Constructor<{GetType().Name}>({part})");
             Address += (int)part << 8;

@@ -151,94 +151,94 @@ namespace IntegraXL.Models
         [Offset(0x004A)] byte _TVFCutoffKeyFollow;
         [Offset(0x004B)] IntegraVelocityCurve _TVFCutoffVelocityCurve;
         [Offset(0x004C)] byte _TVFCutoffVelocitySens;
-        [Offset(0x004E)] byte _TVFResonance;
-        [Offset(0x004D)] byte _TVFResonanceVelocitySens;
+        [Offset(0x004D)] byte _TVFResonance;
+        [Offset(0x004E)] byte _TVFResonanceVelocitySens;
         [Offset(0x004F)] byte _TVFEnvDepth;
         [Offset(0x0050)] IntegraVelocityCurve _TVFEnvVelocityCurve;
         [Offset(0x0051)] byte _TVFEnvVelocitySens;
-        [Offset(0x0052)] byte _TVFEnvTime01VelocitySens;
-        [Offset(0x0053)] byte _TVFEnvTime04VelocitySens;
+        [Offset(0x0052)] byte _TVFEnvTime1VelocitySens;
+        [Offset(0x0053)] byte _TVFEnvTime4VelocitySens;
         [Offset(0x0054)] byte _TVFEnvTimeKeyFollow;
-        [Offset(0x0055)] byte _TVFTime01;
-        [Offset(0x0056)] byte _TVFTime02;
-        [Offset(0x0057)] byte _TVFTime03;
-        [Offset(0x0058)] byte _TVFTime04;
-        [Offset(0x0059)] byte _TVFLevel00;
-        [Offset(0x005A)] byte _TVFLevel01;
-        [Offset(0x005B)] byte _TVFLevel02;
-        [Offset(0x005C)] byte _TVFLevel03;
-        [Offset(0x005D)] byte _TVFLevel04;
+        [Offset(0x0055)] byte _TVFTime1;
+        [Offset(0x0056)] byte _TVFTime2;
+        [Offset(0x0057)] byte _TVFTime3;
+        [Offset(0x0058)] byte _TVFTime4;
+        [Offset(0x0059)] byte _TVFLevel0;
+        [Offset(0x005A)] byte _TVFLevel1;
+        [Offset(0x005B)] byte _TVFLevel2;
+        [Offset(0x005C)] byte _TVFLevel3;
+        [Offset(0x005D)] byte _TVFLevel4;
 
         #endregion
 
         #region Fields: TVA
 
         [Offset(0x005E)] byte _BiasLevel;
-        [Offset(0x005F)] byte _BiasPosition;
+        [Offset(0x005F)] IntegraScales _BiasPosition;
         [Offset(0x0060)] IntegraBiasDirection _BiasDirection;
         [Offset(0x0061)] IntegraVelocityCurve _TVALevelVelocityCurve;
         [Offset(0x0062)] byte _TVALevelVelocitySens;
-        [Offset(0x0063)] byte _TVAEnvTime01VelocitySens;
-        [Offset(0x0064)] byte _TVAEnvTime04VelocitySens;
+        [Offset(0x0063)] byte _TVAEnvTime1VelocitySens;
+        [Offset(0x0064)] byte _TVAEnvTime4VelocitySens;
         [Offset(0x0065)] byte _TVAEnvTimeKeyFollow;
-        [Offset(0x0066)] byte _TVAEnvTime01;
-        [Offset(0x0067)] byte _TVAEnvTime02;
-        [Offset(0x0068)] byte _TVAEnvTime03;
-        [Offset(0x0069)] byte _TVAEnvTime04;
-        [Offset(0x006A)] byte _TVAEnvLevel01;
-        [Offset(0x006B)] byte _TVAEnvLevel02;
-        [Offset(0x006C)] byte _TVAEnvLevel03;
+        [Offset(0x0066)] byte _TVAEnvTime1;
+        [Offset(0x0067)] byte _TVAEnvTime2;
+        [Offset(0x0068)] byte _TVAEnvTime3;
+        [Offset(0x0069)] byte _TVAEnvTime4;
+        [Offset(0x006A)] byte _TVAEnvLevel1;
+        [Offset(0x006B)] byte _TVAEnvLevel2;
+        [Offset(0x006C)] byte _TVAEnvLevel3;
 
         #endregion
 
         #region Fields: LFO 01
 
-        [Offset(0x006D)] IntegraLFOWaveform _LFO01WaveForm;
-        [Offset(0x006E)] byte[] _LFO01Rate = new byte[2];
-        [Offset(0x0070)] byte _LFO01Offset;
-        [Offset(0x0071)] byte _LFO01Detune;
-        [Offset(0x0072)] byte _LFO01DelayTime;
-        [Offset(0x0073)] byte _LFO01DelayTimeKeyFollow;
-        [Offset(0x0074)] IntegraLFOFadeMode _LFO01FadeMode;
-        [Offset(0x0075)] byte _LFO01FadeTime;
-        [Offset(0x0076)] IntegraSwitch _LFO01KeyTrigger;
-        [Offset(0x0077)] byte _LFO01PitchDepth;
-        [Offset(0x0078)] byte _LFO01TVFDepth;
-        [Offset(0x0079)] byte _LFO01TVADepth;
-        [Offset(0x007A)] byte _LFO01PanDepth;
+        [Offset(0x006D)] IntegraLFOWaveform _LFO1WaveForm;
+        [Offset(0x006E)] byte[] _LFO1Rate = new byte[2];
+        [Offset(0x0070)] byte _LFO1Offset;
+        [Offset(0x0071)] byte _LFO1Detune;
+        [Offset(0x0072)] byte _LFO1DelayTime;
+        [Offset(0x0073)] byte _LFO1DelayTimeKeyFollow;
+        [Offset(0x0074)] IntegraLFOFadeMode _LFO1FadeMode;
+        [Offset(0x0075)] byte _LFO1FadeTime;
+        [Offset(0x0076)] IntegraSwitch _LFO1KeyTrigger;
+        [Offset(0x0077)] byte _LFO1PitchDepth;
+        [Offset(0x0078)] byte _LFO1TVFDepth;
+        [Offset(0x0079)] byte _LFO1TVADepth;
+        [Offset(0x007A)] byte _LFO1PanDepth;
 
         #endregion
 
         #region Fields: LFO 02
 
-        [Offset(0x007B)] IntegraLFOWaveform _LFO02WaveForm;
-        [Offset(0x007C)] byte[] _LFO02Rate = new byte[2];
-        [Offset(0x007E)] byte _LFO02Offset;
-        [Offset(0x007F)] byte _LFO02Detune;
-        [Offset(0x0100)] byte _LFO02DelayTime;
-        [Offset(0x0101)] byte _LFO02DelayTimeKeyFollow;
-        [Offset(0x0102)] IntegraLFOFadeMode _LFO02FadeMode;
-        [Offset(0x0103)] byte _LFO02FadeTime;
-        [Offset(0x0104)] IntegraSwitch _LFO02KeyTrigger;
-        [Offset(0x0105)] byte _LFO02PitchDepth;
-        [Offset(0x0106)] byte _LFO02TVFDepth;
-        [Offset(0x0107)] byte _LFO02TVADepth;
-        [Offset(0x0108)] byte _LFO02PanDepth;
+        [Offset(0x007B)] IntegraLFOWaveform _LFO2WaveForm;
+        [Offset(0x007C)] byte[] _LFO2Rate = new byte[2];
+        [Offset(0x007E)] byte _LFO2Offset;
+        [Offset(0x007F)] byte _LFO2Detune;
+        [Offset(0x0100)] byte _LFO2DelayTime;
+        [Offset(0x0101)] byte _LFO2DelayTimeKeyFollow;
+        [Offset(0x0102)] IntegraLFOFadeMode _LFO2FadeMode;
+        [Offset(0x0103)] byte _LFO2FadeTime;
+        [Offset(0x0104)] IntegraSwitch _LFO2KeyTrigger;
+        [Offset(0x0105)] byte _LFO2PitchDepth;
+        [Offset(0x0106)] byte _LFO2TVFDepth;
+        [Offset(0x0107)] byte _LFO2TVADepth;
+        [Offset(0x0108)] byte _LFO2PanDepth;
 
         #endregion
 
         #region Fields: LFO Step Sequencer
 
-        [Offset(0x0109)] IntegraSwitch _LFOStepType;
-        [Offset(0x010A)] byte _LFOStep01;
-        [Offset(0x010B)] byte _LFOStep02;
-        [Offset(0x010C)] byte _LFOStep03;
-        [Offset(0x010D)] byte _LFOStep04;
-        [Offset(0x010E)] byte _LFOStep05;
-        [Offset(0x010F)] byte _LFOStep06;
-        [Offset(0x0110)] byte _LFOStep07;
-        [Offset(0x0111)] byte _LFOStep08;
-        [Offset(0x0112)] byte _LFOStep09;
+        [Offset(0x0109)] IntegraStepLFOType _LFOStepType;
+        [Offset(0x010A)] byte _LFOStep1;
+        [Offset(0x010B)] byte _LFOStep2;
+        [Offset(0x010C)] byte _LFOStep3;
+        [Offset(0x010D)] byte _LFOStep4;
+        [Offset(0x010E)] byte _LFOStep5;
+        [Offset(0x010F)] byte _LFOStep6;
+        [Offset(0x0110)] byte _LFOStep7;
+        [Offset(0x0111)] byte _LFOStep8;
+        [Offset(0x0112)] byte _LFOStep9;
         [Offset(0x0113)] byte _LFOStep10;
         [Offset(0x0114)] byte _LFOStep11;
         [Offset(0x0115)] byte _LFOStep12;
@@ -282,8 +282,11 @@ namespace IntegraXL.Models
             get { return _PartialLevel; }
             set
             {
-                _PartialLevel = value;
-                NotifyPropertyChanged();
+                if (_PartialLevel != value)
+                {
+                    _PartialLevel = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -323,18 +326,24 @@ namespace IntegraXL.Models
             get { return _Pan; }
             set
             {
-                _Pan = value;
-                NotifyPropertyChanged();
+                if (_Pan != value)
+                {
+                    _Pan = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
         [Offset(0x0005)]
-        public byte PanKeyFollow
+        public int PanKeyFollow
         {
-            get { return _PanKeyFollow; }
+            get { return _PanKeyFollow.Deserialize(64, 10); }
             set
             {
-                _PanKeyFollow = value;
-                NotifyPropertyChanged();
+                if (PanKeyFollow != value)
+                {
+                    _PanKeyFollow = value.Serialize(64, 10).Clamp(54, 74);
+                    NotifyPropertyChanged();
+                }
             }
         }
         [Offset(0x0006)]
@@ -343,8 +352,11 @@ namespace IntegraXL.Models
             get { return _RandomPanDepth; }
             set
             {
-                _RandomPanDepth = value;
-                NotifyPropertyChanged();
+                if (_RandomPanDepth != value)
+                {
+                    _RandomPanDepth = value.Clamp(0, 63);
+                    NotifyPropertyChanged();
+                }
             }
         }
         [Offset(0x0007)]
@@ -353,10 +365,14 @@ namespace IntegraXL.Models
             get { return _AlternatePanDepth; }
             set
             {
-                _AlternatePanDepth = value;
-                NotifyPropertyChanged();
+                if (_AlternatePanDepth != value)
+                {
+                    _AlternatePanDepth = value.Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
+
         [Offset(0x0008)]
         public IntegraEnvelopeMode EnvMode
         {
@@ -918,8 +934,11 @@ namespace IntegraXL.Models
             get { return _TVFFilterType; }
             set
             {
-                _TVFFilterType = value;
-                NotifyPropertyChanged();
+                if (_TVFFilterType != value)
+                {
+                    _TVFFilterType = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -929,19 +948,25 @@ namespace IntegraXL.Models
             get { return _TVFCutoffFrequency; }
             set
             {
-                _TVFCutoffFrequency = value;
-                NotifyPropertyChanged();
+                if (_TVFCutoffFrequency != value)
+                {
+                    _TVFCutoffFrequency = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x004A)]
-        public byte TVFCutoffKeyFollow
+        public int TVFCutoffKeyFollow
         {
-            get { return _TVFCutoffKeyFollow; }
+            get { return _TVFCutoffKeyFollow.Deserialize(64, 10); }
             set
             {
-                _TVFCutoffKeyFollow = value;
-                NotifyPropertyChanged();
+                if (TVFCutoffKeyFollow != value)
+                {
+                    _TVFCutoffKeyFollow = value.Serialize(64, 10).Clamp(44, 84);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -951,52 +976,71 @@ namespace IntegraXL.Models
             get { return _TVFCutoffVelocityCurve; }
             set
             {
-                _TVFCutoffVelocityCurve = value;
-                NotifyPropertyChanged();
+                if (_TVFCutoffVelocityCurve != value)
+                {
+                    _TVFCutoffVelocityCurve = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x004C)]
-        public byte TVFCutoffVelocitySens
+        public int TVFCutoffVelocitySens
         {
-            get { return _TVFCutoffVelocitySens; }
+            get { return _TVFCutoffVelocitySens.Deserialize(64); }
             set
             {
-                _TVFCutoffVelocitySens = value;
-                NotifyPropertyChanged();
+                if (TVFCutoffVelocitySens != value)
+                {
+                    _TVFCutoffVelocitySens = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
-        [Offset(0x004E)]
+        [Offset(0x004D)]
         public byte TVFResonance
         {
             get { return _TVFResonance; }
             set
             {
-                _TVFResonance = value;
-                NotifyPropertyChanged();
+                if (_TVFResonance != value)
+                {
+                    _TVFResonance = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
-        [Offset(0x004D)]
-        public byte TVFResonanceVelocitySens
+        [Offset(0x004E)]
+        public int TVFResonanceVelocitySens
         {
-            get { return _TVFResonanceVelocitySens; }
+            get { return _TVFResonanceVelocitySens.Deserialize(64); }
             set
             {
-                _TVFResonanceVelocitySens = value;
-                NotifyPropertyChanged();
+                if (TVFResonanceVelocitySens != value)
+                {
+                    _TVFResonanceVelocitySens = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
+
+        #endregion
+
+        #region TVF Envelope
 
         [Offset(0x004F)]
-        public byte TVFEnvDepth
+        public int TVFEnvDepth
         {
-            get { return _TVFEnvDepth; }
+            get { return _TVFEnvDepth.Deserialize(64); }
             set
             {
-                _TVFEnvDepth = value;
-                NotifyPropertyChanged();
+                if (TVFEnvDepth != value)
+                {
+                    _TVFEnvDepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -1006,151 +1050,193 @@ namespace IntegraXL.Models
             get { return _TVFEnvVelocityCurve; }
             set
             {
-                _TVFEnvVelocityCurve = value;
-                NotifyPropertyChanged();
+                if (TVFEnvVelocityCurve != value)
+                {
+                    _TVFEnvVelocityCurve = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0051)]
-        public byte TVFEnvVelocitySens
+        public int TVFEnvVelocitySens
         {
-            get { return _TVFEnvVelocitySens; }
+            get { return _TVFEnvVelocitySens.Deserialize(64); }
             set
             {
-                _TVFEnvVelocitySens = value;
-                NotifyPropertyChanged();
+                if (TVFEnvVelocitySens != value)
+                {
+                    _TVFEnvVelocitySens = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0052)]
-        public byte TVFEnvTime01VelocitySens
+        public int TVFEnvTime1VelocitySens
         {
-            get { return _TVFEnvTime01VelocitySens; }
+            get { return _TVFEnvTime1VelocitySens.Deserialize(64); }
             set
             {
-                _TVFEnvTime01VelocitySens = value;
-                NotifyPropertyChanged();
+                if (TVFEnvTime1VelocitySens != value)
+                {
+                    _TVFEnvTime1VelocitySens = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0053)]
-        public byte TVFEnvTime04VelocitySens
+        public int TVFEnvTime4VelocitySens
         {
-            get { return _TVFEnvTime04VelocitySens; }
+            get { return _TVFEnvTime4VelocitySens.Deserialize(64); }
             set
             {
-                _TVFEnvTime04VelocitySens = value;
-                NotifyPropertyChanged();
+                if (TVFEnvTime4VelocitySens != value)
+                {
+                    _TVFEnvTime4VelocitySens = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0054)]
-        public byte TVFEnvTimeKeyFollow
+        public int TVFEnvTimeKeyFollow
         {
-            get { return _TVFEnvTimeKeyFollow; }
+            get { return _TVFEnvTimeKeyFollow.Deserialize(64, 10); }
             set
             {
-                _TVFEnvTimeKeyFollow = value;
-                NotifyPropertyChanged();
+                if (TVFEnvTimeKeyFollow != value)
+                {
+                    _TVFEnvTimeKeyFollow = value.Serialize(64, 10).Clamp(54, 74);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0055)]
-        public byte TVFTime01
+        public byte TVFTime1
         {
-            get { return _TVFTime01; }
+            get { return _TVFTime1; }
             set
             {
-                _TVFTime01 = value;
-                NotifyPropertyChanged();
+                if (_TVFTime1 != value)
+                {
+                    _TVFTime1 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0056)]
-        public byte TVFTime02
+        public byte TVFTime2
         {
-            get { return _TVFTime02; }
+            get { return _TVFTime2; }
             set
             {
-                _TVFTime02 = value;
-                NotifyPropertyChanged();
+                if (_TVFTime2 != value)
+                {
+                    _TVFTime2 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0057)]
-        public byte TVFTime03
+        public byte TVFTime3
         {
-            get { return _TVFTime03; }
+            get { return _TVFTime3; }
             set
             {
-                _TVFTime03 = value;
-                NotifyPropertyChanged();
+                if (_TVFTime3 != value)
+                {
+                    _TVFTime3 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0058)]
-        public byte TVFTime04
+        public byte TVFTime4
         {
-            get { return _TVFTime04; }
+            get { return _TVFTime4; }
             set
             {
-                _TVFTime04 = value;
-                NotifyPropertyChanged();
+                if (_TVFTime4 != value)
+                {
+                    _TVFTime4 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0059)]
-        public byte TVFLevel00
+        public byte TVFLevel0
         {
-            get { return _TVFLevel00; }
+            get { return _TVFLevel0; }
             set
             {
-                _TVFLevel00 = value;
-                NotifyPropertyChanged();
+                if (_TVFLevel0 != value)
+                {
+                    _TVFLevel0 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x005A)]
-        public byte TVFLevel01
+        public byte TVFLevel1
         {
-            get { return _TVFLevel01; }
+            get { return _TVFLevel1; }
             set
             {
-                _TVFLevel01 = value;
-                NotifyPropertyChanged();
+                if (_TVFLevel1 != value)
+                {
+                    _TVFLevel1 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x005B)]
-        public byte TVFLevel02
+        public byte TVFLevel2
         {
-            get { return _TVFLevel02; }
+            get { return _TVFLevel2; }
             set
             {
-                _TVFLevel02 = value;
-                NotifyPropertyChanged();
+                if (_TVFLevel2 != value)
+                {
+                    _TVFLevel2 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x005C)]
-        public byte TVFLevel03
+        public byte TVFLevel3
         {
-            get { return _TVFLevel03; }
+            get { return _TVFLevel3; }
             set
             {
-                _TVFLevel03 = value;
-                NotifyPropertyChanged();
+                if (_TVFLevel3 != value)
+                {
+                    _TVFLevel3 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x005D)]
-        public byte TVFLevel04
+        public byte TVFLevel4
         {
-            get { return _TVFLevel04; }
+            get { return _TVFLevel4; }
             set
             {
-                _TVFLevel04 = value;
-                NotifyPropertyChanged();
+                if (_TVFLevel4 != value)
+                {
+                    _TVFLevel4 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -1159,24 +1245,30 @@ namespace IntegraXL.Models
         #region Properties: TVA
 
         [Offset(0x005E)]
-        public byte BiasLevel
+        public int BiasLevel
         {
-            get { return _BiasLevel; }
+            get { return _BiasLevel.Deserialize(64, 10); }
             set
             {
-                _BiasLevel = value;
-                NotifyPropertyChanged();
+                if (BiasLevel != value)
+                {
+                    _BiasLevel = value.Serialize(64, 10).Clamp(54, 74);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x005F)]
-        public byte BiasPosition
+        public IntegraScales BiasPosition
         {
             get { return _BiasPosition; }
             set
             {
-                _BiasPosition = value;
-                NotifyPropertyChanged();
+                if (_BiasPosition != value)
+                {
+                    _BiasPosition = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -1186,8 +1278,11 @@ namespace IntegraXL.Models
             get { return _BiasDirection; }
             set
             {
-                _BiasDirection = value;
-                NotifyPropertyChanged();
+                if (_BiasDirection != value)
+                {
+                    _BiasDirection = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -1197,423 +1292,541 @@ namespace IntegraXL.Models
             get { return _TVALevelVelocityCurve; }
             set
             {
-                _TVALevelVelocityCurve = value;
-                NotifyPropertyChanged();
+                if (_TVALevelVelocityCurve != value)
+                {
+                    _TVALevelVelocityCurve = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0062)]
-        public byte TVALevelVelocitySens
+        public int TVALevelVelocitySens
         {
-            get { return _TVALevelVelocitySens; }
+            get { return _TVALevelVelocitySens.Deserialize(64); }
             set
             {
-                _TVALevelVelocitySens = value;
-                NotifyPropertyChanged();
+                if (TVALevelVelocitySens != value)
+                {
+                    _TVALevelVelocitySens = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
+        #endregion
+
+        #region Properties: TVA ENVELOPE
+
         [Offset(0x0063)]
-        public byte TVAEnvTime01VelocitySens
+        public int TVAEnvTime1VelocitySens
         {
-            get { return _TVAEnvTime01VelocitySens; }
+            get { return _TVAEnvTime1VelocitySens.Deserialize(64); }
             set
             {
-                _TVAEnvTime01VelocitySens = value;
-                NotifyPropertyChanged();
+                if (TVAEnvTime1VelocitySens != value)
+                {
+                    _TVAEnvTime1VelocitySens = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0064)]
-        public byte TVAEnvTime04VelocitySens
+        public int TVAEnvTime4VelocitySens
         {
-            get { return _TVAEnvTime04VelocitySens; }
+            get { return _TVAEnvTime4VelocitySens.Deserialize(64); }
             set
             {
-                _TVAEnvTime04VelocitySens = value;
-                NotifyPropertyChanged();
+                if (TVAEnvTime4VelocitySens != value)
+                {
+                    _TVAEnvTime4VelocitySens = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0065)]
-        public byte TVAEnvTimeKeyFollow
+        public int TVAEnvTimeKeyFollow
         {
-            get { return _TVAEnvTimeKeyFollow; }
+            get { return _TVAEnvTimeKeyFollow.Deserialize(64, 10); }
             set
             {
-                _TVAEnvTimeKeyFollow = value;
-                NotifyPropertyChanged();
+                if (TVAEnvTimeKeyFollow != value)
+                {
+                    _TVAEnvTimeKeyFollow = value.Serialize(64, 10).Clamp(54, 74);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0066)]
-        public byte TVAEnvTime01
+        public byte TVAEnvTime1
         {
-            get { return _TVAEnvTime01; }
+            get { return _TVAEnvTime1; }
             set
             {
-                _TVAEnvTime01 = value;
-                NotifyPropertyChanged();
+                if (_TVAEnvTime1 != value)
+                {
+                    _TVAEnvTime1 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0067)]
-        public byte TVAEnvTime02
+        public byte TVAEnvTime2
         {
-            get { return _TVAEnvTime02; }
+            get { return _TVAEnvTime2; }
             set
             {
-                _TVAEnvTime02 = value;
-                NotifyPropertyChanged();
+                if (_TVAEnvTime2 != value)
+                {
+                    _TVAEnvTime2 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0068)]
-        public byte TVAEnvTime03
+        public byte TVAEnvTime3
         {
-            get { return _TVAEnvTime03; }
+            get { return _TVAEnvTime3; }
             set
             {
-                _TVAEnvTime03 = value;
-                NotifyPropertyChanged();
+                if (_TVAEnvTime3 != value)
+                {
+                    _TVAEnvTime3 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0069)]
-        public byte TVAEnvTime04
+        public byte TVAEnvTime4
         {
-            get { return _TVAEnvTime04; }
+            get { return _TVAEnvTime4; }
             set
             {
-                _TVAEnvTime04 = value;
-                NotifyPropertyChanged();
+                if (_TVAEnvTime4 != value)
+                {
+                    _TVAEnvTime4 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x006A)]
-        public byte TVAEnvLevel01
+        public byte TVAEnvLevel1
         {
-            get { return _TVAEnvLevel01; }
+            get { return _TVAEnvLevel1; }
             set
             {
-                _TVAEnvLevel01 = value;
-                NotifyPropertyChanged();
+                if (_TVAEnvLevel1 != value)
+                {
+                    _TVAEnvLevel1 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x006B)]
-        public byte TVAEnvLevel02
+        public byte TVAEnvLevel2
         {
-            get { return _TVAEnvLevel02; }
+            get { return _TVAEnvLevel2; }
             set
             {
-                _TVAEnvLevel02 = value;
-                NotifyPropertyChanged();
+                if (_TVAEnvLevel2 != value)
+                {
+                    _TVAEnvLevel2 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x006C)]
-        public byte TVAEnvLevel03
+        public byte TVAEnvLevel3
         {
-            get { return _TVAEnvLevel03; }
+            get { return _TVAEnvLevel3; }
             set
             {
-                _TVAEnvLevel03 = value;
-                NotifyPropertyChanged();
+                if (_TVAEnvLevel3 != value)
+                {
+                    _TVAEnvLevel3 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         #endregion
 
-        #region Properties: LFO 01
+        #region Properties: LFO 1
 
         [Offset(0x006D)]
-        public IntegraLFOWaveform LFO01WaveForm
+        public IntegraLFOWaveform LFO1WaveForm
         {
-            get { return _LFO01WaveForm; }
+            get { return _LFO1WaveForm; }
             set
             {
-                _LFO01WaveForm = value;
-                NotifyPropertyChanged();
+                if (_LFO1WaveForm != value)
+                {
+                    _LFO1WaveForm = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
-        //[Offset(0x006E)]
-        //public short LFO01Rate
-        //{
-        //    get { return _LFO01Rate.DeserializeShort(); }
-        //    set
-        //    {
-        //        _LFO01Rate = value.SerializeShort(); ;
-        //        NotifyPropertyChanged();
-        //    }
-        //}
-
-        [Offset(0x0070)]
-        public byte LFO01Offset
+        [Offset(0x006E)]
+        public short LFO1Rate
         {
-            get { return _LFO01Offset; }
+            get { return _LFO1Rate.Deserialize(); }
             set
             {
-                _LFO01Offset = value;
-                NotifyPropertyChanged();
+                if (LFO1Rate != value)
+                {
+                    _LFO1Rate = value.Serialize(0, 149);
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        [Offset(0x0070)]
+        public int LFO1Offset
+        {
+            get { return _LFO1Offset.Deserialize(2, 50); }
+            set
+            {
+                if (LFO1Offset != value)
+                {
+                    _LFO1Offset = value.Serialize(2, 50);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0071)]
-        public byte LFO01Detune
+        public byte LFO1Detune
         {
-            get { return _LFO01Detune; }
+            get { return _LFO1Detune; }
             set
             {
-                _LFO01Detune = value;
-                NotifyPropertyChanged();
+                if (_LFO1Detune != value)
+                {
+                    _LFO1Detune = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0072)]
-        public byte LFO01DelayTime
+        public byte LFO1DelayTime
         {
-            get { return _LFO01DelayTime; }
+            get { return _LFO1DelayTime; }
             set
             {
-                _LFO01DelayTime = value;
-                NotifyPropertyChanged();
+                if (_LFO1DelayTime != value)
+                {
+                    _LFO1DelayTime = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0073)]
-        public byte LFO01DelayTimeKeyFollow
+        public int LFO1DelayTimeKeyFollow
         {
-            get { return _LFO01DelayTimeKeyFollow; }
+            get { return _LFO1DelayTimeKeyFollow.Deserialize(64, 10); }
             set
             {
-                _LFO01DelayTimeKeyFollow = value;
-                NotifyPropertyChanged();
+                if (LFO1DelayTimeKeyFollow != value)
+                {
+                    _LFO1DelayTimeKeyFollow = value.Serialize(64, 10);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0074)]
-        public IntegraLFOFadeMode LFO01FadeMode
+        public IntegraLFOFadeMode LFO1FadeMode
         {
-            get { return _LFO01FadeMode; }
+            get { return _LFO1FadeMode; }
             set
             {
-                _LFO01FadeMode = value;
-                NotifyPropertyChanged();
+                if (_LFO1FadeMode != value)
+                {
+                    _LFO1FadeMode = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0075)]
-        public byte LFO01FadeTime
+        public byte LFO1FadeTime
         {
-            get { return _LFO01FadeTime; }
+            get { return _LFO1FadeTime; }
             set
             {
-                _LFO01FadeTime = value;
-                NotifyPropertyChanged();
+                if (_LFO1FadeTime != value)
+                {
+                    _LFO1FadeTime = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0076)]
-        public IntegraSwitch LFO01KeyTrigger
+        public IntegraSwitch LFO1KeyTrigger
         {
-            get { return _LFO01KeyTrigger; }
+            get { return _LFO1KeyTrigger; }
             set
             {
-                _LFO01KeyTrigger = value;
-                NotifyPropertyChanged();
+                if (_LFO1KeyTrigger != value)
+                {
+                    _LFO1KeyTrigger = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0077)]
-        public byte LFO01PitchDepth
+        public int LFO1PitchDepth
         {
-            get { return _LFO01PitchDepth; }
+            get { return _LFO1PitchDepth.Deserialize(64); }
             set
             {
-                _LFO01PitchDepth = value;
-                NotifyPropertyChanged();
+                if (LFO1PitchDepth != value)
+                {
+                    _LFO1PitchDepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0078)]
-        public byte LFO01TVFDepth
+        public int LFO1TVFDepth
         {
-            get { return _LFO01TVFDepth; }
+            get { return _LFO1TVFDepth.Deserialize(64); }
             set
             {
-                _LFO01TVFDepth = value;
-                NotifyPropertyChanged();
+                if (LFO1TVFDepth != value)
+                {
+                    _LFO1TVFDepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0079)]
-        public byte LFO01TVADepth
+        public int LFO1TVADepth
         {
-            get { return _LFO01TVADepth; }
+            get { return _LFO1TVADepth.Deserialize(64); }
             set
             {
-                _LFO01TVADepth = value;
-                NotifyPropertyChanged();
+                if (LFO1TVADepth != value)
+                {
+                    _LFO1TVADepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x007A)]
-        public byte LFO01PanDepth
+        public int LFO1PanDepth
         {
-            get { return _LFO01PanDepth; }
+            get { return _LFO1PanDepth.Deserialize(64); }
             set
             {
-                _LFO01PanDepth = value;
-                NotifyPropertyChanged();
+                if (LFO1PanDepth != value)
+                {
+                    _LFO1PanDepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         #endregion
 
-        #region Properties: LFO 02
+        #region Properties: LFO 2
 
         [Offset(0x007B)]
-        public IntegraLFOWaveform LFO02WaveForm
+        public IntegraLFOWaveform LFO2WaveForm
         {
-            get { return _LFO02WaveForm; }
+            get { return _LFO2WaveForm; }
             set
             {
-                _LFO02WaveForm = value;
-                NotifyPropertyChanged();
+                if (_LFO2WaveForm != value)
+                {
+                    _LFO2WaveForm = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
-        //[Offset(0x007C)]
-        //public short LFO02Rate
-        //{
-        //    get { return _LFO02Rate.DeserializeShort(); }
-        //    set
-        //    {
-        //        _LFO02Rate = value.SerializeShort();
-        //        NotifyPropertyChanged();
-        //    }
-        //}
-
-        [Offset(0x007E)]
-        public byte LFO02Offset
+        [Offset(0x007C)]
+        public short LFO2Rate
         {
-            get { return _LFO02Offset; }
+            get { return _LFO2Rate.Deserialize(); }
             set
             {
-                _LFO02Offset = value;
-                NotifyPropertyChanged();
+                if (LFO2Rate != value)
+                {
+                    _LFO2Rate = value.Serialize(0, 149);
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        [Offset(0x007E)]
+        public int LFO2Offset
+        {
+            get { return _LFO2Offset.Deserialize(2, 50); }
+            set
+            {
+                if (LFO2Offset != value)
+                {
+                    _LFO2Offset = value.Serialize(2, 50);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x007F)]
-        public byte LFO02Detune
+        public byte LFO2Detune
         {
-            get { return _LFO02Detune; }
+            get { return _LFO2Detune; }
             set
             {
-                _LFO02Detune = value;
-                NotifyPropertyChanged();
+                if (_LFO2Detune != value)
+                {
+                    _LFO2Detune = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0100)]
-        public byte LFO02DelayTime
+        public byte LFO2DelayTime
         {
-            get { return _LFO02DelayTime; }
+            get { return _LFO2DelayTime; }
             set
             {
-                _LFO02DelayTime = value;
-                NotifyPropertyChanged();
+                if (_LFO2DelayTime != value)
+                {
+                    _LFO2DelayTime = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0101)]
-        public byte LFO02DelayTimeKeyFollow
+        public int LFO2DelayTimeKeyFollow
         {
-            get { return _LFO02DelayTimeKeyFollow; }
+            get { return _LFO2DelayTimeKeyFollow.Deserialize(64, 10); }
             set
             {
-                _LFO02DelayTimeKeyFollow = value;
-                NotifyPropertyChanged();
+                if (LFO2DelayTimeKeyFollow != value)
+                {
+                    _LFO2DelayTimeKeyFollow = value.Serialize(64, 10).Clamp(54, 74);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0102)]
-        public IntegraLFOFadeMode LFO02FadeMode
+        public IntegraLFOFadeMode LFO2FadeMode
         {
-            get { return _LFO02FadeMode; }
+            get { return _LFO2FadeMode; }
             set
             {
-                _LFO02FadeMode = value;
-                NotifyPropertyChanged();
+                if (_LFO2FadeMode != value)
+                {
+                    _LFO2FadeMode = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0103)]
-        public byte LFO02FadeTime
+        public byte LFO2FadeTime
         {
-            get { return _LFO02FadeTime; }
+            get { return _LFO2FadeTime; }
             set
             {
-                _LFO02FadeTime = value;
-                NotifyPropertyChanged();
+                if (_LFO2FadeTime != value)
+                {
+                    _LFO2FadeTime = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0104)]
-        public IntegraSwitch LFO02KeyTrigger
+        public IntegraSwitch LFO2KeyTrigger
         {
-            get { return _LFO02KeyTrigger; }
+            get { return _LFO2KeyTrigger; }
             set
             {
-                _LFO02KeyTrigger = value;
-                NotifyPropertyChanged();
+                if (_LFO2KeyTrigger != value)
+                {
+                    _LFO2KeyTrigger = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0105)]
-        public byte LFO02PitchDepth
+        public int LFO2PitchDepth
         {
-            get { return _LFO02PitchDepth; }
+            get { return _LFO2PitchDepth.Deserialize(64); }
             set
             {
-                _LFO02PitchDepth = value;
-                NotifyPropertyChanged();
+                if (LFO2PitchDepth != value)
+                {
+                    _LFO2PitchDepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0106)]
-        public byte LFO02TVFDepth
+        public int LFO2TVFDepth
         {
-            get { return _LFO02TVFDepth; }
+            get { return _LFO2TVFDepth.Deserialize(64); }
             set
             {
-                _LFO02TVFDepth = value;
-                NotifyPropertyChanged();
+                if (LFO2TVFDepth != value)
+                {
+                    _LFO2TVFDepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0107)]
-        public byte LFO02TVADepth
+        public int LFO2TVADepth
         {
-            get { return _LFO02TVADepth; }
+            get { return _LFO2TVADepth.Deserialize(64); }
             set
             {
-                _LFO02TVADepth = value;
-                NotifyPropertyChanged();
+                if (LFO2TVADepth != value)
+                {
+                    _LFO2TVADepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0108)]
-        public byte LFO02PanDepth
+        public int LFO2PanDepth
         {
-            get { return _LFO02PanDepth; }
+            get { return _LFO2PanDepth.Deserialize(64); }
             set
             {
-                _LFO02PanDepth = value;
-                NotifyPropertyChanged();
+                if (LFO2PanDepth != value)
+                {
+                    _LFO2PanDepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -1622,194 +1835,258 @@ namespace IntegraXL.Models
         #region Properties: LFO Step Sequencer
 
         [Offset(0x0109)]
-        public IntegraSwitch LFOStepType
+        public IntegraStepLFOType LFOStepType
         {
             get { return _LFOStepType; }
             set
             {
-                _LFOStepType = value;
-                NotifyPropertyChanged();
+                if (_LFOStepType != value)
+                {
+                    _LFOStepType = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x010A)]
-        public byte LFOStep01
+        public int LFOStep1
         {
-            get { return _LFOStep01; }
+            get { return _LFOStep1.Deserialize(64); }
             set
             {
-                _LFOStep01 = value;
-                NotifyPropertyChanged();
+                if (_LFOStep1 != value)
+                {
+                    _LFOStep1 = value.Serialize(64).Clamp(28, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x010B)]
-        public byte LFOStep02
+        public int LFOStep2
         {
-            get { return _LFOStep02; }
+            get { return _LFOStep2.Deserialize(64); }
             set
             {
-                _LFOStep02 = value;
-                NotifyPropertyChanged();
+                if (_LFOStep2 != value)
+                {
+                    _LFOStep2 = value.Serialize(64).Clamp(28, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x010C)]
-        public byte LFOStep03
+        public int LFOStep3
         {
-            get { return _LFOStep03; }
+            get { return _LFOStep3.Deserialize(64); }
             set
             {
-                _LFOStep03 = value;
-                NotifyPropertyChanged();
+                if (_LFOStep3 != value)
+                {
+                    _LFOStep3 = value.Serialize(64).Clamp(28, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x010D)]
-        public byte LFOStep04
+        public int LFOStep4
         {
-            get { return _LFOStep04; }
+            get { return _LFOStep4.Deserialize(64); }
             set
             {
-                _LFOStep04 = value;
-                NotifyPropertyChanged();
+                if (_LFOStep4 != value)
+                {
+                    _LFOStep4 = value.Serialize(64).Clamp(28, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x010E)]
-        public byte LFOStep05
+        public int LFOStep5
         {
-            get { return _LFOStep05; }
+            get { return _LFOStep5.Deserialize(64); }
             set
             {
-                _LFOStep05 = value;
-                NotifyPropertyChanged();
+                if (_LFOStep5 != value)
+                {
+                    _LFOStep5 = value.Serialize(64).Clamp(28, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x010F)]
-        public byte LFOStep06
+        public int LFOStep6
         {
-            get { return _LFOStep06; }
+            get { return _LFOStep6.Deserialize(64); }
             set
             {
-                _LFOStep06 = value;
-                NotifyPropertyChanged();
+                if (_LFOStep6 != value)
+                {
+                    _LFOStep6 = value.Serialize(64).Clamp(28, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0110)]
-        public byte LFOStep07
+        public int LFOStep7
         {
-            get { return _LFOStep07; }
+            get { return _LFOStep7.Deserialize(64); }
             set
             {
-                _LFOStep07 = value;
-                NotifyPropertyChanged();
+                if (_LFOStep7 != value)
+                {
+                    _LFOStep7 = value.Serialize(64).Clamp(28, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0111)]
-        public byte LFOStep08
+        public int LFOStep8
         {
-            get { return _LFOStep08; }
+            get { return _LFOStep8.Deserialize(64); }
             set
             {
-                _LFOStep08 = value;
-                NotifyPropertyChanged();
+                if (_LFOStep8 != value)
+                {
+                    _LFOStep8 = value.Serialize(64).Clamp(28, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0112)]
-        public byte LFOStep09
+        public int LFOStep9
         {
-            get { return _LFOStep09; }
+            get { return _LFOStep9.Deserialize(64); }
             set
             {
-                _LFOStep09 = value;
-                NotifyPropertyChanged();
+                if (_LFOStep9 != value)
+                {
+                    _LFOStep9 = value.Serialize(64).Clamp(28, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0113)]
-        public byte LFOStep10
+        public int LFOStep10
         {
-            get { return _LFOStep10; }
+            get { return _LFOStep10.Deserialize(64); }
             set
             {
-                _LFOStep10 = value;
-                NotifyPropertyChanged();
+                if (_LFOStep10 != value)
+                {
+                    _LFOStep10 = value.Serialize(64).Clamp(28, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0114)]
-        public byte LFOStep11
+        public int LFOStep11
         {
-            get { return _LFOStep11; }
+            get { return _LFOStep11.Deserialize(64); }
             set
             {
-                _LFOStep11 = value;
-                NotifyPropertyChanged();
+                if (_LFOStep11 != value)
+                {
+                    _LFOStep11 = value.Serialize(64).Clamp(28, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0115)]
-        public byte LFOStep12
+        public int LFOStep12
         {
-            get { return _LFOStep12; }
+            get { return _LFOStep12.Deserialize(64); }
             set
             {
-                _LFOStep12 = value;
-                NotifyPropertyChanged();
+                if (_LFOStep12 != value)
+                {
+                    _LFOStep12 = value.Serialize(64).Clamp(28, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0116)]
-        public byte LFOStep13
+        public int LFOStep13
         {
-            get { return _LFOStep13; }
+            get { return _LFOStep13.Deserialize(64); }
             set
             {
-                _LFOStep13 = value;
-                NotifyPropertyChanged();
+                if (_LFOStep13 != value)
+                {
+                    _LFOStep13 = value.Serialize(64).Clamp(28, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0117)]
-        public byte LFOStep14
+        public int LFOStep14
         {
-            get { return _LFOStep14; }
+            get { return _LFOStep14.Deserialize(64); }
             set
             {
-                _LFOStep14 = value;
-                NotifyPropertyChanged();
+                if (_LFOStep14 != value)
+                {
+                    _LFOStep14 = value.Serialize(64).Clamp(28, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0118)]
-        public byte LFOStep15
+        public int LFOStep15
         {
-            get { return _LFOStep15; }
+            get { return _LFOStep15.Deserialize(64); }
             set
             {
-                _LFOStep15 = value;
-                NotifyPropertyChanged();
+                if (_LFOStep15 != value)
+                {
+                    _LFOStep15 = value.Serialize(64).Clamp(28, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0119)]
-        public byte LFOStep16
+        public int LFOStep16
         {
-            get { return _LFOStep16; }
+            get { return _LFOStep16.Deserialize(64); }
             set
             {
-                _LFOStep16 = value;
-                NotifyPropertyChanged();
+                if (_LFOStep16 != value)
+                {
+                    _LFOStep16 = value.Serialize(64).Clamp(28, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         #endregion
 
+        #endregion
+
+        #region Enumerations
+
+        public List<string> PanValues
+        {
+            get { return IntegraPan.Values; }
+        }
+
+        public List<string> Rates
+        {
+            get { return IntegraExtendedRate.Values; }
+        }
         #endregion
 
     }
