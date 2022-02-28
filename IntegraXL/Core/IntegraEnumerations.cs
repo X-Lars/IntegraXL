@@ -1186,6 +1186,20 @@ namespace IntegraXL.Core
 
     #region PCMSynthToneCommon
 
+    public enum IntegraStructureType : byte
+    {
+        Type1  = 0x00,
+        Type2  = 0x01,
+        Type3  = 0x02,
+        Type4  = 0x03,
+        Type5  = 0x04,
+        Type6  = 0x05,
+        Type7  = 0x06,
+        Type8  = 0x07,
+        Type9  = 0x08,
+        Type10 = 0x09
+
+    }
     public enum IntegraTonePriority : byte
     {
         Last    = 0x00,
@@ -1484,13 +1498,13 @@ namespace IntegraXL.Core
         [Description("4")] Partial04 = 0x03,
     }
 
-   
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraDelayMode : byte
     {
-        Normal       = 0x00,
-        Hold         = 0x01,
-        KeyOffNormal = 0x02,
-        KeyOffDecay  = 0x03
+        [Description("")] Normal       = 0x00,
+        [Description("")] Hold         = 0x01,
+        [Description("")] KeyOffNormal = 0x02,
+        [Description("")] KeyOffDecay  = 0x03
     }
 
     
@@ -1506,19 +1520,19 @@ namespace IntegraXL.Core
     [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraLFOWaveform : byte
     {
-        SIN         = 0x00,
-        TRI         = 0x01,
-        SAWUP       = 0x02,
-        SAWDOWN     = 0x03,
-        SQR         = 0x04,
-        RND         = 0x05,
-        BENDUP      = 0x06,
-        BENDDOWN    = 0x07,
-        TRP         = 0x08,
-        SH          = 0x09,
-        CHS         = 0x0A,
-        VSIN        = 0x0B,
-        STEP        = 0x0C
+        [Description("")] SIN         = 0x00,
+        [Description("")] TRI         = 0x01,
+        [Description("")] SAWUP       = 0x02,
+        [Description("")] SAWDOWN     = 0x03,
+        [Description("")] SQR         = 0x04,
+        [Description("")] RND         = 0x05,
+        [Description("")] BENDUP      = 0x06,
+        [Description("")] BENDDOWN    = 0x07,
+        [Description("")] TRP         = 0x08,
+        [Description("")] SH          = 0x09,
+        [Description("")] CHS         = 0x0A,
+        [Description("")] VSIN        = 0x0B,
+        [Description("")] STEP        = 0x0C
     }
 
     [TypeConverter(typeof(DescriptionConverter))]
@@ -1967,19 +1981,19 @@ namespace IntegraXL.Core
     #region Misc
 
     [TypeConverter(typeof(DescriptionConverter))]
-    public enum IntegraScales : byte
+    public enum IntegraKeyRange : byte
     { 
-        [Description("C-")]           C_  = 0x00,
-        [Description("C\U0001D130-")] C_S = 0x01,
-        [Description("D-")]           D_  = 0x02,
-        [Description("E\U0001D12D-")] E_F = 0x03,
-        [Description("E-")]           E_  = 0x04,
-        [Description("F-")]           F_  = 0x05,
-        [Description("F\U0001D130-")] F_S = 0x06,
-        [Description("G-")]           G_  = 0x07,
-        [Description("G\U0001D130-")] G_S = 0x08,
+        [Description("C -")]           C_  = 0x00,
+        [Description("C#-")] C_S = 0x01,
+        [Description("D -")]           D_  = 0x02,
+        [Description("Eb-")] E_F = 0x03,
+        [Description("E -")]           E_  = 0x04,
+        [Description("F -")]           F_  = 0x05,
+        [Description("F#-")] F_S = 0x06,
+        [Description("G -")]           G_  = 0x07,
+        [Description("G#-")] G_S = 0x08,
         [Description("A-")]           A_  = 0x09,
-        [Description("B\U0001D12D-")] B_F = 0x0A,
+        [Description("Bb-")] B_F = 0x0A,
         [Description("B-")]           B_  = 0x0B,
         [Description("C0")]           C0  = 0x0C,
         [Description("C\U0001D1300")] C0S = 0x0D,

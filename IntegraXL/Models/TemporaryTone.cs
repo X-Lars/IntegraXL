@@ -220,6 +220,8 @@ namespace IntegraXL.Models
                     throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(InitializeToneTypeAsync)}({Part})]\nUnspecified temporary tone type.");
             }
 
+            //NotifyPropertyChanged(string.Empty);
+
             return true;
         }
 
@@ -282,6 +284,13 @@ namespace IntegraXL.Models
         {
             Debug.Print($"[{nameof(TemporaryTone)}] *** {nameof(ToneChanged)} ***");
 
+            SuperNATURALAcousticTone = null;
+            SuperNATURALSynthTone = null;
+            SuperNATURALDrumKit = null;
+            PCMSynthTone = null;
+            PCMDrumKit = null;
+
+            ReinitializeAsync();
             // Old: Remove type from device cache
             // Old: Disconnect
             // Old: Remove MFX ?

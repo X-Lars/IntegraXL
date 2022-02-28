@@ -416,8 +416,11 @@ namespace IntegraXL
 
                 SelectedTones[SelectedPart].BankSelect = value;
 
+                //ToneChanged?.Invoke(this, new IntegraToneChangedEventArgs(value, (Parts)SelectedPart));
+
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(ToneInfo));
+                
             }
         }
 

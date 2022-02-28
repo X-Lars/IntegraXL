@@ -43,9 +43,9 @@ namespace IntegraXL.Models
         }
 
 
-        public PCMSynthTonePartial Partial
+        public PCMSynthTonePartial? Partial
         {
-            get => Partials[(int)_SelectedPartial];
+            get => Partials?[(int)_SelectedPartial];
         }
 
         public bool IsEditable { get; private set; }

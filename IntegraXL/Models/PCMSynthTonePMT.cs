@@ -1,512 +1,657 @@
 ﻿using IntegraXL.Core;
-using System.Reflection;
+using IntegraXL.Extensions;
 
 namespace IntegraXL.Models
 {
-    // TODO: PMT Keyboard / Velocity Range intersection validation
     [Integra(0x00001000, 0x00000029)]
     public class PCMSynthTonePMT : IntegraModel<PCMSynthTonePMT>
     {
-        [Offset(0x0000)] byte _StructureType12;
+        #region Fields: INTEGRA-7
+
+        [Offset(0x0000)] IntegraStructureType _StructureType12;
         [Offset(0x0001)] byte _Booster12;
-        [Offset(0x0002)] byte _Structuretype34;
+        [Offset(0x0002)] IntegraStructureType _Structuretype34;
         [Offset(0x0003)] byte _Booster34;
-
         [Offset(0x0004)] IntegraVelocityControl _VelocityControl;
+        [Offset(0x0005)] IntegraSwitch _PMT1Switch;
+        [Offset(0x0006)] IntegraKeyRange _PMT1KeyboardRangeLower;
+        [Offset(0x0007)] IntegraKeyRange _PMT1KeyboardRangeUpper;
+        [Offset(0x0008)] byte _PMT1KeyboardFadeWidthLower;
+        [Offset(0x0009)] byte _PMT1KeyboardFadeWidthUpper;
+        [Offset(0x000A)] byte _PMT1VelocityRangeLower;
+        [Offset(0x000B)] byte _PMT1VelocityRangeUpper;
+        [Offset(0x000C)] byte _PMT1VelocityFadeWidthLower;
+        [Offset(0x000D)] byte _PMT1VelocityFadeWidthUpper;
+        [Offset(0x000E)] IntegraSwitch _PMT2Switch;
+        [Offset(0x000F)] IntegraKeyRange _PMT2KeyboardRangeLower;
+        [Offset(0x0010)] IntegraKeyRange _PMT2KeyboardRangeUpper;
+        [Offset(0x0011)] byte _PMT2KeyboardFadeWidthLower;
+        [Offset(0x0012)] byte _PMT2KeyboardFadeWidthUpper;
+        [Offset(0x0013)] byte _PMT2VelocityRangeLower;
+        [Offset(0x0014)] byte _PMT2VelocityRangeUpper;
+        [Offset(0x0015)] byte _PMT2VelocityFadeWidthLower;
+        [Offset(0x0016)] byte _PMT2VelocityFadeWidthUpper;
+        [Offset(0x0017)] IntegraSwitch _PMT3Switch;
+        [Offset(0x0018)] IntegraKeyRange _PMT3KeyboardRangeLower;
+        [Offset(0x0019)] IntegraKeyRange _PMT3KeyboardRangeUpper;
+        [Offset(0x001A)] byte _PMT3KeyboardFadeWidthLower;
+        [Offset(0x001B)] byte _PMT3KeyboardFadeWidthUpper;
+        [Offset(0x001C)] byte _PMT3VelocityRangeLower;
+        [Offset(0x001D)] byte _PMT3VelocityRangeUpper;
+        [Offset(0x001E)] byte _PMT3VelocityFadeWidthLower;
+        [Offset(0x001F)] byte _PMT3VelocityFadeWidthUpper;
+        [Offset(0x0020)] IntegraSwitch _PMT4Switch;
+        [Offset(0x0021)] IntegraKeyRange _PMT4KeyboardRangeLower;
+        [Offset(0x0022)] IntegraKeyRange _PMT4KeyboardRangeUpper;
+        [Offset(0x0023)] byte _PMT4KeyboardFadeWidthLower;
+        [Offset(0x0024)] byte _PMT4KeyboardFadeWidthUpper;
+        [Offset(0x0025)] byte _PMT4VelocityRangeLower;
+        [Offset(0x0026)] byte _PMT4VelocityRangeUpper;
+        [Offset(0x0027)] byte _PMT4VelocityFadeWidthLower;
+        [Offset(0x0028)] byte _PMT4VelocityFadeWidthUpper;
 
-        [Offset(0x0005)] IntegraSwitch _PMT01Switch;
-        [Offset(0x0006)] byte _PMT01KeyboardRangeLower;
-        [Offset(0x0007)] byte _PMT01KeyboardRangeUpper;
-        [Offset(0x0008)] byte _PMT01KeyboardFadeWidthLower;
-        [Offset(0x0009)] byte _PMT01KeyboardFadeWidthUpper;
-        [Offset(0x000A)] byte _PMT01VelocityRangeLower;
-        [Offset(0x000B)] byte _PMT01VelocityRangeUpper;
-        [Offset(0x000C)] byte _PMT01VelocityFadeWidthLower;
-        [Offset(0x000D)] byte _PMT01VelocityFadeWidthUpper;
-        [Offset(0x000E)] IntegraSwitch _PMT02Switch;
-        [Offset(0x000F)] byte _PMT02KeyboardRangeLower;
-        [Offset(0x0010)] byte _PMT02KeyboardRangeUpper;
-        [Offset(0x0011)] byte _PMT02KeyboardFadeWidthLower;
-        [Offset(0x0012)] byte _PMT02KeyboardFadeWidthUpper;
-        [Offset(0x0013)] byte _PMT02VelocityRangeLower;
-        [Offset(0x0014)] byte _PMT02VelocityRangeUpper;
-        [Offset(0x0015)] byte _PMT02VelocityFadeWidthLower;
-        [Offset(0x0016)] byte _PMT02VelocityFadeWidthUpper;
-        [Offset(0x0017)] IntegraSwitch _PMT03Switch;
-        [Offset(0x0018)] byte _PMT03KeyboardRangeLower;
-        [Offset(0x0019)] byte _PMT03KeyboardRangeUpper;
-        [Offset(0x001A)] byte _PMT03KeyboardFadeWidthLower;
-        [Offset(0x001B)] byte _PMT03KeyboardFadeWidthUpper;
-        [Offset(0x001C)] byte _PMT03VelocityRangeLower;
-        [Offset(0x001D)] byte _PMT03VelocityRangeUpper;
-        [Offset(0x001E)] byte _PMT03VelocityFadeWidthLower;
-        [Offset(0x001F)] byte _PMT03VelocityFadeWidthUpper;
-        [Offset(0x0020)] IntegraSwitch _PMT04Switch;
-        [Offset(0x0021)] byte _PMT04KeyboardRangeLower;
-        [Offset(0x0022)] byte _PMT04KeyboardRangeUpper;
-        [Offset(0x0023)] byte _PMT04KeyboardFadeWidthLower;
-        [Offset(0x0024)] byte _PMT04KeyboardFadeWidthUpper;
-        [Offset(0x0025)] byte _PMT04VelocityRangeLower;
-        [Offset(0x0026)] byte _PMT04VelocityRangeUpper;
-        [Offset(0x0027)] byte _PMT04VelocityFadeWidthLower;
-        [Offset(0x0028)] byte _PMT04VelocityFadeWidthUpper;
+        #endregion
 
-        //public PCMSynthTonePMT(IntegraAddress address) : base(address + 0x00001000, 0x00000029)
+        #region Constructor
+
         public PCMSynthTonePMT(PCMSynthTone synthTone) : base(synthTone.Device)
         {
-            Address = synthTone.Address;
-            //Address += GetType().GetCustomAttribute<ModelAddress>().Address;
-            //Size = GetType().GetCustomAttribute<ModelAddress>().Size;
+            Address += synthTone.Address;
         }
 
+        #endregion
+
+        #region Properties: Common
+
         [Offset(0x0000)]
-        public byte StructureType12
+        public IntegraStructureType StructureType12
         {
-            get { return _StructureType12; }
+            get => _StructureType12;
             set
             {
-                _StructureType12 = value;
-                NotifyPropertyChanged();
+                if (_StructureType12 != value)
+                {
+                    _StructureType12 = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0001)]
-        public byte Booster12
+        public int Booster12
         {
-            get { return _Booster12; }
+            get => _Booster12.Deserialize(0, 6);
             set
             {
-                _Booster12 = value;
-                NotifyPropertyChanged();
+                if (_Booster12 != value)
+                {
+                    _Booster12 = value.Serialize(0, 6).Clamp(0, 3);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0002)]
-        public byte StructureType34
+        public IntegraStructureType StructureType34
         {
-            get { return _Structuretype34; }
+            get => _Structuretype34;
             set
             {
-                _Structuretype34 = value;
-                NotifyPropertyChanged();
+                if (_Structuretype34 != value)
+                {
+                    _Structuretype34 = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0003)]
-        public byte Booster34
+        public int Booster34
         {
-            get { return _Booster34; }
+            get => _Booster34.Deserialize(0, 6);
             set
             {
-                _Booster34 = value;
-                NotifyPropertyChanged();
+                if (_Booster34 != value)
+                {
+                    _Booster34 = value.Serialize(0, 6).Clamp(0, 3);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0004)]
         public IntegraVelocityControl VelocityControl
         {
-            get { return _VelocityControl; }
+            get => _VelocityControl;
             set
             {
-                _VelocityControl = value;
-                NotifyPropertyChanged();
+                if (_VelocityControl != value)
+                {
+                    _VelocityControl = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
+        #endregion
+
+        #region Properties: PMT 1
+
         [Offset(0x0005)]
-        public IntegraSwitch PMT01Switch
+        public IntegraSwitch PMT1Switch
         {
-            get { return _PMT01Switch; }
+            get => _PMT1Switch;
             set
             {
-                _PMT01Switch = value;
-                NotifyPropertyChanged();
+                if (_PMT1Switch != value)
+                {
+                    _PMT1Switch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0006)]
-        public byte PMT01KeyboardRangeLower
+        public IntegraKeyRange PMT1KeyboardRangeLower
         {
-            get { return _PMT01KeyboardRangeLower; }
+            get => _PMT1KeyboardRangeLower;
             set
             {
-                _PMT01KeyboardRangeLower = value;
-                NotifyPropertyChanged();
+                if (_PMT1KeyboardRangeLower != value)
+                {
+                    _PMT1KeyboardRangeLower = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0007)]
-        public byte PMT01KeyboardRangeUpper
+        public IntegraKeyRange PMT1KeyboardRangeUpper
         {
-            get { return _PMT01KeyboardRangeUpper; }
+            get => _PMT1KeyboardRangeUpper;
             set
             {
-                _PMT01KeyboardRangeUpper = value;
-                NotifyPropertyChanged();
+                if (_PMT1KeyboardRangeUpper != value)
+                {
+                    _PMT1KeyboardRangeUpper = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0008)]
-        public byte PMT01KeyboardFadeWidthLower
+        public byte PMT1KeyboardFadeWidthLower
         {
-            get { return _PMT01KeyboardFadeWidthLower; }
+            get => _PMT1KeyboardFadeWidthLower;
             set
             {
-                _PMT01KeyboardFadeWidthLower = value;
-                NotifyPropertyChanged();
+                if (_PMT1KeyboardFadeWidthLower != value)
+                {
+                    _PMT1KeyboardFadeWidthLower = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0009)]
-        public byte PMT01KeyboardFadeWidthUpper
+        public byte PMT1KeyboardFadeWidthUpper
         {
-            get { return _PMT01KeyboardFadeWidthUpper; }
+            get => _PMT1KeyboardFadeWidthUpper;
             set
             {
-                _PMT01KeyboardFadeWidthUpper = value;
-                NotifyPropertyChanged();
+                if (_PMT1KeyboardFadeWidthUpper != value)
+                {
+                    _PMT1KeyboardFadeWidthUpper = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x000A)]
-        public byte PMT01VelocityRangeLower
+        public byte PMT1VelocityRangeLower
         {
-            get { return _PMT01VelocityRangeLower; }
+            get => _PMT1VelocityRangeLower;
             set
             {
-                _PMT01VelocityRangeLower = value;
-                NotifyPropertyChanged();
+                if (_PMT1VelocityRangeLower != value)
+                {
+                    _PMT1VelocityRangeLower = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x000B)]
-        public byte PMT01VelocityRangeUpper
+        public byte PMT1VelocityRangeUpper
         {
-            get { return _PMT01VelocityRangeUpper; }
+            get => _PMT1VelocityRangeUpper;
             set
             {
-                _PMT01VelocityRangeUpper = value;
-                NotifyPropertyChanged();
+                if (_PMT1VelocityRangeUpper != value)
+                {
+                    _PMT1VelocityRangeUpper = value.Clamp(); ;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x000C)]
-        public byte PMT01VelocityFadeWidthLower
+        public byte PMT1VelocityFadeWidthLower
         {
-            get { return _PMT01VelocityFadeWidthLower; }
+            get => _PMT1VelocityFadeWidthLower;
             set
             {
-                _PMT01VelocityFadeWidthLower = value;
-                NotifyPropertyChanged();
+                if (_PMT1VelocityFadeWidthLower != value)
+                {
+                    _PMT1VelocityFadeWidthLower = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x000D)]
-        public byte PMT01VelocityFadeWidthUpper
+        public byte PMT1VelocityFadeWidthUpper
         {
-            get { return _PMT01VelocityFadeWidthUpper; }
+            get => _PMT1VelocityFadeWidthUpper;
             set
             {
-                _PMT01VelocityFadeWidthUpper = value;
-                NotifyPropertyChanged();
+                if (_PMT1VelocityFadeWidthUpper != value)
+                {
+                    _PMT1VelocityFadeWidthUpper = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
+        #endregion
+
+        #region Properties: PMT 2
+
         [Offset(0x000E)]
-        public IntegraSwitch PMT02Switch
+        public IntegraSwitch PMT2Switch
         {
-            get { return _PMT02Switch; }
+            get => _PMT2Switch;
             set
             {
-                _PMT02Switch = value;
-                NotifyPropertyChanged();
+                if (_PMT2Switch != value)
+                {
+                    _PMT2Switch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x000F)]
-        public byte PMT02KeyboardRangeLower
+        public IntegraKeyRange PMT2KeyboardRangeLower
         {
-            get { return _PMT02KeyboardRangeLower; }
+            get => _PMT2KeyboardRangeLower;
             set
             {
-                _PMT02KeyboardRangeLower = value;
-                NotifyPropertyChanged();
+                if (_PMT2KeyboardRangeLower != value)
+                {
+                    _PMT2KeyboardRangeLower = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0010)]
-        public byte PMT02KeyboardRangeUpper
+        public IntegraKeyRange PMT2KeyboardRangeUpper
         {
-            get { return _PMT02KeyboardRangeUpper; }
+            get => _PMT2KeyboardRangeUpper;
             set
             {
-                _PMT02KeyboardRangeUpper = value;
-                NotifyPropertyChanged();
+                if (_PMT2KeyboardRangeUpper != value)
+                {
+                    _PMT2KeyboardRangeUpper = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0011)]
-        public byte PMT02KeyboardFadeWidthLower
+        public byte PMT2KeyboardFadeWidthLower
         {
-            get { return _PMT02KeyboardFadeWidthLower; }
+            get => _PMT2KeyboardFadeWidthLower;
             set
             {
-                _PMT02KeyboardFadeWidthLower = value;
-                NotifyPropertyChanged();
+                if (_PMT2KeyboardFadeWidthLower != value)
+                {
+                    _PMT2KeyboardFadeWidthLower = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0012)]
-        public byte PMT02KeyboardFadeWidthUpper
+        public byte PMT2KeyboardFadeWidthUpper
         {
-            get { return _PMT02KeyboardFadeWidthUpper; }
+            get => _PMT2KeyboardFadeWidthUpper;
             set
             {
-                _PMT02KeyboardFadeWidthUpper = value;
-                NotifyPropertyChanged();
+                if (_PMT2KeyboardFadeWidthUpper != value)
+                {
+                    _PMT2KeyboardFadeWidthUpper = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0013)]
-        public byte PMT02VelocityRangeLower
+        public byte PMT2VelocityRangeLower
         {
-            get { return _PMT02VelocityRangeLower; }
+            get => _PMT2VelocityRangeLower;
             set
             {
-                _PMT02VelocityRangeLower = value;
-                NotifyPropertyChanged();
+                if (_PMT2VelocityRangeLower != value)
+                {
+                    _PMT2VelocityRangeLower = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0014)]
-        public byte PMT02VelocityRangeUpper
+        public byte PMT2VelocityRangeUpper
         {
-            get { return _PMT02VelocityRangeUpper; }
+            get => _PMT2VelocityRangeUpper;
             set
             {
-                _PMT02VelocityRangeUpper = value;
-                NotifyPropertyChanged();
+                if (_PMT2VelocityRangeUpper != value)
+                {
+                    _PMT2VelocityRangeUpper = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0015)]
-        public byte PMT02VelocityFadeWidthLower
+        public byte PMT2VelocityFadeWidthLower
         {
-            get { return _PMT02VelocityFadeWidthLower; }
+            get => _PMT2VelocityFadeWidthLower;
             set
             {
-                _PMT02VelocityFadeWidthLower = value;
-                NotifyPropertyChanged();
+                if (_PMT2VelocityFadeWidthLower != value)
+                {
+                    _PMT2VelocityFadeWidthLower = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0016)]
-        public byte PMT02VelocityFadeWidthUpper
+        public byte PMT2VelocityFadeWidthUpper
         {
-            get { return _PMT02VelocityFadeWidthUpper; }
+            get => _PMT2VelocityFadeWidthUpper;
             set
             {
-                _PMT02VelocityFadeWidthUpper = value;
-                NotifyPropertyChanged();
+                if (_PMT2VelocityFadeWidthUpper != value)
+                {
+                    _PMT2VelocityFadeWidthUpper = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
+        #endregion
+
+        #region Properties: PMT 3
+
         [Offset(0x0017)]
-        public IntegraSwitch PMT03Switch
+        public IntegraSwitch PMT3Switch
         {
-            get { return _PMT03Switch; }
+            get => _PMT3Switch;
             set
             {
-                _PMT03Switch = value;
-                NotifyPropertyChanged();
+                if (_PMT3Switch != value)
+                {
+                    _PMT3Switch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
         [Offset(0x0018)]
-        public byte PMT03KeyboardRangeLower
+        public IntegraKeyRange PMT3KeyboardRangeLower
         {
-            get { return _PMT03KeyboardRangeLower; }
+            get => _PMT3KeyboardRangeLower;
             set
             {
-                _PMT03KeyboardRangeLower = value;
-                NotifyPropertyChanged();
+                if (_PMT3KeyboardRangeLower != value)
+                {
+                    _PMT3KeyboardRangeLower = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0019)]
-        public byte PMT03KeyboardRangeUpper
+        public IntegraKeyRange PMT3KeyboardRangeUpper
         {
-            get { return _PMT03KeyboardRangeUpper; }
+            get => _PMT3KeyboardRangeUpper;
             set
             {
-                _PMT03KeyboardRangeUpper = value;
-                NotifyPropertyChanged();
+                if (_PMT3KeyboardRangeUpper != value)
+                {
+                    _PMT3KeyboardRangeUpper = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x001A)]
-        public byte PMT03KeyboardFadeWidthLower
+        public byte PMT3KeyboardFadeWidthLower
         {
-            get { return _PMT03KeyboardFadeWidthLower; }
+            get => _PMT3KeyboardFadeWidthLower;
             set
             {
-                _PMT03KeyboardFadeWidthLower = value;
-                NotifyPropertyChanged();
+                if (_PMT3KeyboardFadeWidthLower != value)
+                {
+                    _PMT3KeyboardFadeWidthLower = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x001B)]
-        public byte PMT03KeyboardFadeWidthUpper
+        public byte PMT3KeyboardFadeWidthUpper
         {
-            get { return _PMT03KeyboardFadeWidthUpper; }
+            get => _PMT3KeyboardFadeWidthUpper;
             set
             {
-                _PMT03KeyboardFadeWidthUpper = value;
-                NotifyPropertyChanged();
+                if (_PMT3KeyboardFadeWidthUpper != value)
+                {
+                    _PMT3KeyboardFadeWidthUpper = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x001C)]
-        public byte PMT03VelocityRangeLower
+        public byte PMT3VelocityRangeLower
         {
-            get { return _PMT03VelocityRangeLower; }
+            get => _PMT3VelocityRangeLower;
             set
             {
-                _PMT03VelocityRangeLower = value;
-                NotifyPropertyChanged();
+                if (_PMT3VelocityRangeLower != value)
+                {
+                    _PMT3VelocityRangeLower = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x001D)]
-        public byte PMT03VelocityRangeUpper
+        public byte PMT3VelocityRangeUpper
         {
-            get { return _PMT03VelocityRangeUpper; }
+            get => _PMT3VelocityRangeUpper;
             set
             {
-                _PMT03VelocityRangeUpper = value;
-                NotifyPropertyChanged();
+                if (_PMT3VelocityRangeUpper != value)
+                {
+                    _PMT3VelocityRangeUpper = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x001E)]
-        public byte PMT03VelocityFadeWidthLower
+        public byte PMT3VelocityFadeWidthLower
         {
-            get { return _PMT03VelocityFadeWidthLower; }
+            get => _PMT3VelocityFadeWidthLower;
             set
             {
-                _PMT03VelocityFadeWidthLower = value;
-                NotifyPropertyChanged();
+                if (_PMT3VelocityFadeWidthLower != value)
+                {
+                    _PMT3VelocityFadeWidthLower = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x001F)]
-        public byte PMT03VelocityFadeWidthUpper
+        public byte PMT3VelocityFadeWidthUpper
         {
-            get { return _PMT03VelocityFadeWidthUpper; }
+            get => _PMT3VelocityFadeWidthUpper;
             set
             {
-                _PMT03VelocityFadeWidthUpper = value;
-                NotifyPropertyChanged();
+                if (_PMT3VelocityFadeWidthUpper != value)
+                {
+                    _PMT3VelocityFadeWidthUpper = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
+        #endregion
+
+        #region Properties: PMT 4
+
         [Offset(0x0020)]
-        public IntegraSwitch PMT04Switch
+        public IntegraSwitch PMT4Switch
         {
-            get { return _PMT04Switch; }
+            get => _PMT4Switch;
             set
             {
-                _PMT04Switch =
-                  value; NotifyPropertyChanged();
+                if (_PMT4Switch != value)
+                {
+                    _PMT4Switch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0021)]
-        public byte PMT04KeyboardRangeLower
+        public IntegraKeyRange PMT4KeyboardRangeLower
         {
-            get { return _PMT04KeyboardRangeLower; }
+            get => _PMT4KeyboardRangeLower;
             set
             {
-                _PMT04KeyboardRangeLower = value;
-                NotifyPropertyChanged();
+                if (_PMT4KeyboardRangeLower != value)
+                {
+                    _PMT4KeyboardRangeLower = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0022)]
-        public byte PMT04KeyboardRangeUpper
+        public IntegraKeyRange PMT4KeyboardRangeUpper
         {
-            get { return _PMT04KeyboardRangeUpper; }
+            get => _PMT4KeyboardRangeUpper;
             set
             {
-                _PMT04KeyboardRangeUpper = value;
-                NotifyPropertyChanged();
+                if (_PMT4KeyboardRangeUpper != value)
+                {
+                    _PMT4KeyboardRangeUpper = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0023)]
-        public byte PMT04KeyboardFadeWidthLower
+        public byte PMT4KeyboardFadeWidthLower
         {
-            get { return _PMT04KeyboardFadeWidthLower; }
+            get => _PMT4KeyboardFadeWidthLower;
             set
             {
-                _PMT04KeyboardFadeWidthLower = value;
-                NotifyPropertyChanged();
+                if (_PMT4KeyboardFadeWidthLower != value)
+                {
+                    _PMT4KeyboardFadeWidthLower = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0024)]
-        public byte PMT04KeyboardFadeWidthUpper
+        public byte PMT4KeyboardFadeWidthUpper
         {
-            get { return _PMT04KeyboardFadeWidthUpper; }
+            get => _PMT4KeyboardFadeWidthUpper;
             set
             {
-                _PMT04KeyboardFadeWidthUpper = value;
-                NotifyPropertyChanged();
+                if (_PMT4KeyboardFadeWidthUpper != value)
+                {
+                    _PMT4KeyboardFadeWidthUpper = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0025)]
-        public byte PMT04VelocityRangeLower
+        public byte PMT4VelocityRangeLower
         {
-            get { return _PMT04VelocityRangeLower; }
+            get => _PMT4VelocityRangeLower;
             set
             {
-                _PMT04VelocityRangeLower = value;
-                NotifyPropertyChanged();
+                if (_PMT4VelocityRangeLower != value)
+                {
+                    _PMT4VelocityRangeLower = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0026)]
-        public byte PMT04VelocityRangeUpper
+        public byte PMT4VelocityRangeUpper
         {
-            get { return _PMT04VelocityRangeUpper; }
+            get => _PMT4VelocityRangeUpper;
             set
             {
-                _PMT04VelocityRangeUpper = value;
-                NotifyPropertyChanged();
+                if (_PMT4VelocityRangeUpper != value)
+                {
+                    _PMT4VelocityRangeUpper = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0027)]
-        public byte PMT04VelocityFadeWidthLower
+        public byte PMT4VelocityFadeWidthLower
         {
-            get { return _PMT04VelocityFadeWidthLower; }
+            get => _PMT4VelocityFadeWidthLower;
             set
             {
-                _PMT04VelocityFadeWidthLower = value;
-                NotifyPropertyChanged();
+                if (_PMT4VelocityFadeWidthLower != value)
+                {
+                    _PMT4VelocityFadeWidthLower = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0028)]
-        public byte PMT04VelocityFadeWidthUpper
+        public byte PMT4VelocityFadeWidthUpper
         {
-            get { return _PMT04VelocityFadeWidthUpper; }
+            get => _PMT4VelocityFadeWidthUpper;
             set
             {
-                _PMT04VelocityFadeWidthUpper = value;
-                NotifyPropertyChanged();
+                if (_PMT4VelocityFadeWidthUpper != value)
+                {
+                    _PMT4VelocityFadeWidthUpper = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
+
+        #endregion
     }
 }

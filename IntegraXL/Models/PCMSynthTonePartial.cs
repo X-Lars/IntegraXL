@@ -174,7 +174,7 @@ namespace IntegraXL.Models
         #region Fields: TVA
 
         [Offset(0x005E)] byte _BiasLevel;
-        [Offset(0x005F)] IntegraScales _BiasPosition;
+        [Offset(0x005F)] IntegraKeyRange _BiasPosition;
         [Offset(0x0060)] IntegraBiasDirection _BiasDirection;
         [Offset(0x0061)] IntegraVelocityCurve _TVALevelVelocityCurve;
         [Offset(0x0062)] byte _TVALevelVelocitySens;
@@ -1259,7 +1259,7 @@ namespace IntegraXL.Models
         }
 
         [Offset(0x005F)]
-        public IntegraScales BiasPosition
+        public IntegraKeyRange BiasPosition
         {
             get { return _BiasPosition; }
             set

@@ -364,3 +364,6 @@ FodyWeavers.xsd
 /WPF
 /IntegraXLTest
 /IntegraXL/ToDo.txt
+/IntegraXL/File/FileStructure.cs
+/IntegraXL/File/FileTools.cs
+/IntegraXL/File

@@ -111,6 +111,11 @@ namespace IntegraXL.Extensions
             return (byte)((value / factor) + offset);
         }
 
+        public static byte Deserialize(this byte value, byte offset, int factor)
+        {
+            return (byte)((value - factor) * factor);
+        }
+
         /// <summary>
         /// Deserializes a MIDI byte to a signed <see cref="int"/> multiplied by a factor.
         /// </summary>

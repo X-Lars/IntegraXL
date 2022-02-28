@@ -654,7 +654,7 @@ namespace IntegraXL.Core
         /// <summary>
         /// Requests the device to reinitialize the model.
         /// </summary>
-        protected async void ReinitializeAsync()
+        internal async void ReinitializeAsync()
         {
             IsInitialized = false;
 
