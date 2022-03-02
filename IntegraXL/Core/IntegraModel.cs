@@ -58,6 +58,84 @@ namespace IntegraXL.Core
 
         #region Methods
 
+        public override byte[] Serialize()
+        {
+            //var integraFields = instance.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic)
+            //   .Where(x => x.GetCustomAttribute<OffsetAttribute>() != null);
+            //int fieldCount = this.CachedFields().Count;
+            List<byte> values = new List<byte>();
+           
+            var fields = this.CachedFields().OrderBy(x => x.Key).ToArray();
+            
+            for (int i = 0; i < fields.Count(); i++)
+            {
+                FieldInfo field = fields[i].Value;
+
+                if (field.FieldType == typeof(byte))
+                {
+                    values.Add((byte)field.GetValue(this));
+                }
+                else if (field.FieldType == typeof(bool))
+                {
+                    values.Add((bool)field.GetValue(this) ? (byte)1 : (byte)0);
+                }
+                else if (field.FieldType.IsEnum)
+                {
+                    Type type = field.FieldType.GetEnumUnderlyingType();
+
+                    if (type == typeof(byte))
+                    {
+                        values.Add((byte)field.GetValue(this));
+                    }
+                    else
+                    {
+                        throw new NotImplementedException($"{GetType().Name}.{nameof(TransmitProperty)}] {field.FieldType.Name} {field.Name}");
+                    }
+                }
+                else if (field.FieldType.IsArray)
+                {
+                    Array array = field.GetValue(this) as Array;
+                    Type type = array.GetType().GetElementType();
+
+                    if (type == typeof(byte))
+                    {
+                        for (int a = 0; a < array.Length; a++)
+                        {
+                            values.Add((byte)array.GetValue(a));
+                        }
+                        //data = new byte[array.Length];
+
+                        //Array.Copy(array, data, array.Length);
+                    }
+                    else if (type == typeof(int))
+                    {
+                        for (int a = 0; a < array.Length; a++)
+                        {
+                            int[] ints = (int[])(field.GetValue(this));
+                            byte[] bytes = new byte[4];
+
+                            bytes = BitConverter.GetBytes(ints[a]);
+
+                            if (BitConverter.IsLittleEndian)
+                                Array.Reverse(bytes);
+
+                            for (int b = 0; b < 4; b++)
+                            {
+                                values.Add(bytes[b]);
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        throw new NotImplementedException($"{GetType().Name}.{nameof(TransmitProperty)}] {field.FieldType.Name} {field.Name}");
+                    }
+                }
+            }
+
+            return values.ToArray();
+        }
+
         internal void TransmitProperty(string propertyName, int? index = null)
         {
             //if (string.IsNullOrEmpty(propertyName))
@@ -339,6 +417,14 @@ namespace IntegraXL.Core
             }
         }
 
+        internal void Load(byte[] data)
+        {
+            IntegraSystemExclusive syx = new IntegraSystemExclusive(Address, new IntegraAddress(), data);
+            Device.TransmitSystemExclusive(syx);
+            Initialize(data);
+            NotifyPropertyChanged(string.Empty);
+        }
+
         /// <summary>
         /// Initializes the model with data.
         /// </summary>
@@ -346,7 +432,7 @@ namespace IntegraXL.Core
         /// <returns>True if the model is initialized.</returns>
         /// <exception cref="NotImplementedException"></exception>
         /// <exception cref="NullReferenceException"></exception>
-        protected override bool Initialize(byte[] data)
+        internal override bool Initialize(byte[] data)
         {
             // TODO: Combine received property into the initialize method
             //if (!IsInitialized)
@@ -694,6 +780,8 @@ namespace IntegraXL.Core
             IsConnected = false;
         }
 
+        public abstract byte[] Serialize();
+
         /// <summary>
         /// Event handler for received system exclusive messages.
         /// </summary>
@@ -706,7 +794,7 @@ namespace IntegraXL.Core
         /// </summary>
         /// <param name="data">The data to initialize the model.</param>
         /// <returns>Must return true if the model is initialized.</returns>
-        protected abstract bool Initialize(byte[] data);
+        internal abstract bool Initialize(byte[] data);
 
         /// <summary>
         /// Gets the unique identifier based on the model's address.

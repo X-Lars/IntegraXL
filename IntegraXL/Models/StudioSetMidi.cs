@@ -52,7 +52,7 @@ namespace IntegraXL.Models
 
         #region Overrides: Model
 
-        protected override bool Initialize(byte[] data)
+        internal override bool Initialize(byte[] data)
         {
             _PhaseLock = Convert.ToBoolean(data[0]);
             NotifyPropertyChanged(string.Empty);

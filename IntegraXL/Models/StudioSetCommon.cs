@@ -14,6 +14,7 @@ namespace IntegraXL.Models
         #region Fields
 
         [Offset(0x0000)] private byte[] _NameData = new byte[16];
+        [Offset(0x0010)] private byte[] _Reserved01 = new byte[8];
         [Offset(0x0018)] private byte _VoiceReserve01;
         [Offset(0x0019)] private byte _VoiceReserve02;
         [Offset(0x001A)] private byte _VoiceReserve03;
@@ -30,6 +31,7 @@ namespace IntegraXL.Models
         [Offset(0x0025)] private byte _VoiceReserve14;
         [Offset(0x0026)] private byte _VoiceReserve15;
         [Offset(0x0027)] private byte _VoiceReserve16;
+        [Offset(0x0028)] private byte[] _Reserved02 = new byte[17];
         [Offset(0x0039)] private IntegraControlSources _ToneControl01;
         [Offset(0x003A)] private IntegraControlSources _ToneControl02;
         [Offset(0x003B)] private IntegraControlSources _ToneControl03;
@@ -47,10 +49,12 @@ namespace IntegraXL.Models
         [Offset(0x0048)] private IntegraOutputAssigns _DrumCompEQOutputAssign04;
         [Offset(0x0049)] private IntegraOutputAssigns _DrumCompEQOutputAssign05;
         [Offset(0x004A)] private IntegraOutputAssigns _DrumCompEQOutputAssign06;
+        [Offset(0x004B)] private byte _Reserved03;
         [Offset(0x004C)] private byte _ExtPartLevel;
         [Offset(0x004D)] private byte _ExtPartChorusSendLevel;
         [Offset(0x004E)] private byte _ExtPartReverbSendLevel;
         [Offset(0x004F)] private bool _ExtPartMuteSwitch;
+        [Offset(0x0050)] private byte[] _Reserved04 = new byte[4];
 
         #endregion
 

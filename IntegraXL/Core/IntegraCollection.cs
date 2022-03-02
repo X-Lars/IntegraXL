@@ -162,7 +162,12 @@ namespace IntegraXL.Core
         /// </summary>
         /// <param name="data">The data to initialize the collection.</param>
         /// <returns>Must return true if the collection is initialized.</returns>
-        protected abstract override bool Initialize(byte[] data);
+        internal abstract override bool Initialize(byte[] data);
+
+        public override byte[] Serialize()
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion
 

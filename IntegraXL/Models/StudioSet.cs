@@ -1,4 +1,5 @@
 ﻿using IntegraXL.Core;
+using IntegraXL.File;
 using System.Diagnostics.CodeAnalysis;
 
 namespace IntegraXL.Models
@@ -163,5 +164,54 @@ namespace IntegraXL.Models
         }
 
         #endregion
+
+        public void Load(StudioSetFile file)
+        {
+            Common.Load(file.Common);
+            CommonChorus.Load(file.CommonChorus);
+            CommonReverb.Load(file.CommonReverb);
+            CommonMotionalSurround.Load(file.MotionalSurround);
+            MasterEQ.Load(file.MasterEQ);
+
+            for (int i = 0; i < 16; i++)
+            {
+                Midis[i].Load(file.Midis[i]);
+            }
+
+            for (int i = 0; i < 16; i++)
+            {
+                Parts[i].Load(file.Parts[i]);
+            }
+
+            for (int i = 0; i < 16; i++)
+            {
+                PartEQs[i].Load(file.PartEQs[i]);
+            }
+        }
+
+        public void Save(ref StudioSetFile file)
+        {
+            file.Common = Common.Serialize();
+            file.CommonChorus = CommonChorus.Serialize();
+            file.CommonReverb = CommonReverb.Serialize();
+            file.MotionalSurround = CommonMotionalSurround.Serialize();
+            file.MasterEQ = MasterEQ.Serialize();
+
+            for (int i = 0; i < 16; i++)
+            {
+                file.Midis[i] = Midis[i].Serialize();
+            }
+
+            for (int i = 0; i < 16; i++)
+            {
+                file.Parts[i] = Parts[i].Serialize();
+            }
+
+            for (int i = 0; i < 16; i++)
+            {
+                file.PartEQs[i] = PartEQs[i].Serialize();
+            }
+
+        }
     }
 }

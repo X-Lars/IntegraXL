@@ -76,7 +76,7 @@ namespace IntegraXL.Core
         /// <param name="data">The system exclusive data to initialize the collection.</param>
         /// <returns>True if the collection is initialized.</returns>
         /// <remarks><i>Defaults to do nothing.</i></remarks>
-        protected override bool Initialize(byte[] data)
+        internal override bool Initialize(byte[] data)
         {
             return IsInitialized;
         }

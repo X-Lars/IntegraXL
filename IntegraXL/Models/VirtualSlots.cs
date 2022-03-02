@@ -444,7 +444,7 @@ namespace IntegraXL.Models
 
         #endregion
 
-        #region Overrides
+        #region Overrides: Model
 
         internal async override Task<bool> InitializeAsync()
         {
@@ -497,7 +497,7 @@ namespace IntegraXL.Models
         /// </summary>
         /// <param name="data">The data to initialize the model.</param>
         /// <returns>True if the model is initialized, false otherwise.</returns>
-        protected override bool Initialize(byte[] data)
+        internal override bool Initialize(byte[] data)
         {
             if (!IsInitialized)
             {
@@ -526,6 +526,11 @@ namespace IntegraXL.Models
             }
 
             return IsInitialized;
+        }
+
+        public override byte[] Serialize()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

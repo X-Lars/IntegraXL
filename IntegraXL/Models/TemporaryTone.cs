@@ -300,7 +300,7 @@ namespace IntegraXL.Models
             // New: New / Reinit MFX
         }
 
-        protected override bool Initialize(byte[] data)
+        internal override bool Initialize(byte[] data)
         {
             //throw new NotImplementedException();
 

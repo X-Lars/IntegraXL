@@ -20,6 +20,7 @@ namespace IntegraXL.Models
         [Offset(0x000A)] private byte _ExtPartAmbienceSendLevel;
         [Offset(0x000B)] private IntegraControlChannels _ExtPartControlChannel;
         [Offset(0x000C)] private byte _MotionalSurroundDepth;
+        [Offset(0x000D)] private byte[] _Reserved = new byte[3];
 
         #endregion
 

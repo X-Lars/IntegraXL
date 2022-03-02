@@ -43,6 +43,7 @@ namespace IntegraXL.Models
         [Offset(0x0000)] private IntegraChannels _ReceiveChannel;
         [Offset(0x0001)] private IntegraSwitch _ReceiveSwitch;
 
+        [Offset(0x0002)] private byte[] _Reserved1 = new byte[4];
         // Combines the MSB, LSB & PC into one field
         [Offset(0x0006)] private byte[] _BankSelect = new byte[3];
 
@@ -80,9 +81,13 @@ namespace IntegraXL.Models
         [Offset(0x0024)] private byte _VelocityFadeWidthUpper;
         [Offset(0x0025)] private IntegraMuteSwitch _MuteSwitch;
 
+        [Offset(0x0026)] private byte _Reserved2;
+
         [Offset(0x0027)] private byte _ChorusSendLevel;
         [Offset(0x0028)] private byte _ReverbSendLevel;
         [Offset(0x0029)] private IntegraOutputAssigns _OutputAssign;
+
+        [Offset(0x002A)] private byte _Reserved3;
 
         [Offset(0x002B)] private IntegraScaleTuneTypes _ScaleTuneType;
         [Offset(0x002C)] private IntegraScaleTuneKeys _ScaleTuneKey;
@@ -113,9 +118,15 @@ namespace IntegraXL.Models
         [Offset(0x0043)] private IntegraVelocityCurveTypes _VelocityCurveType;
 
         [Offset(0x0044)] private byte _MotionalSurroundLR;
+
+        [Offset(0x0045)] private byte _Reserved4;
+
         [Offset(0x0046)] private byte _MotionalSurroundFB;
+        [Offset(0x0047)] private byte _Reserved5;
         [Offset(0x0048)] private byte _MotionalSurroundWidth;
         [Offset(0x0049)] private byte _MotionalSurroundAmbienceSendLevel;
+
+        [Offset(0x004A)] private byte[] _Reserved6 = new byte[3];
 
         #endregion
 

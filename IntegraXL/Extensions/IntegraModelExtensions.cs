@@ -17,6 +17,21 @@ namespace IntegraXL.Extensions
         /// </summary>
         private static ConcurrentDictionary<Type, Dictionary<string, int>> _CachedProperties = new();
 
+
+        internal static FieldInfo? Field<T>(this IntegraModel<T> instance, int offset)
+        {
+            var fields = CachedFields(instance);
+
+            if(fields.TryGetValue(offset, out FieldInfo? value))
+            {
+                return value;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         internal static Dictionary<int, FieldInfo> CachedFields<T>(this IntegraModel<T> instance)
         {
             if (_CachedFields.TryGetValue(typeof(T), out Dictionary<int, FieldInfo>? fields))

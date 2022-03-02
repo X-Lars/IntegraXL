@@ -175,6 +175,7 @@ namespace IntegraXL.Extensions
                     return IntegraToneTypes.SuperNATURALSynthTone;
 
                 default:
+                    // TODO: Tone type can be undefined, tone ID 0000 Piano 1 when error
                     throw new ArgumentOutOfRangeException($"[{nameof(IntegraToneExtensions)}.{nameof(ToneType)}]");
             }
         }

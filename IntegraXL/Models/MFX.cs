@@ -353,7 +353,7 @@ namespace IntegraXL.Models
         /// <param name="data">The data to initialize the model.</param>
         /// <returns>True if the model is initialized.</returns>
         /// <remarks><i>Sets the MFX parameter provider after initialization.</i></remarks>
-        protected override bool Initialize(byte[] data)
+        internal override bool Initialize(byte[] data)
         {
             if (base.Initialize(data))
                 SetParameterProvider();

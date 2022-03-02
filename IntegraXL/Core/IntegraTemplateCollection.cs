@@ -73,7 +73,7 @@ namespace IntegraXL.Core
         /// </summary>
         /// <param name="data">The system exclusive data to create and initialize new templates.</param>
         /// <returns>True if the collection is initialized based on the collection count.</returns>
-        protected override bool Initialize(byte[] data)
+        internal override bool Initialize(byte[] data)
         {
             if (!IsInitialized)
             {
@@ -103,6 +103,11 @@ namespace IntegraXL.Core
         protected internal override int GetUID()
         {
             return Requests[0] | 0x0000FFFF;
+        }
+
+        public override byte[] Serialize()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

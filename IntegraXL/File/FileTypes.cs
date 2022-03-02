@@ -5,10 +5,9 @@ namespace IntegraXL.File
 
     public struct TemporaryToneFile
     {
-        public string Name;
-        public byte[] Model;
-    }
 
+    }
+   
     public struct StudioSetFile
     {
         public StudioSetFile()

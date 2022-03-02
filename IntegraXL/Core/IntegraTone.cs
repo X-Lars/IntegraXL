@@ -215,7 +215,7 @@ namespace IntegraXL.Core
         /// </summary>
         /// <param name="data">The data to initialize the model.</param>
         /// <returns>Always true.</returns>
-        protected override bool Initialize(byte[] data)
+        internal override bool Initialize(byte[] data)
         {
             _BankSelect[0] = data[0];
             _BankSelect[1] = data[1];

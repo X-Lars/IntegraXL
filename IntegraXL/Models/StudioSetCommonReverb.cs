@@ -179,7 +179,7 @@ namespace IntegraXL.Models
 
         }
 
-        protected override bool Initialize(byte[] data)
+        internal override bool Initialize(byte[] data)
         {
             IsInitialized = false;
 
