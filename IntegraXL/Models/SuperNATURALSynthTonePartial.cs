@@ -79,6 +79,7 @@ namespace IntegraXL.Models
 
         [Offset(0x0000)] IntegraOSCWave _OSCWave;
         [Offset(0x0001)] IntegraOSCWaveVariation _OSCWaveVariation;
+        [Offset(0x0002)] byte RESERVED01;
         [Offset(0x0003)] byte _OSCPitch;
         [Offset(0x0004)] byte _OSCDetune;
         [Offset(0x0005)] byte _OSCPulseWidthModDepth;
@@ -139,6 +140,7 @@ namespace IntegraXL.Models
         [Offset(0x0028)] IntegraSwitch _ModulationLFOTempoSyncSwitch;
         [Offset(0x0029)] byte _ModulationLFOTempoSyncNote;
         [Offset(0x002A)] byte _OSCPulseWidthShift;
+        [Offset(0x002B)] byte RESERVED02;
         [Offset(0x002C)] byte _ModulationLFOPitchDepth;
         [Offset(0x002D)] byte _ModulationLFOFilterDepth;
         [Offset(0x002E)] byte _ModulationLFOAmpDepth;
@@ -150,6 +152,7 @@ namespace IntegraXL.Models
 
         [Offset(0x0030)] byte _CutoffAftertouchSens;
         [Offset(0x0031)] byte _LevelAftertouchSens;
+        [Offset(0x0032)] byte[] RESERVED03 = new byte[2];
         [Offset(0x0034)] byte _WaveGain;
         [Offset(0x0035)] int _WaveNumber;
         [Offset(0x0039)] byte _HPFCutoff;

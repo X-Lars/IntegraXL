@@ -1,6 +1,7 @@
 ﻿using IntegraXL.Common;
 using IntegraXL.Core;
 using IntegraXL.Extensions;
+using IntegraXL.File;
 using IntegraXL.Interfaces;
 using IntegraXL.Models;
 using System.Collections.Concurrent;
@@ -9,6 +10,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using System.IO;
 
 namespace IntegraXL
 {
@@ -788,6 +790,25 @@ namespace IntegraXL
             return task;
         }
 
+
+        #endregion
+
+        #region Methods: File IO
+
+        public FileTypes.StudioSetFile SaveStudioSet(string filename, string path)
+        {
+            if (StudioSet == null || StudioSet.IsInitialized == false)
+                throw new IntegraException($"[{nameof(Integra)}.{nameof(SaveStudioSet)}]\nStudio set is not initialized.");
+
+            var file = FileManager.CreateStudioSetFile();
+            StudioSet.Save(ref file);
+            byte[] data = FileManager.SaveStudioSet(file);
+
+            string uri = $"{path}\\{file}.{FileTypes.STUDIO_SET_FILE_EXT}";
+
+            throw new NotImplementedException();
+            //File.WriteAllBytes(@"test.i7s", filedata);
+        }
 
         #endregion
 

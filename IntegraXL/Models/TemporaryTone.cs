@@ -1,4 +1,5 @@
 ﻿using IntegraXL.Core;
+using IntegraXL.File;
 using System.Diagnostics;
 using System.Reflection;
 
@@ -308,5 +309,61 @@ namespace IntegraXL.Models
         }
 
         #endregion
+
+        public void Load(FileTypes.TemporaryToneFile file)
+        {
+            
+        }
+
+        public void Save(ref FileTypes.TemporaryToneFile file)
+        {
+            file.ToneType = (byte)Type;
+
+            switch (Type)
+            {
+                case IntegraToneTypes.SuperNATURALAcousticTone:
+                    file.SuperNATURALAcousticToneCommon = SuperNATURALAcousticTone.Common.Serialize();
+                    break;
+
+                case IntegraToneTypes.SuperNATURALSynthTone:
+                    file.SuperNATURALSynthToneCommon = SuperNATURALSynthTone.Common.Serialize();
+                    for (int i = 0; i < IntegraConstants.SNS_PARTIAL_COUNT; i++)
+                    {
+                        file.SuperNATURALSynthTonePartials[i] = SuperNATURALSynthTone.Partials[i].Serialize();
+                    }
+                    break;
+
+                case IntegraToneTypes.SuperNATURALDrumkit:
+                    file.SuperNATURALDrumKitCommon = SuperNATURALDrumKit.Common.Serialize();
+                    file.SuperNATURALDrumKitCommonCompEQ = SuperNATURALDrumKit.CompEQ.Serialize();
+                    for (int i = 0; i < IntegraConstants.SND_NOTE_COUNT; i++)
+                    {
+                        file.SuperNATURALDrumKitNotes[i] = SuperNATURALDrumKit.Notes[i].Serialize();
+                    }
+                    break;
+
+                case IntegraToneTypes.PCMSynthTone:
+                    file.PCMSynthToneCommon = PCMSynthTone.Common.Serialize();
+                    file.PMT = PCMSynthTone.PMT.Serialize();
+
+                    for (int i = 0; i < IntegraConstants.PCM_PARTIAL_COUNT; i++)
+                    {
+                        file.PCMSynthTonePartials[i] = PCMSynthTone.Partials[i].Serialize();
+                    }
+                    file.PCMSynthToneCommon2 = PCMSynthTone.Common02.Serialize();
+                    break;
+
+                case IntegraToneTypes.PCMDrumkit:
+                    file.PCMDrumKitCommon = PCMDrumKit.Common.Serialize();
+                    file.PCMDrumKitCommonCompEQ = PCMDrumKit.CompEQ.Serialize();
+                    for (int i = 0; i < IntegraConstants.PCM_NOTE_COUNT; i++)
+                    {
+                        file.PCMDrumKitNotes[i] = PCMDrumKit.Partials[i].Serialize();
+                    }
+                    break;
+            }
+
+            file.MFX = MFX.Serialize();
+        }
     }
 }

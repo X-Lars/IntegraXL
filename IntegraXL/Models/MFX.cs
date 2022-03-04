@@ -12,8 +12,10 @@ namespace IntegraXL.Models
         #region Fields: INTEGRA-7
 
         [Offset(0x0000)] private IntegraMFXTypes _Type;
+        [Offset(0x0001)] private byte RESERVED01;
         [Offset(0x0002)] private byte _ChorusSendLevel;
         [Offset(0x0003)] private byte _ReverbSendLevel;
+        [Offset(0x0004)] private byte RESERVED02;
         [Offset(0x0005)] private IntegraMFXControlSources _ControlSource01;
         [Offset(0x0006)] private byte _ControlSense01;
         [Offset(0x0007)] private IntegraMFXControlSources _ControlSource02;

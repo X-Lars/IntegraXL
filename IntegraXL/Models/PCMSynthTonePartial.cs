@@ -85,11 +85,20 @@ namespace IntegraXL.Models
         [Offset(0x0009)] IntegraDelayMode _DelayMode;
         [Offset(0x000A)] byte[] _DelayTime = new byte[2];
         [Offset(0x000C)] byte _OutputLevel;
+        
+        [Offset(0x000D)] byte[] RESERVED01 = new byte[2];
+
         [Offset(0x000F)] byte _ChorusSendLevel;
         [Offset(0x0010)] byte _ReverbSendLevel;
+
+        [Offset(0x0011)] byte RESERVED02;
+
         [Offset(0x0012)] IntegraSwitch _ReceiveBender;
         [Offset(0x0013)] IntegraSwitch _ReceiveExpression;
         [Offset(0x0014)] IntegraSwitch _ReceiveHold;
+
+        [Offset(0x0015)] byte RESERVED03;
+
         [Offset(0x0016)] IntegraSwitch _RedamperSwitch;
         [Offset(0x0017)] IntegraControlSwitch _Control01Switch01;
         [Offset(0x0018)] IntegraControlSwitch _Control01Switch02;

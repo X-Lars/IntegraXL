@@ -15,6 +15,7 @@ namespace IntegraXL.Models
         #region Fields: INTEGRA-7
 
         [Offset(0x0000)] byte[] _ToneName = new byte[12];
+        [Offset(0x000C)] byte[] RESERVED01 = new byte[4];
         [Offset(0x0010)] byte _ToneLevel;
         [Offset(0x0011)] IntegraMonyPolySwitch _MonoPoly;
         [Offset(0x0012)] byte _PortamentTimeOffset;
@@ -33,6 +34,8 @@ namespace IntegraXL.Models
         [Offset(0x0020)] byte _InstVariation;
         [Offset(0x0021)] byte _InstNumber;
         [Offset(0x0022)] byte[] _ModifyParameter = new byte[32];
+
+        [Offset(0x0042)] byte[] RESERVED02 = new byte[4];
 
         #endregion
 

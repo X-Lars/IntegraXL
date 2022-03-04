@@ -81,12 +81,14 @@ namespace IntegraXL.Models
         [Offset(0x0014)] byte _AlternatePanDepth;
         [Offset(0x0015)] IntegraEnvelopeMode _EnvMode;
         [Offset(0x0016)] byte _OutputLevel;
+        [Offset(0x0017)] byte[] RESERVED01 = new byte[2];
         [Offset(0x0019)] byte _ChorusSendLevel;
         [Offset(0x001A)] byte _ReverbSendLevel;
         [Offset(0x001B)] IntegraPartialOutputAssign _OutputAssign;
         [Offset(0x001C)] byte _PitchBendRange;
         [Offset(0x001D)] IntegraSwitch _ReceiveExpression;
         [Offset(0x001E)] IntegraSwitch _ReceiveHold;
+        [Offset(0x001F)] byte RESERVED02;
         [Offset(0x0020)] IntegraPartialVelocityControl _WMTVelocityControl;
 
         #endregion
@@ -253,7 +255,7 @@ namespace IntegraXL.Models
         #region Fields: Misc
 
         [Offset(0x0141)] IntegraSwitch _OneShotMode;
-
+        [Offset(0x0142)] byte RESERVED03;
         #endregion
 
         #endregion

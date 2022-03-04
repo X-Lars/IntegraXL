@@ -165,7 +165,7 @@ namespace IntegraXL.Models
 
         #endregion
 
-        public void Load(StudioSetFile file)
+        public void Load(FileTypes.StudioSetFile file)
         {
             Common.Load(file.Common);
             CommonChorus.Load(file.CommonChorus);
@@ -189,7 +189,7 @@ namespace IntegraXL.Models
             }
         }
 
-        public void Save(ref StudioSetFile file)
+        public void Save(ref FileTypes.StudioSetFile file)
         {
             file.Common = Common.Serialize();
             file.CommonChorus = CommonChorus.Serialize();

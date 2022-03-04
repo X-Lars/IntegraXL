@@ -12,6 +12,7 @@ namespace IntegraXL.Models
     public class PCMSynthToneCommon : IntegraModel<PCMSynthToneCommon>
     {
         [Offset(0x0000)] byte[] _ToneName = new byte[12];
+        [Offset(0x000C)] byte[] RESERVED01 = new byte[2];
         [Offset(0x000E)] byte _ToneLevel;
         [Offset(0x000F)] byte _Pan;
         [Offset(0x0010)] IntegraTonePriority _Priority;
@@ -29,11 +30,15 @@ namespace IntegraXL.Models
         [Offset(0x001C)] IntegraPortamentoStart _PortamentoStart;
         [Offset(0x001D)] byte _PortamentoTime;
 
+        [Offset(0x001E)] byte[] RESERVED02 = new byte[4];
+
         [Offset(0x0022)] byte _CutoffOffset;
         [Offset(0x0023)] byte _ResonanceOffset;
         [Offset(0x0024)] byte _AttackTimeOffset;
         [Offset(0x0025)] byte _ReleaseTimeOffset;
         [Offset(0x0026)] byte _VelocitySensOffset;
+
+        [Offset(0x0027)] byte RESERVED03;
 
         [Offset(0x0028)] IntegraSwitch _PMTControlSwitch;
         [Offset(0x0029)] byte _PitchBendRangeUp;
@@ -76,6 +81,8 @@ namespace IntegraXL.Models
         [Offset(0x004C)] byte _MatrixControl04Sens03;
         [Offset(0x004D)] IntegraMatrixControlDestination _MatrixControl04Destination04;
         [Offset(0x004E)] byte _MatrixControl04Sens04;
+
+        [Offset(0x004F)] byte RESERVED04;
 
 
 

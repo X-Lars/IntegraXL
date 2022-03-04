@@ -12,6 +12,7 @@ namespace IntegraXL.Models
     {
         [Offset(0x0000)] byte[] _KitName = new byte[12];
         [Offset(0x000C)] byte _KitLevel;
+        [Offset(0x000D)] byte[] RESERVED01 = new byte[5];
         
         public PCMDrumKitCommon(PCMDrumKit drumKit) : base(drumKit.Device)
         {

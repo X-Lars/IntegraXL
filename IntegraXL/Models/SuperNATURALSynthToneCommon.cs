@@ -10,12 +10,14 @@ namespace IntegraXL.Models
 
         [Offset(0x0000)] byte[] _ToneName = new byte[12];
         [Offset(0x000C)] byte _ToneLevel;
+        [Offset(0x000D)] byte[] RESERVED01 = new byte[5];
         [Offset(0x0012)] IntegraSwitch _PortamentoSwitch;
         [Offset(0x0013)] byte _PortamentoTime;
         [Offset(0x0014)] IntegraSwitch _MonoSwitch;
         [Offset(0x0015)] byte _OctaveShift;
         [Offset(0x0016)] byte _PitchBendRangeUp;
         [Offset(0x0017)] byte _PitchBendRangeDown;
+        [Offset(0x0018)] byte RESERVED02;
         [Offset(0x0019)] IntegraSwitch _Partial01Switch;
         [Offset(0x001A)] IntegraSwitch _Partial01Select;
         [Offset(0x001B)] IntegraSwitch _Partial02Switch;
@@ -24,15 +26,19 @@ namespace IntegraXL.Models
         [Offset(0x001E)] IntegraSwitch _Partial03Select;
         [Offset(0x001F)] IntegraRingSwitch _RingSwitch;
         [Offset(0x0020)] IntegraSwitch _TFXSwitch;
+        [Offset(0x0021)] byte[] RESERVED03 = new byte[13];
         [Offset(0x002E)] IntegraSwitch _UnisonSwitch;
+        [Offset(0x002F)] byte[] RESERVED04 = new byte[2];
         [Offset(0x0031)] IntegraPortamentoMode _PortamentoMode;
         [Offset(0x0032)] IntegraSwitch _LegatoSwitch;
+        [Offset(0x0033)] byte RESERVED05;
         [Offset(0x0034)] byte _AnalogFeel;
         [Offset(0x0035)] byte _WaveShape;
         [Offset(0x0036)] byte _ToneCategory;
         [Offset(0x0037)] int _PhraseNumber;
         [Offset(0x003B)] byte _PhraseOctaveShift;
         [Offset(0x003C)] byte _UnisonSize;
+        [Offset(0x003D)] byte[] RESERVED06 = new byte[3];
 
         #endregion
 

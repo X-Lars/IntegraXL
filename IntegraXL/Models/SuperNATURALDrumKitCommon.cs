@@ -9,6 +9,7 @@ namespace IntegraXL.Models
         #region Fields: INTEGRA-7
 
         [Offset(0x0000)] byte[] _KitName = new byte[12];
+        [Offset(0x000C)] byte[] RESERVED01 = new byte[4];
         [Offset(0x0010)] byte _KitLevel;
         [Offset(0x0011)] byte _AmbienceLevel;
         [Offset(0x0012)] byte _PhraseNumber;
