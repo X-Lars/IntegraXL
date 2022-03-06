@@ -12,10 +12,10 @@ namespace IntegraXL.Models
         #region Fields: INTEGRA-7
 
         [Offset(0x0000)] private IntegraMFXTypes _Type;
-        [Offset(0x0001)] private byte RESERVED01;
+        [Offset(0x0001)] private readonly byte RESERVED01;
         [Offset(0x0002)] private byte _ChorusSendLevel;
         [Offset(0x0003)] private byte _ReverbSendLevel;
-        [Offset(0x0004)] private byte RESERVED02;
+        [Offset(0x0004)] private readonly byte RESERVED02;
         [Offset(0x0005)] private IntegraMFXControlSources _ControlSource01;
         [Offset(0x0006)] private byte _ControlSense01;
         [Offset(0x0007)] private IntegraMFXControlSources _ControlSource02;
@@ -63,7 +63,7 @@ namespace IntegraXL.Models
         [Offset(0x0000)]
         public IntegraMFXTypes Type
         {
-            get { return _Type; }
+            get => _Type;
             set
             {
                 if (_Type != value)
@@ -79,12 +79,12 @@ namespace IntegraXL.Models
         [Offset(0x0002)]
         public byte ChorusSendLevel
         {
-            get { return _ChorusSendLevel; }
+            get => _ChorusSendLevel;
             set
             {
                 if (_ChorusSendLevel != value)
                 {
-                    _ChorusSendLevel = value;
+                    _ChorusSendLevel = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -93,12 +93,12 @@ namespace IntegraXL.Models
         [Offset(0x0003)]
         public byte ReverbSendLevel
         {
-            get { return _ReverbSendLevel; }
+            get => _ReverbSendLevel;
             set
             {
                 if (_ReverbSendLevel != value)
                 {
-                    _ReverbSendLevel = value;
+                    _ReverbSendLevel = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -107,7 +107,7 @@ namespace IntegraXL.Models
         [Offset(0x0005)]
         public IntegraMFXControlSources ControlSource01
         {
-            get { return _ControlSource01; }
+            get => _ControlSource01;
             set
             {
                 if (_ControlSource01 != value)
@@ -119,14 +119,14 @@ namespace IntegraXL.Models
         }
 
         [Offset(0x0006)]
-        public byte ControlSense01
+        public int ControlSense01
         {
-            get { return _ControlSense01; }
+            get => _ControlSense01.Deserialize(64);
             set
             {
-                if (_ControlSense01 != value)
+                if (ControlSense01 != value)
                 {
-                    _ControlSense01 = value;
+                    _ControlSense01 = value.Clamp(1, 127).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -135,7 +135,7 @@ namespace IntegraXL.Models
         [Offset(0x0007)]
         public IntegraMFXControlSources ControlSource02
         {
-            get { return _ControlSource02; }
+            get => _ControlSource02;
             set
             {
                 if (_ControlSource02 != value)
@@ -147,14 +147,14 @@ namespace IntegraXL.Models
         }
 
         [Offset(0x0008)]
-        public byte ControlSense02
+        public int ControlSense02
         {
-            get { return _ControlSense02; }
+            get => _ControlSense02.Deserialize(64);
             set
             {
-                if (_ControlSense02 != value)
+                if (ControlSense02 != value)
                 {
-                    _ControlSense02 = value;
+                    _ControlSense02 = value.Clamp(1, 127).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -163,7 +163,7 @@ namespace IntegraXL.Models
         [Offset(0x0009)]
         public IntegraMFXControlSources ControlSource03
         {
-            get { return _ControlSource03; }
+            get => _ControlSource03;
             set
             {
                 if (_ControlSource03 != value)
@@ -175,14 +175,14 @@ namespace IntegraXL.Models
         }
 
         [Offset(0x000A)]
-        public byte ControlSense03
+        public int ControlSense03
         {
-            get { return _ControlSense03; }
+            get => _ControlSense03.Deserialize(64);
             set
             {
-                if (_ControlSense03 != value)
+                if (ControlSense03 != value)
                 {
-                    _ControlSense03 = value;
+                    _ControlSense03 = value.Clamp(1, 127).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -191,7 +191,7 @@ namespace IntegraXL.Models
         [Offset(0x000B)]
         public IntegraMFXControlSources ControlSource04
         {
-            get { return _ControlSource04; }
+            get => _ControlSource04;
             set
             {
                 if (_ControlSource04 != value)
@@ -203,14 +203,14 @@ namespace IntegraXL.Models
         }
 
         [Offset(0x000C)]
-        public byte ControlSense04
+        public int ControlSense04
         {
-            get { return _ControlSense04; }
+            get => _ControlSense04.Deserialize(64);
             set
             {
-                if (_ControlSense04 != value)
+                if (ControlSense04 != value)
                 {
-                    _ControlSense04 = value;
+                    _ControlSense04 = value.Clamp(1, 127).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -363,7 +363,7 @@ namespace IntegraXL.Models
             return IsInitialized;
         }
 
-        protected internal override int GetUID()
+        internal protected override int GetUID()
         {
             // TODO: Check uniqueness
             return (int)(base.GetUID() | 0xFFF00F00);

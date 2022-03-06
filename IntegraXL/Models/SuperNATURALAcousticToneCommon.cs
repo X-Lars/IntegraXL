@@ -61,8 +61,8 @@ namespace IntegraXL.Models
                     if (string.IsNullOrEmpty(value))
                         return;
 
-                    // Copy the string to the backing field byte array
-                    Array.Copy(Encoding.ASCII.GetBytes(value), 0, _ToneName, 0, 12);
+                    _ToneName = Encoding.ASCII.GetBytes(value.Clamp(_ToneName.Length));
+
                     NotifyPropertyChanged();
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using IntegraXL.Core;
+using IntegraXL.Extensions;
 
 namespace IntegraXL.Models
 {
@@ -10,21 +11,21 @@ namespace IntegraXL.Models
         [Offset(0x0000)] private readonly byte[] _MasterTuneData = new byte[4];
         [Offset(0x0004)] private byte _MasterKeyShift;
         [Offset(0x0005)] private byte _MasterLevel;
-        [Offset(0x0006)] private bool _ScaleTuneSwitch;
+        [Offset(0x0006)] private IntegraSwitch _ScaleTuneSwitch;
         [Offset(0x0011)] private IntegraControlChannels _StudioSetControlChannel;
-        [Offset(0x0020)] private IntegraControlSources _SystemControl01Source;
-        [Offset(0x0021)] private IntegraControlSources _SystemControl02Source;
-        [Offset(0x0022)] private IntegraControlSources _SystemControl03Source;
-        [Offset(0x0023)] private IntegraControlSources _SystemControl04Source;
-        [Offset(0x0024)] private bool _ControlSourceSelect;
-        [Offset(0x0025)] private bool _SystemClockSource;
-        [Offset(0x0026)] private byte[] _SystemTempoData = new byte[2];
-        [Offset(0x0028)] private bool _TempoAssignSource;
-        [Offset(0x0029)] private bool _ReceiveProgramChange;
-        [Offset(0x002A)] private bool _ReceiveBankSelect;
-        [Offset(0x002B)] private bool _SurroundCenterSpeakerSwitch;
-        [Offset(0x002C)] private bool _SurroundSubWooferSwitch;
-        [Offset(0x002D)] private bool _StereoOutputMode;
+        [Offset(0x0020)] private IntegraControlSources _Control01Source;
+        [Offset(0x0021)] private IntegraControlSources _Control02Source;
+        [Offset(0x0022)] private IntegraControlSources _Control03Source;
+        [Offset(0x0023)] private IntegraControlSources _Control04Source;
+        [Offset(0x0024)] private IntegraTempoAssignSource _ControlSourceSelect;
+        [Offset(0x0025)] private IntegraClockSource _SystemClockSource;
+        [Offset(0x0026)] private readonly byte[] _SystemTempoData = new byte[2];
+        [Offset(0x0028)] private IntegraTempoAssignSource _TempoAssignSource;
+        [Offset(0x0029)] private IntegraSwitch _ReceiveProgramChange;
+        [Offset(0x002A)] private IntegraSwitch _ReceiveBankSelect;
+        [Offset(0x002B)] private IntegraSwitch _SurroundCenterSpeakerSwitch;
+        [Offset(0x002C)] private IntegraSwitch _SurroundSubWooferSwitch;
+        [Offset(0x002D)] private IntegraOutputMode _StereoOutputMode;
 
         private double _MasterTune;
         private int _SystemTempo;
@@ -33,9 +34,8 @@ namespace IntegraXL.Models
 
         #region Constructor
 
-#pragma warning disable IDE0051 // Remove unused private members
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "The class is created by reflection.")]
         private SystemCommon(Integra device) : base(device) { }
-#pragma warning restore IDE0051 // Remove unused private members
 
         #endregion
 
@@ -53,159 +53,159 @@ namespace IntegraXL.Models
             }
             set
             {
-                if (_MasterTune == value)
-                    return;
+                if (_MasterTune != value)
+                {
+                    // Invalidate the property value range
+                    value = Math.Max(value, 415.3);
+                    value = Math.Min(value, 466.2);
 
-                // Invalidate the property value range
-                value = Math.Max(value, 415.3);
-                value = Math.Min(value, 466.2);
+                    _MasterTune = value;
 
-                _MasterTune = value;
+                    // Ensures the backing field contains the correct data
+                    InvalidateMasterTuneData();
 
-                // Ensures the backing field contains the correct data
-                InvalidateMasterTuneData();
-
-                NotifyPropertyChanged();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0004)]
         public int MasterKeyShift
         {
-            get { return (_MasterKeyShift - 64); }
+            get => _MasterKeyShift.Deserialize(64);
             set
             {
-                if (_MasterKeyShift == (value + 64))
-                    return;
-
-                _MasterKeyShift = (byte)(value + 64);
-                NotifyPropertyChanged();
+                if (MasterKeyShift != value)
+                {
+                    _MasterKeyShift = value.Serialize(64).Clamp(40, 88);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0005)]
         public byte MasterLevel
         {
-            get { return _MasterLevel; }
+            get => _MasterLevel;
             set
             {
-                if (_MasterLevel == value)
-                    return;
-
-                _MasterLevel = value;
-                NotifyPropertyChanged();
+                if (_MasterLevel != value)
+                {
+                    _MasterLevel = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0006)]
-        public bool ScaleTuneSwitch
+        public IntegraSwitch ScaleTuneSwitch
         {
-            get { return _ScaleTuneSwitch; }
+            get => _ScaleTuneSwitch;
             set
             {
-                if (_ScaleTuneSwitch == value)
-                    return;
-
-                _ScaleTuneSwitch = value;
-                NotifyPropertyChanged();
+                if (_ScaleTuneSwitch != value)
+                {
+                    _ScaleTuneSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0011)]
         public IntegraControlChannels StudioSetControlChannel
         {
-            get { return _StudioSetControlChannel; }
+            get => _StudioSetControlChannel;
             set
             {
-                if (_StudioSetControlChannel == value)
-                    return;
-
-                _StudioSetControlChannel = value;
-                NotifyPropertyChanged();
+                if (_StudioSetControlChannel != value)
+                {
+                    _StudioSetControlChannel = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0020)]
-        public IntegraControlSources SystemControl01Source
+        public IntegraControlSources Control01Source
         {
-            get { return _SystemControl01Source; }
+            get => _Control01Source;
             set
             {
-                if (_SystemControl01Source == value)
-                    return;
-
-                _SystemControl01Source = value;
-                NotifyPropertyChanged();
+                if (_Control01Source != value)
+                {
+                    _Control01Source = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0021)]
-        public IntegraControlSources SystemControl02Source
+        public IntegraControlSources Control02Source
         {
-            get { return _SystemControl02Source; }
+            get => _Control02Source;
             set
             {
-                if (_SystemControl02Source == value)
-                    return;
-
-                _SystemControl02Source = value;
-                NotifyPropertyChanged();
+                if (_Control02Source != value)
+                {
+                    _Control02Source = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0022)]
-        public IntegraControlSources SystemControl03Source
+        public IntegraControlSources Control03Source
         {
-            get { return _SystemControl03Source; }
+            get => _Control03Source;
             set
             {
-                if (_SystemControl03Source == value)
-                    return;
-
-                _SystemControl03Source = value;
-                NotifyPropertyChanged();
+                if (_Control03Source != value)
+                {
+                    _Control03Source = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0023)]
-        public IntegraControlSources SystemControl04Source
+        public IntegraControlSources Control04Source
         {
-            get { return _SystemControl04Source; }
+            get => _Control04Source;
             set
             {
-                if (_SystemControl04Source == value)
-                    return;
-
-                _SystemControl04Source = value;
-                NotifyPropertyChanged();
+                if (_Control04Source != value)
+                {
+                    _Control04Source = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0024)]
-        public bool ControlSourceSelect
+        public IntegraTempoAssignSource ControlSourceSelect
         {
-            get { return _ControlSourceSelect; }
+            get => _ControlSourceSelect;
             set
             {
-                if (_ControlSourceSelect == value)
-                    return;
-
-                _ControlSourceSelect = value;
-                NotifyPropertyChanged();
+                if (_ControlSourceSelect != value)
+                {
+                    _ControlSourceSelect = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0025)]
-        public bool SystemClockSource
+        public IntegraClockSource SystemClockSource
         {
-            get { return _SystemClockSource; }
+            get => _SystemClockSource;
             set
             {
-                if (_SystemClockSource == value)
-                    return;
-
-                _SystemClockSource = value;
-                NotifyPropertyChanged();
+                if (_SystemClockSource != value)
+                {
+                    _SystemClockSource = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -221,100 +221,100 @@ namespace IntegraXL.Models
             }
             set
             {
-                if (_SystemTempo == value)
-                    return;
+                if (_SystemTempo != value)
+                {
+                    _SystemTempo = value.Clamp(20, 250);
 
-                _SystemTempo = value;
-
-                // Ensures the backing field contains the correct data
-                InvalidateSystemTempoData();
-                NotifyPropertyChanged();
-
+                    // Ensures the backing field contains the correct data
+                    InvalidateSystemTempoData();
+                    NotifyPropertyChanged();
+                }
             }
         }
         [Offset(0x0028)]
-        public bool TempoAssignSource
+        public IntegraTempoAssignSource TempoAssignSource
         {
-            get { return _TempoAssignSource; }
+            get => _TempoAssignSource;
             set
             {
-                if (_TempoAssignSource == value)
-                    return;
-
-                _TempoAssignSource = value;
-                NotifyPropertyChanged();
+                if (_TempoAssignSource != value)
+                {
+                    _TempoAssignSource = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0029)]
-        public bool ReceiveProgramChange
+        public IntegraSwitch ReceiveProgramChange
         {
-            get { return _ReceiveProgramChange; }
+            get => _ReceiveProgramChange;
             set
             {
-                if (_ReceiveProgramChange == value)
-                    return;
-
-                _ReceiveProgramChange = value;
-                NotifyPropertyChanged();
+                if (_ReceiveProgramChange != value)
+                {
+                    _ReceiveProgramChange = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x002A)]
-        public bool ReceiveBankSelect
+        public IntegraSwitch ReceiveBankSelect
         {
-            get { return _ReceiveBankSelect; }
+            get => _ReceiveBankSelect;
             set
             {
-                if (_ReceiveBankSelect == value)
-                    return;
-
-                _ReceiveBankSelect = value;
-                NotifyPropertyChanged();
+                if (_ReceiveBankSelect != value)
+                {
+                    _ReceiveBankSelect = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x002B)]
-        public bool SurroundCenterSpeakerSwitch
+        public IntegraSwitch SurroundCenterSpeakerSwitch
         {
-            get { return _SurroundCenterSpeakerSwitch; }
+            get => _SurroundCenterSpeakerSwitch;
             set
             {
-                if (_SurroundCenterSpeakerSwitch == value)
-                    return;
-
-                _SurroundCenterSpeakerSwitch = value;
-                NotifyPropertyChanged();
+                if (_SurroundCenterSpeakerSwitch != value)
+                {
+                    _SurroundCenterSpeakerSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x002C)]
-        public bool SurroundSubWooferSwitch
+        public IntegraSwitch SurroundSubWooferSwitch
         {
-            get { return _SurroundSubWooferSwitch; }
+            get => _SurroundSubWooferSwitch;
             set
             {
-                if (_SurroundSubWooferSwitch == value)
-                    return;
-
-                _SurroundSubWooferSwitch = value;
-                NotifyPropertyChanged();
+                if (_SurroundSubWooferSwitch != value)
+                {
+                    _SurroundSubWooferSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x002D)]
-        public bool StereoOutputMode
+        public IntegraOutputMode StereoOutputMode
         {
-            get { return _StereoOutputMode; }
+            get => _StereoOutputMode;
             set
             {
-                if (_StereoOutputMode == value)
-                    return;
-
-                _StereoOutputMode = value;
-                NotifyPropertyChanged();
+                if (_StereoOutputMode != value)
+                {
+                    _StereoOutputMode = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
+
         #endregion
 
 
@@ -376,8 +376,8 @@ namespace IntegraXL.Models
         /// </summary>
         private void InvalidateSystemTempoData()
         {
-            _SystemTempo = Math.Min(_SystemTempo, 250);
-            _SystemTempo = Math.Max(_SystemTempo, 20);
+            //_SystemTempo = Math.Min(_SystemTempo, 250);
+            //_SystemTempo = Math.Max(_SystemTempo, 20);
 
             _SystemTempoData[0] = (byte)((_SystemTempo >> 4) & 0x0F);
             _SystemTempoData[1] = (byte)((_SystemTempo & 0x0F));

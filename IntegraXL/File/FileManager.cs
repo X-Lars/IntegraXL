@@ -10,28 +10,28 @@ namespace IntegraXL.File
         /// Creates a blank studio set file structure.
         /// </summary>
         /// <returns>A blank studio set file structure.</returns>
-        public static FileTypes.StudioSetFile CreateStudioSetFile()
+        public static StudioSetFile CreateStudioSetFile()
         {
-            return new FileTypes.StudioSetFile();
+            return new StudioSetFile();
         }
 
         /// <summary>
         /// Creates a blank temporary tone file structure.
         /// </summary>
         /// <returns>A blank temporary tone file structure.</returns>
-        public static FileTypes.TemporaryToneFile CreateTemporaryToneFile()
+        public static TemporaryToneFile CreateTemporaryToneFile()
         {
-            return new FileTypes.TemporaryToneFile();
+            return new TemporaryToneFile();
         }
 
-        public static FileTypes.TemporaryToneFile LoadTemporaryTone(byte[] data)
+        public static TemporaryToneFile LoadTemporaryTone(byte[] data)
         {
-            FileTypes.TemporaryToneFile file = new();
+            TemporaryToneFile file = new();
 
             MemoryStream stream = new(data);
             BinaryReader reader = new(stream);
 
-            file.ToneType = reader.ReadByte();
+            file.ToneType = reader.ReadUInt32();
 
             switch((IntegraToneTypes)file.ToneType)
             {
@@ -84,7 +84,7 @@ namespace IntegraXL.File
             return file;
         }
 
-        public static byte[] SaveTemporaryTone(FileTypes.TemporaryToneFile file)
+        internal static MemoryStream WriteTemporaryToneFile(TemporaryToneFile file)
         {
             MemoryStream stream = new();
             BinaryWriter writer = new(stream);
@@ -94,6 +94,7 @@ namespace IntegraXL.File
             switch((IntegraToneTypes)file.ToneType)
             {
                 case IntegraToneTypes.SuperNATURALAcousticTone:
+                    writer.Write(file.SuperNATURALAcousticToneCommon);
                     break;
 
                 case IntegraToneTypes.SuperNATURALSynthTone:
@@ -140,19 +141,26 @@ namespace IntegraXL.File
                     writer.Write(file.PCMDrumKitCommon2);
 
                     break;
+
+                default:
+
+                    throw new IntegraException($"[{nameof(FileManager)}.{nameof(WriteTemporaryToneFile)}]\n" +
+                                               $"Undefined tone type");
             }
 
             writer.Write(file.MFX);
-
-            return stream.ToArray();
+            
+            return stream;
         }
 
-        public static FileTypes.StudioSetFile LoadStudioSet(byte[] data)
+        public static StudioSetFile LoadStudioSet(byte[] data)
         {
-            FileTypes.StudioSetFile file = new();
+            StudioSetFile file = new();
 
             MemoryStream stream = new(data);
             BinaryReader reader = new(stream);
+
+            file.Expansions = reader.ReadBytes(file.Expansions.Length);
 
             file.Common = reader.ReadBytes(file.Common.Length);
             file.CommonChorus = reader.ReadBytes(file.CommonChorus.Length);
@@ -178,10 +186,17 @@ namespace IntegraXL.File
             return file;
         }
 
-        public static byte[] SaveStudioSet(FileTypes.StudioSetFile file)
+        /// <summary>
+        /// Writes the provided <see cref="StudioSetFile"/> to a binary memory stream and returns the stream as an array that can be written to disk.
+        /// </summary>
+        /// <param name="file">The file to write as binary stream.</param>
+        /// <returns>A memory stream containing the binary formatted studio set file data.</returns>
+        internal static MemoryStream WriteStudioSet(StudioSetFile file)
         {
             MemoryStream stream = new();
             BinaryWriter writer = new(stream);
+
+            writer.Write(file.Expansions);
 
             writer.Write(file.Common);
             writer.Write(file.CommonChorus);
@@ -204,7 +219,7 @@ namespace IntegraXL.File
                 writer.Write(file.PartEQs[i]);
             }
 
-            return stream.ToArray();
+            return stream;
         }
     }
 }

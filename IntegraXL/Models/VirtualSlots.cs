@@ -52,12 +52,12 @@ namespace IntegraXL.Models
         /// <summary>
         /// Stores the initial expansion selection.
         /// </summary>
-        private IntegraExpansions[] _InitialExpansions = new IntegraExpansions[4];
+        private readonly IntegraExpansions[] _InitialExpansions = new IntegraExpansions[4];
 
         /// <summary>
         /// Stores the expansion selection for backup.
         /// </summary>
-        private IntegraExpansions[] _BackupExpansions = new IntegraExpansions[4];
+        private readonly IntegraExpansions[] _BackupExpansions = new IntegraExpansions[4];
 
         /// <summary>
         /// Track if the current expansion consumes all four slots.
@@ -77,7 +77,7 @@ namespace IntegraXL.Models
         /// <summary>
         /// Event raised when the expansions are loading or have completed loading.
         /// </summary>
-        public event EventHandler VirtualSlotsLoading;
+        public event EventHandler? VirtualSlotsLoading;
 
         #endregion
 
@@ -86,13 +86,9 @@ namespace IntegraXL.Models
         /// <summary>
         /// Creates and initialize a new <see cref="VirtualSlots"/> instance.
         /// </summary>
-#pragma warning disable IDE0051 // Remove unused private members
         private VirtualSlots(Integra device) : base(device)
-#pragma warning restore IDE0051 // Remove unused private members
         {
             StartupExpansions = device.CreateModel<StartupExpansions>();
-
-            //InitializeStartupExpansions();
         }
 
         private async void InitializeStartupExpansions()
@@ -167,13 +163,50 @@ namespace IntegraXL.Models
         public StartupExpansions StartupExpansions { get; }
 
         /// <summary>
-        /// Gets whether the expansion with the specified index is loaded.
+        /// Gets whether the specified expansion is loaded.
         /// </summary>
         /// <param name="expansion">The expansion to check.</param>
-        /// <returns>True if the expansion is loaded, false otherwise.</returns>
+        /// <returns>True if the expansion is loaded.</returns>
         public bool this[IntegraExpansions expansion]
         {
             get { return IsLoaded(expansion); }
+        }
+
+        /// <summary>
+        /// Gets or sets the virtual slot with the specified index.
+        /// </summary>
+        /// <param name="index">The index of the virtual slot.</param>
+        /// <returns>The expansion of the slot with the specified index.</returns>
+        /// <exception cref="IntegraException"/>
+        public IntegraExpansions this[int index]
+        {
+            get
+            {
+                switch(index)
+                {
+                    case 0: return SlotA;
+                    case 1: return SlotB;
+                    case 2: return SlotC;
+                    case 3: return SlotD;
+
+                    default:
+                        throw new IntegraException($"[{nameof(VirtualSlots)}]\nIndex out of range.");
+                }
+            }
+
+            set
+            {
+                switch(index)
+                {
+                    case 0: SlotA = value; return;
+                    case 1: SlotB = value; return;
+                    case 2: SlotC = value; return;
+                    case 3: SlotD = value; return;
+
+                    default:
+                        throw new IntegraException($"[{nameof(VirtualSlots)}]\nIndex out of range.");
+                }
+            }
         }
 
         /// <summary>
@@ -253,6 +286,14 @@ namespace IntegraXL.Models
         }
 
         /// <summary>
+        /// Gets wheter any of the virtual slots has unsaved changes;
+        /// </summary>
+        public override bool IsDirty
+        {
+            get => SlotAIsDirty || SlotBIsDirty || SlotCIsDirty || SlotDIsDirty;
+        }
+
+        /// <summary>
         /// Gets whether slot A has unsaved changes.
         /// </summary>
         /// <remarks><i>Can be used to mark slots in the UI.</i></remarks>
@@ -326,7 +367,7 @@ namespace IntegraXL.Models
         /// </summary>
         public async Task<bool> Load() 
         {
-            if (!SlotAIsDirty && !SlotBIsDirty && !SlotCIsDirty && !SlotDIsDirty)
+            if (!IsDirty)
                 return true;
 
             _IsLoading = true;
@@ -376,6 +417,57 @@ namespace IntegraXL.Models
         public void SetDefault() 
         { 
             StartupExpansions.SetStartup(_SlotA, _SlotB, _SlotC, _SlotD); 
+        }
+
+        /// <summary>
+        /// Gets the number of unused slots.
+        /// </summary>
+        /// <returns>The number of unused slots.</returns>
+        public int FreeSlots()
+        {
+            var count = 4;
+
+            if (_SlotA != IntegraExpansions.Off)
+                count--;
+
+            if (_SlotB != IntegraExpansions.Off)
+                count--;
+
+            if (_SlotC != IntegraExpansions.Off)
+                count--;
+
+            if (_SlotD != IntegraExpansions.Off)
+                count--;
+
+            return count;
+        }
+        
+        /// <summary>
+        /// Gets the index of the first unused slot.
+        /// </summary>
+        /// <returns>The index of the first unused slot or -1 when all slots are used.</returns>
+        public int NextFreeSlotIndex()
+        {
+            if (_SlotA == IntegraExpansions.Off)
+                return 0;
+            if (_SlotB == IntegraExpansions.Off)
+                return 1;
+            if (_SlotC == IntegraExpansions.Off)
+                return 2;
+            if (_SlotD == IntegraExpansions.Off)
+                return 3;
+
+            return -1;
+        }
+
+        /// <summary>
+        /// Gets wheter the specified expansion is set into one of the four slots.
+        /// </summary>
+        /// <param name="expansion">The expansion to check.</param>
+        /// <returns>True if any of the virtual slots contains the provided expansion.</returns>
+        public bool Contains(IntegraExpansions expansion)
+        {
+            return _SlotA == expansion || _SlotB == expansion || _SlotC == expansion || _SlotD == expansion;
         }
 
         /// <summary>
@@ -453,6 +545,7 @@ namespace IntegraXL.Models
 
             return await base.InitializeAsync();
         }
+
         /// <summary>
         /// Handles system exclusive events by exact matching virtual slot specific addresses.
         /// </summary>
@@ -528,9 +621,13 @@ namespace IntegraXL.Models
             return IsInitialized;
         }
 
+        /// <summary>
+        /// Serializes the model data to a byte array.
+        /// </summary>
+        /// <returns>A byte array containing the virtual slots data sorted by slot index.</returns>
         public override byte[] Serialize()
         {
-            throw new NotImplementedException();
+            return new byte[] { (byte)_SlotA, (byte)_SlotB, (byte)_SlotC, (byte)_SlotD };
         }
 
         #endregion

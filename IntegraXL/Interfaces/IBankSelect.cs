@@ -1,7 +1,7 @@
 ﻿namespace IntegraXL.Interfaces
 {
     /// <summary>
-    /// Contract to exchange and compare tones by there bank selection MSB, LSB and PC.
+    /// Contract to exchange and compare tones by there bank select MSB, LSB and PC.
     /// </summary>
     public interface IBankSelect : IEquatable<IBankSelect>
     {

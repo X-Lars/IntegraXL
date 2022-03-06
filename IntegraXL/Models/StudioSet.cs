@@ -103,17 +103,17 @@ namespace IntegraXL.Models
         /// <summary>
         /// Gets the studio set part model based on the active selected part.
         /// </summary>
-        public StudioSetPart Part => Parts[(int)Device.SelectedPart];
+        public StudioSetPart Part => Parts[(int)Device.PartIndex];
 
         /// <summary>
         /// Gets the studio set MIDI model based on the active selected part.
         /// </summary>
-        public StudioSetMidi Midi => Midis[(int)Device.SelectedPart];
+        public StudioSetMidi Midi => Midis[(int)Device.PartIndex];
 
         /// <summary>
         /// Gets the studio set EQ model based on the active selected part.
         /// </summary>
-        public StudioSetPartEQ PartEQ => PartEQs[(int)Device.SelectedPart];
+        public StudioSetPartEQ PartEQ => PartEQs[(int)Device.PartIndex];
 
         #endregion
 
@@ -125,7 +125,7 @@ namespace IntegraXL.Models
         public override bool IsInitialized 
         { 
             get => PartEQs.IsInitialized; 
-            protected internal set => base.IsInitialized = value; 
+            internal protected set => base.IsInitialized = value; 
         }
 
         protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
@@ -143,7 +143,7 @@ namespace IntegraXL.Models
         /// Gets a hash code based on the model's address with the LSB maxed out.
         /// </summary>
         /// <returns>A hash code for the model.</returns>
-        protected internal override int GetUID()
+        internal protected override int GetUID()
         {
             // Base hash conflicts with studio set common hash
             return base.GetUID() | 0xFF;
@@ -165,7 +165,7 @@ namespace IntegraXL.Models
 
         #endregion
 
-        public void Load(FileTypes.StudioSetFile file)
+        public void Load(StudioSetFile file)
         {
             Common.Load(file.Common);
             CommonChorus.Load(file.CommonChorus);
@@ -173,45 +173,48 @@ namespace IntegraXL.Models
             CommonMotionalSurround.Load(file.MotionalSurround);
             MasterEQ.Load(file.MasterEQ);
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < IntegraConstants.PART_COUNT; i++)
             {
                 Midis[i].Load(file.Midis[i]);
             }
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < IntegraConstants.PART_COUNT; i++)
             {
                 Parts[i].Load(file.Parts[i]);
             }
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < IntegraConstants.PART_COUNT; i++)
             {
                 PartEQs[i].Load(file.PartEQs[i]);
             }
         }
 
-        public void Save(ref FileTypes.StudioSetFile file)
+        internal StudioSetFile Save()
         {
+            StudioSetFile file = FileManager.CreateStudioSetFile();
+
             file.Common = Common.Serialize();
             file.CommonChorus = CommonChorus.Serialize();
             file.CommonReverb = CommonReverb.Serialize();
             file.MotionalSurround = CommonMotionalSurround.Serialize();
             file.MasterEQ = MasterEQ.Serialize();
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < IntegraConstants.PART_COUNT; i++)
             {
                 file.Midis[i] = Midis[i].Serialize();
             }
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < IntegraConstants.PART_COUNT; i++)
             {
                 file.Parts[i] = Parts[i].Serialize();
             }
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < IntegraConstants.PART_COUNT; i++)
             {
                 file.PartEQs[i] = PartEQs[i].Serialize();
             }
 
+            return file;
         }
     }
 }

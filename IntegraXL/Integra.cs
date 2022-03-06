@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using System.IO;
 
 namespace IntegraXL
 {
@@ -56,7 +55,7 @@ namespace IntegraXL
         /// <summary>
         /// Stores the selected active part.
         /// </summary>
-        private int _SelectedPart = 0;
+        private Parts _SelectedPart = Parts.Part01;
 
         /// <summary>
         /// Stores the selected tone of the active part.
@@ -76,7 +75,7 @@ namespace IntegraXL
         /// <summary>
         /// Stores the cancellation token source that cancels all task.
         /// </summary>
-        private CancellationTokenSource _CTS = new ();
+        private CancellationTokenSource _CTS = new();
 
         private IProgress<IntegraStatus> _Progress;
 
@@ -111,7 +110,7 @@ namespace IntegraXL
         /// </i></remarks>
         public Integra()
         {
-            _Status = new ();
+            _Status = new();
             CreateModels();
         }
 
@@ -152,7 +151,7 @@ namespace IntegraXL
                 // TODO: Connection Change
                 return;
             }
-                
+
             DeviceID = connection.ID;
 
             _Connection = connection;
@@ -174,7 +173,7 @@ namespace IntegraXL
         {
             if (_Connection == null)
                 return IsConnected = false;
-            
+
             await _Connection.Invalidate();
 
             return IsConnected = _Connection.IsConnected;
@@ -219,7 +218,7 @@ namespace IntegraXL
             // Initialize remaining models
             foreach (var model in _Models.Values.Where(x => x.IsInitialized == false))
             {
-                if(!_CTS.IsCancellationRequested)
+                if (!_CTS.IsCancellationRequested)
                     await model.InitializeAsync();
             }
 
@@ -245,14 +244,14 @@ namespace IntegraXL
         /// <summary>
         /// Gets the device ID.
         /// </summary>
-        public int DeviceID 
-        { 
+        public int DeviceID
+        {
             // Device ID is zero based
-            get => _DeviceID + 1; 
+            get => _DeviceID + 1;
 
             private set
             {
-                if(_DeviceID != value)
+                if (_DeviceID != value)
                 {
                     _DeviceID = (byte)value;
                     NotifyPropertyChanged();
@@ -265,7 +264,7 @@ namespace IntegraXL
             get => _IsConnected;
             private set
             {
-                if(_IsConnected != value)
+                if (_IsConnected != value)
                 {
                     _IsConnected = value;
                     NotifyPropertyChanged();
@@ -282,7 +281,7 @@ namespace IntegraXL
 
             private set
             {
-                if(_IsInitialized != value)
+                if (_IsInitialized != value)
                 {
                     _IsInitialized = value;
                     NotifyPropertyChanged(string.Empty);
@@ -295,7 +294,7 @@ namespace IntegraXL
             get { return _Status; }
             set
             {
-                if(_Status != value)
+                if (_Status != value)
                 {
                     _Status = value;
                     NotifyPropertyChanged();
@@ -335,6 +334,11 @@ namespace IntegraXL
         #region Properties: INTEGRA-7
 
         /// <summary>
+        /// Gets the system model.
+        /// </summary>
+        public SystemCommon? System { get; private set; }
+
+        /// <summary>
         /// Gets the setup model.
         /// </summary>
         public Setup? Setup { get; private set; }
@@ -342,7 +346,7 @@ namespace IntegraXL
         /// <summary>
         /// Gets the studio sets collection.
         /// </summary>
-        /// <remarks><i>Use the <see cref="Setup.StudioSetPC"/> property to get or set the active studio set by index.</i></remarks>
+        /// <remarks><i>Use the <see cref="Setup.StudioSetPC"/> property to get or set the active studio set.</i></remarks>
         public StudioSets? StudioSets { get; private set; }
 
         /// <summary>
@@ -366,15 +370,24 @@ namespace IntegraXL
         public TemporaryTones? TemporaryTones { get; private set; }
 
         /// <summary>
+        /// Gets or sets the active part by index.
+        /// </summary>
+        /// <remarks><i>
+        /// Raises the <see cref="PartChanged"/> event.<br/>
+        /// </i></remarks>
+        public int PartIndex
+        {
+            get => (int)_SelectedPart;
+            set => Part = (Parts)value;
+        }
+
+        /// <summary>
         /// Gets or sets the active part.
         /// </summary>
-        /// <remarks>
-        /// <i>Determines the indexed partial models returned from the studio set.</i><br/>
-        /// <i>Determines the indexed partial model returned for the selected tone.</i><br/>
-        /// <i>Can be used to notify and update UI applications.</i>
-        /// </remarks>
-        [Bindable(BindableSupport.Yes, BindingDirection.TwoWay)]
-        public int SelectedPart
+        /// <remarks><i>
+        /// Raises the <see cref="PartChanged"/> event.<br/>
+        /// </i></remarks>
+        public Parts Part
         {
             get => _SelectedPart;
             set
@@ -382,56 +395,68 @@ namespace IntegraXL
                 if (_SelectedPart != value)
                 {
                     var previous = _SelectedPart;
-                    var preview = IsPreviewing;
+                    var preview  = IsPreviewing;
 
                     if (preview)
                         Preview = false;
 
-                    _SelectedPart = value.Clamp(0, 15);
+                    _SelectedPart = value;
 
                     if (preview)
                         Preview = true;
 
 
-                    PartChanged?.Invoke(this, new IntegraPartChangedEventArgs((Parts)value, (Parts)previous));
+                    PartChanged?.Invoke(this, new IntegraPartChangedEventArgs(value, previous));
 
                     NotifyPropertyChanged();
+                    NotifyPropertyChanged(nameof(PartIndex));
                     NotifyPropertyChanged(nameof(SelectedTone));
                     NotifyPropertyChanged(nameof(TemporaryTone));
                 }
             }
         }
 
-        public IntegraTone ToneInfo
+        /// <summary>
+        /// Gets the <see cref="IntegraTone"/> containing tone information of the active part.
+        /// </summary>
+        public IntegraTone? ToneInfo
         {
-            get => SelectedTones[SelectedPart];
+            get => SelectedTones?[PartIndex];
         }
 
-        [Bindable(BindableSupport.Yes, BindingDirection.TwoWay)]
-        public IBankSelect SelectedTone
+        /// <summary>
+        /// Gets or sets the tone of the active part.
+        /// </summary>
+        /// <remarks><i>
+        /// The tone can be set using a <see cref="Templates.ToneTemplate"/>.<br/>
+        /// </i></remarks>
+        public IBankSelect? SelectedTone
         {
-            get => SelectedTones[SelectedPart];
+            get => SelectedTones?[PartIndex];
             set
             {
-                if (SelectedTones[SelectedPart].Equals(value))
-                    return;
+                if (value != null)
+                {
+                    if (SelectedTones == null)
+                        return;
 
-                SelectedTones[SelectedPart].BankSelect = value;
+                    if (SelectedTones[PartIndex].Equals(value))
+                        return;
 
-                //ToneChanged?.Invoke(this, new IntegraToneChangedEventArgs(value, (Parts)SelectedPart));
+                    SelectedTones[PartIndex].BankSelect = value;
 
-                NotifyPropertyChanged();
-                NotifyPropertyChanged(nameof(ToneInfo));
-                
+                    NotifyPropertyChanged();
+                    NotifyPropertyChanged(nameof(ToneInfo));
+                }
             }
         }
 
-        private TemporaryTone _TemporaryTone;
-
-        public TemporaryTone TemporaryTone
+        /// <summary>
+        /// Gets the <see cref="Models.TemporaryTone"/> of the active part.
+        /// </summary>
+        public TemporaryTone? TemporaryTone
         {
-            get => TemporaryTones[SelectedPart];
-           
+            get => TemporaryTones?[PartIndex];
         }
 
         #endregion
@@ -441,7 +466,6 @@ namespace IntegraXL
         /// <summary>
         /// Provides a bindable UI command to toggle the tone preview on or off on the active part.
         /// </summary>
-        [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
         public ICommand PreviewCommand
         {
             get
@@ -461,7 +485,7 @@ namespace IntegraXL
         /// <returns>True if the command can be executed.</returns>
         private bool CanExecutePreview()
         {
-            return StudioSet.Part != null && StudioSet.Part.IsInitialized;
+            return StudioSet?.Part != null && StudioSet.Part.IsInitialized;
         }
 
         #endregion
@@ -477,6 +501,7 @@ namespace IntegraXL
 
         private void CreateModels()
         {
+            System         = CreateModel<SystemCommon>();
             Setup          = CreateModel<Setup>();
             VirtualSlots   = CreateModel<VirtualSlots>();
             StudioSets     = CreateModel<StudioSets>();
@@ -498,7 +523,7 @@ namespace IntegraXL
             }
             else
             {
-                TransmitSystemExclusive(new IntegraSystemExclusive(0x0F002000, 0x00000000, new byte[] { (byte)(SelectedPart + 1) }));
+                TransmitSystemExclusive(new IntegraSystemExclusive(0x0F002000, 0x00000000, new byte[] { (byte)(PartIndex + 1) }));
 
                 IsPreviewing = true;
             }
@@ -563,13 +588,15 @@ namespace IntegraXL
         #region Methods: Model Instantiation
 
         /// <summary>
-        /// Creates and caches a new INTEGRA-7 model or returns the model from cache if it exists.<br/>
-        /// Maintains refrential integrity of models and prevents duplicates.
+        /// Creates and caches a new INTEGRA-7 model or returns the model from cache if it exists.
         /// </summary>
         /// <typeparam name="TModel">The model type specifier.</typeparam>
         /// <param name="part">The associated part, only required for <see cref="IntegraPartial"/> derived models.</param>
         /// <returns>A new or cached INTEGRA-7 model.</returns>
-        /// <remarks><i>Newly created models are uninitialized, cached models are possibly already initialized with data.</i></remarks>
+        /// <remarks><i>
+        /// - Maintains refrential integrity of models and prevents duplicates.<br/>
+        /// - Newly created models are uninitialized, cached models are possibly already initialized with data.<br/>
+        /// </i></remarks>
         internal TModel CreateModel<TModel>(Parts? part = null) where TModel : IntegraModel
         {
             IntegraModel? instance;
@@ -589,7 +616,7 @@ namespace IntegraXL
 
             if (_Models.TryGetValue(instance.GetUID(), out IntegraModel? model))
             {
-                Debug.Print($"[{nameof(Integra)}] {nameof(CreateModel)}<{typeof(TModel).Name}>({part}) From Cache");
+                Debug.Print($"[{nameof(Integra)}.{nameof(CreateModel)}<{typeof(TModel).Name}>({part})] Existing cache entry");
 
                 // IMPORTANT: ? Disconnect to remove the device event listener to free all references to the newly created instance?
                 instance.Disconnect();
@@ -600,10 +627,10 @@ namespace IntegraXL
 
             if(!_Models.TryAdd(instance.GetUID(), instance))
             {
-                throw new IntegraException("Integra model cache model");
+                Debug.Print($"[{nameof(Integra)}.{nameof(CreateModel)}<{typeof(TModel).Name}>({part})] Unable to create cache entry: 0x{instance.GetUID():X4}");
             }
 
-            Debug.Print($"[{nameof(Integra)}] {nameof(CreateModel)}<{typeof(TModel).Name}>({part}) New Cache Entry: 0x{instance.GetUID():X4}");
+            Debug.Print($"[{nameof(Integra)}.{nameof(CreateModel)}<{typeof(TModel).Name}>({part})] New cache entry: 0x{instance.GetUID():X4}");
 
             return (TModel)instance;
         }
@@ -612,11 +639,16 @@ namespace IntegraXL
         /// Gets an initialized INTEGRA-7 model.
         /// </summary>
         /// <typeparam name="TModel">The model type specifier.</typeparam>
-        /// <param name="part">The associated part, only required for <see cref="IntegraPartial"/> derived models.</param>
+        /// <param name="part">The associated part, only required for <see cref="IntegraPartial{TModel}"/> derived models.</param>
         /// <returns>An awaitable <see cref="Task"/> that returns an initialized INTEGRA-7 model.</returns>
+        /// <exception cref="IntegraException"/>
         public async Task<TModel> GetModel<TModel>(Parts? part = null) where TModel : IntegraModel
         {
-            Debug.Print($"[{nameof(Integra)}] {nameof(GetModel)}<{typeof(TModel).Name}>({part})");
+            Debug.Print($"[{nameof(Integra)}{nameof(GetModel)}<{typeof(TModel).Name}>({part})]");
+
+            if(typeof(TModel).IsSubclassOf(typeof(IntegraPartial<TModel>)) && part == null)
+                    throw new IntegraException($"[{nameof(Integra)}.{nameof(GetModel)}<{typeof(TModel).Name}>]\n" +
+                                               $"The requested model requires a part argument.");
 
             TModel model = CreateModel<TModel>(part);
 
@@ -640,18 +672,51 @@ namespace IntegraXL
         /// <returns>An awaitable <see cref="Task"/> that returns an initialized INTEGRA-7 tone bank.</returns>
         public async Task<IntegraToneBank> GetToneBank(IntegraToneBanks tonebank)
         {
-            Debug.Print($"[{nameof(Integra)}] {nameof(GetToneBank)}({tonebank})");
+            Debug.Print($"[{nameof(Integra)}.{nameof(GetToneBank)}({tonebank})");
 
             Type? type = tonebank.ToneBankType();
 
             Debug.Assert(type != null);
 
-            IntegraToneBank model = CreateToneBank(type);
+            IntegraToneBank bank = CreateToneBank(type);
 
-            if(!model.IsInitialized)
-                await model.InitializeAsync();
+            if(!bank.IsInitialized)
+                await bank.InitializeAsync();
 
-            return model;
+            return bank;
+        }
+
+        public async Task<IntegraToneBank> GetToneBank(Type type)
+        {
+            Debug.Print($"[{nameof(Integra)}.{nameof(GetToneBank)}({type.Name})");
+
+            if (!type.IsSubclassOf(typeof(IntegraToneBank)))
+                throw new IntegraException($"[{nameof(Integra)}.{nameof(GetToneBank)}({type})]\n" +
+                                           $"The type requires to be derived from {nameof(IntegraToneBank)}.\n" +
+                                           $"Use the static class {nameof(ToneBanks)} to get a valid type.");
+
+            IntegraToneBank bank = CreateToneBank(type);
+
+            if (!bank.IsInitialized)
+                await bank.InitializeAsync();
+
+            return bank;
+        }
+
+        public async Task<IntegraToneBank> GetToneBank<TToneBank>() where TToneBank : IntegraToneBank
+        {
+            Debug.Print($"[{nameof(Integra)}.{nameof(GetToneBank)}<{typeof(TToneBank).Name}>()");
+
+            if (!typeof(TToneBank).IsSubclassOf(typeof(IntegraToneBank)))
+                throw new IntegraException($"[{nameof(Integra)}.{nameof(GetToneBank)}<{typeof(TToneBank).Name}>]\n" +
+                                           $"The type requires to be derived from {nameof(IntegraToneBank)}.");
+
+            IntegraToneBank bank = CreateToneBank(typeof(TToneBank));
+
+            if (!bank.IsInitialized)
+                await bank.InitializeAsync();
+
+            return bank;
         }
 
         /// <summary>
@@ -661,7 +726,10 @@ namespace IntegraXL
         /// <param name="type">The tone bank type specifier.</param>
         /// <returns>A new or cached INTEGRA-7 tone bank.</returns>
         /// <exception cref="IntegraException"></exception>
-        /// <remarks><i>Newly created models are uninitialized, cached models are possibly already initialized with data.</i></remarks>
+        /// <remarks><i>
+        /// - Maintains refrential integrity of tone banks and prevents duplicates.<br/>
+        /// - Newly created tone banks are uninitialized, cached tone banks are possibly already initialized with data.<br/>
+        /// </i></remarks>
         private IntegraToneBank CreateToneBank(Type type)
         {
             IntegraToneBank? instance;
@@ -674,21 +742,17 @@ namespace IntegraXL
 
             if (_Models.TryGetValue(instance.GetUID(), out IntegraModel? model))
             {
-                Debug.Print($"[{nameof(Integra)}] {nameof(CreateToneBank)}({type}) From Cache");
-
-                // IMPORTANT: Disconnect to remove the device event listener to free all references to the newly created instance?
-                //instance.Disconnect();
-                //instance = null;
+                Debug.Print($"[{nameof(Integra)}.{nameof(CreateToneBank)}({type})] Existing cache entry");
 
                 return (IntegraToneBank)model;
             }
 
             if (!_Models.TryAdd(instance.GetUID(), instance))
             {
-                throw new IntegraException("Integra model cache model");
+                Debug.Print($"[{nameof(Integra)}.{nameof(CreateToneBank)}({type})] Unable to create cache entry: 0x{instance.GetUID():X4}");
             }
 
-            Debug.Print($"[{nameof(Integra)}] {nameof(CreateToneBank)}({type}) New Cache Entry: 0x{instance.GetUID():X4}");
+            Debug.Print($"[{nameof(Integra)}.{nameof(CreateToneBank)}({type})] New cache entry: 0x{instance.GetUID():X4}");
 
             return instance;
         }
@@ -795,27 +859,247 @@ namespace IntegraXL
 
         #region Methods: File IO
 
-        public FileTypes.StudioSetFile SaveStudioSet(string filename, string path)
+        /// <summary>
+        /// Writes the studio set data to an in memory <see cref="StudioSetFile"/>.
+        /// </summary>
+        /// <returns>An in memory binary formatted <see cref="StudioSetFile"/>.</returns>
+        /// <exception cref="IntegraException"/>
+        public MemoryStream SaveStudioSet()
         {
             if (StudioSet == null || StudioSet.IsInitialized == false)
-                throw new IntegraException($"[{nameof(Integra)}.{nameof(SaveStudioSet)}]\nStudio set is not initialized.");
+                throw new IntegraException($"[{nameof(Integra)}.{nameof(SaveStudioSet)}()]\n" +
+                                           $"Studio set is not initialized.");
 
-            var file = FileManager.CreateStudioSetFile();
-            StudioSet.Save(ref file);
-            byte[] data = FileManager.SaveStudioSet(file);
+            if (VirtualSlots == null || VirtualSlots.IsInitialized == false)
+                throw new IntegraException($"[{nameof(Integra)}.{nameof(SaveStudioSet)}()]\n" +
+                                           $"Studio set is not initialized.");
 
-            string uri = $"{path}\\{file}.{FileTypes.STUDIO_SET_FILE_EXT}";
+            StudioSetFile file = StudioSet.Save();
 
-            throw new NotImplementedException();
-            //File.WriteAllBytes(@"test.i7s", filedata);
+            file.Expansions = VirtualSlots.Serialize();
+
+            return FileManager.WriteStudioSet(file);
+        }
+
+        public MemoryStream SaveTemporaryTone()
+        {
+            if(TemporaryTone == null || TemporaryTone.IsInitialized == false)
+                throw new IntegraException($"[{nameof(Integra)}.{nameof(SaveTemporaryTone)}()]\n" +
+                                           $"Temporary tone is not initialized.");
+
+            return FileManager.WriteTemporaryToneFile(TemporaryTone.Save());
+        }
+
+        /// <summary>
+        /// Loads the studio set with the provided data.
+        /// </summary>
+        /// <param name="file">The file containing the data to initialize the studio set.</param>
+        /// <param name="index">The studio set index to load the studio set into, defaults to the currently selected studio set.</param>
+        /// <exception cref="IntegraException"/>
+        /// <remarks><i>
+        /// - If no index is provided, the currently selected studio set is overwritten.<br/>
+        /// - If an internal studio set [0..15] is selected an exception is thrown.<br/>
+        /// - Make sure to save the current user data before overwriting the the studio set.<br/>
+        /// </i></remarks>
+        public async Task<bool> LoadStudioSet(StudioSetFile file, int index = -1)
+        {
+            if(Setup == null || Setup.IsInitialized == false)
+                throw new IntegraException($"[{nameof(Integra)}.{nameof(LoadStudioSet)}()]\n" +
+                                           $"Setup is not initialized.");
+
+            if (StudioSet == null || StudioSet.IsInitialized == false)
+                throw new IntegraException($"[{nameof(Integra)}.{nameof(LoadStudioSet)}()]\n" +
+                                           $"Studio set is not initialized.");
+
+            if (index != -1)
+            {
+                if(index < 16)
+                    throw new IntegraException($"[{nameof(Integra)}.{nameof(LoadStudioSet)}()]\n" +
+                                               $"Cannot overwrite internal studio set #{Setup.StudioSetPC}");
+
+                if(index > 63)
+                    throw new IntegraException($"[{nameof(Integra)}.{nameof(LoadStudioSet)}()]\n" +
+                                               $"Studio set slot out of range 16..63");
+
+                if(Setup.StudioSetPC != index)
+                {
+                    // SWITCH CURRENT STUDIO SET
+                    Setup.StudioSetPC = (byte)index;
+                }
+            }
+            else
+            {
+                if (Setup.StudioSetPC < 16)
+                    throw new IntegraException($"[{nameof(Integra)}.{nameof(LoadStudioSet)}()]\n" +
+                                               $"Cannot overwrite internal studio set #{Setup.StudioSetPC}");
+            }
+
+            if(VirtualSlots == null || VirtualSlots.IsInitialized == false)
+                throw new IntegraException($"[{nameof(Integra)}.{nameof(LoadStudioSet)}()]\n" +
+                                           $"Virtual slots is not initialized.");
+
+            int requiredSlots = file.Expansions.Where(x => x != 0).Count();
+
+            if(requiredSlots > VirtualSlots.FreeSlots())
+            {
+                VirtualSlots.SlotA = (IntegraExpansions)file.Expansions[0];
+                VirtualSlots.SlotB = (IntegraExpansions)file.Expansions[1];
+                VirtualSlots.SlotC = (IntegraExpansions)file.Expansions[2];
+                VirtualSlots.SlotD = (IntegraExpansions)file.Expansions[3];
+            }
+            else if(requiredSlots != 0)
+            {
+                for (int i = 0; i < IntegraConstants.EXP_COUNT; i++)
+                {
+                    if(file.Expansions[i] != 0)
+                    {
+                        if(!VirtualSlots.Contains((IntegraExpansions)file.Expansions[i]))
+                        {
+                            VirtualSlots[VirtualSlots.NextFreeSlotIndex()] = (IntegraExpansions)file.Expansions[i];
+                        }
+                    }
+                }
+            }
+
+            await VirtualSlots.Load();
+
+            StudioSet.Load(file);
+
+            NotifyPropertyChanged(string.Empty);
+
+            return true;
+        }
+
+        public void LoadTemporaryTone(TemporaryToneFile file, int part = -1)
+        {
+            if(part != -1)
+            {
+                if(part < 0 || part > 15)
+                    throw new IntegraException($"[{nameof(Integra)}.{nameof(LoadTemporaryTone)}()]\n" +
+                                               $"Temporary tone part out of range 0..15");
+
+                if(TemporaryTones == null || TemporaryTones.IsInitialized == false)
+                    throw new IntegraException($"[{nameof(Integra)}.{nameof(LoadTemporaryTone)}()]\n" +
+                                               $"Temporary tones collection is not initialized.");
+
+                TemporaryTones[part].Load(file);
+            }
+            else
+            {
+                if(TemporaryTone == null || TemporaryTone.IsInitialized == false)
+                    throw new IntegraException($"[{nameof(Integra)}.{nameof(LoadTemporaryTone)}()]\n" +
+                                               $"Temporary tone is not initialized.");
+
+                TemporaryTone.Load(file);
+            }
+        }
+
+        public void StoreTemporaryTone(int index)
+        {
+            Debug.Print($"{TemporaryTone.Type}");
+
+            byte[] data = new byte[4];
+
+            switch(TemporaryTone.Type)
+            {
+                case IntegraToneTypes.SuperNATURALAcousticTone:
+                    if (index < 0 || index > 255)
+                        throw new IntegraException($"");
+
+                    data[0] = 0x59;
+
+                    if(index > 127)
+                    {
+                        data[1] = 0x01;
+                        index -= 128;
+                        data[2] = (byte)index;
+                    }
+                    else
+                    {
+                        data[1] = 0x00;
+                        data[2] = (byte)index;
+                    }
+
+                    break;
+
+                case IntegraToneTypes.SuperNATURALSynthTone:
+                    if (index < 0 || index > 511)
+                        throw new IntegraException($"");
+                    data[0] = 0x5F;
+
+                    if (index >= 128)
+                    {
+                        data[1] = (byte)(index / 128);
+                        index -= 128 * data[1];
+                        data[2] = (byte)index;
+                    }
+                    else
+                    {
+                        data[1] = 0x00;
+                        data[2] = (byte)index;
+                    }
+
+                    break;
+
+                case IntegraToneTypes.SuperNATURALDrumkit:
+                    if (index < 0 || index > 63)
+                        throw new IntegraException($"");
+                    data[0] = 0x58;
+                    data[1] = 0x00;
+                    data[2] = (byte)index;
+
+                    break;
+
+                case IntegraToneTypes.PCMSynthTone:
+                    if (index < 0 || index > 255)
+                        throw new IntegraException($"");
+                    data[0] = 0x57;
+                    if (index > 127)
+                    {
+                        data[1] = 0x01;
+                        index -= 128;
+                        data[2] = (byte)index;
+                    }
+                    else
+                    {
+                        data[1] = 0x00;
+                        data[2] = (byte)index;
+                    }
+
+                    break;
+
+                case IntegraToneTypes.PCMDrumkit:
+                    if (index < 0 || index > 31)
+                        throw new IntegraException($"");
+                    data[0] = 0x56;
+                    data[1] = 0x00;
+                    data[2] = (byte)index;
+
+                    break;
+            }
+
+            data[3] = (byte)PartIndex;
+
+            
+
+            TransmitSystemExclusive(new IntegraSystemExclusive(new IntegraAddress(0x0F001000), new IntegraRequest(data)));
+
+
         }
 
         #endregion
 
         #region Event Handlers
 
-        private void OnSystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
+        /// <summary>
+        /// Handles the <see cref="IntegraConnection.SystemExclusiveReceived"/> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="IntegraConnection"/> that raised the event.</param>
+        /// <param name="e">The event's associated data.</param>
+        private void OnSystemExclusiveReceived(object sender, IntegraSystemExclusiveEventArgs e)
         {
+            // TODO: ?? Move model system exclusive received to this for performance ??
+            
             switch (e.SystemExclusive.Address[0])
             {
                 case 0x01:
@@ -835,6 +1119,15 @@ namespace IntegraXL
                     break;
             }
 
+            if(e.SystemExclusive.Address == IntegraConstants.STORING_DATA)
+            {
+
+            }
+            else if(e.SystemExclusive.Address == IntegraConstants.STORING_COMPLETE)
+            {
+
+            }
+
             SystemExclusiveReceived?.Invoke(this, e);
         }
 
@@ -850,8 +1143,6 @@ namespace IntegraXL
         }
 
         #endregion
-
-        
     }
 
     // Database model

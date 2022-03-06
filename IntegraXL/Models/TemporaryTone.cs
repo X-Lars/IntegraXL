@@ -1,12 +1,11 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.File;
 using System.Diagnostics;
-using System.Reflection;
 
 namespace IntegraXL.Models
 {
     /// <summary>
-    /// Defines a collection of <see cref="TemporaryTone"/>s for all parts.
+    /// Defines the collection of <see cref="TemporaryTone"/> models for all 16 parts.
     /// </summary>
     [Integra(0x19000000, 0x04000000)]
     public sealed class TemporaryTones : IntegraPartialCollection<TemporaryTone>
@@ -16,20 +15,23 @@ namespace IntegraXL.Models
         /// <summary>
         /// Creates a new <see cref="TemporaryTones"/> collection instance.
         /// </summary>
-        /// <param name="device">The device to connect the collection.</param>
-#pragma warning disable IDE0051 // Remove unused private members
-        private TemporaryTones(Integra device) : base(device) { }
-#pragma warning restore IDE0051 // Remove unused private members
+        /// <param name="integra">The device to connect the collection.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "The class is created by reflection.")]
+        private TemporaryTones(Integra integra) : base(integra) { }
 
         #endregion
 
         #region Overrides: Model
 
+        /// <summary>
+        /// Requests the device to initialize the <see cref="TemporaryTones"/> collection.
+        /// </summary>
+        /// <returns>An awaitable task that returns true if the <see cref="TemporaryTones"/> collection is initialized.</returns>
         internal override async Task<bool> InitializeAsync()
         {
             try
             {
-                // IMPORTANT! Determin the tone types before making the initialization request
+                // IMPORTANT! Determin the tone types and create the tone type's associated models before making the initialization request
                 foreach (var tone in this)
                 {
                    await tone.InitializeToneTypeAsync();
@@ -43,10 +45,12 @@ namespace IntegraXL.Models
             return await base.InitializeAsync();
         }
 
-        protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
-        {
-            //base.SystemExclusiveReceived(sender, e);
-        }
+        /// <summary>
+        /// Handles the <see cref="Integra.SystemExclusiveReceived"/> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="Integra"/> that raised the event.</param>
+        /// <param name="e">The event's associated data.</param>
+        protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e) { }
 
         #endregion
     }
@@ -55,19 +59,28 @@ namespace IntegraXL.Models
     /// Defines the INTEGRA-7 temporary tone model.
     /// </summary>
     [Integra(0x19000000, 0x00200000)]
-    public class TemporaryTone : IntegraPartial<TemporaryTone>
+    public sealed class TemporaryTone : IntegraPartial<TemporaryTone>
     {
+        #region Fields
+
         /// <summary>
         /// Stores a reference to the associated tone.
         /// </summary>
         private readonly IntegraTone _Tone;
 
+        #endregion
+
+        #region Constructor
+
         /// <summary>
         /// Creates a new <see cref="TemporaryTone"/> instance.
         /// </summary>
-        /// <param name="device">The device to connect the model.</param>
+        /// <param name="integra">The device to connect the model.</param>
         /// <param name="part">The associated part.</param>
-        internal TemporaryTone(Integra device, Parts part) : base(device, part, false) 
+        /// <remarks><i>
+        /// - The temporary tone 
+        /// </i></remarks>
+        internal TemporaryTone(Integra integra, Parts part) : base(integra, part, false) 
         {
             Address = Attribute.Address;
             
@@ -77,8 +90,10 @@ namespace IntegraXL.Models
             // 0x00, 0x20, 0x40, 0x60, 0x00, ...
             Address[1] += (byte)((int)part % 4 * 0x20);
 
-            _Tone = device.CreateModel<IntegraTone>(Part);
+            _Tone = integra.CreateModel<IntegraTone>(Part);
         }
+
+        #endregion
 
         #region Properties
 
@@ -160,7 +175,7 @@ namespace IntegraXL.Models
         /// <i>This method has to be called before the initialization request is made.</i><br/><br/>
         /// - Determines the type of temporary tone<br/>
         /// - Binds the tone changed event<br/>
-        /// - Sets the associated property<br/>
+        /// - Creates the temporary tone type's associated model<br/>
         /// - Sets the associated MFX address<br/>
         /// </remarks>
         internal async Task<bool> InitializeToneTypeAsync()
@@ -181,7 +196,7 @@ namespace IntegraXL.Models
 
                 NotifyPropertyChanged(nameof(Type));
             }
-            catch (TaskCanceledException)
+            catch (Exception)
             {
                 return false;
             }
@@ -218,10 +233,9 @@ namespace IntegraXL.Models
                     break;
 
                 default:
-                    throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(InitializeToneTypeAsync)}({Part})]\nUnspecified temporary tone type.");
+                    throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(InitializeToneTypeAsync)}({Part})]\n" +
+                                               $"Unspecified temporary tone type.");
             }
-
-            //NotifyPropertyChanged(string.Empty);
 
             return true;
         }
@@ -230,18 +244,60 @@ namespace IntegraXL.Models
 
         #region Overrides: Model
 
+        public override bool IsDirty 
+        { 
+            get
+            {
+                if (MFX != null && MFX.IsDirty)
+                    return true;
+
+                switch(Type)
+                {
+                    case IntegraToneTypes.SuperNATURALAcousticTone: 
+                        return SuperNATURALAcousticTone != null && SuperNATURALAcousticTone.IsDirty;
+
+                    case IntegraToneTypes.SuperNATURALSynthTone:
+                        return SuperNATURALSynthTone != null && SuperNATURALSynthTone.IsDirty;
+
+                    case IntegraToneTypes.SuperNATURALDrumkit:
+                        return SuperNATURALDrumKit != null && SuperNATURALDrumKit.IsDirty;
+
+                    case IntegraToneTypes.PCMSynthTone:
+                        return PCMSynthTone != null && PCMSynthTone.IsDirty;
+
+                    case IntegraToneTypes.PCMDrumkit:
+                        return PCMDrumKit != null && PCMDrumKit.IsDirty;
+
+                    default:
+                        return false;
+                };
+            }
+
+            protected set => base.IsDirty = value; 
+        }
+
+        /// <summary>
+        /// Requests the device to initialize the temporary tone.
+        /// </summary>
+        /// <returns>An awaitable task that returns true if the temporary tone is initialized.</returns>
         internal async override Task<bool> InitializeAsync()
         {
+            // IMPORTANT: The method has to be called before the base method to determine the tone type and create the tone type's associated model
             if (!await InitializeToneTypeAsync())
                 return false;
 
             return await base.InitializeAsync();
         }
 
+        /// <summary>
+        /// Handles the <see cref="Integra.SystemExclusiveReceived"/> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="Integra"/> that raised the event.</param>
+        /// <param name="e">The event's associated data.</param>
         protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e) { }
 
         /// <summary>
-        /// Gets wheter the temorary tone is initialized.
+        /// Gets wheter the <see cref="TemporaryTone"/> is initialized.
         /// </summary>
         public override bool IsInitialized
         {
@@ -269,7 +325,7 @@ namespace IntegraXL.Models
                 }
             }
 
-            protected internal set => base.IsInitialized = value;
+            internal protected set => base.IsInitialized = value;
         }
 
         #endregion
@@ -303,29 +359,117 @@ namespace IntegraXL.Models
 
         internal override bool Initialize(byte[] data)
         {
-            //throw new NotImplementedException();
-
-            return false;
+            throw new NotImplementedException();
         }
 
         #endregion
 
-        public void Load(FileTypes.TemporaryToneFile file)
+        public void Load(TemporaryToneFile file)
         {
-            
+            SuperNATURALAcousticTone = null;
+            SuperNATURALSynthTone = null;
+            SuperNATURALDrumKit = null;
+            PCMSynthTone = null;
+            PCMDrumKit = null;
+
+            Type = (IntegraToneTypes)file.ToneType;
+
+            MFX = new MFX(this);
+
+            switch(Type)
+            {
+                case IntegraToneTypes.SuperNATURALAcousticTone:
+
+                    SuperNATURALAcousticTone = new SuperNATURALAcousticTone(this);
+                    MFX.Address |= SuperNATURALAcousticTone.Address;
+
+                    SuperNATURALAcousticTone.Common.Load(file.SuperNATURALAcousticToneCommon);
+
+                    break;
+
+                case IntegraToneTypes.SuperNATURALSynthTone:
+
+                    SuperNATURALSynthTone = new SuperNATURALSynthTone(this);
+                    MFX.Address |= SuperNATURALSynthTone.Address;
+
+                    SuperNATURALSynthTone.Common.Load(file.SuperNATURALSynthToneCommon);
+
+                    for (int i = 0; i < IntegraConstants.SNS_PARTIAL_COUNT; i++)
+                    {
+                        SuperNATURALSynthTone.Partials[i].Load(file.SuperNATURALSynthTonePartials[i]);
+                    }
+
+                    break;
+
+                case IntegraToneTypes.SuperNATURALDrumkit:
+
+                    SuperNATURALDrumKit = new SuperNATURALDrumKit(this);
+                    MFX.Address |= SuperNATURALDrumKit.Address;
+
+                    SuperNATURALDrumKit.Common.Load(file.SuperNATURALDrumKitCommon);
+                    SuperNATURALDrumKit.CompEQ.Load(file.SuperNATURALDrumKitCommonCompEQ);
+
+                    for (int i = 0; i < IntegraConstants.SND_NOTE_COUNT; i++)
+                    {
+                        SuperNATURALDrumKit.Notes[i].Load(file.SuperNATURALDrumKitNotes[i]);
+                    }
+
+                    break;
+
+                case IntegraToneTypes.PCMSynthTone:
+
+                    PCMSynthTone = new PCMSynthTone(this);
+                    MFX.Address |= PCMSynthTone.Address;
+
+                    PCMSynthTone.Common.Load(file.PCMSynthToneCommon);
+                    PCMSynthTone.PMT.Load(file.PMT);
+
+                    for (int i = 0; i < IntegraConstants.PCM_PARTIAL_COUNT; i++)
+                    {
+                        PCMSynthTone.Partials[i].Load(file.PCMSynthTonePartials[i]);
+                    }
+
+                    PCMSynthTone.Common02.Load(file.PCMSynthToneCommon2);
+
+                    break;
+
+                case IntegraToneTypes.PCMDrumkit:
+
+                    PCMDrumKit = new PCMDrumKit(this);
+                    MFX.Address |= PCMDrumKit.Address;
+
+                    PCMDrumKit.Common.Load(file.PCMDrumKitCommon);
+                    PCMDrumKit.CompEQ.Load(file.PCMDrumKitCommonCompEQ);
+
+                    for (int i = 0; i < IntegraConstants.PCM_NOTE_COUNT; i++)
+                    {
+                        PCMDrumKit.Partials[i].Load(file.PCMDrumKitNotes[i]);
+                    }
+
+                    PCMDrumKit.Common02.Load(file.PCMDrumKitCommon2);
+
+                    break;
+            }
+
+            MFX.Load(file.MFX);
         }
 
-        public void Save(ref FileTypes.TemporaryToneFile file)
+        internal TemporaryToneFile Save()
         {
-            file.ToneType = (byte)Type;
+            TemporaryToneFile file = new ()
+            {
+                ToneType = (uint)Type
+            };
 
             switch (Type)
             {
                 case IntegraToneTypes.SuperNATURALAcousticTone:
+                    Debug.Assert(SuperNATURALAcousticTone != null);
                     file.SuperNATURALAcousticToneCommon = SuperNATURALAcousticTone.Common.Serialize();
                     break;
 
                 case IntegraToneTypes.SuperNATURALSynthTone:
+                    Debug.Assert(SuperNATURALSynthTone != null);
                     file.SuperNATURALSynthToneCommon = SuperNATURALSynthTone.Common.Serialize();
                     for (int i = 0; i < IntegraConstants.SNS_PARTIAL_COUNT; i++)
                     {
@@ -334,6 +478,7 @@ namespace IntegraXL.Models
                     break;
 
                 case IntegraToneTypes.SuperNATURALDrumkit:
+                    Debug.Assert(SuperNATURALDrumKit != null);
                     file.SuperNATURALDrumKitCommon = SuperNATURALDrumKit.Common.Serialize();
                     file.SuperNATURALDrumKitCommonCompEQ = SuperNATURALDrumKit.CompEQ.Serialize();
                     for (int i = 0; i < IntegraConstants.SND_NOTE_COUNT; i++)
@@ -343,6 +488,7 @@ namespace IntegraXL.Models
                     break;
 
                 case IntegraToneTypes.PCMSynthTone:
+                    Debug.Assert(PCMSynthTone != null);
                     file.PCMSynthToneCommon = PCMSynthTone.Common.Serialize();
                     file.PMT = PCMSynthTone.PMT.Serialize();
 
@@ -354,16 +500,26 @@ namespace IntegraXL.Models
                     break;
 
                 case IntegraToneTypes.PCMDrumkit:
+                    Debug.Assert(PCMDrumKit != null);
                     file.PCMDrumKitCommon = PCMDrumKit.Common.Serialize();
                     file.PCMDrumKitCommonCompEQ = PCMDrumKit.CompEQ.Serialize();
                     for (int i = 0; i < IntegraConstants.PCM_NOTE_COUNT; i++)
                     {
                         file.PCMDrumKitNotes[i] = PCMDrumKit.Partials[i].Serialize();
                     }
+                    file.PCMDrumKitCommon2 = PCMDrumKit.Common02.Serialize();
                     break;
             }
 
+            Debug.Assert(MFX != null);
             file.MFX = MFX.Serialize();
+
+            return file;
+        }
+
+        public void Store()
+        {
+
         }
     }
 }

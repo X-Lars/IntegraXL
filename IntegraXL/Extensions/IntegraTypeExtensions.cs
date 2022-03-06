@@ -5,6 +5,15 @@ namespace IntegraXL.Extensions
 {
     public static class IntegraTypeExtensions
     {
+        #region Extensions: String
+
+        public static string Clamp(this string instance, int length)
+        {
+            return instance.Length > length ? instance.Substring(0, length) : instance.PadRight(length);
+        }
+
+        #endregion
+
         #region Extensions: Array
 
         /// <summary>

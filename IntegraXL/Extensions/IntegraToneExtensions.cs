@@ -20,7 +20,7 @@ namespace IntegraXL.Extensions
 
             // 0x5D11 ERROR
             // Check for single addressable tone banks
-            // The low nibble can vary for a long tone banks
+            // The low nibble can vary for big tone banks
 
             if(Enum.IsDefined(typeof(IntegraToneBanks), (ushort)(bank & 0xFF00)))
             {
@@ -175,6 +175,7 @@ namespace IntegraXL.Extensions
                     return IntegraToneTypes.SuperNATURALSynthTone;
 
                 default:
+
                     // TODO: Tone type can be undefined, tone ID 0000 Piano 1 when error
                     throw new ArgumentOutOfRangeException($"[{nameof(IntegraToneExtensions)}.{nameof(ToneType)}]");
             }

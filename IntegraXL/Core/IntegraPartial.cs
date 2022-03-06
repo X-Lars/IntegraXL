@@ -17,7 +17,7 @@ namespace IntegraXL.Core
 
         public Parts Part { get; }
 
-        protected internal override int GetUID()
+        internal protected override int GetUID()
         {
             return base.GetUID() | (int)Part << 8;
         }

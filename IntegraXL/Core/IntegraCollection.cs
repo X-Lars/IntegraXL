@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace IntegraXL.Core
@@ -66,15 +67,11 @@ namespace IntegraXL.Core
         /// </i></remarks>
         internal IntegraCollection(Integra device, bool connect = true) : base(device, connect) 
         {
-            if (!typeof(TItem).IsSubclassOf(typeof(IntegraModel<TItem>)) && !typeof(TItem).IsSubclassOf(typeof(IntegraTemplate)))
-                throw new IntegraException($"[{nameof(IntegraCollection)}]\n" +
-                                           $"{GetType().Name}: Unsupported type.\n" +
-                                           $"The collection type must derive from either {nameof(IntegraModel)} or {nameof(IntegraTemplate)}.");
+            Debug.Assert(typeof(TItem).IsSubclassOf(typeof(IntegraModel<TItem>)) || typeof(TItem).IsSubclassOf(typeof(IntegraTemplate)));
 
-            var typeAttribute = typeof(TItem).GetCustomAttribute<IntegraAttribute>() ??
-                throw new IntegraException($"[{nameof(IntegraCollection)}]\n" +
-                                           $"{GetType().Name}: Attribute missing.\n" +
-                                           $"The type <{typeof(TItem).Name}> requires an {nameof(IntegraAttribute)}.");
+            var typeAttribute = typeof(TItem).GetCustomAttribute<IntegraAttribute>();
+
+            Debug.Assert(typeAttribute != null);
 
             _ItemSize = typeAttribute.Size;
         }
@@ -141,7 +138,7 @@ namespace IntegraXL.Core
         public override bool IsInitialized
         {
             get => base.IsInitialized;
-            protected internal set
+            internal protected set
             {
                 base.IsInitialized = value;
 
@@ -151,9 +148,9 @@ namespace IntegraXL.Core
         }
 
         /// <summary>
-        /// Event handler for received system exclusive messages.
+        /// Handles the <see cref="Integra.SystemExclusiveReceived"/> event.
         /// </summary>
-        /// <param name="sender">The device that raised the event.</param>
+        /// <param name="sender">The <see cref="Integra"/> that raised the event.</param>
         /// <param name="e">The event's associated data.</param>
         protected abstract override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e);
 

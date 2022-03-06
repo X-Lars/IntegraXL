@@ -6,38 +6,54 @@ namespace IntegraXL.Models
     [Integra(0x00003000, 0x0000003C)]
     public class PCMSynthToneCommon02 : IntegraModel<PCMSynthToneCommon02>
     {
+        #region Fields: INTEGRA-7
+
         [Offset(0x0000)] byte[] RESERVED01 = new byte[16];
-        [Offset(0x0010)] byte _ToneCategory;
+        [Offset(0x0010)] IntegraToneCategories _ToneCategory;
         [Offset(0x0013)] byte _PhraseOctaveShift;
         [Offset(0x0014)] byte[] RESERVED02 = new byte[31];
         [Offset(0x0033)] IntegraSwitch _TFXSwitch;
         [Offset(0x0034)] byte[] RESERVED03 = new byte[4];
-        [Offset(0x0038)] int _PhraseNumber;
+        [Offset(0x0038)] IntegraSynthPhrase _PhraseNumber;
 
-        public PCMSynthToneCommon02(PCMSynthTone pcmSynthTone) : base(pcmSynthTone.Device)
+        #endregion
+
+        #region Constructor
+
+        internal PCMSynthToneCommon02(PCMSynthTone pcmSynthTone) : base(pcmSynthTone.Device)
         {
             Address += pcmSynthTone.Address;
         }
 
+        #endregion
+
+        #region Properties: INTEGRA-7
+
         [Offset(0x0010)]
-        public byte ToneCategory
+        public IntegraToneCategories ToneCategory
         {
-            get { return _ToneCategory; }
+            get => _ToneCategory;
             set
             {
-                _ToneCategory = value;
-                NotifyPropertyChanged();
+                if (_ToneCategory != value)
+                {
+                    _ToneCategory = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0013)]
-        public byte PhraseOctaveShift
+        public int PhraseOctaveShift
         {
-            get { return _PhraseOctaveShift; }
+            get => _PhraseOctaveShift.Deserialize(64);
             set
             {
-                _PhraseOctaveShift = value;
-                NotifyPropertyChanged();
+                if (PhraseOctaveShift != value)
+                {
+                    _PhraseOctaveShift = value.Serialize(64).Clamp(61, 67);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -53,13 +69,19 @@ namespace IntegraXL.Models
         }
 
         [Offset(0x0038)]
-        public int PhraseNumber
+        public IntegraSynthPhrase PhraseNumber
         {
-            get { return _PhraseNumber.ToMidi(); }
+            get => _PhraseNumber;
             set
             {
-                _PhraseNumber = value.SerializeInt();
+                if(_PhraseNumber != value)
+                {
+                    _PhraseNumber = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
+
+        #endregion
     }
 }

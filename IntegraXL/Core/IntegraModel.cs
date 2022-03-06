@@ -58,26 +58,39 @@ namespace IntegraXL.Core
 
         #region Methods
 
+        /// <summary>
+        /// Serializes the model's data to an <see cref="byte"/> array.
+        /// </summary>
+        /// <returns>An ordered byte array containing the model's data.</returns>
+        /// <exception cref="NotImplementedException"/>
+        /// <remarks><i>The array is ordered by field offset and can be used as system exclusive data part.</i></remarks>
         public override byte[] Serialize()
         {
-            //var integraFields = instance.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic)
-            //   .Where(x => x.GetCustomAttribute<OffsetAttribute>() != null);
-            //int fieldCount = this.CachedFields().Count;
-            List<byte> values = new List<byte>();
-           
-            var fields = this.CachedFields().OrderBy(x => x.Key).ToArray();
-            
-            for (int i = 0; i < fields.Count(); i++)
+            if (!IsInitialized)
+                throw new IntegraException($"[{nameof(IntegraModel)}.{nameof(Serialize)}()]\n" +
+                                           $"{GetType().Name}: Serialization of uninitialized model.");
+
+            var fields = this.CachedFields().OrderBy(x => x.Key).ToArray() ??
+                throw new IntegraException($"[{nameof(Integra)}.{nameof(Serialize)}]\n" +
+                                           $"{GetType().Name}: The model is not cached and cannot be serialized.");
+
+            List<byte> values = new();
+
+            for (int i = 0; i < fields.Length; i++)
             {
                 FieldInfo field = fields[i].Value;
 
                 if (field.FieldType == typeof(byte))
                 {
-                    values.Add((byte)field.GetValue(this));
+                    object? value = field.GetValue(this);
+                    Debug.Assert(value != null);
+                    values.Add((byte)value);
                 }
                 else if (field.FieldType == typeof(bool))
                 {
-                    values.Add((bool)field.GetValue(this) ? (byte)1 : (byte)0);
+                    object? value = field.GetValue(this);
+                    Debug.Assert(value != null);
+                    values.Add((bool)value ? (byte)1 : (byte)0);
                 }
                 else if (field.FieldType.IsEnum)
                 {
@@ -85,7 +98,24 @@ namespace IntegraXL.Core
 
                     if (type == typeof(byte))
                     {
-                        values.Add((byte)field.GetValue(this));
+                        object? value = field.GetValue(this);
+                        Debug.Assert(value != null);
+                        values.Add((byte)value);
+                    }
+                    else if (type == typeof(int))
+                    {
+                        object? value = field.GetValue(this);
+                        Debug.Assert(value != null);
+
+                        byte[] bytes = BitConverter.GetBytes((int)value);
+
+                        if (BitConverter.IsLittleEndian)
+                            Array.Reverse(bytes);
+
+                        for (int b = 0; b < 4; b++)
+                        {
+                            values.Add(bytes[b]);
+                        }
                     }
                     else
                     {
@@ -94,27 +124,32 @@ namespace IntegraXL.Core
                 }
                 else if (field.FieldType.IsArray)
                 {
-                    Array array = field.GetValue(this) as Array;
-                    Type type = array.GetType().GetElementType();
+                    Array? array = field.GetValue(this) as Array;
+
+                    Debug.Assert(array != null);
+
+                    Type? type = array.GetType().GetElementType();
+
+                    Debug.Assert(type != null);
 
                     if (type == typeof(byte))
                     {
                         for (int a = 0; a < array.Length; a++)
                         {
-                            values.Add((byte)array.GetValue(a));
+                            object? value = array.GetValue(a);
+                            Debug.Assert(value != null);
+                            values.Add((byte)value);
                         }
-                        //data = new byte[array.Length];
-
-                        //Array.Copy(array, data, array.Length);
                     }
                     else if (type == typeof(int))
                     {
                         for (int a = 0; a < array.Length; a++)
                         {
-                            int[] ints = (int[])(field.GetValue(this));
-                            byte[] bytes = new byte[4];
+                            int[]? value = field.GetValue(this) as int[];
 
-                            bytes = BitConverter.GetBytes(ints[a]);
+                            Debug.Assert(value != null);
+
+                            byte[] bytes = BitConverter.GetBytes(value[a]);
 
                             if (BitConverter.IsLittleEndian)
                                 Array.Reverse(bytes);
@@ -128,7 +163,8 @@ namespace IntegraXL.Core
                     }
                     else
                     {
-                        throw new NotImplementedException($"{GetType().Name}.{nameof(TransmitProperty)}] {field.FieldType.Name} {field.Name}");
+                        throw new IntegraException($"[{nameof(Integra)}.{nameof(Serialize)}()]\n" +
+                                                   $"{GetType().Name}: Serialization of unimplemented type {field.FieldType.Name} {field.Name}");
                     }
                 }
             }
@@ -155,11 +191,16 @@ namespace IntegraXL.Core
 
                     if (field.FieldType == typeof(byte))
                     {
-                        data = new byte[] { (byte)field.GetValue(this) };
+                        object? value = field.GetValue(this);
+                        Debug.Assert(value != null);
+                        data = new byte[] { (byte)value };
                     }
                     else if (field.FieldType == typeof(bool))
                     {
-                        data = new byte[] { (bool)field.GetValue(this) ? (byte)1 : (byte)0 };
+                        object? value = field.GetValue(this);
+                        Debug.Assert(value != null);
+
+                        data = new byte[] { (bool)value ? (byte)1 : (byte)0 };
                     }
                     else if (field.FieldType.IsEnum)
                     {
@@ -167,7 +208,21 @@ namespace IntegraXL.Core
 
                         if (type == typeof(byte))
                         {
-                            data = new byte[] { (byte)field.GetValue(this) };
+                            object? value = field.GetValue(this);
+                            Debug.Assert(value != null);
+                            data = new byte[] { (byte)value };
+                        }
+                        else if(type == typeof(int))
+                        {
+                            object? value = field.GetValue(this);
+                            Debug.Assert(value != null);
+                            byte[] bytes = BitConverter.GetBytes((int)value);
+
+                            if (BitConverter.IsLittleEndian)
+                                Array.Reverse(bytes);
+
+                            data = bytes;
+                            
                         }
                         else
                         {
@@ -176,8 +231,13 @@ namespace IntegraXL.Core
                     }
                     else if (field.FieldType.IsArray)
                     {
-                        Array array = field.GetValue(this) as Array;
-                        Type type = array.GetType().GetElementType();
+                        Array? array = field.GetValue(this) as Array;
+
+                        Debug.Assert(array != null);
+
+                        Type? type = array.GetType().GetElementType();
+
+                        Debug.Assert(type != null);
 
                         if (type == typeof(byte))
                         {
@@ -187,25 +247,18 @@ namespace IntegraXL.Core
                         }
                         else if (type == typeof(int))
                         {
-                            if (index != null)
-                            {
-                                int[] ints = (int[])(field.GetValue(this));
-                                byte[] bytes = new byte[4];
+                            Debug.Assert(index != null);
+                            int[]? value = field.GetValue(this) as int[];
 
-                                // Get the bytes from the int array value at the specified index
-                                bytes = BitConverter.GetBytes(ints[(int)index]);
+                            Debug.Assert(value != null);
 
-                                if (BitConverter.IsLittleEndian)
-                                    Array.Reverse(bytes);
+                            byte[] bytes = BitConverter.GetBytes(value[(int)index]);
+                             
+                            if (BitConverter.IsLittleEndian)
+                                Array.Reverse(bytes);
 
-                                data = bytes;
-                                offset += (int)(index * 4);
-
-                            }
-                            else
-                            {
-                                throw new IndexOutOfRangeException($"{GetType().Name}.{nameof(TransmitProperty)}] {field.FieldType.Name} {field.Name} No index provided");
-                            }
+                            data = bytes;
+                            offset += (int)(index * 4);
 
                         }
                         else
@@ -237,12 +290,11 @@ namespace IntegraXL.Core
 
             var fields = this.CachedFields();
             int indexer = 0;
-            bool isIndexed = false;
             for (int dataOffset = 0; dataOffset < systemExclusive.Data.Length; dataOffset++)
             {
                 int fieldOffset = offset + dataOffset;
 
-                fields.TryGetValue(fieldOffset, out FieldInfo field);
+                fields.TryGetValue(fieldOffset, out FieldInfo? field);
 
                 // TODO: should never be null?
                 // TODO: Create cached property entry for each indexed property
@@ -257,7 +309,6 @@ namespace IntegraXL.Core
                         else
                         {
                             field = fields[i];
-                            isIndexed = true;
                             break;
                         }
 
@@ -303,6 +354,24 @@ namespace IntegraXL.Core
                     {
                         field.SetValue(this, systemExclusive.Data[dataOffset]);
                     }
+                    else if (type == typeof(int))
+                    {
+                        byte[] bytes = new byte[4];
+
+                        for (int i = 0; i < bytes.Length; i++)
+                        {
+                            bytes[i] = systemExclusive.Data[dataOffset + i];
+                        }
+
+                        if (BitConverter.IsLittleEndian)
+                            Array.Reverse(bytes);
+
+                        field.SetValue(this, BitConverter.ToInt32(bytes, 0));
+                        //pro += 4;
+                        dataOffset += 3;
+
+
+                    }
                     else
                     {
                         throw new NotImplementedException($"{GetType().Name}.{nameof(ReceivedProperty)}] {field.FieldType.Name} {field.Name}");
@@ -310,8 +379,13 @@ namespace IntegraXL.Core
                 }
                 else if (field.FieldType.IsArray)
                 {
-                    Array array = (Array)field.GetValue(this);
-                    Type arrayType = array.GetType().GetElementType();
+                    Array? array = field.GetValue(this) as Array;
+
+                    Debug.Assert(array != null);
+
+                    Type? arrayType = array.GetType().GetElementType();
+
+                    Debug.Assert(arrayType != null);
 
                     if (arrayType == typeof(byte))
                     {
@@ -383,6 +457,23 @@ namespace IntegraXL.Core
             base.NotifyPropertyChanged(string.Empty);
         }
 
+        /// <summary>
+        /// Initializes the model with the specified data.
+        /// </summary>
+        /// <param name="data">The data used to initialize the model.</param>
+        /// <remarks><i>
+        /// - Transmits the data to the physical device.<br/>
+        /// - Initializes or overwrites the model's data.<br/>
+        /// </i></remarks>
+        internal virtual void Load(byte[] data)
+        {
+            IsInitialized = false;
+
+            Device.TransmitSystemExclusive(new IntegraSystemExclusive(Address, 0, data));
+
+            Initialize(data);
+        }
+
         #endregion
 
         #region Overrides: Model
@@ -417,14 +508,7 @@ namespace IntegraXL.Core
             }
         }
 
-        internal void Load(byte[] data)
-        {
-            IntegraSystemExclusive syx = new IntegraSystemExclusive(Address, new IntegraAddress(), data);
-            Device.TransmitSystemExclusive(syx);
-            Initialize(data);
-            NotifyPropertyChanged(string.Empty);
-        }
-
+        
         /// <summary>
         /// Initializes the model with data.
         /// </summary>
@@ -473,6 +557,20 @@ namespace IntegraXL.Core
                     if (type == typeof(byte))
                     {
                         field.Value.SetValue(this, data[field.Key]);
+                    }
+                    else if(type == typeof(int))
+                    {
+                        byte[] bytes = new byte[4];
+
+                        for (int i = 0; i < bytes.Length; i++)
+                        {
+                            bytes[i] = data[field.Key + i];
+                        }
+
+                        if (BitConverter.IsLittleEndian)
+                            Array.Reverse(bytes);
+
+                        field.Value.SetValue(this, BitConverter.ToInt32(bytes, 0));
                     }
                     else
                     {
@@ -569,6 +667,7 @@ namespace IntegraXL.Core
             // Only transmit properties if the model is initialized
             if (IsInitialized)
             {
+                IsDirty = true;
                 if (index != null)
                 {
                     //TODO: Transmit indexed property for MFX parameters
@@ -612,7 +711,7 @@ namespace IntegraXL.Core
         /// - Initializes the name with the type name.<br/>
         /// - Connects the model to the device.<br/>
         /// </i></remarks>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="IntegraException"></exception>
         internal IntegraModel(Integra device, bool connect = true)
         {
             Device = device ?? 
@@ -688,7 +787,12 @@ namespace IntegraXL.Core
         /// <summary>
         /// Gets wheter the model represents a collection.
         /// </summary>
-        public bool IsCollection { get; }
+        internal bool IsCollection { get; }
+
+        /// <summary>
+        /// Gets wheter the model has unsaved changes.
+        /// </summary>
+        public virtual bool IsDirty { get; protected set; }
 
         /// <summary>
         /// Gets wheter the model is initialized.
@@ -717,11 +821,12 @@ namespace IntegraXL.Core
         /// Requests the device to initialize the model.
         /// </summary>
         /// <returns>An awaitable task that returns true if the model is initialized.</returns>
-        /// <exception cref="NullReferenceException"></exception>
+        /// <exception cref="IntegraException"/>
         internal virtual async Task<bool> InitializeAsync()
         {
             if (Device == null)
-                throw new NullReferenceException($"[{nameof(IntegraModel)}]\nThe device is null.");
+                throw new IntegraException($"[{nameof(IntegraModel)}]\n" +
+                                           $"{GetType().Name}: Device is null.");
 
             if (!IsConnected)
                 Connect();
@@ -751,11 +856,11 @@ namespace IntegraXL.Core
         /// Connects the model to the device to (re)enable receiving system exclusive messages.
         /// </summary>
         /// <remarks><i>Models are connected by default on instantiation.</i></remarks>
-        /// <exception cref="NullReferenceException"></exception>
+        /// <exception cref="IntegraException"/>
         internal protected void Connect()
         {
             if (Device == null)
-                throw new NullReferenceException($"[{nameof(IntegraModel)}]\nThe device is null.");
+                throw new IntegraException($"[{nameof(IntegraModel)}.{nameof(Connect)}()]\nThe device is null.");
 
             if (IsConnected)
                 return;
@@ -767,11 +872,11 @@ namespace IntegraXL.Core
         /// <summary>
         /// Disconnects the model from the device to disable receiving system exclusive messages.
         /// </summary>
-        /// <exception cref="NullReferenceException"
+        /// <exception cref="IntegraException"/>
         internal void Disconnect()
         {
             if (Device == null)
-                throw new NullReferenceException($"[{nameof(IntegraModel)}]\nThe device is null.");
+                throw new IntegraException($"[{nameof(IntegraModel)}.{nameof(Disconnect)}()]\nThe device is null.");
 
             if (!IsConnected)
                 return;
@@ -780,6 +885,11 @@ namespace IntegraXL.Core
             IsConnected = false;
         }
 
+        /// <summary>
+        /// Method to serialize the model data to an <see cref="byte"/> array.
+        /// </summary>
+        /// <returns>Must return the model's data as an byte array.</returns>
+        /// <remarks><i>The byte array is <b>required</b> to be ordered by field offset so it can be transmitted as system exclusive data.</i></remarks>
         public abstract byte[] Serialize();
 
         /// <summary>

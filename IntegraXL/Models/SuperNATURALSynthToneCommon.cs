@@ -1,4 +1,5 @@
 ﻿using IntegraXL.Core;
+using IntegraXL.Extensions;
 using System.Text;
 
 namespace IntegraXL.Models
@@ -59,8 +60,15 @@ namespace IntegraXL.Models
             get { return Encoding.ASCII.GetString(_ToneName); }
             set
             {
-                _ToneName = Encoding.ASCII.GetBytes(value);
-                NotifyPropertyChanged();
+                if (ToneName != value)
+                {
+                    if (string.IsNullOrEmpty(value))
+                        return;
+
+                    _ToneName = Encoding.ASCII.GetBytes(value.Clamp(_ToneName.Length));
+
+                    NotifyPropertyChanged();
+                }
             }
         }
 

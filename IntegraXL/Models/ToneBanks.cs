@@ -2,6 +2,14 @@
 
 namespace IntegraXL.Models
 {
+    public static class ToneBanks
+    {
+        public static Type SuperNATURALAcousticPresets => typeof(SNAPresetToneBank);
+        public static Type SuperNATURALDrumKitPresets => typeof(SNDPresetToneBank);
+        public static Type SuperNATURALSynthPresets => typeof(SNSPresetToneBank);
+    }
+
+
 #pragma warning disable IDE0051 // Remove unused private members
 
     [Integra(0x0F000402, 0x58400000,   26)] public sealed class SNDPresetToneBank : IntegraToneBank { private SNDPresetToneBank(Integra device) : base(device) { Name = "SuperNATURAL Preset Drum Kits"; } }

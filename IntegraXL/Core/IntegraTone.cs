@@ -44,7 +44,7 @@ namespace IntegraXL.Core
         /// Gets the unique identifier for the collection.
         /// </summary>
         /// <returns>A unique identifier for the collection.</returns>
-        protected internal override int GetUID()
+        internal protected override int GetUID()
         {
             return (int)(0xFF0000FF | (Address | 0x00FFFF00));
         }

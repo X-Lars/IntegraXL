@@ -53,7 +53,7 @@ namespace IntegraXL.Core
         public override bool IsInitialized 
         { 
             get => Collection.All(x => x.IsInitialized); 
-            protected internal set => base.IsInitialized = value; 
+            internal protected set => base.IsInitialized = value; 
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace IntegraXL.Core
         /// </summary>
         /// <returns>A hash code for the collection.</returns>
         /// <remarks><i>The LSB is maxed out to specify a collection.</i></remarks>
-        protected internal override int GetUID()
+        internal protected override int GetUID()
         {
             // Base hash conflicts with the first element of the collection
             return base.GetUID() | 0xFF;

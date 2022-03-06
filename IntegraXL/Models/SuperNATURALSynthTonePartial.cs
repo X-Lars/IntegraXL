@@ -79,42 +79,45 @@ namespace IntegraXL.Models
 
         [Offset(0x0000)] IntegraOSCWave _OSCWave;
         [Offset(0x0001)] IntegraOSCWaveVariation _OSCWaveVariation;
-        [Offset(0x0002)] byte RESERVED01;
-        [Offset(0x0003)] byte _OSCPitch;
-        [Offset(0x0004)] byte _OSCDetune;
-        [Offset(0x0005)] byte _OSCPulseWidthModDepth;
-        [Offset(0x0006)] byte _OSCPulseWidth;
-        [Offset(0x0007)] byte _OSCPitchEnvAttack;
-        [Offset(0x0008)] byte _OSCPitchEnvDecay;
-        [Offset(0x0009)] byte _OSCPitchEnvDepth;
+
+        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Field exist to match the model's structure size.")]
+        [Offset(0x0002)] private readonly byte RESERVED01;
+
+        [Offset(0x0003)] private byte _OSCPitch;
+        [Offset(0x0004)] private byte _OSCDetune;
+        [Offset(0x0005)] private byte _OSCPulseWidthModDepth;
+        [Offset(0x0006)] private byte _OSCPulseWidth;
+        [Offset(0x0007)] private byte _OSCPitchEnvAttack;
+        [Offset(0x0008)] private byte _OSCPitchEnvDecay;
+        [Offset(0x0009)] private byte _OSCPitchEnvDepth;
 
         #endregion
 
         #region Fields: Filter
 
-        [Offset(0x000A)] IntegraFilterMode _FilterMode;
-        [Offset(0x000B)] byte _FilterSlope;
-        [Offset(0x000C)] byte _FilterCutoff;
-        [Offset(0x000D)] byte _FilterCutoffKeyFollow;
-        [Offset(0x000E)] byte _FilterEnvVelocitySens;
-        [Offset(0x000F)] byte _FilterResonance;
-        [Offset(0x0010)] byte _FilterEnvAttack;
-        [Offset(0x0011)] byte _FilterEnvDecay;
-        [Offset(0x0012)] byte _FilterEnvSustain;
-        [Offset(0x0013)] byte _FilterEnvRelease;
-        [Offset(0x0014)] byte _FilterEnvDepth;
+        [Offset(0x000A)] private IntegraFilterMode _FilterMode;
+        [Offset(0x000B)] private byte _FilterSlope;
+        [Offset(0x000C)] private byte _FilterCutoff;
+        [Offset(0x000D)] private byte _FilterCutoffKeyFollow;
+        [Offset(0x000E)] private byte _FilterEnvVelocitySens;
+        [Offset(0x000F)] private byte _FilterResonance;
+        [Offset(0x0010)] private byte _FilterEnvAttack;
+        [Offset(0x0011)] private byte _FilterEnvDecay;
+        [Offset(0x0012)] private byte _FilterEnvSustain;
+        [Offset(0x0013)] private byte _FilterEnvRelease;
+        [Offset(0x0014)] private byte _FilterEnvDepth;
 
         #endregion
 
         #region Fields: Amplifier
 
-        [Offset(0x0015)] byte _AmpLevel;
-        [Offset(0x0016)] byte _AmpLevelVelocitySens;
-        [Offset(0x0017)] byte _AmpEnvAttack;
-        [Offset(0x0018)] byte _AmpEnvDecay;
-        [Offset(0x0019)] byte _AmpEnvSustain;
-        [Offset(0x001A)] byte _AmpEnvRelease;
-        [Offset(0x001B)] byte _AmpPan;
+        [Offset(0x0015)] private byte _AmpLevel;
+        [Offset(0x0016)] private byte _AmpLevelVelocitySens;
+        [Offset(0x0017)] private byte _AmpEnvAttack;
+        [Offset(0x0018)] private byte _AmpEnvDecay;
+        [Offset(0x0019)] private byte _AmpEnvSustain;
+        [Offset(0x001A)] private byte _AmpEnvRelease;
+        [Offset(0x001B)] private byte _AmpPan;
 
         #endregion
 
@@ -135,30 +138,30 @@ namespace IntegraXL.Models
 
         #region Fields: Modulation
 
-        [Offset(0x0026)] IntegraLFOShape _ModulationLFOShape;
-        [Offset(0x0027)] byte _ModulationLFORate;
-        [Offset(0x0028)] IntegraSwitch _ModulationLFOTempoSyncSwitch;
-        [Offset(0x0029)] byte _ModulationLFOTempoSyncNote;
-        [Offset(0x002A)] byte _OSCPulseWidthShift;
-        [Offset(0x002B)] byte RESERVED02;
-        [Offset(0x002C)] byte _ModulationLFOPitchDepth;
-        [Offset(0x002D)] byte _ModulationLFOFilterDepth;
-        [Offset(0x002E)] byte _ModulationLFOAmpDepth;
-        [Offset(0x002F)] byte _ModulationLFOPanDepth;
+        [Offset(0x0026)] private IntegraLFOShape _ModulationLFOShape;
+        [Offset(0x0027)] private byte _ModulationLFORate;
+        [Offset(0x0028)] private IntegraSwitch _ModulationLFOTempoSyncSwitch;
+        [Offset(0x0029)] private byte _ModulationLFOTempoSyncNote;
+        [Offset(0x002A)] private byte _OSCPulseWidthShift;
+        [Offset(0x002B)] private readonly byte RESERVED02;
+        [Offset(0x002C)] private byte _ModulationLFOPitchDepth;
+        [Offset(0x002D)] private byte _ModulationLFOFilterDepth;
+        [Offset(0x002E)] private byte _ModulationLFOAmpDepth;
+        [Offset(0x002F)] private byte _ModulationLFOPanDepth;
 
         #endregion
 
         #region Fields: General
 
-        [Offset(0x0030)] byte _CutoffAftertouchSens;
-        [Offset(0x0031)] byte _LevelAftertouchSens;
-        [Offset(0x0032)] byte[] RESERVED03 = new byte[2];
-        [Offset(0x0034)] byte _WaveGain;
-        [Offset(0x0035)] int _WaveNumber;
-        [Offset(0x0039)] byte _HPFCutoff;
-        [Offset(0x003A)] byte _SuperSawDetune;
-        [Offset(0x003B)] byte _ModulationLFORateControl;
-        [Offset(0x003C)] byte _AmpLevelKeyFollow;
+        [Offset(0x0030)] private byte _CutoffAftertouchSens;
+        [Offset(0x0031)] private byte _LevelAftertouchSens;
+        [Offset(0x0032)] private readonly byte[] RESERVED03 = new byte[2];
+        [Offset(0x0034)] private byte _WaveGain;
+        [Offset(0x0035)] private int _WaveNumber;
+        [Offset(0x0039)] private byte _HPFCutoff;
+        [Offset(0x003A)] private byte _SuperSawDetune;
+        [Offset(0x003B)] private byte _ModulationLFORateControl;
+        [Offset(0x003C)] private byte _AmpLevelKeyFollow;
 
         #endregion
 

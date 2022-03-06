@@ -1,4 +1,5 @@
 ﻿using IntegraXL.Core;
+using IntegraXL.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +26,15 @@ namespace IntegraXL.Models
             get { return Encoding.ASCII.GetString(_KitName); }
             set
             {
-                _KitName = Encoding.ASCII.GetBytes(value);
-                NotifyPropertyChanged();
+                if (KitName != value)
+                {
+                    if (string.IsNullOrEmpty(value))
+                        return;
+
+                    _KitName = Encoding.ASCII.GetBytes(value.Clamp(_KitName.Length));
+
+                    NotifyPropertyChanged();
+                }
             }
         }
 

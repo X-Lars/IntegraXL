@@ -1,4 +1,5 @@
 ﻿using IntegraXL.Core;
+using IntegraXL.File;
 
 
 // TODO: Parameter context based on tone category (See Roland parameter reference)
@@ -23,12 +24,13 @@ namespace IntegraXL.Models
         public override bool IsInitialized 
         { 
             get => Common.IsInitialized; 
-            protected internal set => base.IsInitialized = value; 
+            internal protected set => base.IsInitialized = value; 
         }
 
         /// <summary>
         /// Gets the INTEGRA-7 super natural acoustic tone common model.
         /// </summary>
         public SuperNATURALAcousticToneCommon Common { get; }
+
     }
 }

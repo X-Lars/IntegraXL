@@ -484,7 +484,7 @@ namespace IntegraXL.Core
 
                         _MidiOutputDevice.SendLongMessage(new byte[] { 0xF0, 0x7E, ID, 0x06, 0x01, 0xF7 });
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         return Status = ConnectionStatus.Error;
                     }
