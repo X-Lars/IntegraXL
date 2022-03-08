@@ -104,6 +104,39 @@ namespace IntegraXL.Core
         }
     }
 
+    public class IntegraPitchDepths : Enumeration
+    {
+        public new static List<string> Values
+        {
+            get
+            {
+                List<string> values = new();
+
+                // 0.. 9
+                for (int i = 0; i < 10; i++)
+                {
+                    values.Add($"{i}");
+                }
+
+                // 10 .. 90
+                for (int i = 1; i < 10; i++)
+                {
+                    values.Add($"{i * 10}");
+                }
+
+                for (int i = 1; i < 10; i++)
+                {
+                    values.Add($"{i * 100}");
+                }
+                values.Add($"1000");
+                values.Add($"1100");
+                values.Add($"1200");
+
+                return values;
+            }
+        }
+    }
+
     public class IntegraPan : Enumeration
     {
         public new static List<string> Values
@@ -213,6 +246,23 @@ namespace IntegraXL.Core
     #endregion
 
     #region Waveforms
+
+    public enum IntegraPCMWaveGroups : int
+    {
+        INT = 0,
+        SRX01 = 1,
+        SRX02 = 2,
+        SRX03 = 3,
+        SRX04 = 4,
+        SRX05 = 5,
+        SRX06 = 6,
+        SRX07 = 7,
+        SRX08 = 8,
+        SRX09 = 9,
+        SRX10 = 10,
+        SRX11 = 11,
+        SRX12 = 12,
+    }
 
     public enum IntegraWaveFormBanks : int
     {
@@ -1824,8 +1874,8 @@ namespace IntegraXL.Core
     {
         INT        = 0x00,
         SRX        = 0x01,
-        Reserved01 = 0x02,
-        Reserved02 = 0x03
+        //Reserved01 = 0x02,
+        //Reserved02 = 0x03
     }
 
     public enum IntegraControlSwitch : byte
@@ -2371,19 +2421,19 @@ namespace IntegraXL.Core
     [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraKeyRange : byte
     { 
-        [Description("C -")]           C_  = 0x00,
+        [Description("C -")] C_  = 0x00,
         [Description("C#-")] C_S = 0x01,
-        [Description("D -")]           D_  = 0x02,
+        [Description("D -")] D_  = 0x02,
         [Description("Eb-")] E_F = 0x03,
-        [Description("E -")]           E_  = 0x04,
-        [Description("F -")]           F_  = 0x05,
+        [Description("E -")] E_  = 0x04,
+        [Description("F -")] F_  = 0x05,
         [Description("F#-")] F_S = 0x06,
-        [Description("G -")]           G_  = 0x07,
+        [Description("G -")] G_  = 0x07,
         [Description("G#-")] G_S = 0x08,
-        [Description("A-")]           A_  = 0x09,
+        [Description("A -")] A_  = 0x09,
         [Description("Bb-")] B_F = 0x0A,
-        [Description("B-")]           B_  = 0x0B,
-        [Description("C0")]           C0  = 0x0C,
+        [Description("B -")] B_  = 0x0B,
+        [Description("C 0")] C0  = 0x0C,
         [Description("C\U0001D1300")] C0S = 0x0D,
         [Description("D0")]           D0  = 0x0E,
         [Description("E\U0001D12D0")] E0F = 0x0F,

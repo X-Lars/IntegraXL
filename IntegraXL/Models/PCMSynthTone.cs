@@ -26,7 +26,12 @@ namespace IntegraXL.Models
             }
         }
 
-        
+        public int SelectedIndex
+        {
+            get => (int)_SelectedPartial;
+            set => SelectedPartial = (IntegraPCMSynthToneParts)value;
+        }
+
         public IntegraPCMSynthToneParts SelectedPartial
         {
             get => _SelectedPartial;

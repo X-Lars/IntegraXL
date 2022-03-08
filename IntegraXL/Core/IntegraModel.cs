@@ -172,6 +172,16 @@ namespace IntegraXL.Core
             return values.ToArray();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <param name="index"></param>
+        /// <exception cref="NotImplementedException"/>
+        /// <remarks><i>
+        /// - Transmits the property's backing field.<br/>
+        /// - The property is responsible for MIDI serialization of the backing field.<br/>
+        /// </i></remarks>
         internal void TransmitProperty(string propertyName, int? index = null)
         {
             //if (string.IsNullOrEmpty(propertyName))
@@ -201,6 +211,18 @@ namespace IntegraXL.Core
                         Debug.Assert(value != null);
 
                         data = new byte[] { (bool)value ? (byte)1 : (byte)0 };
+                    }
+                    else if (field.FieldType == typeof(int))
+                    {
+                        object? value = field.GetValue(this);
+                        Debug.Assert(value != null);
+
+                        byte[] bytes = BitConverter.GetBytes((int)value);
+
+                        if (BitConverter.IsLittleEndian)
+                            Array.Reverse(bytes);
+
+                        data = bytes;
                     }
                     else if (field.FieldType.IsEnum)
                     {

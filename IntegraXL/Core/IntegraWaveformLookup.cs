@@ -5,11 +5,13 @@ namespace IntegraXL.Core
 {
     internal class IntegraWaveformLookup
     {
+
         public static WaveformTemplate Template(IntegraWaveFormTypes type, IntegraWaveFormBanks bank, int id)
         {
-            List<WaveformTemplate> templates = Templates(type, bank);
+            // Type: PCM = 0, SNA = 1, SND = 2, SNS = 3
+            // Bank: INT = 0, SRX01 = 1 .. SRX12 = 12, ExSN01 = 21 .. ExSN06 = 26
 
-            return templates.Where(x => x.ID == id).FirstOrDefault();
+            return Templates(type, bank).FirstOrDefault(x => x.ID == id, new WaveformTemplate(type, bank, id, "---"));
         }
 
         public static List<WaveformTemplate> Templates(IntegraWaveFormTypes type, IntegraWaveFormBanks bank)
@@ -26,7 +28,7 @@ namespace IntegraXL.Core
             {
                 while (!reader.EndOfStream)
                 {
-                    WaveformTemplate template = LoadWaveform(reader.ReadLine());
+                    WaveformTemplate template = LoadWaveforms(reader.ReadLine());
 
                     if (template.Type != type)
                         continue;
@@ -41,7 +43,7 @@ namespace IntegraXL.Core
             return waveforms;
         }
 
-        public static WaveformTemplate LoadWaveform(string line)
+        public static WaveformTemplate LoadWaveforms(string line)
         {
             string[] values = line.Split('|');
 

@@ -9,6 +9,8 @@ namespace IntegraXL.Models
     [Integra(0x00000200, 0x00000111, 145)]
     public sealed class MFX : IntegraModel<MFX>, IParameterProvider<int>
     {
+        private List<string> _Controls = new ();
+
         #region Fields: INTEGRA-7
 
         [Offset(0x0000)] private IntegraMFXTypes _Type;
@@ -16,18 +18,18 @@ namespace IntegraXL.Models
         [Offset(0x0002)] private byte _ChorusSendLevel;
         [Offset(0x0003)] private byte _ReverbSendLevel;
         [Offset(0x0004)] private readonly byte RESERVED02;
-        [Offset(0x0005)] private IntegraMFXControlSources _ControlSource01;
-        [Offset(0x0006)] private byte _ControlSense01;
-        [Offset(0x0007)] private IntegraMFXControlSources _ControlSource02;
-        [Offset(0x0008)] private byte _ControlSense02;
-        [Offset(0x0009)] private IntegraMFXControlSources _ControlSource03;
-        [Offset(0x000A)] private byte _ControlSense03;
-        [Offset(0x000B)] private IntegraMFXControlSources _ControlSource04;
-        [Offset(0x000C)] private byte _ControlSense04;
-        [Offset(0x000D)] private IntegraMFXControlAssigns _ControlAssign01;
-        [Offset(0x000E)] private IntegraMFXControlAssigns _ControlAssign02;
-        [Offset(0x000F)] private IntegraMFXControlAssigns _ControlAssign03;
-        [Offset(0x0010)] private IntegraMFXControlAssigns _ControlAssign04;
+        [Offset(0x0005)] private IntegraMFXControlSources _ControlSource1;
+        [Offset(0x0006)] private byte _ControlSens1;
+        [Offset(0x0007)] private IntegraMFXControlSources _ControlSource2;
+        [Offset(0x0008)] private byte _ControlSens2;
+        [Offset(0x0009)] private IntegraMFXControlSources _ControlSource3;
+        [Offset(0x000A)] private byte _ControlSens3;
+        [Offset(0x000B)] private IntegraMFXControlSources _ControlSource4;
+        [Offset(0x000C)] private byte _ControlSens4;
+        [Offset(0x000D)] private byte _ControlAssign1;
+        [Offset(0x000E)] private byte _ControlAssign2;
+        [Offset(0x000F)] private byte _ControlAssign3;
+        [Offset(0x0010)] private byte _ControlAssign4;
         [Offset(0x0011)] private readonly int[] _Parameters = new int[32];
 
         #endregion
@@ -43,8 +45,12 @@ namespace IntegraXL.Models
             {
                 IsInitialized = true;
                 Type = IntegraMFXTypes.Thru;
+                //this.SetMFXProvider();
+                //_Controls = this.GetMFXControls();
                 SetParameterProvider();
             }
+
+            PropertyChanged += MFXPropertyChanged;
         }
 
         #endregion
@@ -52,9 +58,14 @@ namespace IntegraXL.Models
         #region Properties
 
         /// <summary>
-        /// Gets wheter the MFX is editable
+        /// Gets wheter the MFX is editable.
         /// </summary>
         public bool IsEditable { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public List<string> Controls => _Controls;
 
         #endregion
 
@@ -71,6 +82,7 @@ namespace IntegraXL.Models
                     _Type = value;
 
                     NotifyPropertyChanged();
+                    //_Controls = this.GetMFXControls();
                     ReinitializeAsync();
                 }
             }
@@ -105,168 +117,168 @@ namespace IntegraXL.Models
         }
 
         [Offset(0x0005)]
-        public IntegraMFXControlSources ControlSource01
+        public IntegraMFXControlSources ControlSource1
         {
-            get => _ControlSource01;
+            get => _ControlSource1;
             set
             {
-                if (_ControlSource01 != value)
+                if (_ControlSource1 != value)
                 {
-                    _ControlSource01 = value;
+                    _ControlSource1 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0006)]
-        public int ControlSense01
+        public int ControlSens1
         {
-            get => _ControlSense01.Deserialize(64);
+            get => _ControlSens1.Deserialize(64);
             set
             {
-                if (ControlSense01 != value)
+                if (ControlSens1 != value)
                 {
-                    _ControlSense01 = value.Clamp(1, 127).Serialize(64);
+                    _ControlSens1 = value.Serialize(64).Clamp(1, 127);
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0007)]
-        public IntegraMFXControlSources ControlSource02
+        public IntegraMFXControlSources ControlSource2
         {
-            get => _ControlSource02;
+            get => _ControlSource2;
             set
             {
-                if (_ControlSource02 != value)
+                if (_ControlSource2 != value)
                 {
-                    _ControlSource02 = value;
+                    _ControlSource2 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0008)]
-        public int ControlSense02
+        public int ControlSens2
         {
-            get => _ControlSense02.Deserialize(64);
+            get => _ControlSens2.Deserialize(64);
             set
             {
-                if (ControlSense02 != value)
+                if (ControlSens2 != value)
                 {
-                    _ControlSense02 = value.Clamp(1, 127).Serialize(64);
+                    _ControlSens2 = value.Serialize(64).Clamp(1, 127);
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0009)]
-        public IntegraMFXControlSources ControlSource03
+        public IntegraMFXControlSources ControlSource3
         {
-            get => _ControlSource03;
+            get => _ControlSource3;
             set
             {
-                if (_ControlSource03 != value)
+                if (_ControlSource3 != value)
                 {
-                    _ControlSource03 = value;
+                    _ControlSource3 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x000A)]
-        public int ControlSense03
+        public int ControlSens3
         {
-            get => _ControlSense03.Deserialize(64);
+            get => _ControlSens3.Deserialize(64);
             set
             {
-                if (ControlSense03 != value)
+                if (ControlSens3 != value)
                 {
-                    _ControlSense03 = value.Clamp(1, 127).Serialize(64);
+                    _ControlSens3 = value.Serialize(64).Clamp(1, 127);
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x000B)]
-        public IntegraMFXControlSources ControlSource04
+        public IntegraMFXControlSources ControlSource4
         {
-            get => _ControlSource04;
+            get => _ControlSource4;
             set
             {
-                if (_ControlSource04 != value)
+                if (_ControlSource4 != value)
                 {
-                    _ControlSource04 = value;
+                    _ControlSource4 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x000C)]
-        public int ControlSense04
+        public int ControlSens4
         {
-            get => _ControlSense04.Deserialize(64);
+            get => _ControlSens4.Deserialize(64);
             set
             {
-                if (ControlSense04 != value)
+                if (ControlSens4 != value)
                 {
-                    _ControlSense04 = value.Clamp(1, 127).Serialize(64);
+                    _ControlSens4 = value.Serialize(64).Clamp(1, 127);
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x000D)]
-        public IntegraMFXControlAssigns ControlAssign01
+        public byte ControlAssign1
         {
-            get { return _ControlAssign01; }
+            get => _ControlAssign1;
             set
             {
-                if (_ControlAssign01 != value)
+                if (_ControlAssign1 != value)
                 {
-                    _ControlAssign01 = value;
+                    _ControlAssign1 = value.Clamp(0, (byte)_Controls.Count);
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x000E)]
-        public IntegraMFXControlAssigns ControlAssign02
+        public byte ControlAssign2
         {
-            get { return _ControlAssign02; }
+            get => _ControlAssign2;
             set
             {
-                if (_ControlAssign02 != value)
+                if (_ControlAssign2 != value)
                 {
-                    _ControlAssign02 = value;
+                    _ControlAssign2 = value.Clamp(0, (byte)_Controls.Count);
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x000F)]
-        public IntegraMFXControlAssigns ControlAssign03
+        public byte ControlAssign3
         {
-            get { return _ControlAssign03; }
+            get => _ControlAssign3;
             set
             {
-                if (_ControlAssign03 != value)
+                if (_ControlAssign3 != value)
                 {
-                    _ControlAssign03 = value;
+                    _ControlAssign3 = value.Clamp(0, (byte)_Controls.Count);
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0010)]
-        public IntegraMFXControlAssigns ControlAssign04
+        public byte ControlAssign4
         {
-            get { return _ControlAssign04; }
+            get => _ControlAssign4;
             set
             {
-                if (_ControlAssign04 != value)
+                if (_ControlAssign4 != value)
                 {
-                    _ControlAssign04 = value;
+                    _ControlAssign4 = value.Clamp(0, (byte)_Controls.Count);
                     NotifyPropertyChanged();
                 }
             }
@@ -302,13 +314,16 @@ namespace IntegraXL.Models
         /// Gets the MFX parameters.
         /// </summary>
         [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
-        public IntegraParameterMapper<int>? Parameters { get; private set; }
+        public IntegraParameterMapper<int>? Parameters { get; internal set; }
 
         /// <summary>
         /// Sets the parameter provider based on the <see cref="Type"/>.
         /// </summary>
         private void SetParameterProvider()
         {
+            // TODO: Use extension method
+            //this.SetMFXProvider();
+
             switch(Type)
             {
                 case IntegraMFXTypes.Equalizer: Parameters = new Equalizer(this); break;
@@ -318,6 +333,9 @@ namespace IntegraXL.Models
                     break;
             }
 
+            _Controls = this.GetMFXControls();
+
+            //NotifyPropertyChanged(nameof(Controls));
             NotifyPropertyChanged(string.Empty);
         }
 
@@ -327,28 +345,28 @@ namespace IntegraXL.Models
 
         protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
         {
-            //base.SystemExclusiveReceived(sender, e);
+            base.SystemExclusiveReceived(sender, e);
 
-            if (e.SystemExclusive.Address == Address)
-            {
-                if (e.SystemExclusive.Data.Length == Size)
-                {
-                    //Debug.Print("*** MFX: Full ***");
-                    Initialize(e.SystemExclusive.Data);
-                }
-                else 
-                {
-                    IntegraAddress offset = new IntegraAddress(0x00000111);
-                    if (e.SystemExclusive.Address.InRange(Address, (int)(Address + offset)))
-                    {
-                        //Debug.Print("*** MFX: Parameters ***");
-                        // Parameter data received
-                        ReceivedProperty(e.SystemExclusive);
-                    }
-                }
-            }
-            
+            //if (e.SystemExclusive.Address == Address)
+            //{
+            //    if (e.SystemExclusive.Data.Length == Size)
+            //    {
+            //        //Debug.Print("*** MFX: Full ***");
+            //        Initialize(e.SystemExclusive.Data);
+            //    }
+            //    else
+            //    {
+            //        IntegraAddress offset = new IntegraAddress(0x00000111);
+            //        if (e.SystemExclusive.Address.InRange(Address, (int)(Address + offset)))
+            //        {
+            //            //Debug.Print("*** MFX: Parameters ***");
+            //            // Parameter data received
+            //            ReceivedProperty(e.SystemExclusive);
+            //        }
+            //    }
+            //}
         }
+
         /// <summary>
         /// Initializes the model with data.
         /// </summary>
@@ -358,9 +376,19 @@ namespace IntegraXL.Models
         internal override bool Initialize(byte[] data)
         {
             if (base.Initialize(data))
+            {
                 SetParameterProvider();
+            }
             
             return IsInitialized;
+        }
+
+        private void MFXPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == nameof(Type))
+            {
+                SetParameterProvider();
+            }
         }
 
         internal protected override int GetUID()

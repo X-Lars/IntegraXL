@@ -13,5 +13,11 @@
 
         public const int STORING_DATA = 0x0F001001;
         public const int STORING_COMPLETE = 0x0F001001;
+
+        public const int WAVE_COUNT_INT    = 1083;
+        
+
+
+
     }
 }

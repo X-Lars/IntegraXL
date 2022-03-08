@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using IntegraXL.Extensions;
 using System.Reflection;
+using IntegraXL.Templates;
 
 namespace IntegraXL.Models
 {
@@ -69,6 +70,12 @@ namespace IntegraXL.Models
     [Integra(0x00002000, 0x0000011A)]
     public class PCMSynthTonePartial : IntegraModel<PCMSynthTonePartial>
     {
+        #region Fields
+
+        private List<string> _WaveGroups = new();
+        private int _WaveCount;
+
+        #endregion
         #region Fields: INTEGRA-7
 
         #region Fields: General
@@ -100,6 +107,10 @@ namespace IntegraXL.Models
         [Offset(0x0015)] byte RESERVED03;
 
         [Offset(0x0016)] IntegraSwitch _RedamperSwitch;
+
+        #endregion
+
+        #region Fields: Matrix Control
 
         [Offset(0x0017)] IntegraControlSwitch _Control01Switch01;
         [Offset(0x0018)] IntegraControlSwitch _Control01Switch02;
@@ -145,15 +156,15 @@ namespace IntegraXL.Models
         [Offset(0x003C)] byte _PitchEnvTime01VelocitySens;
         [Offset(0x003D)] byte _PitchEnvTime04VelocitySens;
         [Offset(0x003E)] byte _PitchEnvTimeKeyFollow;
-        [Offset(0x003F)] byte _PitchEnvTime01;
-        [Offset(0x0040)] byte _PitchEnvTime02;
-        [Offset(0x0041)] byte _PitchEnvTime03;
-        [Offset(0x0042)] byte _PitchEnvTime04;
-        [Offset(0x0043)] byte _PitchEnvLevel00;
-        [Offset(0x0044)] byte _PitchEnvLevel01;
-        [Offset(0x0045)] byte _PitchEnvLevel02;
-        [Offset(0x0046)] byte _PitchEnvLevel03;
-        [Offset(0x0047)] byte _PitchEnvLevel04;
+        [Offset(0x003F)] byte _PitchEnvTime1;
+        [Offset(0x0040)] byte _PitchEnvTime2;
+        [Offset(0x0041)] byte _PitchEnvTime3;
+        [Offset(0x0042)] byte _PitchEnvTime4;
+        [Offset(0x0043)] byte _PitchEnvLevel0;
+        [Offset(0x0044)] byte _PitchEnvLevel1;
+        [Offset(0x0045)] byte _PitchEnvLevel2;
+        [Offset(0x0046)] byte _PitchEnvLevel3;
+        [Offset(0x0047)] byte _PitchEnvLevel4;
 
         #endregion
 
@@ -265,23 +276,66 @@ namespace IntegraXL.Models
         #endregion
 
         #region Constructor
-
         
         internal PCMSynthTonePartial(PCMSynthTone tone, int partial) : base(tone.Device)
         {
             Address += tone.Address;
-            
             Address += (partial * 2) << 8;
 
             Debug.Print($"{Address}");
-            Partial = partial;
+
+            Index = partial;
         }
 
         #endregion
 
         #region Properties
 
-        public int Partial { get; }
+        /// <summary>
+        /// Gets the selected partial.
+        /// </summary>
+        public IntegraPCMSynthToneParts Partial => (IntegraPCMSynthToneParts)Index;
+
+        /// <summary>
+        /// Gets the index of the partial.
+        /// </summary>
+        public int Index { get; }
+
+        /// <summary>
+        /// Gets the left waveform template.
+        /// </summary>
+        public WaveformTemplate WaveFormLeft
+        {
+            get
+            {
+                if(WaveGroupType == IntegraWaveGroupType.INT)
+                {
+                    return IntegraWaveformLookup.Template(IntegraWaveFormTypes.PCM, IntegraWaveFormBanks.INT, WaveNumberL);
+                }
+                else
+                {
+                    return IntegraWaveformLookup.Template(IntegraWaveFormTypes.PCM, (IntegraWaveFormBanks)WaveGroupID, WaveNumberL);
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets the right waveform template.
+        /// </summary>
+        public WaveformTemplate WaveFormRight
+        {
+            get
+            {
+                if (WaveGroupType == IntegraWaveGroupType.INT)
+                {
+                    return IntegraWaveformLookup.Template(IntegraWaveFormTypes.PCM, IntegraWaveFormBanks.INT, WaveNumberR);
+                }
+                else
+                {
+                    return IntegraWaveformLookup.Template(IntegraWaveFormTypes.PCM, (IntegraWaveFormBanks)WaveGroupID, WaveNumberR);
+                }
+            }
+        }
 
         #endregion
 
@@ -292,7 +346,7 @@ namespace IntegraXL.Models
         [Offset(0x0000)]
         public byte PartialLevel
         {
-            get { return _PartialLevel; }
+            get => _PartialLevel;
             set
             {
                 if (_PartialLevel != value)
@@ -304,39 +358,51 @@ namespace IntegraXL.Models
         }
 
         [Offset(0x0001)]
-        public byte CoarseTune
+        public int CoarseTune
         {
-            get { return _CoarseTune; }
+            get => _CoarseTune.Deserialize(64);
             set
             {
-                _CoarseTune = value;
-                NotifyPropertyChanged();
+                if (CoarseTune != value)
+                {
+                    _CoarseTune = value.Serialize(64).Clamp(16, 112);
+                    NotifyPropertyChanged();
+                }
             }
         }
+
         [Offset(0x0002)]
-        public byte FineTune
+        public int FineTune
         {
-            get { return _FineTune; }
+            get => _FineTune.Deserialize(64);
             set
             {
-                _FineTune = value;
-                NotifyPropertyChanged();
+                if (FineTune != value)
+                {
+                    _FineTune = value.Serialize(64).Clamp(14, 114);
+                    NotifyPropertyChanged();
+                }
             }
         }
+
         [Offset(0x0003)]
         public byte RandomPitchDepth
         {
-            get { return _RandomPitchDepth; }
+            get => _RandomPitchDepth;
             set
             {
-                _RandomPitchDepth = value;
-                NotifyPropertyChanged();
+                if (_RandomPitchDepth != value)
+                {
+                    _RandomPitchDepth = value.Clamp(0, 30);
+                    NotifyPropertyChanged();
+                }
             }
         }
+
         [Offset(0x0004)]
         public byte Pan
         {
-            get { return _Pan; }
+            get => _Pan;
             set
             {
                 if (_Pan != value)
@@ -346,10 +412,11 @@ namespace IntegraXL.Models
                 }
             }
         }
+
         [Offset(0x0005)]
         public int PanKeyFollow
         {
-            get { return _PanKeyFollow.Deserialize(64, 10); }
+            get => _PanKeyFollow.Deserialize(64, 10);
             set
             {
                 if (PanKeyFollow != value)
@@ -359,10 +426,11 @@ namespace IntegraXL.Models
                 }
             }
         }
+
         [Offset(0x0006)]
         public byte RandomPanDepth
         {
-            get { return _RandomPanDepth; }
+            get => _RandomPanDepth;
             set
             {
                 if (_RandomPanDepth != value)
@@ -372,10 +440,11 @@ namespace IntegraXL.Models
                 }
             }
         }
+
         [Offset(0x0007)]
         public byte AlternatePanDepth
         {
-            get { return _AlternatePanDepth; }
+            get => _AlternatePanDepth;
             set
             {
                 if (_AlternatePanDepth != value)
@@ -389,105 +458,146 @@ namespace IntegraXL.Models
         [Offset(0x0008)]
         public IntegraEnvelopeMode EnvMode
         {
-            get { return _EnvMode; }
+            get => _EnvMode;
             set
             {
-                _EnvMode = value;
-                NotifyPropertyChanged();
-            }
-        }
-        [Offset(0x0009)]
-        public IntegraDelayMode DelayMode
-        {
-            get { return _DelayMode; }
-            set
-            {
-                _DelayMode = value;
-                NotifyPropertyChanged();
+                if (_EnvMode != value)
+                {
+                    _EnvMode = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
-        //[Offset(0x000A)]
-        //public short DelayTime
-        //{
-        //    get { return _DelayTime.DeserializeShort(); }
-        //    set
-        //    {
-        //        _DelayTime = value.SerializeShort();
-        //        NotifyPropertyChanged();
-        //    }
-        //}
+        [Offset(0x0009)]
+        public IntegraDelayMode DelayMode
+        {
+            get => _DelayMode;
+            set
+            {
+                if (_DelayMode != value)
+                {
+                    _DelayMode = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        [Offset(0x000A)]
+        public short DelayTime
+        {
+            get => _DelayTime.Deserialize();
+            set
+            {
+                if (DelayTime != value)
+                {
+                    _DelayTime = value.Serialize(0, 149);
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         [Offset(0x000C)]
         public byte OutputLevel
         {
-            get { return _OutputLevel; }
+            get => _OutputLevel;
             set
             {
-                _OutputLevel = value;
-                NotifyPropertyChanged();
+                if (_OutputLevel != value)
+                {
+                    _OutputLevel = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
+
         [Offset(0x000F)]
         public byte ChorusSendLevel
         {
-            get { return _ChorusSendLevel; }
+            get => _ChorusSendLevel;
             set
             {
-                _ChorusSendLevel = value;
-                NotifyPropertyChanged();
+                if (_ChorusSendLevel != value)
+                {
+                    _ChorusSendLevel = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
+
         [Offset(0x0010)]
         public byte ReverbSendLevel
         {
-            get { return _ReverbSendLevel; }
+            get => _ReverbSendLevel;
             set
             {
-                _ReverbSendLevel = value;
-                NotifyPropertyChanged();
+                if (_ReverbSendLevel != value)
+                {
+                    _ReverbSendLevel = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
+
         [Offset(0x0012)]
         public IntegraSwitch ReceiveBender
         {
-            get { return _ReceiveBender; }
+            get => _ReceiveBender;
             set
             {
-                _ReceiveBender = value;
-                NotifyPropertyChanged();
+                if (_ReceiveBender != value)
+                {
+                    _ReceiveBender = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
+
         [Offset(0x0013)]
         public IntegraSwitch ReceiveExpression
         {
-            get { return _ReceiveExpression; }
+            get => _ReceiveExpression;
             set
             {
-                _ReceiveExpression = value;
-                NotifyPropertyChanged();
+                if (_ReceiveExpression != value)
+                {
+                    _ReceiveExpression = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
+
         [Offset(0x0014)]
         public IntegraSwitch ReceiveHold
         {
-            get { return _ReceiveHold; }
+            get => _ReceiveHold;
             set
             {
-                _ReceiveHold = value;
-                NotifyPropertyChanged();
+                if (_ReceiveHold != value)
+                {
+                    _ReceiveHold = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
+
         [Offset(0x0016)]
         public IntegraSwitch RedamperSwitch
         {
-            get { return _RedamperSwitch; }
+            get => _RedamperSwitch;
             set
             {
-                _RedamperSwitch = value;
-                NotifyPropertyChanged();
+                if (_RedamperSwitch != value)
+                {
+                    _RedamperSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
+
+        #endregion
+
+        #region Properties: Matrix Control
 
         [Offset(0x0017)]
         public IntegraControlSwitch Control01Switch01
@@ -718,112 +828,157 @@ namespace IntegraXL.Models
         #region Properties: Waveform
 
         [Offset(0x0027)]
-        public IntegraWaveGroupType WaveGroupType
+        public IntegraWaveGroupType WaveGroupType // 0 = INT, 1 = SRX
         {
-            get { return _WaveGroupType; }
+            get => _WaveGroupType;
             set
             {
-                _WaveGroupType = value;
-                NotifyPropertyChanged();
+                if (_WaveGroupType != value)
+                {
+                    _WaveGroupType = value;
+                    NotifyPropertyChanged();
+
+                    NotifyPropertyChanged(nameof(WaveFormLeft));
+                    NotifyPropertyChanged(nameof(WaveFormRight));
+
+                    //InvalidateWaveCount();
+                }
             }
         }
 
         [Offset(0x0028)]
-        public int WaveGroupID
+        public int WaveGroupID // INT = 1, SRX01 = 1 .. SRX12 = 12
         {
-            get { return _WaveGroupID; }
+            get => _WaveGroupID.Deserialize();
             set
             {
-                _WaveGroupID = value;
-                NotifyPropertyChanged();
+                if (WaveGroupID != value)
+                {
+                    _WaveGroupID = value.Clamp(1, 12).SerializeInt();
+                    NotifyPropertyChanged();
+
+                    NotifyPropertyChanged(nameof(WaveFormLeft));
+                    NotifyPropertyChanged(nameof(WaveFormRight));
+
+                    //InvalidateWaveCount();
+                }
             }
         }
 
         [Offset(0x002C)]
         public int WaveNumberL
         {
-            get { return _WaveNumberL; }
+            get => _WaveNumberL.Deserialize();
             set
             {
-                _WaveNumberL = value;
-                NotifyPropertyChanged();
+                if (WaveNumberL != value)
+                {
+                    _WaveNumberL = value.Clamp(0, IntegraConstants.WAVE_COUNT_INT).SerializeInt();
+
+                    NotifyPropertyChanged();
+                    NotifyPropertyChanged(nameof(WaveFormLeft));
+                }
             }
         }
 
         [Offset(0x0030)]
         public int WaveNumberR
         {
-            get { return _WaveNumberR; }
+            get => _WaveNumberR.Deserialize();
             set
             {
-                _WaveNumberR = value;
-                NotifyPropertyChanged();
+                if (WaveNumberR != value)
+                {
+                    _WaveNumberR = value.Clamp(0, IntegraConstants.WAVE_COUNT_INT).SerializeInt();
+
+                    NotifyPropertyChanged();
+                    NotifyPropertyChanged(nameof(WaveFormRight));
+                }
             }
         }
 
         [Offset(0x0034)]
-        public byte WaveGain
+        public int WaveGain
         {
-            get { return _WaveGain; }
+            get => _WaveGain.Deserialize(1, 6);
             set
             {
-                _WaveGain = value;
-                NotifyPropertyChanged();
+                if (WaveGain != value)
+                {
+                    _WaveGain = value.Serialize(1, 6).Clamp(0, 3);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0035)]
         public IntegraSwitch WaveFXMSwitch
         {
-            get { return _WaveFXMSwitch; }
+            get => _WaveFXMSwitch;
             set
             {
-                _WaveFXMSwitch = value;
-                NotifyPropertyChanged();
+                if (_WaveFXMSwitch != value)
+                {
+                    _WaveFXMSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0036)]
-        public byte WaveFXMColor
+        public int WaveFXMColor
         {
-            get { return _WaveFXMColor; }
+            get => _WaveFXMColor.Deserialize(-1);
+            
             set
             {
-                _WaveFXMColor = value;
-                NotifyPropertyChanged();
+                if (WaveFXMColor != value)
+                {
+                    _WaveFXMColor = value.Serialize(-1).Clamp(0, 3);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0037)]
         public byte WaveFXMDepth
         {
-            get { return _WaveFXMDepth; }
+            get => _WaveFXMDepth;
             set
             {
-                _WaveFXMDepth = value;
-                NotifyPropertyChanged();
+                if (_WaveFXMDepth != value)
+                {
+                    _WaveFXMDepth = value.Clamp(0, 16);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0038)]
         public IntegraSwitch WaveTempoSync
         {
-            get { return _WaveTempoSync; }
+            get => _WaveTempoSync;
             set
             {
-                _WaveTempoSync = value;
-                NotifyPropertyChanged();
+                if (_WaveTempoSync != value)
+                {
+                    _WaveTempoSync = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0039)]
-        public byte WavePitchKeyFollow
+        public int WavePitchKeyFollow
         {
-            get { return _WavePitchKeyFollow; }
+            get => _WavePitchKeyFollow.Deserialize(64, 10);
             set
             {
-                _WavePitchKeyFollow = value;
-                NotifyPropertyChanged();
+                if (WavePitchKeyFollow != value)
+                {
+                    _WavePitchKeyFollow = value.Serialize(64, 10).Clamp(44, 84);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -832,156 +987,198 @@ namespace IntegraXL.Models
         #region Properties: Pitch Envelope
 
         [Offset(0x003A)]
-        public byte PitchEnvDepth
+        public int PitchEnvDepth
         {
-            get { return _PitchEnvDepth; }
+            get => _PitchEnvDepth.Deserialize(64);
             set
             {
-                _PitchEnvDepth = value;
-                NotifyPropertyChanged();
+                if (PitchEnvDepth != value)
+                {
+                    _PitchEnvDepth = value.Serialize(64).Clamp(52, 76);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x003B)]
-        public byte PitchEnvVelocitySens
+        public int PitchEnvVelocitySens
         {
-            get { return _PitchEnvVelocitySens; }
+            get => _PitchEnvVelocitySens.Deserialize(64);
             set
             {
-                _PitchEnvVelocitySens = value;
-                NotifyPropertyChanged();
+                if (PitchEnvVelocitySens != value)
+                {
+                    _PitchEnvVelocitySens = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x003C)]
-        public byte PitchEnvTime01VelocitySens
+        public int PitchEnvTime01VelocitySens
         {
-            get { return _PitchEnvTime01VelocitySens; }
+            get => _PitchEnvTime01VelocitySens.Deserialize(64);
             set
             {
-                _PitchEnvTime01VelocitySens = value;
-                NotifyPropertyChanged();
+                if (PitchEnvTime01VelocitySens != value)
+                {
+                    _PitchEnvTime01VelocitySens = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x003D)]
-        public byte PitchEnvTime04VelocitySens
+        public int PitchEnvTime04VelocitySens
         {
-            get { return _PitchEnvTime04VelocitySens; }
+            get => _PitchEnvTime04VelocitySens.Deserialize(64);
             set
             {
-                _PitchEnvTime04VelocitySens = value;
-                NotifyPropertyChanged();
+                if (PitchEnvTime04VelocitySens != value)
+                {
+                    _PitchEnvTime04VelocitySens = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x003E)]
-        public byte PitchEnvTimeKeyFollow
+        public int PitchEnvTimeKeyFollow
         {
-            get { return _PitchEnvTimeKeyFollow; }
+            get => _PitchEnvTimeKeyFollow.Deserialize(64, 10);
             set
             {
-                _PitchEnvTimeKeyFollow = value;
-                NotifyPropertyChanged();
+                if (PitchEnvTimeKeyFollow != value)
+                {
+                    _PitchEnvTimeKeyFollow = value.Serialize(64, 10).Clamp(54, 74);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x003F)]
-        public byte PitchEnvTime01
+        public byte PitchEnvTime1
         {
-            get { return _PitchEnvTime01; }
+            get => _PitchEnvTime1;
             set
             {
-                _PitchEnvTime01 = value;
-                NotifyPropertyChanged();
+                if (_PitchEnvTime1 != value)
+                {
+                    _PitchEnvTime1 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0040)]
-        public byte PitchEnvTime02
+        public byte PitchEnvTime2
         {
-            get { return _PitchEnvTime02; }
+            get => _PitchEnvTime2;
             set
             {
-                _PitchEnvTime02 = value;
-                NotifyPropertyChanged();
+                if (_PitchEnvTime2 != value)
+                {
+                    _PitchEnvTime2 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0041)]
-        public byte PitchEnvTime03
+        public byte PitchEnvTime3
         {
-            get { return _PitchEnvTime03; }
+            get => _PitchEnvTime3;
             set
             {
-                _PitchEnvTime03 = value;
-                NotifyPropertyChanged();
+                if (_PitchEnvTime3 != value)
+                {
+                    _PitchEnvTime3 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0042)]
-        public byte PitchEnvTime04
+        public byte PitchEnvTime4
         {
-            get { return _PitchEnvTime04; }
+            get => _PitchEnvTime4;
             set
             {
-                _PitchEnvTime04 = value;
-                NotifyPropertyChanged();
+                if (_PitchEnvTime4 != value)
+                {
+                    _PitchEnvTime4 = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0043)]
-        public byte PitchEnvLevel00
+        public int PitchEnvLevel0
         {
-            get { return _PitchEnvLevel00; }
+            get => _PitchEnvLevel0.Deserialize(64);
             set
             {
-                _PitchEnvLevel00 = value;
-                NotifyPropertyChanged();
+                if (PitchEnvLevel0 != value)
+                {
+                    _PitchEnvLevel0 = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0044)]
-        public byte PitchEnvLevel01
+        public int PitchEnvLevel1
         {
-            get { return _PitchEnvLevel01; }
+            get => _PitchEnvLevel1.Deserialize(64);
             set
             {
-                _PitchEnvLevel01 = value;
-                NotifyPropertyChanged();
+                if (PitchEnvLevel1 != value)
+                {
+                    _PitchEnvLevel1 = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0045)]
-        public byte PitchEnvLevel02
+        public int PitchEnvLevel2
         {
-            get { return _PitchEnvLevel02; }
+            get => _PitchEnvLevel2.Deserialize(64);
             set
             {
-                _PitchEnvLevel02 = value;
-                NotifyPropertyChanged();
+                if (PitchEnvLevel2 != value)
+                {
+                    _PitchEnvLevel2 = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0046)]
-        public byte PitchEnvLevel03
+        public int PitchEnvLevel3
         {
-            get { return _PitchEnvLevel03; }
+            get => _PitchEnvLevel3.Deserialize(64);
             set
             {
-                _PitchEnvLevel03 = value;
-                NotifyPropertyChanged();
+                if (PitchEnvLevel3 != value)
+                {
+                    _PitchEnvLevel3 = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0047)]
-        public byte PitchEnvLevel04
+        public int PitchEnvLevel4
         {
-            get { return _PitchEnvLevel04; }
+            get => _PitchEnvLevel4.Deserialize(64);
             set
             {
-                _PitchEnvLevel04 = value;
-                NotifyPropertyChanged();
+                if (PitchEnvLevel4 != value)
+                {
+                    _PitchEnvLevel4 = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -2137,6 +2334,63 @@ namespace IntegraXL.Models
 
         #endregion
 
+        #region Methods
+
+        private void InvalidateWaveCount()
+        {
+            //if(WaveGroupType == IntegraWaveGroupType.INT)
+            //{
+            //    WaveCount = IntegraConstants.WAVE_COUNT_INT;
+            //}
+            //else
+            //{
+            //    switch((IntegraWaveFormBanks)WaveGroupID)
+            //    {
+            //        case IntegraWaveFormBanks.SRX01: WaveCount = IntegraConstants.WAVE_COUNT_SRX01; break;
+            //        case IntegraWaveFormBanks.SRX02: WaveCount = IntegraConstants.WAVE_COUNT_SRX02; break;
+            //        case IntegraWaveFormBanks.SRX03: WaveCount = IntegraConstants.WAVE_COUNT_SRX03; break;
+            //        case IntegraWaveFormBanks.SRX04: WaveCount = IntegraConstants.WAVE_COUNT_SRX04; break;
+            //        case IntegraWaveFormBanks.SRX05: WaveCount = IntegraConstants.WAVE_COUNT_SRX05; break;
+            //        case IntegraWaveFormBanks.SRX06: WaveCount = IntegraConstants.WAVE_COUNT_SRX06; break;
+            //        case IntegraWaveFormBanks.SRX07: WaveCount = IntegraConstants.WAVE_COUNT_SRX07; break;
+            //        case IntegraWaveFormBanks.SRX08: WaveCount = IntegraConstants.WAVE_COUNT_SRX08; break;
+            //        case IntegraWaveFormBanks.SRX09: WaveCount = IntegraConstants.WAVE_COUNT_SRX09; break;
+            //        case IntegraWaveFormBanks.SRX10: WaveCount = IntegraConstants.WAVE_COUNT_SRX10; break;
+            //        case IntegraWaveFormBanks.SRX11: WaveCount = IntegraConstants.WAVE_COUNT_SRX11; break;
+            //        case IntegraWaveFormBanks.SRX12: WaveCount = IntegraConstants.WAVE_COUNT_SRX12; break;
+            //    }
+            //}
+
+            NotifyPropertyChanged(nameof(WaveFormLeft));
+            NotifyPropertyChanged(nameof(WaveFormRight));
+
+            // CLAMP WAVE NUMBERS TO THE WAVE COUNT
+            //if (WaveNumberL > WaveCount)
+            //    WaveNumberL = WaveCount;
+            //if (WaveNumberR > WaveCount)
+            //    WaveNumberR = WaveCount;
+        }
+
+        #endregion
+
+        #region Overrides: Model
+
+        /// <summary>
+        /// Gets wheter the model is initialized.
+        /// </summary>
+        public override bool IsInitialized
+        {
+            get => base.IsInitialized;
+            protected internal set
+            {
+                base.IsInitialized = value;
+
+                InvalidateWaveCount();
+            }
+        }
+
+        #endregion
+
         #region Enumerations
 
         public List<string> PanValues
@@ -2148,6 +2402,12 @@ namespace IntegraXL.Models
         {
             get { return IntegraExtendedRate.Values; }
         }
+
+        public List<string> PitchDepths
+        {
+            get { return IntegraPitchDepths.Values; }
+        }
+
         #endregion
 
     }

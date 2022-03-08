@@ -63,6 +63,11 @@ namespace IntegraXL.Extensions
             return value;
         }
 
+        public static short Clamp(this short value, byte min = 0, byte max = 127)
+        {
+            Debug.Assert(min <= max);
+            return Math.Max(Math.Min(value, max), min);
+        }
         //public static short Clamp(this short value, short min = 0, short max = 127)
         //{
         //    Debug.Assert(min < max);
@@ -80,7 +85,7 @@ namespace IntegraXL.Extensions
         /// <param name="offset">The offset to add.</param>
         /// <returns></returns>
         /// <remarks><i>The optional offset is added to the value.</i></remarks>
-        public static byte Serialize(this int value, byte offset = 0)
+        public static byte Serialize(this int value, int offset = 0)
         {
             Debug.Assert(value + offset >= 0);
             Debug.Assert(value + offset < 128);
@@ -97,12 +102,13 @@ namespace IntegraXL.Extensions
         /// <remarks><i>The optional offset is <b>subtracted</b> from the byte value.</i></remarks>
         public static int Deserialize(this byte value, int offset = 0)
         {
-            Debug.Assert(offset >= 0);
+            //Debug.Assert(offset >= 0);
             Debug.Assert(offset <= 64);
 
             return value - offset;
         }
 
+       
         /// <summary>
         /// Serializes a signd <see cref="int"/> to a MIDI byte divided by a factor.
         /// </summary>
@@ -189,6 +195,22 @@ namespace IntegraXL.Extensions
                 Array.Reverse(bytes);
 
             return BitConverter.ToInt32(bytes, 0);
+        }
+
+        /// <summary>
+        /// Deserializes a MIDI integer.
+        /// </summary>
+        /// <param name="value">The value to deserialize.</param>
+        /// <returns>A deserialized MIDI integer value.</returns>
+        public static int Deserialize(this int value)
+        {
+            byte[] values = BitConverter.GetBytes(value);
+
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(values);
+
+            // TODO: ? Remove logical AND's ?
+            return (values[0]) << 12 | (values[1]) << 8 | (values[2]) << 4 | (values[3]);
         }
 
         //public static int MIDIValue(this short value)
