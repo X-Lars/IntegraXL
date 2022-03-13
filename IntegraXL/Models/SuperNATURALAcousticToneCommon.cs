@@ -18,7 +18,7 @@ namespace IntegraXL.Models
         [Offset(0x000C)] byte[] RESERVED01 = new byte[4];
         [Offset(0x0010)] byte _ToneLevel;
         [Offset(0x0011)] IntegraMonyPolySwitch _MonoPoly;
-        [Offset(0x0012)] byte _PortamentTimeOffset;
+        [Offset(0x0012)] byte _PortamentoTimeOffset;
         [Offset(0x0013)] byte _CutoffOffset;
         [Offset(0x0014)] byte _ResonanceOffset;
         [Offset(0x0015)] byte _AttackTimeOffset;
@@ -27,8 +27,8 @@ namespace IntegraXL.Models
         [Offset(0x0018)] byte _VibratoDepth;
         [Offset(0x0019)] byte _VibratoDelay;
         [Offset(0x001A)] byte _OctaveShift;
-        [Offset(0x001B)] byte _Category;
-        [Offset(0x001C)] byte[] _PhraseNumber = new byte[2];
+        [Offset(0x001B)] IntegraTemporaryToneCategories _Category;
+        [Offset(0x001C)] IntegraSNAPhrase _PhraseNumber;
         [Offset(0x001E)] byte _PhraseOctaveShift;
         [Offset(0x001F)] IntegraSwitch _TFXSwitch;
         [Offset(0x0020)] byte _InstVariation;
@@ -44,6 +44,20 @@ namespace IntegraXL.Models
         internal SuperNATURALAcousticToneCommon(SuperNATURALAcousticTone tone) : base(tone.Device) 
         {
             Address = tone.Address;
+        }
+
+        #endregion
+
+        #region Properties
+
+        public IntegraSNAInstruments Instrument
+        {
+            get => this.GetInstrument();
+            set
+            {
+                this.SetInstrument(value);
+                NotifyPropertyChanged();
+            }
         }
 
         #endregion
@@ -71,12 +85,12 @@ namespace IntegraXL.Models
         [Offset(0x0010)]
         public byte ToneLevel
         {
-            get { return _ToneLevel; }
+            get => _ToneLevel;
             set
             {
                 if (_ToneLevel != value)
                 {
-                    _ToneLevel = value;
+                    _ToneLevel = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -84,7 +98,7 @@ namespace IntegraXL.Models
         [Offset(0x0011)]
         public IntegraMonyPolySwitch MonoPoly
         {
-            get { return _MonoPoly; }
+            get => _MonoPoly;
             set
             {
                 if (_MonoPoly != value)
@@ -96,14 +110,14 @@ namespace IntegraXL.Models
         }
 
         [Offset(0x0012)]
-        public byte PortamentoTimeOffset
+        public int PortamentoTimeOffset
         {
-            get { return _PortamentTimeOffset; }
+            get => _PortamentoTimeOffset.Deserialize(64);
             set
             {
-                if (_PortamentTimeOffset != value)
+                if (PortamentoTimeOffset != value)
                 {
-                    _PortamentTimeOffset = value;
+                    _PortamentoTimeOffset = value.Serialize(64).Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -111,28 +125,28 @@ namespace IntegraXL.Models
 
 
         [Offset(0x0013)]
-        public byte CutoffOffset
+        public int CutoffOffset
         {
-            get { return _CutoffOffset; }
+            get => _CutoffOffset.Deserialize(64);
             set
             {
-                if (_CutoffOffset != value)
+                if (CutoffOffset != value)
                 {
-                    _CutoffOffset = value;
+                    _CutoffOffset = value.Serialize(64).Clamp();
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0014)]
-        public byte ResonanceOffset
+        public int ResonanceOffset
         {
-            get { return _ResonanceOffset; }
+            get => _ResonanceOffset.Deserialize(64);
             set
             {
-                if (_ResonanceOffset != value)
+                if (ResonanceOffset != value)
                 {
-                    _ResonanceOffset = value;
+                    _ResonanceOffset = value.Serialize(64).Clamp();
                     NotifyPropertyChanged();
                 }
                 
@@ -140,92 +154,92 @@ namespace IntegraXL.Models
         }
 
         [Offset(0x0015)]
-        public byte AttackTimeOffset
+        public int AttackTimeOffset
         {
-            get { return _AttackTimeOffset; }
+            get => _AttackTimeOffset.Deserialize(64);
             set
             {
-                if (_AttackTimeOffset != value)
+                if (AttackTimeOffset != value)
                 {
-                    _AttackTimeOffset = value;
+                    _AttackTimeOffset = value.Serialize(64).Clamp();
                     NotifyPropertyChanged();
                 }
             }
         }
         [Offset(0x0016)]
-        public byte ReleaseTimeOffset
+        public int ReleaseTimeOffset
         {
-            get { return _ReleaseTimeOffset; }
+            get => _ReleaseTimeOffset.Deserialize(64);
             set
             {
-                if (_ReleaseTimeOffset != value)
+                if (ReleaseTimeOffset != value)
                 {
-                    _ReleaseTimeOffset = value;
+                    _ReleaseTimeOffset = value.Serialize(64).Clamp();
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0017)]
-        public byte VibratoRate
+        public int VibratoRate
         {
-            get { return _VibratoRate; }
+            get => _VibratoRate.Deserialize(64);
             set
             {
-                if (_VibratoRate != value)
+                if (VibratoRate != value)
                 {
-                    _VibratoRate = value;
+                    _VibratoRate = value.Serialize(64).Clamp();
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0018)]
-        public byte VibratoDepth
+        public int VibratoDepth
         {
-            get { return _VibratoDepth; }
+            get => _VibratoDepth.Deserialize(64);
             set
             {
-                if (_VibratoDepth != value)
+                if (VibratoDepth != value)
                 {
-                    _VibratoDepth = value;
+                    _VibratoDepth = value.Serialize(64).Clamp();
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0019)]
-        public byte VibratoDelay
+        public int VibratoDelay
         {
-            get { return _VibratoDelay; }
+            get => _VibratoDelay.Deserialize(64);
             set
             {
-                if (_VibratoDelay != value)
+                if (VibratoDelay != value)
                 {
-                    _VibratoDelay = value;
+                    _VibratoDelay = value.Serialize(64).Clamp();
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x001A)]
-        public byte OctaveShift
+        public int OctaveShift
         {
-            get { return _OctaveShift; }
+            get => _OctaveShift.Deserialize(64);
             set
             {
-                if (_OctaveShift != value)
+                if (OctaveShift != value)
                 {
-                    _OctaveShift = value;
+                    _OctaveShift = value.Serialize(64).Clamp(61, 67);
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x001B)]
-        public byte Category
+        public IntegraTemporaryToneCategories Category
         {
-            get { return _Category; }
+            get => _Category;
             set
             {
                 if (_Category != value)
@@ -236,30 +250,29 @@ namespace IntegraXL.Models
             }
         }
 
-        // TODO:
-        //[Offset(0x001C)]
-        //public short PhraseNumber
-        //{
-        //    get { return _PhraseNumber.DeserializeShort(); }
-        //    set
-        //    {
-        //        if (_PhraseNumber.DeserializeShort() != value)
-        //        {
-        //            _PhraseNumber = value.SerializeShort();
-        //            NotifyPropertyChanged();
-        //        }
-        //    }
-        //}
-
-        [Offset(0x001E)]
-        public byte PhraseOctaveShift
+        [Offset(0x001C)]
+        public IntegraSNAPhrase PhraseNumber
         {
-            get { return _PhraseOctaveShift; }
+            get => _PhraseNumber;
             set
             {
-                if (_PhraseOctaveShift != value)
+                if (PhraseNumber != value)
                 {
-                    _PhraseOctaveShift = value;
+                    _PhraseNumber = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        [Offset(0x001E)]
+        public int PhraseOctaveShift
+        {
+            get => _PhraseOctaveShift.Deserialize(64);
+            set
+            {
+                if (PhraseOctaveShift != value)
+                {
+                    _PhraseOctaveShift = value.Serialize(64).Clamp(61, 67);
                     NotifyPropertyChanged();
                 }
             }
@@ -279,6 +292,7 @@ namespace IntegraXL.Models
             }
         }
 
+       
         [Offset(0x0020)]
         public byte InstVariation
         {
@@ -289,6 +303,8 @@ namespace IntegraXL.Models
                 {
                     _InstVariation = value;
                     NotifyPropertyChanged();
+                    NotifyPropertyChanged(nameof(Instrument));
+                    //ReinitializeAsync();
                 }
             }
         }
@@ -303,6 +319,7 @@ namespace IntegraXL.Models
                 {
                     _InstNumber = value;
                     NotifyPropertyChanged();
+                    NotifyPropertyChanged(nameof(Instrument));
                     ReinitializeAsync();
                 }
             }
@@ -415,10 +432,14 @@ namespace IntegraXL.Models
             //Debug.Assert(data[33] < 0);
             base.Initialize(data);
 
-            Parameters = this.GetParameterType();
+            //Parameters = this.GetParameterType();
+            Parameters = this.NewGetParameterType();
+
+
+            TypeChanged?.Invoke(this, new IntegraTypeChangedEventArgs(Parameters?.GetType()));
             NotifyPropertyChanged(string.Empty);
 
-            Debug.Print($"[{GetType().Name}] Parameter Type: {Parameters.GetType().Name}");
+            //Debug.Print($"[{GetType().Name}] Parameter Type: {Parameters.GetType().Name}");
 
             return IsInitialized = true;
         }

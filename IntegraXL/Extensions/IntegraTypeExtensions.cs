@@ -210,7 +210,7 @@ namespace IntegraXL.Extensions
                 Array.Reverse(values);
 
             // TODO: ? Remove logical AND's ?
-            return (values[0]) << 12 | (values[1]) << 8 | (values[2]) << 4 | (values[3]);
+            return (values[0] & 0x0F) << 12 | (values[1] & 0x0F) << 8 | (values[2] & 0x0F) << 4 | (values[3] & 0x0F);
         }
 
         //public static int MIDIValue(this short value)

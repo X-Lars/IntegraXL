@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace IntegraXL.Core
+﻿namespace IntegraXL.Core
 {
+    /// <summary>
+    /// Base exception for exceptions raised from within the <see cref="IntegraXL"/> namespace.
+    /// </summary>
     public class IntegraException : Exception
     {
         public IntegraException(string message) : base(message) { }

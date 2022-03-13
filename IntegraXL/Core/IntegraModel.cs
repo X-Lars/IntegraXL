@@ -84,13 +84,30 @@ namespace IntegraXL.Core
                 {
                     object? value = field.GetValue(this);
                     Debug.Assert(value != null);
+
                     values.Add((byte)value);
                 }
                 else if (field.FieldType == typeof(bool))
                 {
                     object? value = field.GetValue(this);
                     Debug.Assert(value != null);
+
                     values.Add((bool)value ? (byte)1 : (byte)0);
+                }
+                else if (field.FieldType == typeof(int))
+                {
+                    object? value = field.GetValue(this);
+                    Debug.Assert(value != null);
+
+                    byte[] bytes = BitConverter.GetBytes((int)value);
+
+                    if (BitConverter.IsLittleEndian)
+                        Array.Reverse(bytes);
+
+                    for (int b = 0; b < 4; b++)
+                    {
+                        values.Add(bytes[b]);
+                    }
                 }
                 else if (field.FieldType.IsEnum)
                 {
@@ -100,6 +117,7 @@ namespace IntegraXL.Core
                     {
                         object? value = field.GetValue(this);
                         Debug.Assert(value != null);
+
                         values.Add((byte)value);
                     }
                     else if (type == typeof(int))
@@ -116,6 +134,22 @@ namespace IntegraXL.Core
                         {
                             values.Add(bytes[b]);
                         }
+                    }
+                    else if (type == typeof(short))
+                    {
+                        object? value = field.GetValue(this);
+                        Debug.Assert(value != null);
+
+                        byte[] bytes = BitConverter.GetBytes((short)value);
+
+                        if (BitConverter.IsLittleEndian)
+                            Array.Reverse(bytes);
+
+                        for (int b = 0; b < 2; b++)
+                        {
+                            values.Add(bytes[b]);
+                        }
+
                     }
                     else
                     {
@@ -168,6 +202,8 @@ namespace IntegraXL.Core
                     }
                 }
             }
+
+            Debug.Print($"[{nameof(IntegraModel)}.{nameof(Serialize)}<{GetType().Name}>] {string.Join(" ", (values.ToArray()).Select(x => string.Format("{0:X2}", x)))}");
 
             return values.ToArray();
         }
@@ -244,7 +280,19 @@ namespace IntegraXL.Core
                                 Array.Reverse(bytes);
 
                             data = bytes;
-                            
+                        }
+                        else if (type == typeof(short))
+                        {
+                            object? value = field.GetValue(this);
+                            Debug.Assert(value != null);
+
+                            byte[] bytes = BitConverter.GetBytes((short)value);
+
+                            if (BitConverter.IsLittleEndian)
+                                Array.Reverse(bytes);
+
+                            data = bytes;
+
                         }
                         else
                         {
@@ -281,7 +329,6 @@ namespace IntegraXL.Core
 
                             data = bytes;
                             offset += (int)(index * 4);
-
                         }
                         else
                         {
@@ -394,6 +441,22 @@ namespace IntegraXL.Core
 
 
                     }
+                    else if (type == typeof(short))
+                    {
+                        byte[] bytes = new byte[2];
+
+                        for (int i = 0; i < bytes.Length; i++)
+                        {
+                            bytes[i] = systemExclusive.Data[dataOffset + i];
+                        }
+
+                        if (BitConverter.IsLittleEndian)
+                            Array.Reverse(bytes);
+
+                        field.SetValue(this, BitConverter.ToInt16(bytes, 0));
+
+                        dataOffset += 1;
+                    }
                     else
                     {
                         throw new NotImplementedException($"{GetType().Name}.{nameof(ReceivedProperty)}] {field.FieldType.Name} {field.Name}");
@@ -491,6 +554,7 @@ namespace IntegraXL.Core
         {
             IsInitialized = false;
 
+            Debug.Print($"[{nameof(IntegraModel)}.{nameof(Load)}<{GetType().Name}>] {string.Join(" ", (data.Select(x => string.Format("{0:X2}", x))))}");
             Device.TransmitSystemExclusive(new IntegraSystemExclusive(Address, 0, data));
 
             Initialize(data);
@@ -580,6 +644,7 @@ namespace IntegraXL.Core
                     {
                         field.Value.SetValue(this, data[field.Key]);
                     }
+                    
                     else if(type == typeof(int))
                     {
                         byte[] bytes = new byte[4];
@@ -593,6 +658,20 @@ namespace IntegraXL.Core
                             Array.Reverse(bytes);
 
                         field.Value.SetValue(this, BitConverter.ToInt32(bytes, 0));
+                    }
+                    else if (type == typeof(short))
+                    {
+                        byte[] bytes = new byte[2];
+
+                        for (int i = 0; i < bytes.Length; i++)
+                        {
+                            bytes[i] = data[field.Key + i];
+                        }
+
+                        if (BitConverter.IsLittleEndian)
+                            Array.Reverse(bytes);
+
+                        field.Value.SetValue(this, BitConverter.ToInt16(bytes, 0));
                     }
                     else
                     {
@@ -828,6 +907,8 @@ namespace IntegraXL.Core
             {
                 if (_IsInitialized != value)
                 {
+                    Debug.Print($"[{GetType().Name}] {nameof(IsInitialized)} = {value}");
+
                     _IsInitialized = value;
 
                     NotifyPropertyChanged(string.Empty);

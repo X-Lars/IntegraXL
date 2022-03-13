@@ -16,17 +16,17 @@ namespace IntegraXL.Models
 
         [Offset(0x0000)] private byte[] _NameData = new byte[16];
 
-        [Offset(0x0010)] private readonly byte[] _Reserved01 = new byte[8];
+        [Offset(0x0010)] private readonly byte[] RESERVED1 = new byte[8];
 
-        [Offset(0x0018)] private byte _VoiceReserve01;
-        [Offset(0x0019)] private byte _VoiceReserve02;
-        [Offset(0x001A)] private byte _VoiceReserve03;
-        [Offset(0x001B)] private byte _VoiceReserve04;
-        [Offset(0x001C)] private byte _VoiceReserve05;
-        [Offset(0x001D)] private byte _VoiceReserve06;
-        [Offset(0x001E)] private byte _VoiceReserve07;
-        [Offset(0x001F)] private byte _VoiceReserve08;
-        [Offset(0x0020)] private byte _VoiceReserve09;
+        [Offset(0x0018)] private byte _VoiceReserve1;
+        [Offset(0x0019)] private byte _VoiceReserve2;
+        [Offset(0x001A)] private byte _VoiceReserve3;
+        [Offset(0x001B)] private byte _VoiceReserve4;
+        [Offset(0x001C)] private byte _VoiceReserve5;
+        [Offset(0x001D)] private byte _VoiceReserve6;
+        [Offset(0x001E)] private byte _VoiceReserve7;
+        [Offset(0x001F)] private byte _VoiceReserve8;
+        [Offset(0x0020)] private byte _VoiceReserve9;
         [Offset(0x0021)] private byte _VoiceReserve10;
         [Offset(0x0022)] private byte _VoiceReserve11;
         [Offset(0x0023)] private byte _VoiceReserve12;
@@ -35,32 +35,32 @@ namespace IntegraXL.Models
         [Offset(0x0026)] private byte _VoiceReserve15;
         [Offset(0x0027)] private byte _VoiceReserve16;
 
-        [Offset(0x0028)] private byte[] _Reserved02 = new byte[17];
+        [Offset(0x0028)] private readonly byte[] RESERVED2 = new byte[17];
 
-        [Offset(0x0039)] private IntegraControlSources _ToneControl01;
-        [Offset(0x003A)] private IntegraControlSources _ToneControl02;
-        [Offset(0x003B)] private IntegraControlSources _ToneControl03;
-        [Offset(0x003C)] private IntegraControlSources _ToneControl04;
-        [Offset(0x003D)] private byte[] _StudioSetTempoData = new byte[2];
-        [Offset(0x003F)] private byte _SoloPart;
-        [Offset(0x0040)] private bool _ReverbSwitch;
-        [Offset(0x0041)] private bool _ChorusSwitch;
-        [Offset(0x0042)] private bool _MasterEQSwitch;
-        [Offset(0x0043)] private bool _DrumCompEQSwitch;
+        [Offset(0x0039)] private IntegraControlSources _ToneControl1;
+        [Offset(0x003A)] private IntegraControlSources _ToneControl2;
+        [Offset(0x003B)] private IntegraControlSources _ToneControl3;
+        [Offset(0x003C)] private IntegraControlSources _ToneControl4;
+        [Offset(0x003D)] private byte[] _Tempo = new byte[2];
+        [Offset(0x003F)] private SoloParts _SoloPart;
+        [Offset(0x0040)] private IntegraSwitch _ReverbSwitch;
+        [Offset(0x0041)] private IntegraSwitch _ChorusSwitch;
+        [Offset(0x0042)] private IntegraSwitch _MasterEQSwitch;
+        [Offset(0x0043)] private IntegraSwitch _DrumCompEQSwitch;
         [Offset(0x0044)] private Parts _DrumCompEQPart;
-        [Offset(0x0045)] private IntegraOutputAssigns _DrumCompEQOutputAssign01;
-        [Offset(0x0046)] private IntegraOutputAssigns _DrumCompEQOutputAssign02;
-        [Offset(0x0047)] private IntegraOutputAssigns _DrumCompEQOutputAssign03;
-        [Offset(0x0048)] private IntegraOutputAssigns _DrumCompEQOutputAssign04;
-        [Offset(0x0049)] private IntegraOutputAssigns _DrumCompEQOutputAssign05;
-        [Offset(0x004A)] private IntegraOutputAssigns _DrumCompEQOutputAssign06;
-        
-        [Offset(0x004B)] private readonly byte _Reserved03;
+        [Offset(0x0045)] private IntegraOutputAssigns _DrumCompEQOutputAssign1;
+        [Offset(0x0046)] private IntegraOutputAssigns _DrumCompEQOutputAssign2;
+        [Offset(0x0047)] private IntegraOutputAssigns _DrumCompEQOutputAssign3;
+        [Offset(0x0048)] private IntegraOutputAssigns _DrumCompEQOutputAssign4;
+        [Offset(0x0049)] private IntegraOutputAssigns _DrumCompEQOutputAssign5;
+        [Offset(0x004A)] private IntegraOutputAssigns _DrumCompEQOutputAssign6;
+
+        [Offset(0x004B)] private readonly byte RESERVED3;
 
         [Offset(0x004C)] private byte _ExtPartLevel;
         [Offset(0x004D)] private byte _ExtPartChorusSendLevel;
         [Offset(0x004E)] private byte _ExtPartReverbSendLevel;
-        [Offset(0x004F)] private bool _ExtPartMuteSwitch;
+        [Offset(0x004F)] private IntegraSwitch _ExtPartMuteSwitch;
 
         [Offset(0x0050)] private readonly byte[] _Reserved04 = new byte[4];
 
@@ -78,11 +78,8 @@ namespace IntegraXL.Models
         [Offset(0x0000)]
         public new string Name
         {
-            get
-            {
-                // Convert the backing field byte array to string
-                return Encoding.ASCII.GetString(_NameData, 0, _NameData.Length);
-            }
+            // Convert the backing field byte array to string
+            get => Encoding.ASCII.GetString(_NameData, 0, _NameData.Length);
             set
             {
                 if (Name != value)
@@ -100,178 +97,226 @@ namespace IntegraXL.Models
         #region Properties: Voice Reserves
 
         [Offset(0x0018)]
-        public byte VoiceReserve01
+        public byte VoiceReserve1
         {
-            get { return _VoiceReserve01; }
+            get => _VoiceReserve1;
             set
             {
-                _VoiceReserve01 = value;
-                NotifyPropertyChanged();
+                if (_VoiceReserve1 != value)
+                {
+                    _VoiceReserve1 = value.Clamp(0, 64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0019)]
-        public byte VoiceReserve02
+        public byte VoiceReserve2
         {
-            get { return _VoiceReserve02; }
+            get => _VoiceReserve2;
             set
             {
-                _VoiceReserve02 = value;
-                NotifyPropertyChanged();
+                if (_VoiceReserve2 != value)
+                {
+                    _VoiceReserve2 = value.Clamp(0, 64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x001A)]
-        public byte VoiceReserve03
+        public byte VoiceReserve3
         {
-            get { return _VoiceReserve03; }
+            get => _VoiceReserve3;
             set
             {
-                _VoiceReserve03 = value;
-                NotifyPropertyChanged();
+                if (_VoiceReserve3 != value)
+                {
+                    _VoiceReserve3 = value.Clamp(0, 64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x001B)]
-        public byte VoiceReserve04
+        public byte VoiceReserve4
         {
-            get { return _VoiceReserve04; }
+            get => _VoiceReserve4;
             set
             {
-                _VoiceReserve04 = value;
-                NotifyPropertyChanged();
+                if (_VoiceReserve4 != value)
+                {
+                    _VoiceReserve4 = value.Clamp(0, 64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x001C)]
-        public byte VoiceReserve05
+        public byte VoiceReserve5
         {
-            get { return _VoiceReserve05; }
+            get => _VoiceReserve5;
             set
             {
-                _VoiceReserve05 = value;
-                NotifyPropertyChanged();
+                if (_VoiceReserve5 != value)
+                {
+                    _VoiceReserve5 = value.Clamp(0, 64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x001D)]
-        public byte VoiceReserve06
+        public byte VoiceReserve6
         {
-            get { return _VoiceReserve06; }
+            get => _VoiceReserve6;
             set
             {
-                _VoiceReserve06 = value;
-                NotifyPropertyChanged();
+                if (_VoiceReserve6 != value)
+                {
+                    _VoiceReserve6 = value.Clamp(0, 64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x001E)]
-        public byte VoiceReserve07
+        public byte VoiceReserve7
         {
-            get { return _VoiceReserve07; }
+            get => _VoiceReserve7;
             set
             {
-                _VoiceReserve07 = value;
-                NotifyPropertyChanged();
+                if (_VoiceReserve7 != value)
+                {
+                    _VoiceReserve7 = value.Clamp(0, 64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x001F)]
-        public byte VoiceReserve08
+        public byte VoiceReserve8
         {
-            get { return _VoiceReserve08; }
+            get => _VoiceReserve8;
             set
             {
-                _VoiceReserve08 = value;
-                NotifyPropertyChanged();
+                if (_VoiceReserve8 != value)
+                {
+                    _VoiceReserve8 = value.Clamp(0, 64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0020)]
-        public byte VoiceReserve09
+        public byte VoiceReserve9
         {
-            get { return _VoiceReserve09; }
+            get => _VoiceReserve9;
             set
             {
-                _VoiceReserve09 = value;
-                NotifyPropertyChanged();
+                if (_VoiceReserve9 != value)
+                {
+                    _VoiceReserve9 = value.Clamp(0, 64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0021)]
         public byte VoiceReserve10
         {
-            get { return _VoiceReserve10; }
+            get => _VoiceReserve10;
             set
             {
-                _VoiceReserve10 = value;
-                NotifyPropertyChanged();
+                if (_VoiceReserve10 != value)
+                {
+                    _VoiceReserve10 = value.Clamp(0, 64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0022)]
         public byte VoiceReserve11
         {
-            get { return _VoiceReserve11; }
+            get => _VoiceReserve11;
             set
             {
-                _VoiceReserve11 = value;
-                NotifyPropertyChanged();
+                if (_VoiceReserve11 != value)
+                {
+                    _VoiceReserve11 = value.Clamp(0, 64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0023)]
         public byte VoiceReserve12
         {
-            get { return _VoiceReserve12; }
+            get => _VoiceReserve12;
             set
             {
-                _VoiceReserve12 = value;
-                NotifyPropertyChanged();
+                if (_VoiceReserve12 != value)
+                {
+                    _VoiceReserve12 = value.Clamp(0, 64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0024)]
         public byte VoiceReserve13
         {
-            get { return _VoiceReserve13; }
+            get => _VoiceReserve13;
             set
             {
-                _VoiceReserve13 = value;
-                NotifyPropertyChanged();
+                if (_VoiceReserve13 != value)
+                {
+                    _VoiceReserve13 = value.Clamp(0, 64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0025)]
         public byte VoiceReserve14
         {
-            get { return _VoiceReserve14; }
+            get => _VoiceReserve14;
             set
             {
-                _VoiceReserve14 = value;
-                NotifyPropertyChanged();
+                if (_VoiceReserve14 != value)
+                {
+                    _VoiceReserve14 = value.Clamp(0, 64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0026)]
         public byte VoiceReserve15
         {
-            get { return _VoiceReserve15; }
+            get => _VoiceReserve15;
             set
             {
-                _VoiceReserve15 = value;
-                NotifyPropertyChanged();
+                if (_VoiceReserve15 != value)
+                {
+                    _VoiceReserve15 = value.Clamp(0, 64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0027)]
         public byte VoiceReserve16
         {
-            get { return _VoiceReserve16; }
+            get => _VoiceReserve16;
             set
             {
-                _VoiceReserve16 = value;
-                NotifyPropertyChanged();
+                if (_VoiceReserve16 != value)
+                {
+                    _VoiceReserve16 = value.Clamp(0, 64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -281,46 +326,58 @@ namespace IntegraXL.Models
         #region Properties: Tone Control Sources
 
         [Offset(0x0039)]
-        public IntegraControlSources ToneControlSource01
+        public IntegraControlSources ToneControlSource1
         {
-            get { return _ToneControl01; }
+            get => _ToneControl1;
             set
             {
-                _ToneControl01 = value;
-                NotifyPropertyChanged();
+                if (_ToneControl1 != value)
+                {
+                    _ToneControl1 = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x003A)]
-        public IntegraControlSources ToneControlSource02
+        public IntegraControlSources ToneControlSource2
         {
-            get { return _ToneControl02; }
+            get => _ToneControl2;
             set
             {
-                _ToneControl02 = value;
-                NotifyPropertyChanged();
+                if (_ToneControl2 != value)
+                {
+                    _ToneControl2 = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x003B)]
-        public IntegraControlSources ToneControlSource03
+        public IntegraControlSources ToneControlSource3
         {
-            get { return _ToneControl03; }
+            get => _ToneControl3;
             set
             {
-                _ToneControl03 = value;
-                NotifyPropertyChanged();
+                if (_ToneControl3 != value)
+                {
+                    _ToneControl3 = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x003C)]
-        public IntegraControlSources ToneControlSource04
+        public IntegraControlSources ToneControlSource4
         {
-            get { return _ToneControl04; }
+            get => _ToneControl4;
             set
             {
-                _ToneControl04 = value;
-                NotifyPropertyChanged();
+                if (_ToneControl4 != value)
+                {
+                    _ToneControl4 = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -329,81 +386,86 @@ namespace IntegraXL.Models
         [Offset(0x003D)]
         public short Tempo
         {
-            get
-            {
-                // Convert the backing field byte array to short
-                return (short)((_StudioSetTempoData[0] & 0x0F) << 4 | (_StudioSetTempoData[1] & 0x0F));
-            }
+            get => _Tempo.Deserialize();
             set
             {
-                if (Tempo != value)
+                if(Tempo != value)
                 {
-                    // Copy the short to the backing field byte array
-                    value = Math.Min(value, (short)250);
-                    value = Math.Max(value, (short)20);
-
-                    _StudioSetTempoData[0] = (byte)((value >> 4) & 0x0F);
-                    _StudioSetTempoData[1] = (byte)((value) & 0x0F);
-
+                    _Tempo = value.Serialize(20, 250);
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x003F)]
-        public byte SoloPart
+        public SoloParts SoloPart
         {
-            get { return _SoloPart; }
+            get => _SoloPart;
             set
             {
-                _SoloPart = value;
-                NotifyPropertyChanged();
+                if (_SoloPart != value)
+                {
+                    _SoloPart = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         #region Properties: Switches
 
         [Offset(0x0040)]
-        public bool ReverbSwitch
+        public IntegraSwitch ReverbSwitch
         {
-            get { return _ReverbSwitch; }
+            get => _ReverbSwitch;
             set
             {
-                _ReverbSwitch = value;
-                NotifyPropertyChanged();
+                if (_ReverbSwitch != value)
+                {
+                    _ReverbSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0041)]
-        public bool ChorusSwitch
+        public IntegraSwitch ChorusSwitch
         {
-            get { return _ChorusSwitch; }
+            get => _ChorusSwitch;
             set
             {
-                _ChorusSwitch = value;
-                NotifyPropertyChanged();
+                if (_ChorusSwitch != value)
+                {
+                    _ChorusSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0042)]
-        public bool MasterEQSwitch
+        public IntegraSwitch MasterEQSwitch
         {
-            get { return _MasterEQSwitch; }
+            get => _MasterEQSwitch;
             set
             {
-                _MasterEQSwitch = value;
-                NotifyPropertyChanged();
+                if (_MasterEQSwitch != value)
+                {
+                    _MasterEQSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0043)]
-        public bool DrumCompEQSwitch
+        public IntegraSwitch DrumCompEQSwitch
         {
-            get { return _DrumCompEQSwitch; }
+            get => _DrumCompEQSwitch;
             set
             {
-                _DrumCompEQSwitch = value;
-                NotifyPropertyChanged();
+                if (_DrumCompEQSwitch != value)
+                {
+                    _DrumCompEQSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -412,79 +474,100 @@ namespace IntegraXL.Models
         [Offset(0x0044)]
         public Parts DrumCompEQPart
         {
-            get { return _DrumCompEQPart; }
+            get => _DrumCompEQPart;
             set
             {
-                _DrumCompEQPart = value;
-                NotifyPropertyChanged();
+                if (_DrumCompEQPart != value)
+                {
+                    _DrumCompEQPart = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         #region Properties: Drum Compressor + EQ Output Assign
 
         [Offset(0x0045)]
-        public IntegraOutputAssigns DrumCompEQOutputAssign01
+        public IntegraOutputAssigns DrumCompEQOutputAssign1
         {
-            get { return _DrumCompEQOutputAssign01; }
+            get => _DrumCompEQOutputAssign1;
             set
             {
-                _DrumCompEQOutputAssign01 = value;
-                NotifyPropertyChanged();
+                if (_DrumCompEQOutputAssign1 != value)
+                {
+                    _DrumCompEQOutputAssign1 = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0046)]
-        public IntegraOutputAssigns DrumCompEQOutputAssign02
+        public IntegraOutputAssigns DrumCompEQOutputAssign2
         {
-            get { return _DrumCompEQOutputAssign02; }
+            get => _DrumCompEQOutputAssign2;
             set
             {
-                _DrumCompEQOutputAssign02 = value;
-                NotifyPropertyChanged();
+                if (_DrumCompEQOutputAssign2 != value)
+                {
+                    _DrumCompEQOutputAssign2 = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0047)]
-        public IntegraOutputAssigns DrumCompEQOutputAssign03
+        public IntegraOutputAssigns DrumCompEQOutputAssign3
         {
-            get { return _DrumCompEQOutputAssign03; }
+            get => _DrumCompEQOutputAssign3;
             set
             {
-                _DrumCompEQOutputAssign03 = value;
-                NotifyPropertyChanged();
+                if (_DrumCompEQOutputAssign3 != value)
+                {
+                    _DrumCompEQOutputAssign3 = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0048)]
-        public IntegraOutputAssigns DrumCompEQOutputAssign04
+        public IntegraOutputAssigns DrumCompEQOutputAssign4
         {
-            get { return _DrumCompEQOutputAssign04; }
+            get => _DrumCompEQOutputAssign4;
             set
             {
-                _DrumCompEQOutputAssign04 = value;
-                NotifyPropertyChanged();
+                if (_DrumCompEQOutputAssign4 != value)
+                {
+                    _DrumCompEQOutputAssign4 = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0049)]
-        public IntegraOutputAssigns DrumCompEQOutputAssign05
+        public IntegraOutputAssigns DrumCompEQOutputAssign5
         {
-            get { return _DrumCompEQOutputAssign05; }
+            get => _DrumCompEQOutputAssign5;
             set
             {
-                _DrumCompEQOutputAssign05 = value;
-                NotifyPropertyChanged();
+                if (_DrumCompEQOutputAssign5 != value)
+                {
+                    _DrumCompEQOutputAssign5 = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x004A)]
-        public IntegraOutputAssigns DrumCompEQOutputAssign06
+        public IntegraOutputAssigns DrumCompEQOutputAssign6
         {
-            get { return _DrumCompEQOutputAssign06; }
+            get => _DrumCompEQOutputAssign6;
             set
             {
-                _DrumCompEQOutputAssign06 = value;
-                NotifyPropertyChanged();
+                if (_DrumCompEQOutputAssign6 != value)
+                {
+                    _DrumCompEQOutputAssign6 = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -495,91 +578,60 @@ namespace IntegraXL.Models
         [Offset(0x004C)]
         public byte ExtPartLevel
         {
-            get { return _ExtPartLevel; }
+            get => _ExtPartLevel;
             set
             {
-                _ExtPartLevel = value;
-                NotifyPropertyChanged();
+                if (_ExtPartLevel != value)
+                {
+                    _ExtPartLevel = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x004D)]
         public byte ExtPartChorusSendLevel
         {
-            get { return _ExtPartChorusSendLevel; }
+            get => _ExtPartChorusSendLevel;
             set
             {
-                _ExtPartChorusSendLevel = value;
-                NotifyPropertyChanged();
+                if (_ExtPartChorusSendLevel != value)
+                {
+                    _ExtPartChorusSendLevel = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x004E)]
         public byte ExtPartReverbSendLevel
         {
-            get { return _ExtPartReverbSendLevel; }
+            get => _ExtPartReverbSendLevel;
             set
             {
-                _ExtPartReverbSendLevel = value;
-                NotifyPropertyChanged();
+                if (_ExtPartReverbSendLevel != value)
+                {
+                    _ExtPartReverbSendLevel = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x004F)]
-        public bool ExtPartMuteSwitch
+        public IntegraSwitch ExtPartMuteSwitch
         {
-            get { return _ExtPartMuteSwitch; }
+            get => _ExtPartMuteSwitch;
             set
             {
-                _ExtPartMuteSwitch = value;
-                NotifyPropertyChanged();
+                if (_ExtPartMuteSwitch != value)
+                {
+                    _ExtPartMuteSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         #endregion
-
-        #endregion
-
-        #region Methods
-
-        ///// <summary>
-        ///// Method to initialize the properties of the <see cref="StudioSetCommon"/> class by the received system exclusive data.
-        ///// </summary>
-        ///// <param name="data">A <see cref="byte[]"/> array containing the received system exclusive data part.</param>
-        //protected override bool Initialize(byte[] data)
-        //{
-        //    return base.Initialize(data);
-        //    //if(base.Initialize(data))
-        //    //{
-        //    //    _Name = Encoding.ASCII.GetString(data, 0, 16);
-        //    //}
-
-        //    //return true;
-
-        //}
-
-        //private void SetStudioSetName()
-        //{
-        //    _Name = Encoding.ASCII.GetString(_NameData, 0, 16);
-        //}
-        //private void SetStudioSetNameData()
-        //{
-        //    Array.Copy(Encoding.ASCII.GetBytes(_Name), 0, _NameData, 0, 16);
-        //}
-
-        //private void SetStudioSetTempo()
-        //{
-        //    _StudioSetTempo = (short)((_StudioSetTempoData[0] & 0x0F) << 4 | (_StudioSetTempoData[1] & 0x0F));
-        //}
-
-        //private void SetStudioSetTempoData()
-        //{
-        //    _StudioSetTempo = Math.Min(_StudioSetTempo, (short)250);
-        //    _StudioSetTempo = Math.Max(_StudioSetTempo, (short)20);
-
-        //    _StudioSetTempoData[0] = (byte)((_StudioSetTempo >> 4) & 0x0F);
-        //    _StudioSetTempoData[1] = (byte)((_StudioSetTempo) & 0x0F);
-        //}
 
         #endregion
 
@@ -588,26 +640,6 @@ namespace IntegraXL.Models
         public List<string> VoiceReserveValues
         {
             get { return IntegraVoiceReserves.Values; }
-        }
-
-        public List<string> SoloPartValues
-        {
-            get { return IntegraPartSelections.Values; }
-        }
-
-        public IEnumerable<IntegraControlSources> ToneControlSourceValues
-        {
-            get { return Enum.GetValues(typeof(IntegraControlSources)).Cast<IntegraControlSources>(); }
-        }
-
-        public IEnumerable<Parts> IntegraParts
-        {
-            get { return Enum.GetValues(typeof(Parts)).Cast<Parts>(); }
-        }
-
-        public IEnumerable<IntegraOutputAssigns> OutputAssigns
-        {
-            get { return Enum.GetValues(typeof(IntegraOutputAssigns)).Cast<IntegraOutputAssigns>(); }
         }
 
         #endregion

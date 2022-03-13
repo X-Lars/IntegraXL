@@ -622,12 +622,12 @@ namespace IntegraXL.Models
         }
 
         /// <summary>
-        /// Serializes the model data to a byte array.
+        /// Serializes the model's data to a byte array.
         /// </summary>
-        /// <returns>A byte array containing the virtual slots data sorted by slot index.</returns>
+        /// <returns>A four byte array containing the virtual slots data sorted by slot index.</returns>
         public override byte[] Serialize()
         {
-            return new byte[] { (byte)_SlotA, (byte)_SlotB, (byte)_SlotC, (byte)_SlotD };
+            return new byte[4] { (byte)_SlotA, (byte)_SlotB, (byte)_SlotC, (byte)_SlotD };
         }
 
         #endregion
@@ -635,9 +635,9 @@ namespace IntegraXL.Models
         #region Enumerations
 
         /// <summary>
-        /// Provides an enumerated list of available expansions to the UI.
+        /// Provides an enumerated list of available expansions.
         /// </summary>
-        public IEnumerable<IntegraExpansions> Expansions
+        public static IEnumerable<IntegraExpansions> Expansions
         {
             get { return Enum.GetValues(typeof(IntegraExpansions)).Cast<IntegraExpansions>(); }
         }

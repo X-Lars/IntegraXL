@@ -15,8 +15,8 @@ namespace IntegraXL.Models
 
             if (IsEditable)
             {
-                Common = new PCMDrumKitCommon(this);
-                CompEQ = new DrumKitCommonCompEQ(this);
+                Common   = new PCMDrumKitCommon(this);
+                CompEQ   = new DrumKitCommonCompEQ(this);
                 Partials = new PCMDrumKitPartials(this);
                 Common02 = new PCMDrumKitCommon02(this);
             }
@@ -44,13 +44,21 @@ namespace IntegraXL.Models
 
         public override bool IsInitialized 
         { 
-            get => !IsEditable || Common02.IsInitialized;
+            get
+            {
+                if (!IsEditable)
+                    return true;
+
+                return Common.IsInitialized && CompEQ.IsInitialized && Partials.IsInitialized && Common02.IsInitialized;
+            }
+            
         }
 
         public PCMDrumKitCommon Common { get; }
         public PCMDrumKitCommon02 Common02 { get; }
         public DrumKitCommonCompEQ CompEQ { get; }
         public PCMDrumKitPartials Partials { get; }
+
         public PCMDrumKitPartial Partial => Partials[SelectedIndex];
     }
 }

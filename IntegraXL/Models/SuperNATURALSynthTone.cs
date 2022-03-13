@@ -15,7 +15,7 @@ namespace IntegraXL.Models
 
         public override bool IsInitialized 
         { 
-            get => Partials.IsInitialized; 
+            get => Common.IsInitialized && Partials.IsInitialized; 
         }
 
         public SuperNATURALSynthToneCommon Common { get; }

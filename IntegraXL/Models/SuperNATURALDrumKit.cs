@@ -43,7 +43,7 @@ namespace IntegraXL.Models
 
         public override bool IsInitialized
         {
-            get => Notes.IsInitialized;
+            get => Common.IsInitialized && CompEQ.IsInitialized && Notes.IsInitialized;
         }
 
         #endregion

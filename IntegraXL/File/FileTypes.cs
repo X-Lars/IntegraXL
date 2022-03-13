@@ -6,7 +6,13 @@ namespace IntegraXL.File
     {
         public TemporaryToneFile()
         {
+            Header = new char[6];
+            Version = 1;
+            Size = 0;
+
             ToneType = 0;
+            Name = new byte[12];
+            Expansion = 0;
 
             PCMSynthToneCommon = new byte[80];
             PMT = new byte[41];
@@ -44,7 +50,7 @@ namespace IntegraXL.File
 
             for (int i = 0; i < IntegraConstants.PCM_NOTE_COUNT; i++)
             {
-                PCMDrumKitNotes[i] = new byte[194];
+                PCMDrumKitNotes[i] = new byte[195];
             }
 
             PCMDrumKitCommon2 = new byte[50];
@@ -52,7 +58,13 @@ namespace IntegraXL.File
             MFX = new byte[145];
         }
 
+        public char[] Header;
+        public UInt16 Version;
+        public UInt32 Size;
+
         public UInt32 ToneType;
+        public byte[] Name;
+        public byte Expansion;
 
         public byte[] PCMSynthToneCommon;
         public byte[] PMT;
@@ -80,6 +92,12 @@ namespace IntegraXL.File
     {
         public StudioSetFile()
         {
+            Header = new char[6] { 'I', '7', 'X', 'L', 'S', 'S' };
+            Version = 1;
+            Size = 0;
+
+            Name = new byte[16];
+
             Expansions = new byte[IntegraConstants.EXP_COUNT];
 
             Common = new byte[84];
@@ -110,6 +128,11 @@ namespace IntegraXL.File
             }
         }
 
+        public readonly char[] Header;
+        public readonly UInt16 Version;
+        public UInt32 Size;
+
+        public byte[] Name;
         public byte[] Expansions;
         public byte[] Common;
         public byte[] CommonChorus;

@@ -1,4 +1,5 @@
 ﻿using IntegraXL.Core;
+using IntegraXL.Extensions;
 using IntegraXL.File;
 using System.Diagnostics;
 
@@ -452,43 +453,76 @@ namespace IntegraXL.Models
             }
 
             MFX.Load(file.MFX);
+            Store();
         }
 
+        /// <summary>
+        /// Creates a new <see cref="TemporaryToneFile"/> initialized with the <see cref="TemporaryTone"/>'s data. 
+        /// </summary>
+        /// <returns>A <see cref="TemporaryToneFile"/> containing the <see cref="TemporaryTone"/>'s data.</returns>
+        /// <exception cref="IntegraException"/>
         internal TemporaryToneFile Save()
         {
-            TemporaryToneFile file = new ()
+            Debug.Print($"[{nameof(TemporaryTone)}.{nameof(Save)}()] {Part}, {Type} ");
+
+            if (_Tone == null || _Tone.IsInitialized == false)
+                throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(IntegraTone)} is uninitialized.");
+
+            TemporaryToneFile file = new()
             {
-                ToneType = (uint)Type
+                Header = FileManager.TEMPORARY_TONE_FILE_HEADER,
+                ToneType  = (uint)Type, 
+                Expansion = (byte)_Tone.GetExpansion()
             };
 
             switch (Type)
             {
                 case IntegraToneTypes.SuperNATURALAcousticTone:
-                    Debug.Assert(SuperNATURALAcousticTone != null);
+
+                    if (SuperNATURALAcousticTone == null || SuperNATURALAcousticTone.IsInitialized == false)
+                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(SuperNATURALAcousticTone)} is uninitialized.");
+
                     file.SuperNATURALAcousticToneCommon = SuperNATURALAcousticTone.Common.Serialize();
+
                     break;
 
                 case IntegraToneTypes.SuperNATURALSynthTone:
-                    Debug.Assert(SuperNATURALSynthTone != null);
+                    
+                    if (SuperNATURALSynthTone == null || SuperNATURALSynthTone.IsInitialized == false)
+                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(SuperNATURALSynthTone)} is uninitialized.");
+
                     file.SuperNATURALSynthToneCommon = SuperNATURALSynthTone.Common.Serialize();
+
                     for (int i = 0; i < IntegraConstants.SNS_PARTIAL_COUNT; i++)
                     {
                         file.SuperNATURALSynthTonePartials[i] = SuperNATURALSynthTone.Partials[i].Serialize();
                     }
+
                     break;
 
                 case IntegraToneTypes.SuperNATURALDrumkit:
-                    Debug.Assert(SuperNATURALDrumKit != null);
+
+                    if (SuperNATURALDrumKit == null || SuperNATURALDrumKit.IsInitialized == false)
+                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(SuperNATURALDrumKit)} is uninitialized.");
+
                     file.SuperNATURALDrumKitCommon = SuperNATURALDrumKit.Common.Serialize();
                     file.SuperNATURALDrumKitCommonCompEQ = SuperNATURALDrumKit.CompEQ.Serialize();
+
                     for (int i = 0; i < IntegraConstants.SND_NOTE_COUNT; i++)
                     {
                         file.SuperNATURALDrumKitNotes[i] = SuperNATURALDrumKit.Notes[i].Serialize();
                     }
+
                     break;
 
                 case IntegraToneTypes.PCMSynthTone:
-                    Debug.Assert(PCMSynthTone != null);
+
+                    if (PCMSynthTone == null || PCMSynthTone.IsInitialized == false)
+                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(PCMSynthTone)} is uninitialized.");
+
+                    if(PCMSynthTone.IsEditable == false)
+                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(PCMSynthTone)} is not editable.");
+
                     file.PCMSynthToneCommon = PCMSynthTone.Common.Serialize();
                     file.PMT = PCMSynthTone.PMT.Serialize();
 
@@ -496,22 +530,35 @@ namespace IntegraXL.Models
                     {
                         file.PCMSynthTonePartials[i] = PCMSynthTone.Partials[i].Serialize();
                     }
+
                     file.PCMSynthToneCommon2 = PCMSynthTone.Common02.Serialize();
+
                     break;
 
                 case IntegraToneTypes.PCMDrumkit:
-                    Debug.Assert(PCMDrumKit != null);
+                    
+                    if (PCMDrumKit == null || PCMDrumKit.IsInitialized == false)
+                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(PCMDrumKit)} is uninitialized.");
+
+                    if (PCMDrumKit.IsEditable == false)
+                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(PCMDrumKit)} is not editable.");
+
                     file.PCMDrumKitCommon = PCMDrumKit.Common.Serialize();
                     file.PCMDrumKitCommonCompEQ = PCMDrumKit.CompEQ.Serialize();
+
                     for (int i = 0; i < IntegraConstants.PCM_NOTE_COUNT; i++)
                     {
                         file.PCMDrumKitNotes[i] = PCMDrumKit.Partials[i].Serialize();
                     }
+
                     file.PCMDrumKitCommon2 = PCMDrumKit.Common02.Serialize();
+
                     break;
             }
 
-            Debug.Assert(MFX != null);
+            if (MFX == null || MFX.IsInitialized == false)
+                throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(MFX)} is uninitialized.");
+
             file.MFX = MFX.Serialize();
 
             return file;
@@ -519,7 +566,93 @@ namespace IntegraXL.Models
 
         public void Store()
         {
+            Debug.Print($"[{nameof(TemporaryTone)}.{nameof(Store)}()] {Type}");
 
+            byte[] data = new byte[4];
+            int index = 0; // User tone bank ID to store the temporary tone
+            switch (Type)
+            {
+                case IntegraToneTypes.SuperNATURALAcousticTone:
+                    if (index < 0 || index > 255)
+                        throw new IntegraException($"");
+
+                    data[0] = 0x59;
+
+                    if (index > 127)
+                    {
+                        data[1] = 0x01;
+                        index -= 128;
+                        data[2] = (byte)index;
+                    }
+                    else
+                    {
+                        data[1] = 0x00;
+                        data[2] = (byte)index;
+                    }
+
+                    break;
+
+                case IntegraToneTypes.SuperNATURALSynthTone:
+                    if (index < 0 || index > 511)
+                        throw new IntegraException($"");
+                    data[0] = 0x5F;
+
+                    if (index >= 128)
+                    {
+                        data[1] = (byte)(index / 128);
+                        index -= 128 * data[1];
+                        data[2] = (byte)index;
+                    }
+                    else
+                    {
+                        data[1] = 0x00;
+                        data[2] = (byte)index;
+                    }
+
+                    break;
+
+                case IntegraToneTypes.SuperNATURALDrumkit:
+                    if (index < 0 || index > 63)
+                        throw new IntegraException($"");
+                    data[0] = 0x58;
+                    data[1] = 0x00;
+                    data[2] = (byte)index;
+
+                    break;
+
+                case IntegraToneTypes.PCMSynthTone:
+                    if (index < 0 || index > 255)
+                        throw new IntegraException($"");
+                    data[0] = 0x57;
+                    if (index > 127)
+                    {
+                        data[1] = 0x01;
+                        index -= 128;
+                        data[2] = (byte)index;
+                    }
+                    else
+                    {
+                        data[1] = 0x00;
+                        data[2] = (byte)index;
+                    }
+
+                    break;
+
+                case IntegraToneTypes.PCMDrumkit:
+                    if (index < 0 || index > 31)
+                        throw new IntegraException($"");
+                    data[0] = 0x56;
+                    data[1] = 0x00;
+                    data[2] = (byte)index;
+
+                    break;
+            }
+
+            data[3] = (byte)Part;
+
+            Device.TransmitSystemExclusive(new IntegraSystemExclusive(new IntegraAddress(0x0F001000), new IntegraRequest(data)));
+
+            NotifyPropertyChanged(string.Empty);
         }
     }
 }

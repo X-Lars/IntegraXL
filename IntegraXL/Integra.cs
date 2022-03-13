@@ -377,7 +377,7 @@ namespace IntegraXL
         /// </i></remarks>
         public int PartIndex
         {
-            get => (int)_SelectedPart;
+            get => (int)Part;
             set => Part = (Parts)value;
         }
 
@@ -881,11 +881,16 @@ namespace IntegraXL
             return FileManager.WriteStudioSet(file);
         }
 
+        /// <summary>
+        /// Creates an in memory binary formatted <see cref="TemporaryToneFile"/> containing the <see cref="TemporaryTone"/>'s data.
+        /// </summary>
+        /// <returns>The <see cref="TemporaryToneFile"/> as memory stream.</returns>
+        /// <exception cref="IntegraException"/>
         public MemoryStream SaveTemporaryTone()
         {
             if(TemporaryTone == null || TemporaryTone.IsInitialized == false)
                 throw new IntegraException($"[{nameof(Integra)}.{nameof(SaveTemporaryTone)}()]\n" +
-                                           $"Temporary tone is not initialized.");
+                                           $"{nameof(TemporaryTone)} is not initialized.");
 
             return FileManager.WriteTemporaryToneFile(TemporaryTone.Save());
         }

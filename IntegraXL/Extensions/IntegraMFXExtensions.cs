@@ -58,9 +58,9 @@ namespace IntegraXL.Extensions
             // TODO: Check Clamp value
             return (value + 98) / 2;
         }
-
+        
         /// <summary>
-        /// Gets the list of controllable MFX parameters based on the <see cref="MFX.Type"/>.
+        /// Gets a new list of controllable MFX parameters based on the <see cref="MFX.Type"/>.
         /// </summary>
         /// <param name="instance">The MFX model.</param>
         /// <returns>The list of controllable MFX parameters.</returns>
@@ -509,6 +509,13 @@ namespace IntegraXL.Extensions
                     controls.Add("Flanger Balance");
                     break;
             }
+
+            //int count = IntegraConstants.MFX_CTRL_DEST_COUNT - controls.Count;
+
+            //for (int i = 0; i < count; i++)
+            //{
+            //    controls.Add("Off");
+            //}
 
             return controls;
         }

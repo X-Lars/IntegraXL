@@ -9,7 +9,8 @@ namespace IntegraXL.Models
         #region Fields: INTEGRA-7
 
         [Offset(0x0000)] byte[] RESERVED01 = new byte[16];
-        [Offset(0x0010)] IntegraToneCategories _ToneCategory;
+        [Offset(0x0010)] IntegraTemporaryToneCategories _ToneCategory;
+        [Offset(0x0011)] byte[] ToCheck = new byte[2];
         [Offset(0x0013)] byte _PhraseOctaveShift;
         [Offset(0x0014)] byte[] RESERVED02 = new byte[31];
         [Offset(0x0033)] IntegraSwitch _TFXSwitch;
@@ -30,7 +31,7 @@ namespace IntegraXL.Models
         #region Properties: INTEGRA-7
 
         [Offset(0x0010)]
-        public IntegraToneCategories ToneCategory
+        public IntegraTemporaryToneCategories ToneCategory
         {
             get => _ToneCategory;
             set

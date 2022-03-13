@@ -7,7 +7,7 @@ namespace IntegraXL.Models
     {
         #region Fields: INTEGRA-7
 
-        [Offset(0x0000)] private bool _MotionalSurroundSwitch;
+        [Offset(0x0000)] private IntegraSwitch _Switch;
         [Offset(0x0001)] private IntegraRoomTypes _RoomType;
         [Offset(0x0002)] private byte _AmbienceLevel;
         [Offset(0x0003)] private IntegraRoomSizes _RoomSize;
@@ -35,13 +35,16 @@ namespace IntegraXL.Models
         #region Properties: INTEGRA-7
 
         [Offset(0x0000)]
-        public bool MotionalSurroundSwitch
+        public IntegraSwitch Switch
         {
-            get { return _MotionalSurroundSwitch; }
+            get => _Switch;
             set
             {
-                _MotionalSurroundSwitch = value;
-                NotifyPropertyChanged();
+                if (_Switch != value)
+                {
+                    _Switch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 

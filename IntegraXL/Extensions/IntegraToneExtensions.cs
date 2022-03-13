@@ -63,6 +63,9 @@ namespace IntegraXL.Extensions
         /// <typeparam name="T">The instance type specifier.</typeparam>
         /// <param name="instance">The instance providing the MSB and LSB.</param>
         /// <returns>The associated expansion.</returns>
+        /// <remarks><i>
+        /// Defaults to <see cref="IntegraExpansions.Off"/> if the bank select is out of range.
+        /// </i></remarks>
         public static IntegraExpansions GetExpansion<T>(this T instance) where T : IBankSelect
         {
             switch (instance.MSB)

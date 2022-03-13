@@ -42,7 +42,7 @@ namespace IntegraXL.Models
 
         public override bool IsInitialized
         {
-            get => Collection.Last().IsInitialized;
+            get => Collection.All(x => x.IsInitialized);// Collection.Last().IsInitialized;
         }
 
         protected override void SystemExclusiveReceived(object sender, IntegraSystemExclusiveEventArgs e)
@@ -137,7 +137,7 @@ namespace IntegraXL.Models
         #region Fields: Waveform
 
         [Offset(0x0027)] IntegraWaveGroupType _WaveGroupType;
-        [Offset(0x0028)] int _WaveGroupID;
+        [Offset(0x0028)] IntegraPCMWaveGroups _WaveGroupID;
         [Offset(0x002C)] int _WaveNumberL;
         [Offset(0x0030)] int _WaveNumberR;
         [Offset(0x0034)] byte _WaveGain;
@@ -442,14 +442,14 @@ namespace IntegraXL.Models
         }
 
         [Offset(0x0007)]
-        public byte AlternatePanDepth
+        public int AlternatePanDepth
         {
-            get => _AlternatePanDepth;
+            get => _AlternatePanDepth.Deserialize(64);
             set
             {
                 if (_AlternatePanDepth != value)
                 {
-                    _AlternatePanDepth = value.Clamp(1, 127);
+                    _AlternatePanDepth = value.Serialize(64).Clamp(1, 127);
                     NotifyPropertyChanged();
                 }
             }
@@ -847,14 +847,14 @@ namespace IntegraXL.Models
         }
 
         [Offset(0x0028)]
-        public int WaveGroupID // INT = 1, SRX01 = 1 .. SRX12 = 12
+        public IntegraPCMWaveGroups WaveGroupID // INT = 1, SRX01 = 1 .. SRX12 = 12
         {
-            get => _WaveGroupID.Deserialize();
+            get => _WaveGroupID;
             set
             {
-                if (WaveGroupID != value)
+                if (_WaveGroupID != value)
                 {
-                    _WaveGroupID = value.Clamp(1, 12).SerializeInt();
+                    _WaveGroupID = value;
                     NotifyPropertyChanged();
 
                     NotifyPropertyChanged(nameof(WaveFormLeft));

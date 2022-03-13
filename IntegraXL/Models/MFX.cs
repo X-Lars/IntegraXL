@@ -3,21 +3,29 @@ using IntegraXL.Extensions;
 using IntegraXL.Interfaces;
 using IntegraXL.Models.Parameters;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace IntegraXL.Models
 {
     [Integra(0x00000200, 0x00000111, 145)]
     public sealed class MFX : IntegraModel<MFX>, IParameterProvider<int>
     {
-        private List<string> _Controls = new ();
+        #region Fields
+
+        /// <summary>
+        /// Stores the list of controllable parameter names.
+        /// </summary>
+        internal List<string> _Controls = new ();
+
+        #endregion
 
         #region Fields: INTEGRA-7
 
         [Offset(0x0000)] private IntegraMFXTypes _Type;
-        [Offset(0x0001)] private readonly byte RESERVED01;
+        [Offset(0x0001)] private readonly byte RESERVED1;
         [Offset(0x0002)] private byte _ChorusSendLevel;
         [Offset(0x0003)] private byte _ReverbSendLevel;
-        [Offset(0x0004)] private readonly byte RESERVED02;
+        [Offset(0x0004)] private readonly byte RESERVED2;
         [Offset(0x0005)] private IntegraMFXControlSources _ControlSource1;
         [Offset(0x0006)] private byte _ControlSens1;
         [Offset(0x0007)] private IntegraMFXControlSources _ControlSource2;
@@ -26,28 +34,25 @@ namespace IntegraXL.Models
         [Offset(0x000A)] private byte _ControlSens3;
         [Offset(0x000B)] private IntegraMFXControlSources _ControlSource4;
         [Offset(0x000C)] private byte _ControlSens4;
-        [Offset(0x000D)] private byte _ControlAssign1;
-        [Offset(0x000E)] private byte _ControlAssign2;
-        [Offset(0x000F)] private byte _ControlAssign3;
-        [Offset(0x0010)] private byte _ControlAssign4;
+        [Offset(0x000D)] private byte _ControlDestination1;
+        [Offset(0x000E)] private byte _ControlDestination2;
+        [Offset(0x000F)] private byte _ControlDestination3;
+        [Offset(0x0010)] private byte _ControlDestination4;
         [Offset(0x0011)] private readonly int[] _Parameters = new int[32];
 
         #endregion
 
         #region Constructor
 
-        public MFX(TemporaryTone temporaryTone) : base(temporaryTone.Device)
+        internal MFX(TemporaryTone temporaryTone) : base(temporaryTone.Device)
         {
-
             IsEditable = temporaryTone.IsEditable;
 
             if(!IsEditable)
             {
                 IsInitialized = true;
                 Type = IntegraMFXTypes.Thru;
-                //this.SetMFXProvider();
-                //_Controls = this.GetMFXControls();
-                SetParameterProvider();
+                InitializeMFX();
             }
 
             PropertyChanged += MFXPropertyChanged;
@@ -63,9 +68,17 @@ namespace IntegraXL.Models
         public bool IsEditable { get; private set; }
 
         /// <summary>
-        /// 
+        /// Gets a list of controlable MFX parameter names based on the <see cref="Type"/> that can be assigned by index to the four MFX control destination properties.
         /// </summary>
+        /// <remarks><i>
+        /// The number of controlable MFX parameters may change based on the <see cref="Type"/>.
+        /// </i></remarks>
         public List<string> Controls => _Controls;
+
+        /// <summary>
+        /// Gets the <i>zero based</i> maximum index of the <see cref="Controls"/> list.
+        /// </summary>
+        public byte MaxControlIndex { get; private set; }
 
         #endregion
 
@@ -82,7 +95,6 @@ namespace IntegraXL.Models
                     _Type = value;
 
                     NotifyPropertyChanged();
-                    //_Controls = this.GetMFXControls();
                     ReinitializeAsync();
                 }
             }
@@ -229,56 +241,56 @@ namespace IntegraXL.Models
         }
 
         [Offset(0x000D)]
-        public byte ControlAssign1
+        public byte ControlDestination1
         {
-            get => _ControlAssign1;
+            get => _ControlDestination1;
             set
             {
-                if (_ControlAssign1 != value)
+                if (_ControlDestination1 != value)
                 {
-                    _ControlAssign1 = value.Clamp(0, (byte)_Controls.Count);
+                    _ControlDestination1 = value.Clamp(0, MaxControlIndex);
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x000E)]
-        public byte ControlAssign2
+        public byte ControlDestination2
         {
-            get => _ControlAssign2;
+            get => _ControlDestination2;
             set
             {
-                if (_ControlAssign2 != value)
+                if (_ControlDestination2 != value)
                 {
-                    _ControlAssign2 = value.Clamp(0, (byte)_Controls.Count);
+                    _ControlDestination2 = value.Clamp(0, MaxControlIndex);
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x000F)]
-        public byte ControlAssign3
+        public byte ControlDestination3
         {
-            get => _ControlAssign3;
+            get => _ControlDestination3;
             set
             {
-                if (_ControlAssign3 != value)
+                if (_ControlDestination3 != value)
                 {
-                    _ControlAssign3 = value.Clamp(0, (byte)_Controls.Count);
+                    _ControlDestination3 = value.Clamp(0, MaxControlIndex);
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0010)]
-        public byte ControlAssign4
+        public byte ControlDestination4
         {
-            get => _ControlAssign4;
+            get => _ControlDestination4;
             set
             {
-                if (_ControlAssign4 != value)
+                if (_ControlDestination4 != value)
                 {
-                    _ControlAssign4 = value.Clamp(0, (byte)_Controls.Count);
+                    _ControlDestination4 = value.Clamp(0, MaxControlIndex);
                     NotifyPropertyChanged();
                 }
             }
@@ -317,10 +329,14 @@ namespace IntegraXL.Models
         public IntegraParameterMapper<int>? Parameters { get; internal set; }
 
         /// <summary>
-        /// Sets the parameter provider based on the <see cref="Type"/>.
+        /// Initializes the MFX parameter provider and controllable parameters list based on the <see cref="Type"/>.
         /// </summary>
-        private void SetParameterProvider()
+        /// <remarks><i>
+        /// Method is invoked by the <see cref="Initialize(byte[])"/> on initialization or on reïnitialization when the <see cref="Type"/> is changed.
+        /// </i></remarks>
+        private void InitializeMFX()
         {
+            Debug.Print($"[{nameof(MFX)}.{nameof(InitializeMFX)}()]");
             // TODO: Use extension method
             //this.SetMFXProvider();
 
@@ -335,7 +351,13 @@ namespace IntegraXL.Models
 
             _Controls = this.GetMFXControls();
 
-            //NotifyPropertyChanged(nameof(Controls));
+            MaxControlIndex = (byte)(_Controls.Count - 1);
+
+            if (ControlDestination1 > MaxControlIndex) ControlDestination1 = 0;
+            if (ControlDestination2 > MaxControlIndex) ControlDestination2 = 0;
+            if (ControlDestination3 > MaxControlIndex) ControlDestination3 = 0;
+            if (ControlDestination4 > MaxControlIndex) ControlDestination4 = 0;
+
             NotifyPropertyChanged(string.Empty);
         }
 
@@ -372,12 +394,15 @@ namespace IntegraXL.Models
         /// </summary>
         /// <param name="data">The data to initialize the model.</param>
         /// <returns>True if the model is initialized.</returns>
-        /// <remarks><i>Sets the MFX parameter provider after initialization.</i></remarks>
+        /// <remarks><i>
+        /// - Sets the MFX parameter provider after initialization.<br/>
+        /// - Sets the MFX controllable parameter list after initialization.<br/>
+        /// </i></remarks>
         internal override bool Initialize(byte[] data)
         {
             if (base.Initialize(data))
             {
-                SetParameterProvider();
+                InitializeMFX();
             }
             
             return IsInitialized;
@@ -387,7 +412,10 @@ namespace IntegraXL.Models
         {
             if(e.PropertyName == nameof(Type))
             {
-                SetParameterProvider();
+                ControlDestination1 = 0;
+                ControlDestination2 = 0;
+                ControlDestination3 = 0;
+                ControlDestination4 = 0;
             }
         }
 

@@ -62,7 +62,7 @@ namespace IntegraXL.Models
                 if (!IsEditable)
                     return true;
 
-                return Common02.IsInitialized;
+                return Common.IsInitialized && PMT.IsInitialized && Partials.IsInitialized && Common02.IsInitialized;
             }
         }
 
