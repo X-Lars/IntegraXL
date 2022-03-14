@@ -87,7 +87,7 @@ namespace IntegraXL.Models
                     if (string.IsNullOrEmpty(value))
                         return;
 
-                    _NameData = Encoding.ASCII.GetBytes(value.Clamp(_NameData.Length));
+                    _NameData = Encoding.ASCII.GetBytes(value.FixedLength(_NameData.Length));
 
                     NotifyPropertyChanged();
                 }

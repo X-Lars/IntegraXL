@@ -9,6 +9,7 @@ namespace IntegraXL.Extensions
 
         public static IntegraSNAInstruments GetInstrument(this SuperNATURALAcousticToneCommon instance)
         {
+            
             short value = 0;
             value += (short)(instance.InstVariation << 8);
             value += (byte)(instance.InstNumber);
@@ -262,12 +263,14 @@ namespace IntegraXL.Extensions
                 case 107: instance.InstVariation = 0x01; instance.InstNumber = 0x20; break;//0x0120
                 case 108: instance.InstVariation = 0x01; instance.InstNumber = 0x21; break;//0x0121
                 case 109: instance.InstVariation = 0x01; instance.InstNumber = 0x22; break;//0x0122
+                    // ExSN04
                 case 110: instance.InstVariation = 0x02; instance.InstNumber = 0x18; break;//0x0218
                 case 111: instance.InstVariation = 0x03; instance.InstNumber = 0x18; break;//0x0318
                 case 112: instance.InstVariation = 0x01; instance.InstNumber = 0x19; break;//0x0119
                 case 113: instance.InstVariation = 0x02; instance.InstNumber = 0x19; break;//0x0219
                 case 114: instance.InstVariation = 0x03; instance.InstNumber = 0x19; break;//0x0319
                 case 115: instance.InstVariation = 0x04; instance.InstNumber = 0x19; break;//0x0419
+                    // ExSN05
                 case 116: instance.InstVariation = 0x01; instance.InstNumber = 0x38; break;//0x0138
                 case 117: instance.InstVariation = 0x02; instance.InstNumber = 0x38; break;//0x0238
                 case 118: instance.InstVariation = 0x03; instance.InstNumber = 0x38; break;//0x0338
@@ -338,7 +341,6 @@ namespace IntegraXL.Extensions
                 case IntegraSNAInstruments.NylonGuitar2:
                 case IntegraSNAInstruments.SteelStrGuitar:
                 case IntegraSNAInstruments.SteelStrGuitar2:
-                case IntegraSNAInstruments.Steel12ThGtr:
                 case IntegraSNAInstruments.SteelFingGuitar:
                     return new SNAGuitar1(instance);
 
@@ -347,7 +349,19 @@ namespace IntegraXL.Extensions
 
                 case IntegraSNAInstruments.TCGuitarFing:
                 case IntegraSNAInstruments.Guitar335Fing:
+                case IntegraSNAInstruments.JazzGuitar:
                     return new SNAGuitar3(instance);
+
+                case IntegraSNAInstruments.Steel12ThGtr:
+                    return new SNAGuitar4(instance);
+
+                case IntegraSNAInstruments.STGuitarHalf:
+                case IntegraSNAInstruments.STGuitarFront:
+                case IntegraSNAInstruments.TCGuitarRear:
+                case IntegraSNAInstruments.LPGuitarFront:
+                case IntegraSNAInstruments.LPGuitarRear:
+                case IntegraSNAInstruments.Guitar335Half:
+                    return new SNAElectricGuitar(instance);
 
                 // ExSN01
                 case IntegraSNAInstruments.Santoor:
@@ -355,7 +369,7 @@ namespace IntegraXL.Extensions
                     return new SNABellMallet3(instance);
 
                 case IntegraSNAInstruments.Ukelele:
-                    return new SNAUkele(instance);
+                    return new SNAUkelele(instance);
 
                 case IntegraSNAInstruments.Mandolin:
                     return new SNAMandolin(instance);
@@ -382,7 +396,6 @@ namespace IntegraXL.Extensions
                 case IntegraSNAInstruments.Trumpet:
                 case IntegraSNAInstruments.Trumpet2:
                 case IntegraSNAInstruments.ClassicalTrumpet:
-                case IntegraSNAInstruments.MariachiTp:
                 case IntegraSNAInstruments.MuteTrumpet:
                 case IntegraSNAInstruments.StraightMuteTp:
                 case IntegraSNAInstruments.CupMuteTrumpet:
@@ -392,6 +405,9 @@ namespace IntegraXL.Extensions
                 case IntegraSNAInstruments.BassTrombone:
                 case IntegraSNAInstruments.FlugelHorn:
                     return new SNABrass2(instance);
+
+                case IntegraSNAInstruments.MariachiTp:
+                    return new SNABrass3(instance);
 
                 case IntegraSNAInstruments.Harp:
                     return new SNAHarp(instance);
@@ -406,11 +422,15 @@ namespace IntegraXL.Extensions
                 case IntegraSNAInstruments.Sarangi:
                     return new SNASitar(instance);
 
+                case IntegraSNAInstruments.Tsugaru:
+                case IntegraSNAInstruments.Sansin:
+                    return new SNAShamisen(instance);
+
                 case IntegraSNAInstruments.Koto:
-                    return new SNAKoto(instance);
+                    return new SNAKoto1(instance);
 
                 case IntegraSNAInstruments.TaishouKoto:
-                    return new SNATaishou(instance);
+                    return new SNAKoto2(instance);
 
                 case IntegraSNAInstruments.Kalimba:
                     return new SNAKalimba(instance);
@@ -435,6 +455,7 @@ namespace IntegraXL.Extensions
                 case IntegraSNAInstruments.Clarinet:
                 case IntegraSNAInstruments.Piccolo:
                 case IntegraSNAInstruments.Flute:
+                case IntegraSNAInstruments.Flute2:
                 case IntegraSNAInstruments.EnglishHorn:
                 case IntegraSNAInstruments.BassClarinet:
                     return new SNAWind1(instance);
@@ -592,7 +613,7 @@ namespace IntegraXL.Extensions
 
                     // INT 035 Flamenco Guitar
                     // ExSN4 001 Ukulele
-                    return instance.InstVariation == 1 ? new SNAGuitar2(instance) : new SNAUkele(instance);
+                    return instance.InstVariation == 1 ? new SNAGuitar2(instance) : new SNAUkelele(instance);
 
                 case 25:
                     if (instance.InstVariation == 2)
@@ -613,7 +634,7 @@ namespace IntegraXL.Extensions
                     // ExSN3 001 TC Guitar w / Fing
                     // ExSN3 002 335Guitar w/ Fing
 
-                    return instance.InstVariation == 0 ? new SNAElectricGuitarFingerPickingOctaveTone(instance) : new SNAGuitar3(instance);
+                    return instance.InstVariation == 0 ? new SNAElectricGuitar(instance) : new SNAGuitar3(instance);
 
                 case 27:
                     // INT 038 ST Guitar Half
@@ -623,7 +644,7 @@ namespace IntegraXL.Extensions
                     // ExSN3 004 LP Guitar Front
                     // ExSN3 005 335 Guitar Half
 
-                    return new SNAElectricGuitarMuteHarmonics(instance);
+                    return new SNAElectricGuitar(instance);
 
                 case 32:
                 case 35:
@@ -745,7 +766,7 @@ namespace IntegraXL.Extensions
                     // ExSN1 007 Koto
                     // ExSN1 008 Taishou Koto
 
-                    return instance.InstVariation == 0 ? new SNAKoto(instance) : new SNATaishou(instance);
+                    return instance.InstVariation == 0 ? new SNAKoto1(instance) : new SNAKoto2(instance);
 
                 case 108:
 

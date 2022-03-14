@@ -65,7 +65,7 @@ namespace IntegraXL.Models
                     if (string.IsNullOrEmpty(value))
                         return;
 
-                    _ToneName = Encoding.ASCII.GetBytes(value.Clamp(_ToneName.Length));
+                    _ToneName = Encoding.ASCII.GetBytes(value.FixedLength(_ToneName.Length));
 
                     NotifyPropertyChanged();
                 }

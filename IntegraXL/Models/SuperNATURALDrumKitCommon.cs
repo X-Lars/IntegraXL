@@ -40,7 +40,7 @@ namespace IntegraXL.Models
                     if (string.IsNullOrEmpty(value))
                         return;
 
-                    _KitName = Encoding.ASCII.GetBytes(value.Clamp(_KitName.Length));
+                    _KitName = Encoding.ASCII.GetBytes(value.FixedLength(_KitName.Length));
 
                     NotifyPropertyChanged();
                 }

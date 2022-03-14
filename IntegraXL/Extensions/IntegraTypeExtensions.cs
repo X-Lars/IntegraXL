@@ -7,7 +7,13 @@ namespace IntegraXL.Extensions
     {
         #region Extensions: String
 
-        public static string Clamp(this string instance, int length)
+        /// <summary>
+        /// Clamps or pads the current string to the specified length.
+        /// </summary>
+        /// <param name="instance">The string to clamp or pad.</param>
+        /// <param name="length">The required string length.</param>
+        /// <returns>The string clamped or padded to the specified length.</returns>
+        public static string FixedLength(this string instance, int length)
         {
             return instance.Length > length ? instance.Substring(0, length) : instance.PadRight(length);
         }

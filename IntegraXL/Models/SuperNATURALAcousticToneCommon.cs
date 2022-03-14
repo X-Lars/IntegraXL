@@ -1,10 +1,7 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Extensions;
 using IntegraXL.Interfaces;
-using System;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection;
 using System.Text;
 
 namespace IntegraXL.Models
@@ -14,28 +11,27 @@ namespace IntegraXL.Models
     {
         #region Fields: INTEGRA-7
 
-        [Offset(0x0000)] byte[] _ToneName = new byte[12];
-        [Offset(0x000C)] byte[] RESERVED01 = new byte[4];
-        [Offset(0x0010)] byte _ToneLevel;
-        [Offset(0x0011)] IntegraMonyPolySwitch _MonoPoly;
-        [Offset(0x0012)] byte _PortamentoTimeOffset;
-        [Offset(0x0013)] byte _CutoffOffset;
-        [Offset(0x0014)] byte _ResonanceOffset;
-        [Offset(0x0015)] byte _AttackTimeOffset;
-        [Offset(0x0016)] byte _ReleaseTimeOffset;
-        [Offset(0x0017)] byte _VibratoRate;
-        [Offset(0x0018)] byte _VibratoDepth;
-        [Offset(0x0019)] byte _VibratoDelay;
-        [Offset(0x001A)] byte _OctaveShift;
-        [Offset(0x001B)] IntegraTemporaryToneCategories _Category;
-        [Offset(0x001C)] IntegraSNAPhrase _PhraseNumber;
-        [Offset(0x001E)] byte _PhraseOctaveShift;
-        [Offset(0x001F)] IntegraSwitch _TFXSwitch;
-        [Offset(0x0020)] byte _InstVariation;
-        [Offset(0x0021)] byte _InstNumber;
-        [Offset(0x0022)] byte[] _ModifyParameter = new byte[32];
-
-        [Offset(0x0042)] byte[] RESERVED02 = new byte[4];
+        [Offset(0x0000)] private byte[] _ToneName = new byte[12];
+        [Offset(0x000C)] private byte[] RESERVED01 = new byte[4];
+        [Offset(0x0010)] private byte _ToneLevel;
+        [Offset(0x0011)] private IntegraMonyPolySwitch _MonoPoly;
+        [Offset(0x0012)] private byte _PortamentoTimeOffset;
+        [Offset(0x0013)] private byte _CutoffOffset;
+        [Offset(0x0014)] private byte _ResonanceOffset;
+        [Offset(0x0015)] private byte _AttackTimeOffset;
+        [Offset(0x0016)] private byte _ReleaseTimeOffset;
+        [Offset(0x0017)] private byte _VibratoRate;
+        [Offset(0x0018)] private byte _VibratoDepth;
+        [Offset(0x0019)] private byte _VibratoDelay;
+        [Offset(0x001A)] private byte _OctaveShift;
+        [Offset(0x001B)] private IntegraTemporaryToneCategories _Category;
+        [Offset(0x001C)] private IntegraSNAPhrase _PhraseNumber;
+        [Offset(0x001E)] private byte _PhraseOctaveShift;
+        [Offset(0x001F)] private IntegraSwitch _TFXSwitch;
+        [Offset(0x0020)] private byte _InstVariation;
+        [Offset(0x0021)] private byte _InstNumber;
+        [Offset(0x0022)] private byte[] _ModifyParameter = new byte[32];
+        [Offset(0x0042)] private byte[] RESERVED02 = new byte[4];
 
         #endregion
 
@@ -50,13 +46,41 @@ namespace IntegraXL.Models
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the selected instrument.
+        /// </summary>
         public IntegraSNAInstruments Instrument
         {
             get => this.GetInstrument();
             set
             {
-                this.SetInstrument(value);
-                NotifyPropertyChanged();
+                // TODO: Skip selection of expansions that are not loaded
+                if((int)value >= 77 && (int)value <= 86)
+                {
+                    // ExSN01
+                }
+                else if((int)value >= 87 && (int)value <= 101)
+                {
+                    // ExSN02
+                }
+                else if ((int)value >= 102 && (int)value <= 109)
+                {
+                    // ExSN03
+                }
+                else if ((int)value >= 110 && (int)value <= 115)
+                {
+                    // ExSN04
+                }
+                else if ((int)value >= 116 && (int)value <= 126)
+                {
+                    // ExSN05
+                }
+
+                if (Instrument != value)
+                {
+                    this.SetInstrument(value);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -75,7 +99,7 @@ namespace IntegraXL.Models
                     if (string.IsNullOrEmpty(value))
                         return;
 
-                    _ToneName = Encoding.ASCII.GetBytes(value.Clamp(_ToneName.Length));
+                    _ToneName = Encoding.ASCII.GetBytes(value.FixedLength(_ToneName.Length));
 
                     NotifyPropertyChanged();
                 }
@@ -303,8 +327,8 @@ namespace IntegraXL.Models
                 {
                     _InstVariation = value;
                     NotifyPropertyChanged();
-                    NotifyPropertyChanged(nameof(Instrument));
-                    //ReinitializeAsync();
+
+                    InitializeParameters();
                 }
             }
         }
@@ -319,12 +343,13 @@ namespace IntegraXL.Models
                 {
                     _InstNumber = value;
                     NotifyPropertyChanged();
-                    NotifyPropertyChanged(nameof(Instrument));
-                    ReinitializeAsync();
+
+                    InitializeParameters();
                 }
             }
         }
 
+        // TODO: Make set internal to ensure the parameters property used is and the parameters are validated?
         [Offset(0x0022)]
         public byte this[int index]
         {
@@ -358,6 +383,21 @@ namespace IntegraXL.Models
 
         #region Methods
 
+        /// <summary>
+        /// Initializes the <see cref="Parameters"/> property.
+        /// </summary>
+        private void InitializeParameters()
+        {
+            IntegraParameterMapper<byte> parameters = this.NewGetParameterType();
+
+            if (Parameters != parameters)
+            {
+                Parameters = this.NewGetParameterType();
+                TypeChanged?.Invoke(this, new IntegraTypeChangedEventArgs(Parameters.GetType()));
+                NotifyPropertyChanged(string.Empty);
+            }
+        }
+
         // TODO: No loop / remove completely
         private void ReceivedParameter(IntegraSystemExclusive e)
         {
@@ -372,30 +412,7 @@ namespace IntegraXL.Models
             NotifyPropertyChanged(string.Empty);
         }
 
-        private void SetParameterProvider()
-        {
-            // TODO: Get Type 
-            //switch (Type)
-            //{
-            //    case IntegraReverbTypes.Room1:
-            //    case IntegraReverbTypes.Room2:
-            //    case IntegraReverbTypes.Hall1:
-            //    case IntegraReverbTypes.Hall2:
-            //    case IntegraReverbTypes.Plate:
-            //        Parameter = new CommonReverb(this);
-            //        break;
-
-            //    case IntegraReverbTypes.GM2:
-            //        Parameter = new CommonReverbGM2(this);
-            //        break;
-
-            //    default:
-            //        Parameter = new CommonReverbOff(this);
-            //        break;
-            //}
-
-            NotifyPropertyChanged(string.Empty);
-        }
+       
 
         #endregion
 
@@ -421,27 +438,25 @@ namespace IntegraXL.Models
                 {
                     ReceivedProperty(e.SystemExclusive);
                 }
-
             }
-
         }
 
-        internal override bool Initialize(byte[] data)
+        
+        /// <summary>
+        /// Gets wheter the model is initialized.
+        /// </summary>
+        public override bool IsInitialized
         {
-            IsInitialized = false;
-            //Debug.Assert(data[33] < 0);
-            base.Initialize(data);
+            get => base.IsInitialized;
+            protected internal set
+            {
+                base.IsInitialized = value;
 
-            //Parameters = this.GetParameterType();
-            Parameters = this.NewGetParameterType();
-
-
-            TypeChanged?.Invoke(this, new IntegraTypeChangedEventArgs(Parameters?.GetType()));
-            NotifyPropertyChanged(string.Empty);
-
-            //Debug.Print($"[{GetType().Name}] Parameter Type: {Parameters.GetType().Name}");
-
-            return IsInitialized = true;
+                if(value == true)
+                {
+                    InitializeParameters();
+                }
+            }
         }
 
         #endregion
