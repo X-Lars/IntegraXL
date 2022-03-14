@@ -1362,138 +1362,138 @@ namespace IntegraXL.Core
     [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraSNAInstruments : int
     {
-        [Description("INT 001: ")]   ConcertGrand     = 0,
-        [Description("INT 002: ")]   GrandPiano1      = 1,
-        [Description("INT 003: ")]   GrandPiano2      = 2,
-        [Description("INT 004: ")]   GrandPiano3      = 3,
-        [Description("INT 005: ")]   MellowPiano      = 4,
-        [Description("INT 006: ")]   BrightPiano      = 5,
-        [Description("INT 007: ")]   UprightPiano     = 6,
-        [Description("INT 008: ")]   ConcertMono      = 7,
-        [Description("INT 009: ")]   HonkyTonk        = 8,
-        [Description("INT 010: ")]   PureVintageEP1   = 9,
-        [Description("INT 011: ")]   PureVintageEP2   = 10,
-        [Description("INT 012: ")]   PureWurly        = 11,
-        [Description("INT 013: ")]   PureVintageEP3   = 12,
-        [Description("INT 014: ")]   OldHammerEP      = 13,
-        [Description("INT 015: ")]   DynoPiano        = 14,
-        [Description("INT 016: ")]   ClavCBFlat       = 15,
-        [Description("INT 017: ")]   ClavCAFlat       = 16,
-        [Description("INT 018: ")]   ClavCBMedium     = 17,
-        [Description("INT 019: ")]   ClavCAMedium     = 18,
-        [Description("INT 020: ")]   ClavCBBrillia    = 19,
-        [Description("INT 021: ")]   ClavCABrillia    = 20,
-        [Description("INT 022: ")]   ClavCBCombo      = 21,
-        [Description("INT 023: ")]   ClavCACombo      = 22,
-        [Description("INT 024: ")]   Glockenspiel     = 23,
-        [Description("INT 025: ")]   Vibraphone       = 24,
-        [Description("INT 026: ")]   Marimba          = 25,
-        [Description("INT 027: ")]   Xylophone        = 26,
-        [Description("INT 028: ")]   TubularBells     = 27,
-        [Description("INT 029: ")]   TWOrgan          = 28,
-        [Description("INT 030: ")]   FrenchAccordion  = 29,
-        [Description("INT 031: ")]   ItalianAccordion = 30,
-        [Description("INT 032: ")]   Harmonica        = 31,
-        [Description("INT 033: ")]   Bandoneon        = 32,
-        [Description("INT 034: ")]   NylonGuitar      = 33,
-        [Description("INT 035: ")]   FlamencoGuitar   = 34,
-        [Description("INT 036: ")]   SteelStrGuitar   = 35,
-        [Description("INT 037: ")]   JazzGuitar       = 36,
-        [Description("INT 038: ")]   STGuitarHalf     = 37,
-        [Description("INT 039: ")]   STGuitarFront    = 38,
-        [Description("INT 040: ")]   TCGuitarRear     = 39,
-        [Description("INT 041: ")]   AcousticBass     = 40,
-        [Description("INT 042: ")]   FingeredBass     = 41,
-        [Description("INT 043: ")]   PickedBass       = 42,
-        [Description("INT 044: ")]   FretlessBass     = 43,
-        [Description("INT 045: ")]   Violin           = 44,
-        [Description("INT 046: ")]   Violin2          = 45,
-        [Description("INT 047: ")]   Viola            = 46,
-        [Description("INT 048: ")]   Cello            = 47,
-        [Description("INT 049: ")]   Cello2           = 48,
-        [Description("INT 050: ")]   Contrabass       = 49,
-        [Description("INT 051: ")]   Harp             = 50,
-        [Description("INT 052: ")]   Timpani          = 51,
-        [Description("INT 053: ")]   Strings          = 52,
-        [Description("INT 054: ")]   MarcatoStrings   = 53,
-        [Description("INT 055: ")]   LondonChoir      = 54,
-        [Description("INT 056: ")]   BoysChoir        = 55,
-        [Description("INT 057: ")]   Trumpet          = 56,
-        [Description("INT 058: ")]   Trombone         = 57,
-        [Description("INT 059: ")]   Tb2CupMute       = 58,
-        [Description("INT 060: ")]   MuteTrumpet      = 59,
-        [Description("INT 061: ")]   FrenchHorn       = 60,
-        [Description("INT 062: ")]   SopranoSax2      = 61,
-        [Description("INT 063: ")]   AltoSax2         = 62,
-        [Description("INT 064: ")]   TenorSax2        = 63,
-        [Description("INT 065: ")]   BaritoneSax2     = 64,
-        [Description("INT 066: ")]   Oboe             = 65,
-        [Description("INT 067: ")]   Bassoon          = 66,
-        [Description("INT 068: ")]   Clarinet         = 67,
-        [Description("INT 069: ")]   Piccolo          = 68,
-        [Description("INT 070: ")]   Flute            = 69,
-        [Description("INT 071: ")]   PanFlute         = 70,
-        [Description("INT 072: ")]   Shakuhachi       = 71,
-        [Description("INT 073: ")]   Sitar            = 72,
-        [Description("INT 074: ")]   UilleannPipes    = 73,
-        [Description("INT 075: ")]   BagPipes         = 74,
-        [Description("INT 076: ")]   Erhu             = 75,
-        [Description("INT 077: ")]   SteelDrums       = 76,
+        [Description("INT 001: Concert Grand")]            ConcertGrand     = 0,
+        [Description("INT 002: Grand Piano 1")]            GrandPiano1      = 1,
+        [Description("INT 003: Grand Piano 2")]            GrandPiano2      = 2,
+        [Description("INT 004: Grand Piano 3")]            GrandPiano3      = 3,
+        [Description("INT 005: Mellow Piano")]             MellowPiano      = 4,
+        [Description("INT 006: Bright Piano")]             BrightPiano      = 5,
+        [Description("INT 007: Upright Piano")]            UprightPiano     = 6,
+        [Description("INT 008: Concert Mono")]             ConcertMono      = 7,
+        [Description("INT 009: Honkey-Tonk")]              HonkyTonk        = 8,
+        [Description("INT 010: Pure Vintage EP 1")]        PureVintageEP1   = 9,
+        [Description("INT 011: Pure Vintage EP 2")]        PureVintageEP2   = 10,
+        [Description("INT 012: Pure Wurly")]               PureWurly        = 11,
+        [Description("INT 013: Pure Vintage EP 3")]        PureVintageEP3   = 12,
+        [Description("INT 014: Old Hammer EP")]            OldHammerEP      = 13,
+        [Description("INT 015: Dyno Piano")]               DynoPiano        = 14,
+        [Description("INT 016: Clav CB Flat")]             ClavCBFlat       = 15,
+        [Description("INT 017: Clav CA Flat")]             ClavCAFlat       = 16,
+        [Description("INT 018: Clav CB Medium")]           ClavCBMedium     = 17,
+        [Description("INT 019: Clav CA Medium")]           ClavCAMedium     = 18,
+        [Description("INT 020: Clav CB Brilliant")]        ClavCBBrillia    = 19,
+        [Description("INT 021: Clav CA Brilliant")]        ClavCABrillia    = 20,
+        [Description("INT 022: Clav CB Combo")]            ClavCBCombo      = 21,
+        [Description("INT 023: Clav CA Combo")]            ClavCACombo      = 22,
+        [Description("INT 024: Glockenspiel")]             Glockenspiel     = 23,
+        [Description("INT 025: Vibraphone")]               Vibraphone       = 24,
+        [Description("INT 026: Marimba")]                  Marimba          = 25,
+        [Description("INT 027: Xylophone")]                Xylophone        = 26,
+        [Description("INT 028: Tubular Bells")]            TubularBells     = 27,
+        [Description("INT 029: TW Organ")]                 TWOrgan          = 28,
+        [Description("INT 030: French Accordion")]         FrenchAccordion  = 29,
+        [Description("INT 031: Italian Accordion")]        ItalianAccordion = 30,
+        [Description("INT 032: Harmonica")]                Harmonica        = 31,
+        [Description("INT 033: Bandoneon")]                Bandoneon        = 32,
+        [Description("INT 034: Nylon Guitar")]             NylonGuitar      = 33,
+        [Description("INT 035: Flamenco Guitar")]          FlamencoGuitar   = 34,
+        [Description("INT 036: Steel String Guitar")]      SteelStrGuitar   = 35,
+        [Description("INT 037: Jazz Guitar")]              JazzGuitar       = 36,
+        [Description("INT 038: ST Guitar Half")]           STGuitarHalf     = 37,
+        [Description("INT 039: ST Guitar Front")]          STGuitarFront    = 38,
+        [Description("INT 040: TC Guitar Rear")]           TCGuitarRear     = 39,
+        [Description("INT 041: Acoustic Bass")]            AcousticBass     = 40,
+        [Description("INT 042: Fingered Bass")]            FingeredBass     = 41,
+        [Description("INT 043: Picked Bass")]              PickedBass       = 42,
+        [Description("INT 044: Fretless Bass")]            FretlessBass     = 43,
+        [Description("INT 045: Violin")]                   Violin           = 44,
+        [Description("INT 046: Violin 2")]                 Violin2          = 45,
+        [Description("INT 047: Viola")]                    Viola            = 46,
+        [Description("INT 048: Cello")]                    Cello            = 47,
+        [Description("INT 049: Cello 2")]                  Cello2           = 48,
+        [Description("INT 050: Contrabass")]               Contrabass       = 49,
+        [Description("INT 051: Harp")]                     Harp             = 50,
+        [Description("INT 052: Timpani")]                  Timpani          = 51,
+        [Description("INT 053: Strings")]                  Strings          = 52,
+        [Description("INT 054: Marcato Strings")]          MarcatoStrings   = 53,
+        [Description("INT 055: London Choir")]             LondonChoir      = 54,
+        [Description("INT 056: Boys Choir")]               BoysChoir        = 55,
+        [Description("INT 057: Trumpet")]                  Trumpet          = 56,
+        [Description("INT 058: Trombone")]                 Trombone         = 57,
+        [Description("INT 059: Trombone 2 Cup Mute")]      Tb2CupMute       = 58,
+        [Description("INT 060: Mute Trumpet")]             MuteTrumpet      = 59,
+        [Description("INT 061: French Horn")]              FrenchHorn       = 60,
+        [Description("INT 062: Soprano Sax 2")]            SopranoSax2      = 61,
+        [Description("INT 063: Alto Sax 2")]               AltoSax2         = 62,
+        [Description("INT 064: Tenor Sax 2")]              TenorSax2        = 63,
+        [Description("INT 065: Baritone Sax 2")]           BaritoneSax2     = 64,
+        [Description("INT 066: Oboe")]                     Oboe             = 65,
+        [Description("INT 067: Bassoon")]                  Bassoon          = 66,
+        [Description("INT 068: Clarinet")]                 Clarinet         = 67,
+        [Description("INT 069: Piccolo")]                  Piccolo          = 68,
+        [Description("INT 070: Flute")]                    Flute            = 69,
+        [Description("INT 071: Pan Flute")]                PanFlute         = 70,
+        [Description("INT 072: Shakuhachi")]               Shakuhachi       = 71,
+        [Description("INT 073: Sitar")]                    Sitar            = 72,
+        [Description("INT 074: Uilleann Pipes")]           UilleannPipes    = 73,
+        [Description("INT 075: Bag Pipes")]                BagPipes         = 74,
+        [Description("INT 076: Erhu")]                     Erhu             = 75,
+        [Description("INT 077: Steel Drums")]              SteelDrums       = 76,
         // ExSN01
-        [Description("ExSN01 001:")] Santoor          = 77,
-        [Description("ExSN01 002:")] YangChin         = 78,
-        [Description("ExSN01 003:")] TinWhistle       = 79,
-        [Description("ExSN01 004:")] Ryuteki          = 80,
-        [Description("ExSN01 005:")] Tsugaru          = 81,
-        [Description("ExSN01 006:")] Sansin           = 82,
-        [Description("ExSN01 007:")] Koto             = 83,
-        [Description("ExSN01 008:")] TaishouKoto      = 84,
-        [Description("ExSN01 009:")] Kalimba          = 85,
-        [Description("ExSN01 010:")] Sarangi          = 86,
+        [Description("ExSN01 001: Santoor")]               Santoor          = 77,
+        [Description("ExSN01 002: Yang Chin")]             YangChin         = 78,
+        [Description("ExSN01 003: Tin Whistle")]           TinWhistle       = 79,
+        [Description("ExSN01 004: Ryuteki")]               Ryuteki          = 80,
+        [Description("ExSN01 005: Tsugaru")]               Tsugaru          = 81,
+        [Description("ExSN01 006: Sansin")]                Sansin           = 82,
+        [Description("ExSN01 007: Koto")]                  Koto             = 83,
+        [Description("ExSN01 008: Taishou Koto")]          TaishouKoto      = 84,
+        [Description("ExSN01 009: Kalimba")]               Kalimba          = 85,
+        [Description("ExSN01 010: Sarangi")]               Sarangi          = 86,
         // ExSN02
-        [Description("ExSN02 001:")] SopranoSax       = 87,
-        [Description("ExSN02 002:")] AltoSax          = 88,
-        [Description("ExSN02 003:")] TenorSax         = 89,
-        [Description("ExSN02 004:")] BaritoneSax      = 90,
-        [Description("ExSN02 005:")] EnglishHorn      = 91,
-        [Description("ExSN02 006:")] BassClarinet     = 92,
-        [Description("ExSN02 007:")] Flute2           = 93,
-        [Description("ExSN02 008:")] SopranoRecorder  = 94,
-        [Description("ExSN02 009:")] AltoRecorder     = 95,
-        [Description("ExSN02 010:")] TenorRecorder    = 96,
-        [Description("ExSN02 011:")] BassRecorder     = 97,
-        [Description("ExSN02 012:")] OcarinaSopC      = 98,
-        [Description("ExSN02 013:")] OcarinaSopF      = 99,
-        [Description("ExSN02 014:")] OcarinaAlto      = 100,
-        [Description("ExSN02 015:")] OcarinaBass      = 101,
+        [Description("ExSN02 001: Soprano Sax")]           SopranoSax       = 87,
+        [Description("ExSN02 002: Alto Sax")]              AltoSax          = 88,
+        [Description("ExSN02 003: Tenor Sax")]             TenorSax         = 89,
+        [Description("ExSN02 004: Baritone Sax")]          BaritoneSax      = 90,
+        [Description("ExSN02 005: English Horn")]          EnglishHorn      = 91,
+        [Description("ExSN02 006: Bass Clarinet")]         BassClarinet     = 92,
+        [Description("ExSN02 007: Flute 2")]               Flute2           = 93,
+        [Description("ExSN02 008: Soprano Recorder")]      SopranoRecorder  = 94,
+        [Description("ExSN02 009: Alto Recorder")]         AltoRecorder     = 95,
+        [Description("ExSN02 010: Tenor Recorder")]        TenorRecorder    = 96,
+        [Description("ExSN02 011: Bass Recorder")]         BassRecorder     = 97,
+        [Description("ExSN02 012: Ocarina Soprano C")]     OcarinaSopC      = 98,
+        [Description("ExSN02 013: Ocarina Soprano F")]     OcarinaSopF      = 99,
+        [Description("ExSN02 014: Ocarina Alto")]          OcarinaAlto      = 100,
+        [Description("ExSN02 015: Ocarina Bass")]          OcarinaBass      = 101,
         // ExSN03
-        [Description("ExSN03 001:")] TCGuitarFing     = 102,
-        [Description("ExSN03 002:")] Guitar335Fing    = 103,
-        [Description("ExSN03 003:")] LPGuitarRear     = 104,
-        [Description("ExSN03 004:")] LPGuitarFront    = 105,
-        [Description("ExSN03 005:")] Guitar335Half    = 106,
-        [Description("ExSN03 006:")] AcousticBass2    = 107,
-        [Description("ExSN03 007:")] FingeredBass2    = 108,
-        [Description("ExSN03 008:")] PickedBass2      = 109,
+        [Description("ExSN03 001: TC Guitar Fingered")]    TCGuitarFing     = 102,
+        [Description("ExSN03 002: 335 Guitar Fingered")]   Guitar335Fing    = 103,
+        [Description("ExSN03 003: LP Guitar Rear")]        LPGuitarRear     = 104,
+        [Description("ExSN03 004: LP Guitar Front")]       LPGuitarFront    = 105,
+        [Description("ExSN03 005: 355 Guitar Half")]       Guitar335Half    = 106,
+        [Description("ExSN03 006: Acoustic Bass 2")]       AcousticBass2    = 107,
+        [Description("ExSN03 007: Fingered Bass 2")]       FingeredBass2    = 108,
+        [Description("ExSN03 008: Picked Bass 2")]         PickedBass2      = 109,
         // ExSN04
-        [Description("ExSN04 001:")] Ukelele          = 110,
-        [Description("ExSN04 002:")] NylonGuitar2     = 111,
-        [Description("ExSN04 003:")] Steel12ThGtr     = 112,
-        [Description("ExSN04 004:")] Mandolin         = 113,
-        [Description("ExSN04 005:")] SteelFingGuitar  = 114,
-        [Description("ExSN04 006:")] SteelStrGuitar2  = 115,
+        [Description("ExSN04 001: Ukelele")]               Ukelele          = 110,
+        [Description("ExSN04 002: Nylon Guitar 2")]        NylonGuitar2     = 111,
+        [Description("ExSN04 003: 12Th Steel Guitar")]     Steel12ThGtr     = 112,
+        [Description("ExSN04 004: Mandolin")]              Mandolin         = 113,
+        [Description("ExSN04 005: Steel Fingered Guitar")] SteelFingGuitar  = 114,
+        [Description("ExSN04 006: Steel String Guitar 2")] SteelStrGuitar2  = 115,
         // ExSN05
-        [Description("ExSN05 001:")] ClassicalTrumpet = 116,
-        [Description("ExSN05 002:")] FlugelHorn       = 117,
-        [Description("ExSN05 003:")] Trumpet2         = 118,
-        [Description("ExSN05 004:")] MariachiTp       = 119,
-        [Description("ExSN05 005:")] Trombone2        = 120,
-        [Description("ExSN05 006:")] BassTrombone     = 121,
-        [Description("ExSN05 007:")] Tuba             = 122,
-        [Description("ExSN05 008:")] StraightMuteTp   = 123,
-        [Description("ExSN05 009:")] CupMuteTrumpet   = 124,
-        [Description("ExSN05 010:")] FrenchHorn2      = 125,
-        [Description("ExSN05 011:")] MuteFrenchHorn   = 126,
+        [Description("ExSN05 001: Classical Trumpet")]     ClassicalTrumpet = 116,
+        [Description("ExSN05 002: Flugel Horn")]           FlugelHorn       = 117,
+        [Description("ExSN05 003: Trumpet")]               Trumpet2         = 118,
+        [Description("ExSN05 004: Mariachi Trumpet")]      MariachiTp       = 119,
+        [Description("ExSN05 005: Trombone 2")]            Trombone2        = 120,
+        [Description("ExSN05 006: Bass Trombone")]         BassTrombone     = 121,
+        [Description("ExSN05 007: Tuba")]                  Tuba             = 122,
+        [Description("ExSN05 008: Straight Mute Trumpet")] StraightMuteTp   = 123,
+        [Description("ExSN05 009: Cup Mute Trumpet")]      CupMuteTrumpet   = 124,
+        [Description("ExSN05 010: French Horn 2")]         FrenchHorn2      = 125,
+        [Description("ExSN05 011: Mute French Horn")]      MuteFrenchHorn   = 126,
     }
 
     [TypeConverter(typeof(DescriptionConverter))]
@@ -1541,187 +1541,208 @@ namespace IntegraXL.Core
         [Description("Third")] TRD = 0x01
     }
 
-    public enum SNAPlayScale : byte
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum SNAHarpPlayScale : byte
     {
-        Chroma,
-        Major,
-        Minor,
-        Seventh,
-        Diminish,
-        Whole
+        [Description("Chroma")]         Chromatic,
+        [Description("Major")]          Major,
+        [Description("Minor")]          Minor,
+        [Description("7Th")]            Seventh,
+        [Description("Diminish")]       Diminish,
+        [Description("Whole Tone")]     WholeTone,
+        [Description("Harmonic Minor")] HarmonicMinor
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum SNAWindPlayScale : byte
+    {
+        [Description("Chroma")]     Chromatic,
+        [Description("Major")]      Major,
+        [Description("Minor")]      Minor,
+        [Description("7Th")]        Seventh,
+        [Description("Diminish")]   Diminish,
+        [Description("Whole Tone")] WholeTone
     }
 
     public enum SNAKotoPlayScale : byte
     {
-        Chroma,
-        Hira
+        Chromatic,
+        Hirajyoshi
     }
 
-    public enum SNAPortaGliss : byte
+    public enum SNAPortamentoGliss : byte
     {
-        Porta,
-        Gliss
+        Portamento,
+        Glissando
     }
     #endregion
 
     #region SuperNATURALAcousticTone Variations
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum VarBellMallet1 : byte
     {
-        Off = 0x00,
-        DeadStroke = 0x01
+        [Description("Off")]         Off,
+        [Description("Dead Stroke")] DeadStroke
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum VarBellMallet2 : byte
     {
-        Off = 0x00,
-        DeadStroke = 0x01,
-        TremoloSw = 0x02
+        [Description("Off")]            Off,
+        [Description("Dead Stroke")]    DeadStroke,
+        [Description("Tremolo Switch")] TremoloSwitch
     }
 
     public enum VarBellMallet3 : byte
     {
-        Off = 0x00,
-        Mute = 0x01,
-        Tremolo = 0x02
+        Off,
+        Mute,
+        Tremolo
     }
 
     public enum VarGuitar1 : byte
     {
-        Off = 0x00,
-        Mute = 0x01,
-        Harmonics = 0x02
+        Off,
+        Mute,
+        Harmonics
     }
 
     public enum VarGuitar2 : byte
     {
-        Off = 0x00,
-        Rasgueado = 0x01,
-        Harmonics = 0x02
+        Off,
+        Rasgueado,
+        Harmonics
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum VarGuitar3 : byte
     {
-        Off = 0x00,
-        FingerPicking = 0x01,
-        OctaveTone = 0x02
+        [Description("Off")]            Off,
+        [Description("Finger Picking")] FingerPicking,
+        [Description("Octave Tone")]    OctaveTone
     }
 
     public enum VarBass1 : byte
     {
-        Off = 0x00,
-        Staccato = 0x01,
-        Harmonics = 0x02
+        Off,
+        Staccato,
+        Harmonics
     }
 
     public enum VarBass2 : byte
     {
-        Off = 0x00,
-        Slap = 0x01,
-        Harmonics = 0x02
+        Off,
+        Slap,
+        Harmonics
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum VarBass3 : byte
     {
-        Off = 0x00,
-        BridgeMute = 0x01,
-        Harmonics = 0x02
+        [Description("Off")]         Off,
+        [Description("Bridge Mute")] BridgeMute,
+        [Description("Harmonics")]   Harmonics
     }
 
     public enum VarHarp : byte
     {
-        Off = 0x00,
-        Nail = 0x01
+        Off,
+        Nail
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum VarShamisen : byte
     {
-        Off = 0x00,
-        Strum = 0x01,
-        UpPicking = 0x02,
-        AutoBend = 0x03
+        [Description("Off")]        Off,
+        [Description("Strum")]      Strum,
+        [Description("Up Picking")] UpPicking,
+        [Description("Auto Bend")]  AutoBend
     }
 
     public enum VarKoto: byte
     {
-        Off = 0x00,
-        Tremolo = 0x01,
-        Ornament = 0x02
+        Off,
+        Tremolo,
+        Ornament
     }
 
     public enum VarKalimba : byte
     {
-        Off = 0x00,
-        Buzz = 0x01
+        Off,
+        Buzz
     }
 
     public enum VarStrings1 : byte
     {
-        Off = 0x00,
-        Staccato = 0x01,
-        Pizzicato = 0x02,
-        Tremolo = 0x03
+        Off,
+        Staccato,
+        Pizzicato,
+        Tremolo
     }
 
     public enum VarStrings2 : byte
     {
-        Off = 0x00,
-        Staccato = 0x01,
-        Ornament = 0x02
+        Off,
+        Staccato,
+        Ornament
     }
 
     public enum VarBrass1 : byte
     {
-        Off = 0x00,
-        Staccato = 0x01,
+        Off,
+        Staccato
     }
 
     public enum VarBrass2 : byte
     {
-        Off = 0x00,
-        Staccato = 0x01,
-        Fall = 0x02
+        Off,
+        Staccato,
+        Fall
     }
 
     public enum VarPipes : byte
     {
-        Off = 0x00,
-        Ornament = 0x02
+        Off,
+        Ornament
     }
 
     public enum VarWind2 : byte
     {
-        Off = 0x00,
-        Staccato = 0x01,
-        Flutter = 0x02
+        Off,
+        Staccato,
+        Flutter
     }
 
     public enum VarWind3 : byte
     {
-        Off = 0x00,
-        Cut = 0x01,
-        Ornament = 0x02
+        Off,
+        Cut,
+        Ornament
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum VarWind4 : byte
     {
-        Off,
-        Staccato,
-        Fall,
-        SubTone
+        [Description("Off")]      Off,
+        [Description("Staccato")] Staccato,
+        [Description("Fall")]     Fall,
+        [Description("Sub Tone")] SubTone
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum VarChoir : byte
     {
-        Off,
-        VoiceWoo
+        [Description("Off")]       Off,
+        [Description("Voice Woo")] VoiceWoo
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum VarTimpani : byte
     {
-        Off,
-        Flam,
-        AccentRoll
+        [Description("Off")]         Off,
+        [Description("Flam")]        Flam,
+        [Description("Accent Roll")] AccentRoll
     }
 
     public enum VarSteelDrum: byte

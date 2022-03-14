@@ -999,9 +999,9 @@ namespace IntegraXL.Models.Parameters
             }
         }
 
-        public SNAPlayScale PlayScale
+        public SNAHarpPlayScale PlayScale
         {
-            get => (SNAPlayScale)this[6];
+            get => (SNAHarpPlayScale)this[6];
             set
             {
                 if (PlayScale != value)
@@ -2162,9 +2162,9 @@ namespace IntegraXL.Models.Parameters
     {
         public SNAWindCommonExtended(SuperNATURALAcousticToneCommon provider) : base(provider) { }
         
-        public SNAPlayScale PlayScale
+        public SNAWindPlayScale PlayScale
         {
-            get => (SNAPlayScale)this[6];
+            get => (SNAWindPlayScale)this[6];
             set
             {
                 if (PlayScale != value)
@@ -2214,9 +2214,9 @@ namespace IntegraXL.Models.Parameters
     {
         public SNAWind1(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
-        public SNAPortaGliss Glide
+        public SNAPortamentoGliss Glide
         {
-            get => (SNAPortaGliss)this[8];
+            get => (SNAPortamentoGliss)this[8];
             set
             {
                 if (Glide != value)
@@ -2476,9 +2476,9 @@ namespace IntegraXL.Models.Parameters
     {
         public SNASax(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
-        public SNAPortaGliss Glide
+        public SNAPortamentoGliss Glide
         {
-            get => (SNAPortaGliss)this[8];
+            get => (SNAPortamentoGliss)this[8];
             set
             {
                 if (Glide != value)
