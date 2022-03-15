@@ -25,11 +25,14 @@ namespace IntegraXL.Models.Parameters
 
         public IntegraRateMSecSwitch LeftSwitch
         {
-            get { return (IntegraRateMSecSwitch)this[0]; }
+            get => (IntegraRateMSecSwitch)this[0];
             set
             {
-                this[0] = (int)value;
-                NotifyPropertyChanged();
+                if (LeftSwitch != value)
+                {
+                    this[0] = (int)value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -45,21 +48,27 @@ namespace IntegraXL.Models.Parameters
 
         public IntegraNoteRates LeftNote
         {
-            get { return (IntegraNoteRates)this[2]; }
+            get => (IntegraNoteRates)this[2];
             set
             {
-                this[2] = (int)value;
-                NotifyPropertyChanged();
+                if (LeftNote != value)
+                {
+                    this[2] = (int)value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         public IntegraRateMSecSwitch RightSwitch
         {
-            get { return (IntegraRateMSecSwitch)this[3]; }
+            get => (IntegraRateMSecSwitch)this[3];
             set
             {
-                this[3] = (int)value;
-                NotifyPropertyChanged();
+                if (RightSwitch != value)
+                {
+                    this[3] = (int)value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -75,21 +84,27 @@ namespace IntegraXL.Models.Parameters
 
         public IntegraNoteRates RightNote
         {
-            get { return (IntegraNoteRates)this[5]; }
+            get => (IntegraNoteRates)this[5];
             set
             {
-                this[5] = (int)value;
-                NotifyPropertyChanged();
+                if (RightNote != value)
+                {
+                    this[5] = (int)value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         public IntegraRateMSecSwitch CenterSwitch
         {
-            get { return (IntegraRateMSecSwitch)this[6]; }
+            get => (IntegraRateMSecSwitch)this[6];
             set
             {
-                this[6] = (int)value;
-                NotifyPropertyChanged();
+                if (CenterSwitch != value)
+                {
+                    this[6] = (int)value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -105,11 +120,14 @@ namespace IntegraXL.Models.Parameters
 
         public IntegraNoteRates CenterNote
         {
-            get { return (IntegraNoteRates)this[8]; }
+            get => (IntegraNoteRates)this[8];
             set
             {
-                this[8] = (int)value;
-                NotifyPropertyChanged();
+                if (CenterNote != value)
+                {
+                    this[8] = (int)value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -125,57 +143,54 @@ namespace IntegraXL.Models.Parameters
 
         public IntegraDelayHFDamps HFDamp
         {
-            get { return (IntegraDelayHFDamps)this[10]; }
+            get => (IntegraDelayHFDamps)this[10];
             set
             {
-                this[10] = (int)value;
-                NotifyPropertyChanged();
+                if (HFDamp != value)
+                {
+                    this[10] = (int)value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         public int LeftLevel
         {
-            get { return this[11]; }
+            get => this[11];
             set
             {
-                this[11] = value.Clamp();
-                NotifyPropertyChanged();
+                if (this[11] != value)
+                {
+                    this[11] = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         public int RightLevel
         {
-            get { return this[12]; }
+            get => this[12];
             set
             {
-                this[12] = value.Clamp();
-                NotifyPropertyChanged();
+                if (this[12] != value)
+                {
+                    this[12] = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         public int CenterLevel
         {
-            get { return this[13]; }
+            get => this[13];
             set
             {
-                this[13] = value.Clamp();
-                NotifyPropertyChanged();
+                if (this[13] != value)
+                {
+                    this[13] = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
-        }
-
-        public static IEnumerable<IntegraRateMSecSwitch> RateSwitchs
-        {
-            get { return Enum.GetValues(typeof(IntegraRateMSecSwitch)).Cast<IntegraRateMSecSwitch>(); }
-        }
-
-        public static IEnumerable<IntegraNoteRates> Notes
-        {
-            get { return Enum.GetValues(typeof(IntegraNoteRates)).Cast<IntegraNoteRates>(); }
-        }
-
-        public static IEnumerable<IntegraDelayHFDamps> HFDamps
-        {
-            get { return Enum.GetValues(typeof(IntegraDelayHFDamps)).Cast<IntegraDelayHFDamps>(); }
         }
 
         public static List<string> PreDelays

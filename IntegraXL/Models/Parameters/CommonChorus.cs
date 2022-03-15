@@ -20,42 +20,54 @@ namespace IntegraXL.Models.Parameters
 
         public IntegraChorusFilterTypes FilterType
         {
-            get { return (IntegraChorusFilterTypes)this[0]; }
+            get => (IntegraChorusFilterTypes)this[0];
             set
             {
-                this[0] = (int)value;
-                NotifyPropertyChanged();
+                if (FilterType != value)
+                {
+                    this[0] = (int)value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         public IntegraMidFrequencies CutoffFreq
         {
-            get { return (IntegraMidFrequencies)this[1]; }
+            get => (IntegraMidFrequencies)this[1];
             set
             {
-                this[1] = (int)value;
-                NotifyPropertyChanged();
+                if (CutoffFreq != value)
+                {
+                    this[1] = (int)value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         public int PreDelay
         {
-            get { return this[2]; }
+            get => this[2];
             set
             {
-                // TODO: Clamp
-                this[2] = value;
-                NotifyPropertyChanged();
+                if (this[2] != value)
+                {
+                    // TODO: Clamp
+                    this[2] = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         public IntegraRateNoteSwitch RateSwitch
         {
-            get { return (IntegraRateNoteSwitch)this[3]; }
+            get => (IntegraRateNoteSwitch)this[3];
             set
             {
-                this[3] = (int)value;
-                NotifyPropertyChanged();
+                if (RateSwitch != value)
+                {
+                    this[3] = (int)value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -71,21 +83,27 @@ namespace IntegraXL.Models.Parameters
 
         public IntegraNoteRates RateNote
         {
-            get { return (IntegraNoteRates)this[5]; }
+            get => (IntegraNoteRates)this[5];
             set
             {
-                this[5] = (int)value;
-                NotifyPropertyChanged();
+                if (RateNote != value)
+                {
+                    this[5] = (int)value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         public int Depth
         {
-            get { return this[6]; }
+            get => this[6];
             set
             {
-                this[6] = value.Clamp();
-                NotifyPropertyChanged();
+                if (this[6] != value)
+                {
+                    this[6] = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -102,36 +120,20 @@ namespace IntegraXL.Models.Parameters
 
         public int Feedback
         {
-            get { return this[8]; }
+            get => this[8];
             set
             {
-                this[8] = value.Clamp();
+                if (this[8] != value)
+                {
+                    this[8] = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
-        }
-
-        public static IEnumerable<IntegraChorusFilterTypes> FilterTypes
-        {
-            get { return Enum.GetValues(typeof(IntegraChorusFilterTypes)).Cast<IntegraChorusFilterTypes>(); }
-        }
-
-        public static IEnumerable<IntegraMidFrequencies> CutoffFreqs
-        {
-            get { return Enum.GetValues(typeof(IntegraMidFrequencies)).Cast<IntegraMidFrequencies>(); }
         }
 
         public static List<string> PreDelays
         {
             get { return IntegraPreDelay.Values; }
-        }
-
-        public static IEnumerable<IntegraRateNoteSwitch> RateSwitchs
-        {
-            get { return Enum.GetValues(typeof(IntegraRateNoteSwitch)).Cast<IntegraRateNoteSwitch>(); }
-        }
-
-        public static IEnumerable<IntegraNoteRates> NoteRates
-        {
-            get { return Enum.GetValues(typeof(IntegraNoteRates)).Cast<IntegraNoteRates>(); }
         }
     }
 }

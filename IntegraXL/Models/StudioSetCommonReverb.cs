@@ -150,6 +150,7 @@ namespace IntegraXL.Models
                     break;
             }
 
+            TypeChanged?.Invoke(this, new IntegraTypeChangedEventArgs(Parameters.GetType()));
             NotifyPropertyChanged(string.Empty);
         }
 
@@ -188,20 +189,6 @@ namespace IntegraXL.Models
             SetParameterProvider();
 
             return IsInitialized = true;
-        }
-
-        #endregion
-        
-        #region Enumerations
-
-        public virtual IEnumerable<IntegraReverbTypes> ReverbTypes
-        {
-            get { return Enum.GetValues(typeof(IntegraReverbTypes)).Cast<IntegraReverbTypes>(); }
-        }
-
-        public virtual IEnumerable<IntegraStudioSetCommonOutputAssigns> OutputAssigns
-        {
-            get { return Enum.GetValues(typeof(IntegraStudioSetCommonOutputAssigns)).Cast<IntegraStudioSetCommonOutputAssigns>(); }
         }
 
         #endregion

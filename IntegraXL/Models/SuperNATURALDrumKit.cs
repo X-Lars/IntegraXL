@@ -5,7 +5,7 @@ namespace IntegraXL.Models
     [Integra(0x00030000, 0x00100000)]
     public class SuperNATURALDrumKit : IntegraModel<SuperNATURALDrumKit>
     {
-        private IntegraSNDNoteIndex _SelectedNote = IntegraSNDNoteIndex.Key27E1Flat;
+        private IntegraSNDNoteIndex _SelectedNote = IntegraSNDNoteIndex.Key27;
 
         internal SuperNATURALDrumKit(TemporaryTone tone) : base(tone.Device)
         {

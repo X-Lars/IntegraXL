@@ -144,6 +144,7 @@ namespace IntegraXL.Models
                     break;
             };
 
+            TypeChanged?.Invoke(this, new IntegraTypeChangedEventArgs(Parameters.GetType()));
             NotifyPropertyChanged(string.Empty);
         }
 
@@ -181,25 +182,6 @@ namespace IntegraXL.Models
             SetParameterProvider();
 
             return IsInitialized = true;
-        }
-
-        #endregion
-
-        #region Enumerations
-
-        public static IEnumerable<IntegraChorusTypes> Types
-        {
-            get { return Enum.GetValues(typeof(IntegraChorusTypes)).Cast<IntegraChorusTypes>(); }
-        }
-
-        public static IEnumerable<IntegraStudioSetCommonOutputAssigns> OutputAssigns
-        {
-            get { return Enum.GetValues(typeof(IntegraStudioSetCommonOutputAssigns)).Cast<IntegraStudioSetCommonOutputAssigns>(); }
-        }
-
-        public static IEnumerable<IntegraChorusOutputSelections> OutputSelects
-        {
-            get { return Enum.GetValues(typeof(IntegraChorusOutputSelections)).Cast<IntegraChorusOutputSelections>(); }
         }
 
         #endregion

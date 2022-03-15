@@ -18,71 +18,92 @@ namespace IntegraXL.Models.Parameters
 
         public int PreLPF
         {
-            get { return this[0]; }
+            get => this[0];
             set
             {
-                this[0] = value.Clamp(0, 7);
-                NotifyPropertyChanged();
+                if (this[0] != value)
+                {
+                    this[0] = value.Clamp(0, 7);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         public int Level
         {
-            get { return this[1]; }
+            get => this[1];
             set
             {
-                this[1] = value.Clamp();
-                NotifyPropertyChanged();
+                if (this[1] != value)
+                { 
+                    this[1] = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         public int Feedback
         {
-            get { return this[2]; }
+            get => this[2];
             set
             {
-                this[2] = value.Clamp();
-                NotifyPropertyChanged();
+                if (this[2] != value)
+                {
+                    this[2] = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         public int Delay
         {
-            get { return this[3]; }
+            get => this[3];
             set
             {
-                this[3] = value.Clamp();
-                NotifyPropertyChanged();
+                if (this[3] != value)
+                {
+                    this[3] = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         public int Rate
         {
-            get { return this[4]; }
+            get => this[4];
             set
             {
-                this[4] = value.Clamp();
-                NotifyPropertyChanged();
+                if (this[4] != value)
+                {
+                    this[4] = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         public int Depth
         {
-            get { return this[5]; }
+            get => this[5];
             set
             {
-                this[5] = value.Clamp();
-                NotifyPropertyChanged();
+                if (this[5] != value)
+                {
+                    this[5] = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         public int ReverbSendLevel
         {
-            get { return this[6]; }
+            get => this[6];
             set
             {
-                this[6] = value.Clamp();
-                NotifyPropertyChanged();
+                if (this[6] != value)
+                {
+                    this[6] = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
     }
