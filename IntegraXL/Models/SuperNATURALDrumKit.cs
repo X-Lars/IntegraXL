@@ -5,7 +5,7 @@ namespace IntegraXL.Models
     [Integra(0x00030000, 0x00100000)]
     public class SuperNATURALDrumKit : IntegraModel<SuperNATURALDrumKit>
     {
-        private int _SelectedIndex;
+        private IntegraSNDNoteIndex _SelectedNote = IntegraSNDNoteIndex.Key27E1Flat;
 
         internal SuperNATURALDrumKit(TemporaryTone tone) : base(tone.Device)
         {
@@ -18,12 +18,19 @@ namespace IntegraXL.Models
 
         public int SelectedIndex
         {
-            get => _SelectedIndex;
+            get => (int)_SelectedNote;
+            set => SelectedNote = (IntegraSNDNoteIndex)value;
+        }
+
+        public IntegraSNDNoteIndex SelectedNote
+        {
+            get => _SelectedNote;
             set
             {
-                if (_SelectedIndex != value)
+                if (_SelectedNote != value)
                 {
-                    _SelectedIndex = value;
+                    _SelectedNote = value;
+
                     NotifyPropertyChanged();
                     NotifyPropertyChanged(nameof(Note));
                 }
@@ -35,7 +42,7 @@ namespace IntegraXL.Models
         public SuperNATURALDrumKitNotes Notes { get; }
         public SuperNATURALDrumKitNote Note
         {
-            get => Notes[_SelectedIndex];
+            get => Notes[(int)_SelectedNote];
         }
             
 

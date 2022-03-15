@@ -1,6 +1,5 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Extensions;
-using IntegraXL.Templates;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
@@ -99,80 +98,97 @@ namespace IntegraXL.Models
             int offset = (msb + lsb);
 
             Address += offset;
-            Index = (IntegraSNDNoteIndex)note;
+
+            Index = note;
         }
 
         #endregion
 
-        public IntegraSNDNoteIndex Index { get; }
+        #region Properties
 
-        public WaveformTemplate Waveform
-        {
-            get
-            {
-                WaveformTemplate template = IntegraWaveformLookup.Template(IntegraWaveFormTypes.SND,IntegraWaveFormBanks.INT, InstNumber);
+        /// <summary>
+        /// Gets the selected partial.
+        /// </summary>
+        public IntegraSNDNoteIndex Partial => (IntegraSNDNoteIndex)Index;
 
-                return template;
-            }
-        }
+        /// <summary>
+        /// Gets the index of the partial.
+        /// </summary>
+        public int Index { get; }
+
+        #endregion
 
         #region Properties: INTEGRA-7
 
         [Offset(0x0000)]
-        public int InstNumber
+        public IntegraSNDInstruments InstNumber
         {
-            get { return _InstNumber.ToMidi(); }
+            get => (IntegraSNDInstruments)_InstNumber.Deserialize();
             set
             {
-                _InstNumber = value.SerializeInt();
+                if (InstNumber != value)
+                {
+                    _InstNumber = ((int)value).SerializeInt();
 
-                NotifyPropertyChanged();
-                NotifyPropertyChanged(nameof(Waveform));
+                    Variation = IntegraNoteVariation.Off;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0004)]
         public byte NoteLevel
         {
-            get { return _NoteLevel; }
+            get => _NoteLevel;
             set
             {
-                _NoteLevel = value;
-                NotifyPropertyChanged();
+                if (_NoteLevel != value)
+                {
+                    _NoteLevel = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0005)]
         public byte Pan
         {
-            get { return _Pan; }
+            get => _Pan;
             set
             {
-                _Pan = value;
-                NotifyPropertyChanged();
+                if (_Pan != value)
+                {
+                    _Pan = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0006)]
         public byte ChorusSendLevel
         {
-            get { return _ChorusSendLevel; }
+            get => _ChorusSendLevel;
             set
             {
-                _ChorusSendLevel = value;
-                NotifyPropertyChanged();
+                if (_ChorusSendLevel != value)
+                {
+                    _ChorusSendLevel = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0007)]
         public byte ReverbSendLevel
         {
-            get { return _ReverbSendLevel; }
+            get => _ReverbSendLevel;
             set
             {
-                _ReverbSendLevel = value;
-                NotifyPropertyChanged();
-
+                if (_ReverbSendLevel != value)
+                {
+                    _ReverbSendLevel = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -180,90 +196,123 @@ namespace IntegraXL.Models
         public int Tune
         {
             // TODO: Calulate tune values -1200 / 1200 (8 / 248)
-            get { return _Tune.ToMidi(); }
+            get => _Tune.DeserializeInt(128, 10);
             set
             {
-                _Tune = value.SerializeInt();
-                NotifyPropertyChanged();
+                if (Tune != value)
+                {
+                    _Tune = value.Clamp(-1200, 1200).SerializeInt(128, 10);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x000C)]
         public byte Attack
         {
-            get { return _Attack; }
+            get => _Attack;
             set
             {
-                _Attack = value;
-                NotifyPropertyChanged();
+                if (_Attack != value)
+                {
+                    _Attack = value.Clamp(0, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x000D)] 
-        public byte Decay
+        public int Decay
         {
-            get { return _Decay; }
+            get => _Decay.Deserialize(64);
             set
             {
-                _Decay = value;
-                NotifyPropertyChanged();
+                if (Decay != value)
+                {
+                    _Decay = value.Clamp(-63, 0).Serialize(64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x000E)] 
-        public byte Brilliance
+        public int Brilliance
         {
-            get { return _Brilliance; }
+            get => _Brilliance.Deserialize(64);
             set
             {
-                _Brilliance = value;
-                NotifyPropertyChanged();
+                if (Brilliance != value)
+                {
+                    _Brilliance = value.Clamp(-15, 12).Serialize(64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x000F)] 
         public IntegraNoteVariation Variation
         {
-            get { return _Variation; }
+            get => _Variation;
             set
             {
-                _Variation = value;
-                NotifyPropertyChanged();
+                if (_Variation != value)
+                {
+                    if ((byte)value > this.MaxVariation())
+                        return;
+
+                    _Variation = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0010)] 
         public byte DynamicRange
         {
-            get { return _DynamicRange; }
+            get => _DynamicRange;
             set
             {
-                _DynamicRange = value;
-                NotifyPropertyChanged();
+                if (_DynamicRange != value)
+                {
+                    _DynamicRange = value.Clamp(0, 63);
+                    NotifyPropertyChanged();
+                }
             }
         }
+
         [Offset(0x0011)] 
         public byte StereoWidth
         {
-            get { return _StereoWidth; }
+            get => _StereoWidth;
             set
             {
-                _StereoWidth = value;
-                NotifyPropertyChanged();
+                if (_StereoWidth != value)
+                {
+                    _StereoWidth = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0012)] 
         public IntegraNoteOutputAssign OutputAssign
         {
-            get { return _OutputAssign; }
+            get => _OutputAssign;
             set
             {
-                _OutputAssign = value;
-                NotifyPropertyChanged();
+                if (_OutputAssign != value)
+                {
+                    _OutputAssign = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         #endregion
+
+        public static List<string> PanValues
+        {
+            get { return IntegraPan.Values; }
+        }
     }
 }

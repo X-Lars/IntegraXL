@@ -13,7 +13,7 @@ namespace IntegraXL.Models
         [Offset(0x000C)] byte[] RESERVED01 = new byte[4];
         [Offset(0x0010)] byte _KitLevel;
         [Offset(0x0011)] byte _AmbienceLevel;
-        [Offset(0x0012)] byte _PhraseNumber;
+        [Offset(0x0012)] IntegraSNDPhrase _PhraseNumber;
         [Offset(0x0013)] IntegraSwitch _TFXSwitch;
 
         #endregion
@@ -32,7 +32,7 @@ namespace IntegraXL.Models
         [Offset(0x0000)]
         public string KitName
         {
-            get { return Encoding.ASCII.GetString(_KitName); }
+            get => Encoding.ASCII.GetString(_KitName, 0, 12);
             set
             {
                 if (KitName != value)
@@ -50,41 +50,54 @@ namespace IntegraXL.Models
         [Offset(0x0010)]
         public byte KitLevel
         {
-            get { return _KitLevel; }
+            get => _KitLevel;
             set
             {
-                _KitLevel = value;
-                NotifyPropertyChanged();
+                if (_KitLevel != value)
+                {
+                    _KitLevel = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
         [Offset(0x0011)]
         public byte AmbienceLevel
         {
-            get { return _AmbienceLevel; }
+            get => _AmbienceLevel;
             set
             {
-                _AmbienceLevel = value;
-                NotifyPropertyChanged();
+                if (_AmbienceLevel != value)
+                {
+                    _AmbienceLevel = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
         [Offset(0x0012)]
-        public byte PhraseNumber
+        public IntegraSNDPhrase PhraseNumber
         {
-            get { return _PhraseNumber; }
+            get => _PhraseNumber;
             set
             {
-                _PhraseNumber = value;
+                if (_PhraseNumber != value)
+                {
+                    _PhraseNumber = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0013)]
         public IntegraSwitch TFXSwitch
         {
-            get { return _TFXSwitch; }
+            get => _TFXSwitch;
             set
             {
-                _TFXSwitch = value;
-                NotifyPropertyChanged();
+                if (_TFXSwitch != value)
+                {
+                    _TFXSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 

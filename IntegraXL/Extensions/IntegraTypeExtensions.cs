@@ -219,6 +219,29 @@ namespace IntegraXL.Extensions
             return (values[0] & 0x0F) << 12 | (values[1] & 0x0F) << 8 | (values[2] & 0x0F) << 4 | (values[3] & 0x0F);
         }
 
+        public static int DeserializeInt(this int value, int offset, int factor = 1)
+        {
+            byte[] values = BitConverter.GetBytes(value);
+
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(values);
+
+            int integer = (values[0] & 0x0F) << 12 | (values[1] & 0x0F) << 8 | (values[2] & 0x0F) << 4 | (values[3] & 0x0F);
+
+            integer -= offset;
+            integer *= factor;
+            // TODO: ? Remove logical AND's ?
+            return integer;
+        }
+
+        public static int SerializeInt(this int value, int offset, int factor = 1)
+        {
+            int integer = value / factor;
+            integer += offset;
+
+            return integer.SerializeInt();
+        }
+
         //public static int MIDIValue(this short value)
         //{
         //    return (((value & 0xFF00) >> 8) * 128) + (value & 0x00FF);

@@ -1,0 +1,191 @@
+﻿using IntegraXL.Core;
+using IntegraXL.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace IntegraXL.Extensions
+{
+    public static class IntegraSNDExtensions
+    {
+        public static byte MaxVariation(this SuperNATURALDrumKitNote instance)
+        {
+            switch (instance.InstNumber)
+            {
+                case IntegraSNDInstruments.StudioKick:
+                case IntegraSNDInstruments.PopKick:
+                case IntegraSNDInstruments.JazzKick:
+                case IntegraSNDInstruments.RockKick:
+                case IntegraSNDInstruments.StudioKick2:
+                case IntegraSNDInstruments.RockKick2:
+                case IntegraSNDInstruments.OrchBassDrum:
+                case IntegraSNDInstruments.StudioSNXStk:
+                case IntegraSNDInstruments.PopSNXStk:
+                case IntegraSNDInstruments.JazzSNXStk:
+                case IntegraSNDInstruments.RockSNXStk:
+                case IntegraSNDInstruments.TightSNXStk:
+                case IntegraSNDInstruments.StudioSN2XStk:
+                case IntegraSNDInstruments.RockSN2XStk:
+                case IntegraSNDInstruments.BrushSNSlide:
+                case IntegraSNDInstruments.SnareCrossStk:
+                case IntegraSNDInstruments.OrchSnareXStk:
+                case IntegraSNDInstruments.PopTomHi:
+                case IntegraSNDInstruments.PopTomMid:
+                case IntegraSNDInstruments.PopTomFlr:
+                case IntegraSNDInstruments.RockTomHi:
+                case IntegraSNDInstruments.RockTomMid:
+                case IntegraSNDInstruments.RockTomFloor:
+                case IntegraSNDInstruments.JazzTomHi:
+                case IntegraSNDInstruments.JazzTomMid:
+                case IntegraSNDInstruments.JazzTomFloor:
+                case IntegraSNDInstruments.BrushTomHi:
+                case IntegraSNDInstruments.BrushTomMid:
+                case IntegraSNDInstruments.BrushTomFloor:
+                case IntegraSNDInstruments.MedHHClose:
+                case IntegraSNDInstruments.MedHHOpen:
+                case IntegraSNDInstruments.MedHHPedal:
+                case IntegraSNDInstruments.StandardHHCl:
+                case IntegraSNDInstruments.StandardHHOp:
+                case IntegraSNDInstruments.StandardHHPdl:
+                case IntegraSNDInstruments.JazzHHClose:
+                case IntegraSNDInstruments.JazzHHOpen:
+                case IntegraSNDInstruments.JazzHHPedal:
+                case IntegraSNDInstruments.BrushHHClose:
+                case IntegraSNDInstruments.BrushHHOpen:
+                case IntegraSNDInstruments.StandardRdEdge:
+                case IntegraSNDInstruments.StandardRdBell:
+                case IntegraSNDInstruments.StdRdEdgeBell:
+                case IntegraSNDInstruments.MediumRideEdge:
+                case IntegraSNDInstruments.MediumRideBell:
+                case IntegraSNDInstruments.MedRdEdgeBell:
+                case IntegraSNDInstruments.Flat18Ride:
+                case IntegraSNDInstruments.Brush18Ride:
+                case IntegraSNDInstruments.Brush20Ride:
+                case IntegraSNDInstruments.Brush16CrR:
+                case IntegraSNDInstruments.Brush16CrL:
+                case IntegraSNDInstruments.Brush18CrR:
+                case IntegraSNDInstruments.Brush18CrL:
+                case IntegraSNDInstruments.SplashCymbal1:
+                case IntegraSNDInstruments.SplashCymbal2:
+                case IntegraSNDInstruments.BrushSplashCym:
+                case IntegraSNDInstruments.ChinaCymbal:
+                case IntegraSNDInstruments.OrchCymbal:
+                case IntegraSNDInstruments.Gong:
+                case IntegraSNDInstruments.TimpaniF2:
+                case IntegraSNDInstruments.TimpaniF2S:
+                case IntegraSNDInstruments.TimpaniG2:
+                case IntegraSNDInstruments.TimpaniG2S:
+                case IntegraSNDInstruments.TimpaniA2:
+                case IntegraSNDInstruments.TimpaniA2S:
+                case IntegraSNDInstruments.TimpaniB2:
+                case IntegraSNDInstruments.TimpaniC3:
+                case IntegraSNDInstruments.TimpaniC3S:
+                case IntegraSNDInstruments.TimpaniD3:
+                case IntegraSNDInstruments.TimpaniD3S:
+                case IntegraSNDInstruments.TimpaniE3:
+                case IntegraSNDInstruments.TimpaniF3:
+                case IntegraSNDInstruments.Tambourine2:
+                case IntegraSNDInstruments.Cowbell1:
+                case IntegraSNDInstruments.Cowbell2:
+                case IntegraSNDInstruments.VibraSlap:
+                case IntegraSNDInstruments.LowBongo1:
+                case IntegraSNDInstruments.HighBongo2:
+                case IntegraSNDInstruments.LowBongo2:
+                case IntegraSNDInstruments.MuteHiConga1:
+                case IntegraSNDInstruments.MuteHiConga2:
+                case IntegraSNDInstruments.OpenHiConga2:
+                case IntegraSNDInstruments.LowConga2:
+                case IntegraSNDInstruments.HighTimbale:
+                case IntegraSNDInstruments.LowTimbale:
+                case IntegraSNDInstruments.HighAgogo1:
+                case IntegraSNDInstruments.LowAgogo1:
+                case IntegraSNDInstruments.HighAgogo2:
+                case IntegraSNDInstruments.LowAgogo2:
+                case IntegraSNDInstruments.Cabasa1:
+                case IntegraSNDInstruments.Cabasa2:
+                case IntegraSNDInstruments.Maracas1:
+                case IntegraSNDInstruments.Maracas2:
+                case IntegraSNDInstruments.ShortWhistle:
+                case IntegraSNDInstruments.LongWhistle:
+                case IntegraSNDInstruments.ShortGuiro:
+                case IntegraSNDInstruments.LongGuiro:
+                case IntegraSNDInstruments.Claves1:
+                case IntegraSNDInstruments.Claves2:
+                case IntegraSNDInstruments.HiWoodblock1:
+                case IntegraSNDInstruments.LowWoodblock1:
+                case IntegraSNDInstruments.HiWoodblock2:
+                case IntegraSNDInstruments.LowWoodblock2:
+                case IntegraSNDInstruments.MuteCuica1:
+                case IntegraSNDInstruments.OpenCuica1:
+                case IntegraSNDInstruments.MuteCuica2:
+                case IntegraSNDInstruments.OpenCuica2:
+                case IntegraSNDInstruments.MuteTriangle2:
+                case IntegraSNDInstruments.OpenTriangle2:
+                case IntegraSNDInstruments.Shaker:
+                case IntegraSNDInstruments.SleighBell1:
+                case IntegraSNDInstruments.SleighBell2:
+                case IntegraSNDInstruments.WindChimes:
+                case IntegraSNDInstruments.Castanets2:
+                case IntegraSNDInstruments.MuteSurdo1:
+                case IntegraSNDInstruments.OpenSurdo1:
+                case IntegraSNDInstruments.MuteSurdo2:
+                case IntegraSNDInstruments.OpenSurdo2:
+                case IntegraSNDInstruments.Sticks:
+                case IntegraSNDInstruments.SquareClick:
+                case IntegraSNDInstruments.MetroClick:
+                case IntegraSNDInstruments.MetroBell:
+                case IntegraSNDInstruments.HandClap:
+                case IntegraSNDInstruments.HighQ:
+                case IntegraSNDInstruments.Slap:
+                case IntegraSNDInstruments.ScratchPush:
+                case IntegraSNDInstruments.ScratchPull:
+                case IntegraSNDInstruments.GtFretNoise:
+                case IntegraSNDInstruments.GtCuttingUpNz:
+                case IntegraSNDInstruments.GtCuttingDwNz:
+                case IntegraSNDInstruments.AcBassNoise:
+                case IntegraSNDInstruments.FluteKeyClick:
+                    return 6; // Flam/Buzz
+
+                case IntegraSNDInstruments.StudioSN:
+                case IntegraSNDInstruments.StudioSNRim:
+                case IntegraSNDInstruments.PopSN:
+                case IntegraSNDInstruments.PopSNRim:
+                case IntegraSNDInstruments.JazzSN:
+                case IntegraSNDInstruments.JazzSNRim:
+                case IntegraSNDInstruments.RockSN:
+                case IntegraSNDInstruments.RockSNRim:
+                case IntegraSNDInstruments.TightSN:
+                case IntegraSNDInstruments.TightSNRim:
+                case IntegraSNDInstruments.StudioSN2:
+                case IntegraSNDInstruments.StudioSN2Rim:
+                case IntegraSNDInstruments.RockSN2:
+                case IntegraSNDInstruments.RockSN2Rim:
+                case IntegraSNDInstruments.BrushSNSlap:
+                case IntegraSNDInstruments.BrushSNTap:
+                case IntegraSNDInstruments.OrchSnare:
+                case IntegraSNDInstruments.Standard16CrR:
+                case IntegraSNDInstruments.Standard16CrL:
+                case IntegraSNDInstruments.Standard18CrR:
+                case IntegraSNDInstruments.Standard18CrL:
+                case IntegraSNDInstruments.Jazz16CrR:
+                case IntegraSNDInstruments.Jazz16CrL:
+                case IntegraSNDInstruments.Heavy18CrR:
+                case IntegraSNDInstruments.Heavy18CrL:
+                case IntegraSNDInstruments.OrchMalletCym:
+                case IntegraSNDInstruments.Tambourine1:
+                case IntegraSNDInstruments.HighBongo1:
+                case IntegraSNDInstruments.OpenHiConga1:
+                case IntegraSNDInstruments.LowConga1:
+                case IntegraSNDInstruments.MuteTriangle1:
+                case IntegraSNDInstruments.OpenTriangle1:
+                case IntegraSNDInstruments.Castanets1:
+                    return 7; // Flam/Buzz/Roll
+
+                default:
+                    return 0;
+            }
+        }
+    }
+}
