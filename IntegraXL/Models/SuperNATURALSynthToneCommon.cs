@@ -35,10 +35,10 @@ namespace IntegraXL.Models
         [Offset(0x0033)] byte RESERVED05;
         [Offset(0x0034)] byte _AnalogFeel;
         [Offset(0x0035)] byte _WaveShape;
-        [Offset(0x0036)] byte _ToneCategory;
-        [Offset(0x0037)] int _PhraseNumber;
+        [Offset(0x0036)] IntegraTemporaryToneCategories _Category;
+        [Offset(0x0037)] IntegraSynthPhrase _PhraseNumber;
         [Offset(0x003B)] byte _PhraseOctaveShift;
-        [Offset(0x003C)] byte _UnisonSize;
+        [Offset(0x003C)] IntegraUnisonSize _UnisonSize;
         [Offset(0x003D)] byte[] RESERVED06 = new byte[3];
 
         #endregion
@@ -57,7 +57,7 @@ namespace IntegraXL.Models
         [Offset(0x0000)]
         public string ToneName
         {
-            get { return Encoding.ASCII.GetString(_ToneName); }
+            get => Encoding.ASCII.GetString(_ToneName, 0, 12);
             set
             {
                 if (ToneName != value)
@@ -75,76 +75,98 @@ namespace IntegraXL.Models
         [Offset(0x000C)]
         public byte ToneLevel
         {
-            get { return _ToneLevel; }
+            get => _ToneLevel;
             set
             {
-                _ToneLevel = value;
-                NotifyPropertyChanged();
+                if (_ToneLevel != value)
+                {
+                    _ToneLevel = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0012)]
         public IntegraSwitch PortamentoSwitch
         {
-            get { return _PortamentoSwitch; }
+            get => _PortamentoSwitch;
             set
             {
-                _PortamentoSwitch = value;
-                NotifyPropertyChanged();
+                if (_PortamentoSwitch != value)
+                {
+                    _PortamentoSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0013)]
-        public  byte PortamentoTime
+        public byte PortamentoTime
         {
-            get { return _PortamentoTime; }
+            get => _PortamentoTime;
             set 
-            { 
-                _PortamentoTime = value;
-                NotifyPropertyChanged();
+            {
+                if (_PortamentoTime != value)
+                {
+                    _PortamentoTime = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0014)]
         public IntegraSwitch MonoSwitch
         {
-            get { return _MonoSwitch; }
+            get => _MonoSwitch;
             set
             {
-                _MonoSwitch = value;
-                NotifyPropertyChanged();
+                if (_MonoSwitch != value)
+                {
+                    _MonoSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0015)]
-        public byte OctaveShift
+        public int OctaveShift
         {
-            get { return _OctaveShift; }
+            get => _OctaveShift.Deserialize(64);
             set
             {
-                _OctaveShift = value;
-                NotifyPropertyChanged();
+                if (OctaveShift != value)
+                {
+                    _OctaveShift = value.Serialize(64).Clamp(61, 67);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0016)]
         public byte PitchBendRangeUp
         {
-            get { return _PitchBendRangeUp; }
+            get => _PitchBendRangeUp;
             set
             {
-                _PitchBendRangeUp = value;
-                NotifyPropertyChanged();
+                if (_PitchBendRangeUp != value)
+                {
+                    _PitchBendRangeUp = value.Clamp(0, 48);
+                    NotifyPropertyChanged();
+                }
             }
         }
+
         [Offset(0x0017)]
         public byte PitchBendRangeDown
         {
-            get { return _PitchBendRangeDown; }
+            get => _PitchBendRangeDown;
             set
             {
-                _PitchBendRangeDown = value;
-                NotifyPropertyChanged();
+                if (_PitchBendRangeDown != value)
+                {
+                    _PitchBendRangeDown = value.Clamp(0, 48);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -216,123 +238,154 @@ namespace IntegraXL.Models
         [Offset(0x001F)]
         public IntegraRingSwitch RingSwitch
         {
-            get { return _RingSwitch; }
+            get => _RingSwitch;
             set
             {
-                _RingSwitch = value;
-                NotifyPropertyChanged();
+                if (_RingSwitch != value)
+                {
+                    _RingSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
+
         [Offset(0x0020)]
         public IntegraSwitch TFXSwitch
         {
-            get { return _TFXSwitch; }
+            get => _TFXSwitch;
             set
             {
-                _TFXSwitch = value;
-                NotifyPropertyChanged();
+                if (_TFXSwitch != value)
+                {
+                    _TFXSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x002E)]
         public IntegraSwitch UnisonSwitch
         {
-            get { return _UnisonSwitch; }
+            get => _UnisonSwitch;
             set
             {
-                _UnisonSwitch = value;
-                NotifyPropertyChanged();
+                if (_UnisonSwitch != value)
+                {
+                    _UnisonSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0031)]
         public IntegraPortamentoMode PortamentoMode
         {
-            get { return _PortamentoMode; }
+            get => _PortamentoMode;
             set
             {
-                _PortamentoMode = value;
-                NotifyPropertyChanged();
+                if (_PortamentoMode != value)
+                {
+                    _PortamentoMode = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0032)]
         public IntegraSwitch LegatoSwitch
         {
-            get { return _LegatoSwitch; }
+            get => _LegatoSwitch;
             set
             {
-                _LegatoSwitch = value;
-                NotifyPropertyChanged();
+                if (_LegatoSwitch != value)
+                {
+                    _LegatoSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0034)]
         public byte AnalogFeel
         {
-            get { return _AnalogFeel; }
+            get => _AnalogFeel;
             set
             {
-                _AnalogFeel = value;
-                NotifyPropertyChanged();
+                if (_AnalogFeel != value)
+                {
+                    _AnalogFeel = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0035)]
         public byte WaveShape
         {
-            get { return _WaveShape; }
+            get => _WaveShape;
             set
             {
-                _WaveShape = value;
-                NotifyPropertyChanged();
+                if (_WaveShape != value)
+                {
+                    _WaveShape = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0036)]
-        public byte ToneCategory
+        public IntegraTemporaryToneCategories Category
         {
-            get { return _ToneCategory; }
+            get => _Category;
             set
             {
-                _ToneCategory = value;
-                NotifyPropertyChanged();
+                if (_Category != value)
+                {
+                    _Category = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
-        //[Offset(0x0037)]
-        //public int PhraseNumber
-        //{
-        //    get
-        //    {
-        //        return _PhraseNumber.DeserializeInt();
-        //    }
-        //    set
-        //    {
-        //        _PhraseNumber = value.SerializeInt();
-        //        NotifyPropertyChanged();
-        //    }
-        //}
-
-        [Offset(0x003B)]
-        public byte PhraseOctaveShift
+        [Offset(0x0037)]
+        public IntegraSynthPhrase PhraseNumber
         {
-            get { return _PhraseOctaveShift; }
+            get => _PhraseNumber;
             set
             {
-                _PhraseOctaveShift = value;
-                NotifyPropertyChanged();
+                if (_PhraseNumber != value)
+                {
+                    _PhraseNumber = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        [Offset(0x003B)]
+        public int PhraseOctaveShift
+        {
+            get => _PhraseOctaveShift.Deserialize(64);
+            set
+            {
+                if (PhraseOctaveShift != value)
+                {
+                    _PhraseOctaveShift = value.Serialize(64).Clamp(61, 67);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x003C)]
-        public byte UnisonSize
+        public IntegraUnisonSize UnisonSize
         {
-            get { return _UnisonSize; }
+            get => _UnisonSize;
             set
             {
-                _UnisonSize = value;
-                NotifyPropertyChanged();
+                if (_UnisonSize != value)
+                {
+                    _UnisonSize = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 

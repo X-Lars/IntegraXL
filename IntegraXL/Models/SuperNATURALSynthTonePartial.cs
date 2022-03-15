@@ -1,5 +1,6 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Extensions;
+using IntegraXL.Templates;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
@@ -96,7 +97,7 @@ namespace IntegraXL.Models
         #region Fields: Filter
 
         [Offset(0x000A)] private IntegraFilterMode _FilterMode;
-        [Offset(0x000B)] private byte _FilterSlope;
+        [Offset(0x000B)] private IntegraFilterSlope _FilterSlope;
         [Offset(0x000C)] private byte _FilterCutoff;
         [Offset(0x000D)] private byte _FilterCutoffKeyFollow;
         [Offset(0x000E)] private byte _FilterEnvVelocitySens;
@@ -126,7 +127,7 @@ namespace IntegraXL.Models
         [Offset(0x001C)] IntegraLFOShape _LFOShape;
         [Offset(0x001D)] byte _LFORate;
         [Offset(0x001E)] IntegraSwitch _LFOTempoSyncSwitch;
-        [Offset(0x001F)] byte _LFOTempoSyncNote;
+        [Offset(0x001F)] IntegraTempoSyncNote _LFOTempoSyncNote;
         [Offset(0x0020)] byte _LFOFadeTime;
         [Offset(0x0021)] IntegraSwitch _LFOKeyTrigger;
         [Offset(0x0022)] byte _LFOPitchDepth;
@@ -138,16 +139,16 @@ namespace IntegraXL.Models
 
         #region Fields: Modulation
 
-        [Offset(0x0026)] private IntegraLFOShape _ModulationLFOShape;
-        [Offset(0x0027)] private byte _ModulationLFORate;
-        [Offset(0x0028)] private IntegraSwitch _ModulationLFOTempoSyncSwitch;
-        [Offset(0x0029)] private byte _ModulationLFOTempoSyncNote;
+        [Offset(0x0026)] private IntegraLFOShape _ModLFOShape;
+        [Offset(0x0027)] private byte _ModLFORate;
+        [Offset(0x0028)] private IntegraSwitch _ModLFOTempoSyncSwitch;
+        [Offset(0x0029)] private IntegraTempoSyncNote _ModLFOTempoSyncNote;
         [Offset(0x002A)] private byte _OSCPulseWidthShift;
         [Offset(0x002B)] private readonly byte RESERVED02;
-        [Offset(0x002C)] private byte _ModulationLFOPitchDepth;
-        [Offset(0x002D)] private byte _ModulationLFOFilterDepth;
-        [Offset(0x002E)] private byte _ModulationLFOAmpDepth;
-        [Offset(0x002F)] private byte _ModulationLFOPanDepth;
+        [Offset(0x002C)] private byte _ModLFOPitchDepth;
+        [Offset(0x002D)] private byte _ModLFOFilterDepth;
+        [Offset(0x002E)] private byte _ModLFOAmpDepth;
+        [Offset(0x002F)] private byte _ModLFOPanDepth;
 
         #endregion
 
@@ -160,7 +161,7 @@ namespace IntegraXL.Models
         [Offset(0x0035)] private int _WaveNumber;
         [Offset(0x0039)] private byte _HPFCutoff;
         [Offset(0x003A)] private byte _SuperSawDetune;
-        [Offset(0x003B)] private byte _ModulationLFORateControl;
+        [Offset(0x003B)] private byte _ModLFORateControl;
         [Offset(0x003C)] private byte _AmpLevelKeyFollow;
 
         #endregion
@@ -174,14 +175,35 @@ namespace IntegraXL.Models
         {
             Address += tone.Address;
             Address += (partial) << 8;
-            Partial  = (IntegraSNSynthToneParts)partial;
+
+            Debug.Print($"{Address}");
+
+            Index = partial;
         }
 
         #endregion
 
         #region Properties
 
-        public IntegraSNSynthToneParts Partial { get; private set; }
+        /// <summary>
+        /// Gets the selected partial.
+        /// </summary>
+        public IntegraSNSynthToneParts Partial => (IntegraSNSynthToneParts)Index;
+        
+        /// <summary>
+        /// Gets the index of the partial.
+        /// </summary>
+        public int Index { get; }
+
+        public WaveformTemplate WaveForm
+        {
+            get
+            {
+                // TODO: Default template for non PCM wave
+                return IntegraWaveformLookup.Template(IntegraWaveFormTypes.SNS, IntegraWaveFormBanks.INT, WaveNumber);
+            }
+        }
+
 
         #endregion
 
@@ -192,102 +214,128 @@ namespace IntegraXL.Models
         [Offset(0x0000)]
         public IntegraOSCWave OSCWave
         {
-            get { return _OSCWave; }
+            get => _OSCWave;
             set
             {
-                _OSCWave = value;
-                NotifyPropertyChanged();
+                if (_OSCWave != value)
+                {
+                    _OSCWave = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0001)]
         public IntegraOSCWaveVariation OSCWaveVariation
         {
-            get { return _OSCWaveVariation; }
+            get => _OSCWaveVariation;
             set
             {
-                _OSCWaveVariation = value;
-                NotifyPropertyChanged();
+                if (_OSCWaveVariation != value)
+                {
+                    _OSCWaveVariation = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0003)]
-        public byte OSCPitch
+        public int OSCPitch
         {
-            get { return _OSCPitch; }
+            get => _OSCPitch.Deserialize(64);
             set
             {
-                _OSCPitch = value;
-                NotifyPropertyChanged();
+                if (OSCPitch != value)
+                {
+                    _OSCPitch = value.Serialize(64).Clamp(40, 88);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0004)]
-        public byte OSCDetune
+        public int OSCDetune
         {
-            get { return _OSCDetune; }
+            get => _OSCDetune.Deserialize(64);
             set
             {
-                _OSCDetune = value;
-                NotifyPropertyChanged();
+                if (OSCDetune != value)
+                {
+                    _OSCDetune = value.Serialize(64).Clamp(14, 114);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0005)]
         public byte OSCPulseWidthModDepth
         {
-            get { return _OSCPulseWidthModDepth; }
+            get => _OSCPulseWidthModDepth;
             set
             {
-                _OSCPulseWidthModDepth = value;
-                NotifyPropertyChanged();
+                if (_OSCPulseWidthModDepth != value)
+                {
+                    _OSCPulseWidthModDepth = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0006)]
         public byte OSCPulseWidth
         {
-            get { return _OSCPulseWidth; }
+            get => _OSCPulseWidth;
             set
             {
-                _OSCPulseWidth = value;
-                NotifyPropertyChanged();
+                if (_OSCPulseWidth != value)
+                {
+                    _OSCPulseWidth = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0007)]
         public byte OSCPitchEnvAttack
         {
-            get { return _OSCPitchEnvAttack; }
+            get => _OSCPitchEnvAttack;
             set
             {
-                _OSCPitchEnvAttack = value;
-                NotifyPropertyChanged();
+                if (_OSCPitchEnvAttack != value)
+                {
+                    _OSCPitchEnvAttack = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0008)]
         public byte OSCPitchEnvDecay
         {
-            get { return _OSCPitchEnvDecay; }
+            get => _OSCPitchEnvDecay;
             set
             {
-                _OSCPitchEnvDecay = value;
-                NotifyPropertyChanged();
+                if (_OSCPitchEnvDecay != value)
+                {
+                    _OSCPitchEnvDecay = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0009)]
-        public byte OSCPitchEnvDepth
+        public int OSCPitchEnvDepth
         {
-            get { return _OSCPitchEnvDepth; }
+            get => _OSCPitchEnvDepth.Deserialize(64);
             set
             {
-                _OSCPitchEnvDepth = value;
-                NotifyPropertyChanged();
+                if (OSCPitchEnvDepth != value)
+                {
+                    _OSCPitchEnvDepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
-
 
         #endregion
 
@@ -296,124 +344,156 @@ namespace IntegraXL.Models
         [Offset(0x000A)]
         public IntegraFilterMode FilterMode
         {
-            get { return _FilterMode; }
+            get => _FilterMode;
             set
             {
-                _FilterMode = value;
-                NotifyPropertyChanged();
+                if (_FilterMode != value)
+                {
+                    _FilterMode = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x000B)]
-        public byte FilterSlope
+        public IntegraFilterSlope FilterSlope
         {
-            get { return _FilterSlope; }
+            get => _FilterSlope;
             set
             {
-                _FilterSlope = value;
-                NotifyPropertyChanged();
+                if (_FilterSlope != value)
+                {
+                    _FilterSlope = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x000C)]
         public byte FilterCutoff
         {
-            get { return _FilterCutoff; }
+            get => _FilterCutoff;
             set
             {
-                _FilterCutoff = value;
-                NotifyPropertyChanged();
+                if (_FilterCutoff != value)
+                {
+                    _FilterCutoff = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x000D)]
-        public byte FilterCutoffKeyFollow
+        public int FilterCutoffKeyFollow
         {
-            get { return _FilterCutoffKeyFollow; }
+            get => _FilterCutoffKeyFollow.Deserialize(64, 10);
             set
             {
-                _FilterCutoffKeyFollow = value;
-                NotifyPropertyChanged();
+                if (FilterCutoffKeyFollow != value)
+                {
+                    _FilterCutoffKeyFollow = value.Serialize(64, 10).Clamp(54, 74);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x000E)]
-        public byte FilterEnvVelocitySens
+        public int FilterEnvVelocitySens
         {
-            get { return _FilterEnvVelocitySens; }
+            get => _FilterEnvVelocitySens.Deserialize(64);
             set
             {
-                _FilterEnvVelocitySens = value;
-                NotifyPropertyChanged();
+                if (FilterEnvVelocitySens != value)
+                {
+                    _FilterEnvVelocitySens = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x000F)]
         public byte FilterResonance
         {
-            get { return _FilterResonance; }
+            get => _FilterResonance;
             set
             {
-                _FilterResonance = value;
-                NotifyPropertyChanged();
+                if (_FilterResonance != value)
+                {
+                    _FilterResonance = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0010)]
         public byte FilterEnvAttack
         {
-            get { return _FilterEnvAttack; }
+            get => _FilterEnvAttack;
             set
             {
-                _FilterEnvAttack = value;
-                NotifyPropertyChanged();
+                if (_FilterEnvAttack != value)
+                {
+                    _FilterEnvAttack = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0011)]
         public byte FilterEnvDecay
         {
-            get { return _FilterEnvDecay; }
+            get => _FilterEnvDecay;
             set
             {
-                _FilterEnvDecay = value;
-                NotifyPropertyChanged();
+                if (_FilterEnvDecay != value)
+                {
+                    _FilterEnvDecay = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0012)]
         public byte FilterEnvSustain
         {
-            get { return _FilterEnvSustain; }
+            get => _FilterEnvSustain;
             set
             {
-                _FilterEnvSustain = value;
-                NotifyPropertyChanged();
+                if (_FilterEnvSustain != value)
+                {
+                    _FilterEnvSustain = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0013)]
         public byte FilterEnvRelease
         {
-            get { return _FilterEnvRelease; }
+            get => _FilterEnvRelease;
             set
             {
-                _FilterEnvRelease = value;
-                NotifyPropertyChanged();
+                if (_FilterEnvRelease != value)
+                {
+                    _FilterEnvRelease = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0014)]
-        public byte FilterEnvDepth
+        public int FilterEnvDepth
         {
-            get { return _FilterEnvDepth; }
+            get => _FilterEnvDepth.Deserialize(64);
             set
             {
-                _FilterEnvDepth = value;
-                NotifyPropertyChanged();
+                if (FilterEnvDepth != value)
+                {
+                    _FilterEnvDepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
-
 
         #endregion
 
@@ -422,80 +502,100 @@ namespace IntegraXL.Models
         [Offset(0x0015)]
         public byte AmpLevel
         {
-            get { return _AmpLevel; }
+            get => _AmpLevel;
             set
             {
-                _AmpLevel = value;
-                NotifyPropertyChanged();
+                if (_AmpLevel != value)
+                {
+                    _AmpLevel = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0016)]
-        public byte AmpLevelVelocitySens
+        public int AmpLevelVelocitySens
         {
-            get { return _AmpLevelVelocitySens; }
+            get => _AmpLevelVelocitySens.Deserialize(64);
             set
             {
-                _AmpLevelVelocitySens = value;
-                NotifyPropertyChanged();
+                if (AmpLevelVelocitySens != value)
+                {
+                    _AmpLevelVelocitySens = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0017)]
         public byte AmpEnvAttack
         {
-            get { return _AmpEnvAttack; }
+            get => _AmpEnvAttack;
             set
             {
-                _AmpEnvAttack = value;
-                NotifyPropertyChanged();
+                if (_AmpEnvAttack != value)
+                {
+                    _AmpEnvAttack = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0018)]
         public byte AmpEnvDecay
         {
-            get { return _AmpEnvDecay; }
+            get => _AmpEnvDecay;
             set
             {
-                _AmpEnvDecay = value;
-                NotifyPropertyChanged();
+                if (_AmpEnvDecay != value)
+                {
+                    _AmpEnvDecay = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0019)]
         public byte AmpEnvSustain
         {
-            get { return _AmpEnvSustain; }
+            get => _AmpEnvSustain;
             set
             {
-                _AmpEnvSustain = value;
-                NotifyPropertyChanged();
+                if (_AmpEnvSustain != value)
+                {
+                    _AmpEnvSustain = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x001A)]
         public byte AmpEnvRelease
         {
-            get { return _AmpEnvRelease; }
+            get => _AmpEnvRelease;
             set
             {
-                _AmpEnvRelease = value;
-                NotifyPropertyChanged();
+                if (_AmpEnvRelease != value)
+                {
+                    _AmpEnvRelease = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x001B)]
         public byte AmpPan
         {
-            get { return _AmpPan; }
+            get => _AmpPan;
             set
             {
-                _AmpPan = value;
-                NotifyPropertyChanged();
+                if (_AmpPan != value)
+                {
+                    _AmpPan = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
-
 
         #endregion
 
@@ -504,214 +604,270 @@ namespace IntegraXL.Models
         [Offset(0x001C)]
         public IntegraLFOShape LFOShape
         {
-            get { return _LFOShape; }
+            get => _LFOShape;
             set
             {
-                _LFOShape = value;
-                NotifyPropertyChanged();
+                if (_LFOShape != value)
+                {
+                    _LFOShape = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x001D)]
         public byte LFORate
         {
-            get { return _LFORate; }
+            get => _LFORate;
             set
             {
-                _LFORate = value;
-                NotifyPropertyChanged();
+                if (_LFORate != value)
+                {
+                    _LFORate = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x001E)]
         public IntegraSwitch LFOTempoSyncSwitch
         {
-            get { return _LFOTempoSyncSwitch; }
+            get => _LFOTempoSyncSwitch;
             set
             {
-                _LFOTempoSyncSwitch = value;
-                NotifyPropertyChanged();
+                if (_LFOTempoSyncSwitch != value)
+                {
+                    _LFOTempoSyncSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x001F)]
-        public byte LFOTempoSyncNote
+        public IntegraTempoSyncNote LFOTempoSyncNote
         {
-            get { return _LFOTempoSyncNote; }
+            get => _LFOTempoSyncNote;
             set
             {
-                _LFOTempoSyncNote = value;
-                NotifyPropertyChanged();
+                if (_LFOTempoSyncNote != value)
+                {
+                    _LFOTempoSyncNote = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0020)]
         public byte LFOFadeTime
         {
-            get { return _LFOFadeTime; }
+            get => _LFOFadeTime;
             set
             {
-                _LFOFadeTime = value;
-                NotifyPropertyChanged();
+                if (_LFOFadeTime != value)
+                {
+                    _LFOFadeTime = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0021)]
         public IntegraSwitch LFOKeyTrigger
         {
-            get { return _LFOKeyTrigger; }
+            get => _LFOKeyTrigger;
             set
             {
-                _LFOKeyTrigger = value;
-                NotifyPropertyChanged();
+                if (_LFOKeyTrigger != value)
+                {
+                    _LFOKeyTrigger = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0022)]
-        public byte LFOPitchDepth
+        public int LFOPitchDepth
         {
-            get { return _LFOPitchDepth; }
+            get => _LFOPitchDepth.Deserialize(64);
             set
             {
-                _LFOPitchDepth = value;
-                NotifyPropertyChanged();
+                if (LFOPitchDepth != value)
+                {
+                    _LFOPitchDepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0023)]
-        public byte LFOFilterDepth
+        public int LFOFilterDepth
         {
-            get { return _LFOFilterDepth; }
+            get => _LFOFilterDepth.Deserialize(64);
             set
             {
-                _LFOFilterDepth = value;
-                NotifyPropertyChanged();
+                if (LFOFilterDepth != value)
+                {
+                    _LFOFilterDepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0024)]
-        public byte LFOAmpDepth
+        public int LFOAmpDepth
         {
-            get { return _LFOAmpDepth; }
+            get => _LFOAmpDepth.Deserialize(64);
             set
             {
-                _LFOAmpDepth = value;
-                NotifyPropertyChanged();
+                if (LFOAmpDepth != value)
+                {
+                    _LFOAmpDepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0025)]
-        public byte LFOPanDepth
+        public int LFOPanDepth
         {
-            get { return _LFOPanDepth; }
+            get => _LFOPanDepth.Deserialize(64);
             set
             {
-                _LFOPanDepth = value;
-                NotifyPropertyChanged();
+                if (LFOPanDepth != value)
+                {
+                    _LFOPanDepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
-
 
         #endregion
 
         #region Properties: Modulation
 
         [Offset(0x0026)]
-        public IntegraLFOShape ModulationLFOShape
+        public IntegraLFOShape ModLFOShape
         {
-            get { return _ModulationLFOShape; }
+            get => _ModLFOShape;
             set
             {
-                _ModulationLFOShape = value;
-                NotifyPropertyChanged();
+                if (_ModLFOShape != value)
+                {
+                    _ModLFOShape = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0027)]
-        public byte ModulationLFORate
+        public byte ModLFORate
         {
-            get { return _ModulationLFORate; }
+            get => _ModLFORate;
             set
             {
-                _ModulationLFORate = value;
-                NotifyPropertyChanged();
+                if (_ModLFORate != value)
+                {
+                    _ModLFORate = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0028)]
-        public IntegraSwitch ModulationLFOTempoSyncSwitch
+        public IntegraSwitch ModLFOTempoSyncSwitch
         {
-            get { return _ModulationLFOTempoSyncSwitch; }
+            get => _ModLFOTempoSyncSwitch;
             set
             {
-                _ModulationLFOTempoSyncSwitch = value;
-                NotifyPropertyChanged();
+                if (_ModLFOTempoSyncSwitch != value)
+                {
+                    _ModLFOTempoSyncSwitch = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0029)]
-        public byte ModulationLFOTempoSyncNote
+        public IntegraTempoSyncNote ModLFOTempoSyncNote
         {
-            get { return _ModulationLFOTempoSyncNote; }
+            get => _ModLFOTempoSyncNote;
             set
             {
-                _ModulationLFOTempoSyncNote = value;
-                NotifyPropertyChanged();
+                if (_ModLFOTempoSyncNote != value)
+                {
+                    _ModLFOTempoSyncNote = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x002A)]
         public byte OSCPulseWidthShift
         {
-            get { return _OSCPulseWidthShift; }
+            get => _OSCPulseWidthShift;
             set
             {
-                _OSCPulseWidthShift = value;
-                NotifyPropertyChanged();
+                if (_OSCPulseWidthShift != value)
+                {
+                    _OSCPulseWidthShift = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x002C)]
-        public byte ModulationLFOPitchDepth
+        public int ModLFOPitchDepth
         {
-            get { return _ModulationLFOPitchDepth; }
+            get => _ModLFOPitchDepth.Deserialize(64);
             set
             {
-                _ModulationLFOPitchDepth = value;
-                NotifyPropertyChanged();
+                if (ModLFOPitchDepth != value)
+                {
+                    _ModLFOPitchDepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x002D)]
-        public byte ModulationLFOFilterDepth
+        public int ModLFOFilterDepth
         {
-            get { return _ModulationLFOFilterDepth; }
+            get => _ModLFOFilterDepth.Deserialize(64);
             set
             {
-                _ModulationLFOFilterDepth = value;
-                NotifyPropertyChanged();
+                if (ModLFOFilterDepth != value)
+                {
+                    _ModLFOFilterDepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x002E)]
-        public byte ModulationLFOAmpDepth
+        public int ModLFOAmpDepth
         {
-            get { return _ModulationLFOAmpDepth; }
+            get => _ModLFOAmpDepth.Deserialize(64);
             set
             {
-                _ModulationLFOAmpDepth = value;
-                NotifyPropertyChanged();
+                if (ModLFOAmpDepth != value)
+                {
+                    _ModLFOAmpDepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x002F)]
-        public byte ModulationLFOPanDepth
+        public int ModLFOPanDepth
         {
-            get { return _ModulationLFOPanDepth; }
+            get => _ModLFOPanDepth.Deserialize(64);
             set
             {
-                _ModulationLFOPanDepth = value;
-                NotifyPropertyChanged();
+                if (ModLFOPanDepth != value)
+                {
+                    _ModLFOPanDepth = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -721,90 +877,114 @@ namespace IntegraXL.Models
         #region Properties: General
 
         [Offset(0x0030)]
-        public byte CutoffAftertouchSens
+        public int CutoffAftertouchSens
         {
-            get { return _CutoffAftertouchSens; }
+            get => _CutoffAftertouchSens.Deserialize(64);
             set
             {
-                _CutoffAftertouchSens = value;
-                NotifyPropertyChanged();
+                if (CutoffAftertouchSens != value)
+                {
+                    _CutoffAftertouchSens = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0031)]
-        public byte LevelAftertouchSens
+        public int LevelAftertouchSens
         {
-            get { return _LevelAftertouchSens; }
+            get => _LevelAftertouchSens.Deserialize(64);
             set
             {
-                _LevelAftertouchSens = value;
-                NotifyPropertyChanged();
+                if (LevelAftertouchSens != value)
+                {
+                    _LevelAftertouchSens = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0034)]
-        public byte WaveGain
+        public int WaveGain
         {
-            get { return _WaveGain; }
+            get => _WaveGain.Deserialize(1, 6);
             set
             {
-                _WaveGain = value;
-                NotifyPropertyChanged();
+                if (WaveGain != value)
+                {
+                    _WaveGain = value.Serialize(1, 6).Clamp(0, 3);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0035)]
         public int WaveNumber
         {
-            get { return _WaveNumber.ToMidi(); }
+            get => _WaveNumber.Deserialize();
             set
             {
-                _WaveNumber = value.SerializeInt();
-                NotifyPropertyChanged();
+                if (WaveNumber != value)
+                {
+                    _WaveNumber = value.Clamp(0, IntegraConstants.WAVE_COUNT_SNS).SerializeInt();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0039)]
         public byte HPFCutoff
         {
-            get { return _HPFCutoff; }
+            get => _HPFCutoff;
             set
             {
-                _HPFCutoff = value;
-                NotifyPropertyChanged();
+                if (_HPFCutoff != value)
+                {
+                    _HPFCutoff = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x003A)]
         public byte SuperSawDetune
         {
-            get { return _SuperSawDetune; }
+            get => _SuperSawDetune;
             set
             {
-                _SuperSawDetune = value;
-                NotifyPropertyChanged();
+                if (_SuperSawDetune != value)
+                {
+                    _SuperSawDetune = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x003B)]
-        public byte ModulationLFORateControl
+        public int ModLFORateControl
         {
-            get { return _ModulationLFORateControl; }
+            get => _ModLFORateControl.Deserialize(64);
             set
             {
-                _ModulationLFORateControl = value;
-                NotifyPropertyChanged();
+                if (ModLFORateControl != value)
+                {
+                    _ModLFORateControl = value.Serialize(64).Clamp(1, 127);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x003C)]
-        public byte AmpLevelKeyFollow
+        public int AmpLevelKeyFollow
         {
-            get { return _AmpLevelKeyFollow; }
+            get => _AmpLevelKeyFollow.Deserialize(64, 10);
             set
             {
-                _AmpLevelKeyFollow = value;
-                NotifyPropertyChanged();
+                if (AmpLevelKeyFollow != value)
+                {
+                    _AmpLevelKeyFollow = value.Serialize(64, 10).Clamp(54, 74);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -812,6 +992,13 @@ namespace IntegraXL.Models
 
         #endregion
 
-       
+        #region Enumerations
+
+        public List<string> PanValues
+        {
+            get { return IntegraPan.Values; }
+        }
+
+        #endregion
     }
 }

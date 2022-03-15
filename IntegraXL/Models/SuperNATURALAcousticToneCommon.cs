@@ -91,7 +91,7 @@ namespace IntegraXL.Models
         [Offset(0x0000)]
         public string ToneName
         {
-            get { return Encoding.ASCII.GetString(_ToneName, 0, 12); }
+            get => Encoding.ASCII.GetString(_ToneName, 0, 12);
             set
             {
                 if (ToneName != value)
@@ -119,6 +119,7 @@ namespace IntegraXL.Models
                 }
             }
         }
+
         [Offset(0x0011)]
         public IntegraMonyPolySwitch MonoPoly
         {
@@ -305,7 +306,7 @@ namespace IntegraXL.Models
         [Offset(0x001F)]
         public IntegraSwitch TFXSwitch
         {
-            get { return _TFXSwitch; }
+            get => _TFXSwitch;
             set
             {
                 if (_TFXSwitch != value)

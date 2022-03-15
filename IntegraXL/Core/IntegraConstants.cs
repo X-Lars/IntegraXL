@@ -15,7 +15,7 @@
         public const int STORING_COMPLETE = 0x0F001001;
 
         public const int WAVE_COUNT_INT    = 1083;
-
+        public const int WAVE_COUNT_SNS = 450;
         public const int MFX_CTRL_DEST_COUNT = 17;
 
 

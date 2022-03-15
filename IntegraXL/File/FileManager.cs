@@ -62,6 +62,8 @@ namespace IntegraXL.File
                         file.SuperNATURALSynthTonePartials[i] = reader.ReadBytes(file.SuperNATURALSynthTonePartials[i].Length);
                     }
 
+                    file.SuperNATURALSynthToneMisc = reader.ReadBytes(file.SuperNATURALSynthToneMisc.Length);
+
                     break;
 
                 case IntegraToneTypes.SuperNATURALDrumkit:
@@ -151,7 +153,9 @@ namespace IntegraXL.File
                 case IntegraToneTypes.SuperNATURALSynthTone:
 
                     file.Size = (uint)(fixedSize + file.SuperNATURALSynthToneCommon.Length
-                                                 + IntegraConstants.SNS_PARTIAL_COUNT * file.SuperNATURALSynthTonePartials[0].Length);
+                                                 + IntegraConstants.SNS_PARTIAL_COUNT * file.SuperNATURALSynthTonePartials[0].Length
+                                                 + file.SuperNATURALSynthToneMisc.Length);
+
                     writer.Write(file.Size);
 
                     writer.Write(file.ToneType);
@@ -167,6 +171,8 @@ namespace IntegraXL.File
                     {
                         writer.Write(file.SuperNATURALSynthTonePartials[i]);
                     }
+
+                    writer.Write(file.SuperNATURALSynthToneMisc);
 
                     break;
 

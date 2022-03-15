@@ -1357,7 +1357,6 @@ namespace IntegraXL.Core
     #endregion
 
     #region SuperNATURALSynthToneCommon
-
     
     [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraSNAInstruments : int
@@ -1496,14 +1495,7 @@ namespace IntegraXL.Core
         [Description("ExSN05 011: Mute French Horn")]      MuteFrenchHorn   = 126,
     }
 
-    [TypeConverter(typeof(DescriptionConverter))]
-    public enum IntegraRingSwitch : byte
-    {
-        [Description("Off")] Off   = 0x00,
-        [Description("---")] Empty = 0x01,
-        [Description("On")]  On    = 0x02,
-    }
-
+    
     public enum IntegraPortamentoMode : byte
     {
         Normal = 0x00,
@@ -2594,13 +2586,38 @@ namespace IntegraXL.Core
 
     #endregion
 
+    #region Synth Tone Common
+
+    #endregion
+
+    #region SuperNATURALSynthToneCommon
+
+    public enum IntegraRingSwitch : byte
+    {
+        Off = 0x00,
+        On  = 0x02,
+    }
+
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraUnisonSize : byte
+    {
+        [Description("2")] Size2,
+        [Description("4")] Size4,
+        [Description("6")] Size6,
+        [Description("8")] Size8
+    }
+
+    #endregion
+
+
     #region SuperNATURALSynthTonePartial
 
+    [TypeConverter(typeof(DescriptionConverter))]
     public enum IntegraSNSynthToneParts : int
     {
-        [Description("Partial 01")] Partial01 = 0x00002000,
-        [Description("Partial 02")] Partial02 = 0x00002100,
-        [Description("Partial 03")] Partial03 = 0x00002200
+        [Description("1")] Partial01 = 0x00,
+        [Description("2")] Partial02 = 0x01,
+        [Description("3")] Partial03 = 0x02
     }
 
     public enum IntegraOSCWave : byte
@@ -2634,6 +2651,13 @@ namespace IntegraXL.Core
         LPF04       = 0x07
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraFilterSlope : byte
+    {
+        [Description("-12")] SlopeMinus12 = 0x00,
+        [Description("-24")] SlopeMinus24 = 0x01,
+    }
+
     public enum IntegraLFOShape : byte
     {
         TRI     = 0x00,
@@ -2644,6 +2668,37 @@ namespace IntegraXL.Core
         RND     = 0x05
     }
 
+    [TypeConverter(typeof(DescriptionConverter))]
+    public enum IntegraTempoSyncNote : byte
+    {
+        [Description("16")]   Note16   = 0x00,
+        [Description("12")]   Note12   = 0x01,
+        [Description("8")]    Note8    = 0x02,
+        [Description("4")]    Note4    = 0x03,
+        [Description("2")]    Note2    = 0x04,
+        [Description("1")]    Note1    = 0x05,
+        [Description("3/4")]  Note3_4  = 0x06,
+        [Description("2/3")]  Note2_3  = 0x07,
+        [Description("1/2")]  Note1_2  = 0x08,
+        [Description("3/8")]  Note3_8  = 0x09,
+        [Description("1/3")]  Note1_3  = 0x0A,
+        [Description("1/4")]  Note1_4  = 0x0B,
+        [Description("3/16")] Note3_16 = 0x0C,
+        [Description("1/6")]  Note1_6  = 0x0D,
+        [Description("1/8")]  Note1_8  = 0x0E,
+        [Description("3/32")] Note3_32 = 0x0F,
+        [Description("1/12")] Note1_12 = 0x10,
+        [Description("1/16")] Note1_16 = 0x11,
+        [Description("1/24")] Note1_24 = 0x12,
+        [Description("1/32")] Note1_32 = 0x13
+    }
+
+    public enum IntegraEnvLoopMode : byte
+    {
+        Off,
+        FreeRun,
+        TempoSync
+    }
     #endregion
 
     #region Misc

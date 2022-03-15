@@ -33,6 +33,8 @@ namespace IntegraXL.File
                 SuperNATURALSynthTonePartials[i] = new byte[61];
             }
 
+            SuperNATURALSynthToneMisc = new byte[37];
+
             SuperNATURALAcousticToneCommon = new byte[70];
 
             SuperNATURALDrumKitCommon = new byte[20];
@@ -73,6 +75,7 @@ namespace IntegraXL.File
 
         public byte[] SuperNATURALSynthToneCommon;
         public byte[][] SuperNATURALSynthTonePartials;
+        public byte[] SuperNATURALSynthToneMisc;
 
         public byte[] SuperNATURALAcousticToneCommon;
 

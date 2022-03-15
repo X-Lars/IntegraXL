@@ -76,6 +76,7 @@ namespace IntegraXL.Models
         private int _WaveCount;
 
         #endregion
+
         #region Fields: INTEGRA-7
 
         #region Fields: General

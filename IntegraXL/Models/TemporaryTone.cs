@@ -400,6 +400,8 @@ namespace IntegraXL.Models
                         SuperNATURALSynthTone.Partials[i].Load(file.SuperNATURALSynthTonePartials[i]);
                     }
 
+                    SuperNATURALSynthTone.Misc.Load(file.SuperNATURALSynthToneMisc);
+
                     break;
 
                 case IntegraToneTypes.SuperNATURALDrumkit:
@@ -497,6 +499,8 @@ namespace IntegraXL.Models
                     {
                         file.SuperNATURALSynthTonePartials[i] = SuperNATURALSynthTone.Partials[i].Serialize();
                     }
+
+                    file.SuperNATURALSynthToneMisc = SuperNATURALSynthTone.Misc.Serialize();
 
                     break;
 
