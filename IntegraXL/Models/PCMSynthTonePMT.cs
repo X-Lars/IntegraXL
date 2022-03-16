@@ -215,7 +215,7 @@ namespace IntegraXL.Models
             {
                 if (_PMT1VelocityRangeLower != value)
                 {
-                    _PMT1VelocityRangeLower = value.Clamp();
+                    _PMT1VelocityRangeLower = value.Clamp(1, 127);
                     NotifyPropertyChanged();
                 }
             }
@@ -229,7 +229,7 @@ namespace IntegraXL.Models
             {
                 if (_PMT1VelocityRangeUpper != value)
                 {
-                    _PMT1VelocityRangeUpper = value.Clamp(); ;
+                    _PMT1VelocityRangeUpper = value.Clamp(1, 127);
                     NotifyPropertyChanged();
                 }
             }
@@ -345,7 +345,7 @@ namespace IntegraXL.Models
             {
                 if (_PMT2VelocityRangeLower != value)
                 {
-                    _PMT2VelocityRangeLower = value.Clamp();
+                    _PMT2VelocityRangeLower = value.Clamp(1, 127);
                     NotifyPropertyChanged();
                 }
             }
@@ -359,7 +359,7 @@ namespace IntegraXL.Models
             {
                 if (_PMT2VelocityRangeUpper != value)
                 {
-                    _PMT2VelocityRangeUpper = value.Clamp();
+                    _PMT2VelocityRangeUpper = value.Clamp(1, 127);
                     NotifyPropertyChanged();
                 }
             }
@@ -474,7 +474,7 @@ namespace IntegraXL.Models
             {
                 if (_PMT3VelocityRangeLower != value)
                 {
-                    _PMT3VelocityRangeLower = value.Clamp();
+                    _PMT3VelocityRangeLower = value.Clamp(1, 127);
                     NotifyPropertyChanged();
                 }
             }
@@ -488,7 +488,7 @@ namespace IntegraXL.Models
             {
                 if (_PMT3VelocityRangeUpper != value)
                 {
-                    _PMT3VelocityRangeUpper = value.Clamp();
+                    _PMT3VelocityRangeUpper = value.Clamp(1, 127);
                     NotifyPropertyChanged();
                 }
             }
@@ -604,7 +604,7 @@ namespace IntegraXL.Models
             {
                 if (_PMT4VelocityRangeLower != value)
                 {
-                    _PMT4VelocityRangeLower = value.Clamp();
+                    _PMT4VelocityRangeLower = value.Clamp(1, 127);
                     NotifyPropertyChanged();
                 }
             }
@@ -618,7 +618,7 @@ namespace IntegraXL.Models
             {
                 if (_PMT4VelocityRangeUpper != value)
                 {
-                    _PMT4VelocityRangeUpper = value.Clamp();
+                    _PMT4VelocityRangeUpper = value.Clamp(1, 127);
                     NotifyPropertyChanged();
                 }
             }

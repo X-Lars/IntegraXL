@@ -1,24 +1,30 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace IntegraXL.Models
 {
     [Integra(0x00000000, 0x00000012)]
     public class PCMDrumKitCommon : IntegraModel<PCMDrumKitCommon>
     {
+        #region Properties: INTEGRA-7
+
         [Offset(0x0000)] byte[] _KitName = new byte[12];
         [Offset(0x000C)] byte _KitLevel;
         [Offset(0x000D)] byte[] RESERVED01 = new byte[5];
-        
-        public PCMDrumKitCommon(PCMDrumKit drumKit) : base(drumKit.Device)
+
+        #endregion
+
+        #region Constructor
+
+        public PCMDrumKitCommon(PCMDrumKit parent) : base(parent.Device)
         {
-            Address = drumKit.Address;
+            Address = parent.Address;
         }
+
+        #endregion
+
+        #region Properties: INTEGRA-7
 
         [Offset(0x0000)]
         public string KitName
@@ -48,5 +54,7 @@ namespace IntegraXL.Models
                 NotifyPropertyChanged();
             }
         }
+
+        #endregion
     }
 }

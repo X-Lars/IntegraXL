@@ -70,13 +70,6 @@ namespace IntegraXL.Models
     [Integra(0x00002000, 0x0000011A)]
     public class PCMSynthTonePartial : IntegraModel<PCMSynthTonePartial>
     {
-        #region Fields
-
-        private List<string> _WaveGroups = new();
-        private int _WaveCount;
-
-        #endregion
-
         #region Fields: INTEGRA-7
 
         #region Fields: General
@@ -113,25 +106,25 @@ namespace IntegraXL.Models
 
         #region Fields: Matrix Control
 
-        [Offset(0x0017)] IntegraControlSwitch _Control01Switch01;
-        [Offset(0x0018)] IntegraControlSwitch _Control01Switch02;
-        [Offset(0x0019)] IntegraControlSwitch _Control01Switch03;
-        [Offset(0x001A)] IntegraControlSwitch _Control01Switch04;
+        [Offset(0x0017)] IntegraControlSwitch _Control1Switch1;
+        [Offset(0x0018)] IntegraControlSwitch _Control1Switch2;
+        [Offset(0x0019)] IntegraControlSwitch _Control1Switch3;
+        [Offset(0x001A)] IntegraControlSwitch _Control1Switch4;
 
-        [Offset(0x001B)] IntegraControlSwitch _Control02Switch01;
-        [Offset(0x001C)] IntegraControlSwitch _Control02Switch02;
-        [Offset(0x001D)] IntegraControlSwitch _Control02Switch03;
-        [Offset(0x001E)] IntegraControlSwitch _Control02Switch04;
+        [Offset(0x001B)] IntegraControlSwitch _Control2Switch1;
+        [Offset(0x001C)] IntegraControlSwitch _Control2Switch2;
+        [Offset(0x001D)] IntegraControlSwitch _Control2Switch3;
+        [Offset(0x001E)] IntegraControlSwitch _Control2Switch4;
 
-        [Offset(0x001F)] IntegraControlSwitch _Control03Switch01;
-        [Offset(0x0020)] IntegraControlSwitch _Control03Switch02;
-        [Offset(0x0021)] IntegraControlSwitch _Control03Switch03;
-        [Offset(0x0022)] IntegraControlSwitch _Control03Switch04;
+        [Offset(0x001F)] IntegraControlSwitch _Control3Switch1;
+        [Offset(0x0020)] IntegraControlSwitch _Control3Switch2;
+        [Offset(0x0021)] IntegraControlSwitch _Control3Switch3;
+        [Offset(0x0022)] IntegraControlSwitch _Control3Switch4;
 
-        [Offset(0x0023)] IntegraControlSwitch _Control04Switch01;
-        [Offset(0x0024)] IntegraControlSwitch _Control04Switch02;
-        [Offset(0x0025)] IntegraControlSwitch _Control04Switch03;
-        [Offset(0x0026)] IntegraControlSwitch _Control04Switch04;
+        [Offset(0x0023)] IntegraControlSwitch _Control4Switch1;
+        [Offset(0x0024)] IntegraControlSwitch _Control4Switch2;
+        [Offset(0x0025)] IntegraControlSwitch _Control4Switch3;
+        [Offset(0x0026)] IntegraControlSwitch _Control4Switch4;
 
         #endregion
 
@@ -154,8 +147,8 @@ namespace IntegraXL.Models
 
         [Offset(0x003A)] byte _PitchEnvDepth;
         [Offset(0x003B)] byte _PitchEnvVelocitySens;
-        [Offset(0x003C)] byte _PitchEnvTime01VelocitySens;
-        [Offset(0x003D)] byte _PitchEnvTime04VelocitySens;
+        [Offset(0x003C)] byte _PitchEnvTime1VelocitySens;
+        [Offset(0x003D)] byte _PitchEnvTime4VelocitySens;
         [Offset(0x003E)] byte _PitchEnvTimeKeyFollow;
         [Offset(0x003F)] byte _PitchEnvTime1;
         [Offset(0x0040)] byte _PitchEnvTime2;
@@ -601,224 +594,224 @@ namespace IntegraXL.Models
         #region Properties: Matrix Control
 
         [Offset(0x0017)]
-        public IntegraControlSwitch Control01Switch01
+        public IntegraControlSwitch Control1Switch1
         {
-            get => _Control01Switch01;
+            get => _Control1Switch1;
             set
             {
-                if (_Control01Switch01 != value)
+                if (_Control1Switch1 != value)
                 {
-                    _Control01Switch01 = value;
+                    _Control1Switch1 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0018)]
-        public IntegraControlSwitch Control01Switch02
+        public IntegraControlSwitch Control1Switch2
         {
-            get => _Control01Switch02;
+            get => _Control1Switch2;
             set
             {
-                if (_Control01Switch02 != value)
+                if (_Control1Switch2 != value)
                 {
-                    _Control01Switch02 = value;
+                    _Control1Switch2 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0019)]
-        public IntegraControlSwitch Control01Switch03
+        public IntegraControlSwitch Control1Switch3
         {
-            get => _Control01Switch03;
+            get => _Control1Switch3;
             set
             {
-                if (_Control01Switch03 != value)
+                if (_Control1Switch3 != value)
                 {
-                    _Control01Switch03 = value;
+                    _Control1Switch3 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x001A)]
-        public IntegraControlSwitch Control01Switch04
+        public IntegraControlSwitch Control1Switch4
         {
-            get => _Control01Switch04;
+            get => _Control1Switch4;
             set
             {
-                if (_Control01Switch04 != value)
+                if (_Control1Switch4 != value)
                 {
-                    _Control01Switch04 = value;
+                    _Control1Switch4 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x001B)]
-        public IntegraControlSwitch Control02Switch01
+        public IntegraControlSwitch Control2Switch1
         {
-            get => _Control02Switch01;
+            get => _Control2Switch1;
             set
             {
-                if (_Control02Switch01 != value)
+                if (_Control2Switch1 != value)
                 {
-                    _Control02Switch01 = value;
+                    _Control2Switch1 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x001C)]
-        public IntegraControlSwitch Control02Switch02
+        public IntegraControlSwitch Control2Switch2
         {
-            get => _Control02Switch02;
+            get => _Control2Switch2;
             set
             {
-                if (_Control02Switch02 != value)
+                if (_Control2Switch2 != value)
                 {
-                    _Control02Switch02 = value;
+                    _Control2Switch2 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x001D)]
-        public IntegraControlSwitch Control02Switch03
+        public IntegraControlSwitch Control2Switch3
         {
-            get => _Control02Switch03; 
+            get => _Control2Switch3; 
             set
             {
-                if (_Control02Switch03 != value)
+                if (_Control2Switch3 != value)
                 {
-                    _Control02Switch03 = value;
+                    _Control2Switch3 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x001E)]
-        public IntegraControlSwitch Control02Switch04
+        public IntegraControlSwitch Control2Switch4
         {
-            get => _Control02Switch04; 
+            get => _Control2Switch4; 
             set
             {
-                if (_Control02Switch04 != value)
+                if (_Control2Switch4 != value)
                 {
-                    _Control02Switch04 = value;
+                    _Control2Switch4 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x001F)]
-        public IntegraControlSwitch Control03Switch01
+        public IntegraControlSwitch Control3Switch1
         {
-            get => _Control03Switch01; 
+            get => _Control3Switch1; 
             set
             {
-                if (_Control03Switch01 != value)
+                if (_Control3Switch1 != value)
                 {
-                    _Control03Switch01 = value;
+                    _Control3Switch1 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0020)]
-        public IntegraControlSwitch Control03Switch02
+        public IntegraControlSwitch Control3Switch2
         {
-            get => _Control03Switch02;
+            get => _Control3Switch2;
             set
             {
-                if (_Control03Switch02 != value)
+                if (_Control3Switch2 != value)
                 {
-                    _Control03Switch02 = value;
+                    _Control3Switch2 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0021)]
-        public IntegraControlSwitch Control03Switch03
+        public IntegraControlSwitch Control3Switch3
         {
-            get => _Control03Switch03; 
+            get => _Control3Switch3; 
             set
             {
-                if (_Control03Switch03 != value)
+                if (_Control3Switch3 != value)
                 {
-                    _Control03Switch03 = value;
+                    _Control3Switch3 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0022)]
-        public IntegraControlSwitch Control03Switch04
+        public IntegraControlSwitch Control3Switch4
         {
-            get => _Control03Switch04; 
+            get => _Control3Switch4; 
             set
             {
-                if (_Control03Switch04 != value)
+                if (_Control3Switch4 != value)
                 {
-                    _Control03Switch04 = value;
+                    _Control3Switch4 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0023)]
-        public IntegraControlSwitch Control04Switch01
+        public IntegraControlSwitch Control4Switch1
         {
-            get => _Control04Switch01; 
+            get => _Control4Switch1; 
             set
             {
-                if (_Control04Switch01 != value)
+                if (_Control4Switch1 != value)
                 {
-                    _Control04Switch01 = value;
+                    _Control4Switch1 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0024)]
-        public IntegraControlSwitch Control04Switch02
+        public IntegraControlSwitch Control4Switch2
         {
-            get => _Control04Switch02; 
+            get => _Control4Switch2; 
             set
             {
-                if (_Control04Switch02 != value)
+                if (_Control4Switch2 != value)
                 {
-                    _Control04Switch02 = value;
+                    _Control4Switch2 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0025)]
-        public IntegraControlSwitch Control04Switch03
+        public IntegraControlSwitch Control4Switch3
         {
-            get => _Control04Switch03; 
+            get => _Control4Switch3; 
             set
             {
-                if (_Control04Switch03 != value)
+                if (_Control4Switch3 != value)
                 {
-                    _Control04Switch03 = value;
+                    _Control4Switch3 = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0026)]
-        public IntegraControlSwitch Control04Switch04
+        public IntegraControlSwitch Control4Switch4
         {
-            get => _Control04Switch04; 
+            get => _Control4Switch4; 
             set
             {
-                if (_Control04Switch04 != value)
+                if (_Control4Switch4 != value)
                 {
-                    _Control04Switch04 = value;
+                    _Control4Switch4 = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -995,7 +988,7 @@ namespace IntegraXL.Models
             {
                 if (PitchEnvDepth != value)
                 {
-                    _PitchEnvDepth = value.Serialize(64).Clamp(52, 76);
+                    _PitchEnvDepth = value.Clamp(-12, 12).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -1009,35 +1002,35 @@ namespace IntegraXL.Models
             {
                 if (PitchEnvVelocitySens != value)
                 {
-                    _PitchEnvVelocitySens = value.Serialize(64).Clamp(1, 127);
+                    _PitchEnvVelocitySens = value.Clamp(-63, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x003C)]
-        public int PitchEnvTime01VelocitySens
+        public int PitchEnvTime1VelocitySens
         {
-            get => _PitchEnvTime01VelocitySens.Deserialize(64);
+            get => _PitchEnvTime1VelocitySens.Deserialize(64);
             set
             {
-                if (PitchEnvTime01VelocitySens != value)
+                if (PitchEnvTime1VelocitySens != value)
                 {
-                    _PitchEnvTime01VelocitySens = value.Serialize(64).Clamp(1, 127);
+                    _PitchEnvTime1VelocitySens = value.Serialize(64).Clamp(1, 127);
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x003D)]
-        public int PitchEnvTime04VelocitySens
+        public int PitchEnvTime4VelocitySens
         {
-            get => _PitchEnvTime04VelocitySens.Deserialize(64);
+            get => _PitchEnvTime4VelocitySens.Deserialize(64);
             set
             {
-                if (PitchEnvTime04VelocitySens != value)
+                if (PitchEnvTime4VelocitySens != value)
                 {
-                    _PitchEnvTime04VelocitySens = value.Serialize(64).Clamp(1, 127);
+                    _PitchEnvTime4VelocitySens = value.Serialize(64).Clamp(1, 127);
                     NotifyPropertyChanged();
                 }
             }

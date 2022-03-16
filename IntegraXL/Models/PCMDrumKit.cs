@@ -5,7 +5,7 @@ namespace IntegraXL.Models
     [Integra(0x00100000, 0x00100000)]
     public class PCMDrumKit : IntegraModel<PCMDrumKit>
     {
-        private int _SelectedIndex;
+        private IntegraPCMNoteIndex _SelectedPartial = IntegraPCMNoteIndex.Key21;
 
         public PCMDrumKit(TemporaryTone tone) : base(tone.Device, false)
         {
@@ -28,12 +28,19 @@ namespace IntegraXL.Models
 
         public int SelectedIndex
         {
-            get => _SelectedIndex;
+            get => (int)_SelectedPartial;
+            set => SelectedPartial = (IntegraPCMNoteIndex)value;
+        }
+
+        public IntegraPCMNoteIndex SelectedPartial
+        {
+            get => _SelectedPartial;
             set
             {
-                if (_SelectedIndex != value)
+                if (_SelectedPartial != value)
                 {
-                    _SelectedIndex = value;
+                    _SelectedPartial = value;
+
                     NotifyPropertyChanged();
                     NotifyPropertyChanged(nameof(Partial));
                 }
@@ -58,6 +65,7 @@ namespace IntegraXL.Models
         public PCMDrumKitCommon02 Common02 { get; }
         public DrumKitCommonCompEQ CompEQ { get; }
         public PCMDrumKitPartials Partials { get; }
+
 
         public PCMDrumKitPartial Partial => Partials[SelectedIndex];
     }
