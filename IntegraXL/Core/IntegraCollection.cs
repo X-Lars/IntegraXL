@@ -129,6 +129,15 @@ namespace IntegraXL.Core
 
         #region Overrides: Model
 
+        internal override void Initialize()
+        {
+            foreach (var request in Requests)
+            {
+                IntegraSystemExclusive systemExclusive = new(Address, request);
+                Device.TransmitSystemExclusive(systemExclusive);
+            }
+        }
+
         /// <summary>
         /// Gets whether the collection is initialized.
         /// </summary>

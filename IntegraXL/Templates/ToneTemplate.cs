@@ -62,19 +62,6 @@ namespace IntegraXL.Templates
         /// </summary>
         public byte PC { get; }
 
-        /// <summary>
-        /// Gets whether the current <see cref="IBankSelect"/> interface data equals the provided <see cref="IBankSelect"/> interface data.
-        /// </summary>
-        /// <param name="bankSelect">The interface to compare.</param>
-        /// <returns>True if both <see cref="IBankSelect"/> interfaces have equal data.</returns>
-        public bool Equals(IBankSelect? bankSelect)
-        {
-            if (bankSelect is null)
-                return false;
-
-            return MSB == bankSelect.MSB && LSB == bankSelect.LSB && PC == bankSelect.PC;
-        }
-
         #endregion
 
         #region Overrides: Object

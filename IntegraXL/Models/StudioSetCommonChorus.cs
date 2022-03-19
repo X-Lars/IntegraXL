@@ -1,7 +1,7 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Extensions;
 using IntegraXL.Interfaces;
-using IntegraXL.Models.Parameters;
+using IntegraXL.Models.Providers;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -43,7 +43,7 @@ namespace IntegraXL.Models
                 _Type = value;
 
                 NotifyPropertyChanged();
-                ReinitializeAsync();
+                //ReinitializeAsync();
             }
         }
 
@@ -104,13 +104,13 @@ namespace IntegraXL.Models
         /// <summary>
         /// Event raised when the chorus type is changed.
         /// </summary>
-        public event EventHandler<IntegraTypeChangedEventArgs>? TypeChanged;
+        public event EventHandler<IntegraParametersChangedEventArgs>? ParametersChanged;
 
         /// <summary>
         /// Gets the chorus parameters.
         /// </summary>
         [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
-        public IntegraParameterMapper<int>? Parameters { get; private set; }
+        public IntegraParameterProvider<int>? Parameters { get; private set; }
 
         #endregion
 
@@ -144,7 +144,7 @@ namespace IntegraXL.Models
                     break;
             };
 
-            TypeChanged?.Invoke(this, new IntegraTypeChangedEventArgs(Parameters.GetType()));
+            ParametersChanged?.Invoke(this, new IntegraParametersChangedEventArgs(Parameters.GetType()));
             NotifyPropertyChanged(string.Empty);
         }
 

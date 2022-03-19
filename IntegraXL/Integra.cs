@@ -25,11 +25,6 @@ namespace IntegraXL
         /// <summary>
         /// 
         /// </summary>
-        private readonly IntegraTaskManager _TaskManager = new();
-
-        /// <summary>
-        /// 
-        /// </summary>
         private IntegraStatus _Status;
 
         /// <summary>
@@ -56,11 +51,6 @@ namespace IntegraXL
         /// Stores the selected active part.
         /// </summary>
         private Parts _SelectedPart = Parts.Part01;
-
-        /// <summary>
-        /// Stores the selected tone of the active part.
-        /// </summary>
-        private IntegraTone _SelectedTone;
 
         /// <summary>
         /// Stores the command to preview the active tone.
@@ -158,7 +148,7 @@ namespace IntegraXL
             _Connection.SystemExclusiveReceived += OnSystemExclusiveReceived;
             _Connection.ConnectionChanged += OnConnectionChanged;
 
-            _TaskManager.Initialize();
+            //_TaskManager.Initialize();
         }
 
         /// <summary>
@@ -195,44 +185,37 @@ namespace IntegraXL
             if (_Connection == null)
                 return IsInitialized = false;
 
-            if (!_Connection.IsConnected)
-            {
-                await Connect();
+            await Connect();
 
-                if (!IsConnected)
-                    return IsInitialized = false;
-            }
-
-            _CTS = new CancellationTokenSource();
-
-            // Initialize collections first to reduce SX and duplicate calls
-            foreach (var model in _Models.Values.Where(x => x.IsInitialized == false && x.GetType().IsSubclassOf(typeof(IntegraCollection))))
-            {
-                if (!_CTS.IsCancellationRequested)
-                {
-                    ReportProgress($"Initializing {model.Name}", "Please wait...", 0, "");
-                    await model.InitializeAsync();
-                }
-            }
-
-            // Initialize remaining models
-            foreach (var model in _Models.Values.Where(x => x.IsInitialized == false))
-            {
-                if (!_CTS.IsCancellationRequested)
-                    await model.InitializeAsync();
-            }
-
-            if (_CTS.IsCancellationRequested)
+            if (!IsConnected)
                 return IsInitialized = false;
+
+            StartQueue();
 
             return IsInitialized = true;
         }
 
-        private void OnConnectionChanged(object? sender, IntegraConnectionStatusEventArgs e)
+        
+
+        internal void NotifyToneChanged(IBankSelect bankselect, Parts part)
         {
-            if (e.Previous == ConnectionStatus.Connected)
+            ToneChanged?.Invoke(this, new IntegraToneChangedEventArgs(bankselect, part));
+
+            if(part == Part)
             {
-                _CTS.Cancel();
+                Tone.Update(bankselect);
+                NotifyPropertyChanged(nameof(Tone));
+            }
+        }
+
+        internal void NotifyPartChanged(Parts part, Parts previous)
+        {
+            PartChanged?.Invoke(this, new IntegraPartChangedEventArgs(part, previous));
+
+            if (StudioSet != null)
+            {
+                Tone.Update(StudioSet.Part);
+                NotifyPropertyChanged(nameof(Tone));
             }
         }
 
@@ -360,11 +343,6 @@ namespace IntegraXL
         public VirtualSlots? VirtualSlots { get; private set; }
 
         /// <summary>
-        /// Gets the collection of selected tones for all parts.
-        /// </summary>
-        public IntegraTones? SelectedTones { get; private set; }
-
-        /// <summary>
         /// Gets the collection of temporary tones for all parts.
         /// </summary>
         public TemporaryTones? TemporaryTones { get; private set; }
@@ -405,23 +383,15 @@ namespace IntegraXL
                     if (preview)
                         Preview = true;
 
-
-                    PartChanged?.Invoke(this, new IntegraPartChangedEventArgs(value, previous));
-
                     NotifyPropertyChanged();
+
+                    NotifyPartChanged(value, previous);
+
                     NotifyPropertyChanged(nameof(PartIndex));
                     NotifyPropertyChanged(nameof(SelectedTone));
                     NotifyPropertyChanged(nameof(TemporaryTone));
                 }
             }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="IntegraTone"/> containing tone information of the active part.
-        /// </summary>
-        public IntegraTone? ToneInfo
-        {
-            get => SelectedTones?[PartIndex];
         }
 
         /// <summary>
@@ -432,21 +402,23 @@ namespace IntegraXL
         /// </i></remarks>
         public IBankSelect? SelectedTone
         {
-            get => SelectedTones?[PartIndex];
+            get => StudioSet?.Part?.BankSelect;
             set
             {
                 if (value != null)
                 {
-                    if (SelectedTones == null)
-                        return;
+                    if (SelectedTone != null)
+                    {
+                        if (SelectedTone.Equals(value))
+                            return;
+                    }
 
-                    if (SelectedTones[PartIndex].Equals(value))
-                        return;
-
-                    SelectedTones[PartIndex].BankSelect = value;
+                    if (StudioSet != null)
+                    {
+                        StudioSet.Part.BankSelect = value;
+                    }
 
                     NotifyPropertyChanged();
-                    NotifyPropertyChanged(nameof(ToneInfo));
                 }
             }
         }
@@ -458,6 +430,11 @@ namespace IntegraXL
         {
             get => TemporaryTones?[PartIndex];
         }
+
+        /// <summary>
+        /// Gets the <see cref="Models.Tone"/> providing tone information for the active tone.
+        /// </summary>
+        public Tone Tone { get; private set; }
 
         #endregion
 
@@ -492,22 +469,24 @@ namespace IntegraXL
 
         #region Commands: Implementation
 
-        
+
         #endregion
 
         #endregion
 
         #region Methods
-
+        
         private void CreateModels()
         {
             System         = CreateModel<SystemCommon>();
             Setup          = CreateModel<Setup>();
             VirtualSlots   = CreateModel<VirtualSlots>();
             StudioSets     = CreateModel<StudioSets>();
-            SelectedTones  = CreateModel<IntegraTones>();
-            StudioSet      = CreateModel<StudioSet>();
+            //Tones          = CreateChildModel<Tones>();
+            StudioSet = CreateModel<StudioSet>();
             TemporaryTones = CreateModel<TemporaryTones>();
+
+            Tone = new Tone(this);
         }
 
         /// <summary>
@@ -540,16 +519,22 @@ namespace IntegraXL
         internal void TransmitSystemExclusive(IntegraSystemExclusive systemExclusive)
         {
             // TODO: Check if taskmanager is nescessary for sending
-            Task<bool> task = new(() =>
+            //Task<bool> task = new(() =>
+            //{
+            //    systemExclusive.DeviceID = _DeviceID;
+
+            //    _Connection.SendSystemExclusiveMessage(systemExclusive);
+            //    return true;
+
+            //}, _CTS.Token);
+
+            //_TaskManager.Enqueue(task, _CTS.Token);
+            lock (_ModelQueue)
             {
                 systemExclusive.DeviceID = _DeviceID;
 
                 _Connection.SendSystemExclusiveMessage(systemExclusive);
-                return true;
-
-            }, _CTS.Token);
-
-            _TaskManager.Enqueue(task, _CTS.Token);
+            }
         }
 
 
@@ -588,6 +573,23 @@ namespace IntegraXL
         #region Methods: Model Instantiation
 
         /// <summary>
+        /// Creates and caches a new INTEGRA-7 child model or returns the model from cache if it exists.
+        /// </summary>
+        /// <typeparam name="TModel">The model type specifier.</typeparam>
+        /// <param name="part">The associated part, only required for <see cref="IntegraPartial"/> derived models.</param>
+        /// <returns>A new or cached INTEGRA-7 model.</returns>
+        /// <remarks><i>
+        /// - Maintains refrential integrity of models and prevents duplicates.<br/>
+        /// - Child models <b>require</b> to be initialized by the parent's request.<br/>
+        /// - Child models are not enqueued on the initialization queue.<br/>
+        /// </i></remarks>
+        internal TModel CreateChildModel<TModel>(Parts? part = null) where TModel : IntegraModel
+        {
+            Debug.Print($"[{nameof(Integra)}.{nameof(CreateChildModel)}<{typeof(TModel).Name}>({part})]");
+            return CreateModel<TModel>(part, false);
+        }
+
+        /// <summary>
         /// Creates and caches a new INTEGRA-7 model or returns the model from cache if it exists.
         /// </summary>
         /// <typeparam name="TModel">The model type specifier.</typeparam>
@@ -595,9 +597,9 @@ namespace IntegraXL
         /// <returns>A new or cached INTEGRA-7 model.</returns>
         /// <remarks><i>
         /// - Maintains refrential integrity of models and prevents duplicates.<br/>
-        /// - Newly created models are uninitialized, cached models are possibly already initialized with data.<br/>
+        /// - Newly created models are enqueued for initialization.<br/>
         /// </i></remarks>
-        internal TModel CreateModel<TModel>(Parts? part = null) where TModel : IntegraModel
+        internal TModel CreateModel<TModel>(Parts? part = null, bool initialize = true) where TModel : IntegraModel
         {
             IntegraModel? instance;
 
@@ -616,21 +618,27 @@ namespace IntegraXL
 
             if (_Models.TryGetValue(instance.GetUID(), out IntegraModel? model))
             {
-                Debug.Print($"[{nameof(Integra)}.{nameof(CreateModel)}<{typeof(TModel).Name}>({part})] Existing cache entry");
+                Debug.Print($"[{nameof(Integra)}.{nameof(CreateModel)}<{typeof(TModel).Name}>({part})] " +
+                            $"Existing cache entry");
 
-                // IMPORTANT: ? Disconnect to remove the device event listener to free all references to the newly created instance?
-                instance.Disconnect();
-                instance = null;
+                // IMPORTANT: Call dispose to disconnect the device event listener
+                instance.Dispose();
+                //instance = null;
 
                 return (TModel)model;
             }
 
             if(!_Models.TryAdd(instance.GetUID(), instance))
             {
-                Debug.Print($"[{nameof(Integra)}.{nameof(CreateModel)}<{typeof(TModel).Name}>({part})] Unable to create cache entry: 0x{instance.GetUID():X4}");
+                Debug.Print($"[{nameof(Integra)}.{nameof(CreateModel)}<{typeof(TModel).Name}>({part})] " +
+                            $"Unable to create cache entry: 0x{instance.GetUID():X4}");
             }
 
-            Debug.Print($"[{nameof(Integra)}.{nameof(CreateModel)}<{typeof(TModel).Name}>({part})] New cache entry: 0x{instance.GetUID():X4}");
+            Debug.Print($"[{nameof(Integra)}.{nameof(CreateModel)}<{typeof(TModel).Name}>({part})] " +
+                        $"New cache entry: 0x{instance.GetUID():X4}");
+
+            if(initialize)
+                Enqueue(instance);
 
             return (TModel)instance;
         }
@@ -652,15 +660,15 @@ namespace IntegraXL
 
             TModel model = CreateModel<TModel>(part);
 
-            try
-            {
-                if (!model.IsInitialized)
-                    await model.InitializeAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
+            //try
+            //{
+            //    if (!model.IsInitialized)
+            //        await model.InitializeAsync();
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine(ex);
+            //}
 
             return model;
         }
@@ -680,8 +688,8 @@ namespace IntegraXL
 
             IntegraToneBank bank = CreateToneBank(type);
 
-            if(!bank.IsInitialized)
-                await bank.InitializeAsync();
+            //if(!bank.IsInitialized)
+            //    await bank.InitializeAsync();
 
             return bank;
         }
@@ -697,8 +705,8 @@ namespace IntegraXL
 
             IntegraToneBank bank = CreateToneBank(type);
 
-            if (!bank.IsInitialized)
-                await bank.InitializeAsync();
+            //if (!bank.IsInitialized)
+            //    await bank.InitializeAsync();
 
             return bank;
         }
@@ -713,8 +721,8 @@ namespace IntegraXL
 
             IntegraToneBank bank = CreateToneBank(typeof(TToneBank));
 
-            if (!bank.IsInitialized)
-                await bank.InitializeAsync();
+            //if (!bank.IsInitialized)
+            //    await bank.InitializeAsync();
 
             return bank;
         }
@@ -754,106 +762,9 @@ namespace IntegraXL
 
             Debug.Print($"[{nameof(Integra)}.{nameof(CreateToneBank)}({type})] New cache entry: 0x{instance.GetUID():X4}");
 
+            Enqueue(instance);
             return instance;
         }
-
-        #endregion
-
-        #region Methods: Model Requests
-
-        internal Task<bool> ReinitializeModel(IntegraModel model)
-        {
-            Debug.Print($"[{nameof(Integra)}] {nameof(ReinitializeModel)}<{model.GetType().Name}>()");
-
-            if(model.IsInitialized)
-                model.IsInitialized = false;
-
-            return InitializeModel(model);
-        }
-
-
-
-        /// <summary>
-        /// Initializes an INTEGRA-7 model with data.
-        /// </summary>
-        /// <param name="model">The model to initialize.</param>
-        /// <returns>An awaitable <see cref="Task"/> that returns true if the model is initialized.</returns>
-        internal Task<bool> InitializeModel(IntegraModel model)
-        {
-            Debug.Print($"[{nameof(Integra)}] {nameof(InitializeModel)}<{model.GetType().Name}>()");
-
-            Task<bool> task = new (() =>
-            {
-                    //InitProgress(model);
-                    Debug.Print($"[{nameof(IntegraTaskManager)}] Task: {model.GetType().Name}");
-
-                    foreach (var request in model.Requests)
-                    {
-                        IntegraSystemExclusive systemExclusive = new(model.Address, request);
-                        systemExclusive.DeviceID = _DeviceID;
-
-                    //if (_Connection == null)
-                    //    return false;
-
-                    _Connection.SendSystemExclusiveMessage(systemExclusive);
-                    }
-
-                    while (!model.IsInitialized)
-                    {
-                    if (_CTS.IsCancellationRequested)
-                        return false;
-                        //_ModelCTS.Token.ThrowIfCancellationRequested();
-                        //await Task.Delay(100, _ModelCTS.Token);
-
-                        //Task.Delay(100);
-                        //Thread.Sleep(100);
-                    }
-
-                    //CompleteProgress(model);
-                    return true;
-
-            }, _CTS.Token);
-
-            //task.ContinueWith((t) =>
-            //{
-            //    Debug.Print($"[{nameof(Integra)}] {nameof(InitializeModel)}<{model.GetType().Name}>() CANCELLED");
-            //    return false;
-            //}, TaskContinuationOptions.OnlyOnCanceled);
-
-            // TODO: Error handling / Time out to prevent application lock
-            //if(!_ModelCTS.IsCancellationRequested)
-            _TaskManager.Enqueue(task, _CTS.Token);
-
-
-            return task;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="instance"></param>
-        /// <returns></returns>
-        internal Task<bool> LoadExpansions(VirtualSlots instance)
-        {
-            Task<bool> task = new (() =>
-            {
-                IntegraSystemExclusive systemExclusive = new(0x0F003000, instance.Requests[0]);
-                systemExclusive.DeviceID = _DeviceID;
-                _Connection.SendSystemExclusiveMessage(systemExclusive);
-
-                while (instance.IsLoading)
-                {
-                    Thread.Sleep(100);
-                }
-
-                return true;
-            },_CTS.Token);
-
-            _TaskManager.Enqueue(task, _CTS.Token);
-
-            return task;
-        }
-
 
         #endregion
 
@@ -1096,6 +1007,14 @@ namespace IntegraXL
 
         #region Event Handlers
 
+        private void OnConnectionChanged(object? sender, IntegraConnectionStatusEventArgs e)
+        {
+            if (e.Previous == ConnectionStatus.Connected)
+            {
+                _CTS.Cancel();
+            }
+        }
+
         /// <summary>
         /// Handles the <see cref="IntegraConnection.SystemExclusiveReceived"/> event.
         /// </summary>
@@ -1120,6 +1039,10 @@ namespace IntegraXL
                 case byte x when x >= 0x19 && x < 0x1D:
                     //Debug.Print($"0x19 Temporary Tone Address");
                     break;
+
+                case 0x0F:
+                    //Debug.Print($"0x0F Function Address");
+                    break;
                 default:
                     break;
             }
@@ -1129,6 +1052,14 @@ namespace IntegraXL
 
             }
             else if(e.SystemExclusive.Address == IntegraConstants.STORING_COMPLETE)
+            {
+
+            }
+            else if(e.SystemExclusive.Address == IntegraConstants.VIRTUAL_SLOTS_LOADING)
+            {
+
+            }
+            else if(e.SystemExclusive.Address == IntegraConstants.VIRTUAL_SLOTS_COMPLETE)
             {
 
             }
@@ -1147,6 +1078,144 @@ namespace IntegraXL
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        #endregion
+
+        #region Task Manager
+
+
+        private IntegraModelQueue _ModelQueue = new();
+
+        private bool _IsRunning = false;
+        private bool _IsCancelled = false;
+        private IntegraModel? _CurrentModel;
+
+
+        public bool IsRunning => _IsRunning;
+        public int Count => _ModelQueue.Count;
+        public IntegraModel? CurrentModel => _CurrentModel;
+
+        private void StartQueue()
+        {
+            lock (_ModelQueue)
+            {
+                if (_ModelQueue.Count != 0)
+                {
+                    if (!_IsRunning && IsConnected)
+                    {
+                        _IsRunning = true;
+                        NotifyPropertyChanged(nameof(IsRunning));
+                        ThreadPool.QueueUserWorkItem(ExecuteQueue, null);
+                    }
+                }
+            }
+        }
+
+        internal void Dequeue(IntegraModel model)
+        {
+            lock(_ModelQueue)
+            {
+                if (_ModelQueue.Contains(model))
+                {
+                    // REBUILD QUEUE WITHOUT THE SPECIFIED MODEL
+                    _ModelQueue = new IntegraModelQueue(_ModelQueue.Where(x => x != model));
+                }
+                else if(_CurrentModel == model)
+                {
+                    // MODEL IS BEING PROCESSED, CANCEL
+                    _IsCancelled = true;
+                }
+            }
+        }
+
+        internal void Enqueue(IntegraModel model)
+        {
+            lock (_ModelQueue)
+            {
+                _ModelQueue.Enqueue(model);
+
+                Debug.Print($"[{nameof(Integra)}.{nameof(Enqueue)}({model.GetType().Name})]");
+
+                if (!_IsRunning && IsConnected)
+                {
+                    _IsRunning = true;
+                    NotifyPropertyChanged(nameof(IsRunning));
+                    NotifyPropertyChanged(nameof(Count));
+                    ThreadPool.QueueUserWorkItem(ExecuteQueue, null);
+                }
+            }
+        }
+
+        private async void ExecuteQueue(object ignored)
+        {
+            while (true)
+            {
+                //IntegraModel model;
+
+                lock (_ModelQueue)
+                {
+                    if (_ModelQueue.Count == 0)
+                    {
+                        _IsRunning = false;
+                        _CurrentModel = null;
+
+                        NotifyPropertyChanged(string.Empty);
+                        break;
+                    }
+
+                    _CurrentModel = _ModelQueue.Dequeue();
+                }
+
+                try
+                {
+                    if (_CurrentModel.IsInitialized)
+                    {
+                        Debug.Print($"[{nameof(Integra)}.{nameof(ExecuteQueue)}({_CurrentModel.GetType().Name}[{_CurrentModel.Address}])] Skip");
+                        NotifyPropertyChanged(nameof(Count));
+                        continue;
+                    }
+
+                    Debug.Print($"[{nameof(Integra)}.{nameof(ExecuteQueue)}({_CurrentModel.GetType().Name}[{_CurrentModel.Address}])] Start");
+
+                    NotifyPropertyChanged(nameof(CurrentModel));
+
+                    _CurrentModel.Initialize();
+
+                    while (_CurrentModel.IsInitialized == false && _IsCancelled == false)
+                    {
+                        // TODO: Report Progress
+                        await Task.Delay(100);
+                    }
+
+                    if (_IsCancelled)
+                    {
+                        _IsCancelled = false;
+                        Debug.Print($"[{nameof(Integra)}.{nameof(ExecuteQueue)}({_CurrentModel.GetType().Name}[{_CurrentModel.Address}])] Cancelled");
+                    }
+                    else
+                    {
+                        Debug.Print($"[{nameof(Integra)}.{nameof(ExecuteQueue)}({_CurrentModel.GetType().Name}[{_CurrentModel.Address}])] Complete");
+                    }
+
+                }
+                catch
+                {
+
+                    // TODO: Reschedule Task?
+                    lock (_ModelQueue)
+                    {
+                        ThreadPool.QueueUserWorkItem(ExecuteQueue, null);
+                    }
+
+                    Debug.Print($"[{nameof(Integra)}.{nameof(ExecuteQueue)}({_CurrentModel.GetType().Name})] Error");
+
+                    throw;
+                }
+
+                NotifyPropertyChanged(nameof(Count));
+                Debug.Print($"[{nameof(IntegraTaskManager)}] Task Count = {Count}");
+            }
+
+        }
         #endregion
     }
 

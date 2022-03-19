@@ -10,13 +10,13 @@ namespace IntegraXL.Core
     /// <summary>
     /// Base class for all <see cref="SuperNATURALAcousticTone"/> parameter mappers enables naming and validation of the <see cref="SuperNATURALAcousticTone"/> indexer property.
     /// </summary>
-    public abstract class IntegraSNAMapper : IntegraParameterMapper<byte>
+    public abstract class IntegraSNAProvider : IntegraParameterProvider<byte>
     {
         /// <summary>
-        /// Creates a new <see cref="IntegraSNAMapper"/> instance.
+        /// Creates a new <see cref="IntegraSNAProvider"/> instance.
         /// </summary>
         /// <param name="provider">The model that provides the parameters.</param>
-        protected IntegraSNAMapper(SuperNATURALAcousticToneCommon provider) : base(provider) { }
+        protected IntegraSNAProvider(SuperNATURALAcousticToneCommon provider) : base(provider) { }
     }
 
     /// <summary>
@@ -25,15 +25,15 @@ namespace IntegraXL.Core
     /// <remarks>
     /// <i>(De)serializes the property values to and from INTEGRA-7 MFX parameters.</i>
     /// </remarks>
-    public abstract class IntegraMFXMapper : IntegraParameterMapper<int>
+    public abstract class IntegraMFXProvider : IntegraParameterProvider<int>
     {
         #region Constructor
 
         /// <summary>
-        /// Creates a new <see cref="IntegraMFXMapper"/> instance.
+        /// Creates a new <see cref="IntegraMFXProvider"/> instance.
         /// </summary>
         /// <param name="provider">The model that provides the parameters.</param>
-        public IntegraMFXMapper(IParameterProvider<int> provider) : base(provider) { }
+        protected IntegraMFXProvider(IParameterProvider<int> provider) : base(provider) { }
 
         #endregion
 
@@ -57,7 +57,7 @@ namespace IntegraXL.Core
     /// Base class for all parameter mappers enables naming and validation of parameters provided by a model's indexer property.
     /// </summary>
     /// <typeparam name="TIndexer">The parameter indexer property type.</typeparam>
-    public abstract class IntegraParameterMapper<TIndexer> : INotifyPropertyChanged
+    public abstract class IntegraParameterProvider<TIndexer> : IntegraParameterProvider, INotifyPropertyChanged
     {
         #region Fields
 
@@ -71,10 +71,10 @@ namespace IntegraXL.Core
         #region Constructor
 
         /// <summary>
-        /// Creates a new <see cref="IntegraParameterMapper{TIndexer}"/> instance.
+        /// Creates a new <see cref="IntegraParameterProvider{TIndexer}"/> instance.
         /// </summary>
         /// <param name="provider">The model providing the parameter indexer property.</param>
-        public IntegraParameterMapper(IParameterProvider<TIndexer> provider)
+        protected IntegraParameterProvider(IParameterProvider<TIndexer> provider) : base()
         {
             Debug.Assert(provider.GetType().GetInterfaces().Contains(typeof(IParameterProvider<TIndexer>)));
 
@@ -101,7 +101,7 @@ namespace IntegraXL.Core
         #endregion
 
         #region Event Handlers
-        
+
         /// <summary>
         /// Handles the property changed event of the provider.
         /// </summary>
@@ -133,5 +133,10 @@ namespace IntegraXL.Core
         }
 
         #endregion
+    }
+
+    public abstract class IntegraParameterProvider 
+    {
+        protected IntegraParameterProvider() { }
     }
 }

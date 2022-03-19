@@ -1,8 +1,8 @@
 ﻿using IntegraXL.Core;
 
-namespace IntegraXL.Models.Parameters
+namespace IntegraXL.Models.Providers
 {
-    public class CommonChorusOff : IntegraMFXMapper
+    public class CommonChorusOff : IntegraMFXProvider
     {
         public CommonChorusOff(StudioSetCommonChorus provider) : base(provider) { }
     }

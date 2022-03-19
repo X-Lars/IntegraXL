@@ -58,7 +58,7 @@ namespace IntegraXL.Extensions
         }
 
         /// <summary>
-        /// Gets the expansion based on the MSB and LSB of the bank select.
+        /// Gets the expansion based on the MSB and LSB of the <see cref="IBankSelect"/> interface.
         /// </summary>
         /// <typeparam name="T">The instance type specifier.</typeparam>
         /// <param name="instance">The instance providing the MSB and LSB.</param>
@@ -178,7 +178,7 @@ namespace IntegraXL.Extensions
                     return IntegraToneTypes.SuperNATURALSynthTone;
 
                 default:
-
+                    return IntegraToneTypes.Unavailable;
                     // TODO: Tone type can be undefined, tone ID 0000 Piano 1 when error
                     throw new ArgumentOutOfRangeException($"[{nameof(IntegraToneExtensions)}.{nameof(ToneType)}]");
             }

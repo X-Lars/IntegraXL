@@ -1,6 +1,6 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Models;
-using IntegraXL.Models.Parameters;
+using IntegraXL.Models.Providers;
 
 namespace IntegraXL.Extensions
 {
@@ -285,7 +285,7 @@ namespace IntegraXL.Extensions
             }
         }
 
-        public static IntegraParameterMapper<byte> NewGetParameterType(this SuperNATURALAcousticToneCommon instance)
+        public static IntegraParameterProvider<byte> NewGetParameterType(this SuperNATURALAcousticToneCommon instance)
         {
             switch(instance.Instrument)
             {
@@ -503,7 +503,7 @@ namespace IntegraXL.Extensions
             }
         }
 
-        public static IntegraParameterMapper<byte> GetParameterType(this SuperNATURALAcousticToneCommon instance)
+        public static IntegraParameterProvider<byte> GetParameterType(this SuperNATURALAcousticToneCommon instance)
         {
 
             if (instance.InstVariation == 64)

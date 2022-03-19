@@ -1,7 +1,7 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Extensions;
 
-namespace IntegraXL.Models.Parameters
+namespace IntegraXL.Models.Providers
 {
     /// <remarks>
     /// 00: Low Freq <br/>
@@ -16,9 +16,9 @@ namespace IntegraXL.Models.Parameters
     /// 09: High Gain <br/>
     /// 10: Level <br/>
     /// </remarks>
-    public sealed class Equalizer : IntegraMFXMapper
+    public sealed class MFXEqualizer : IntegraMFXProvider
     {
-        public Equalizer(MFX provider) : base(provider) { }
+        public MFXEqualizer(MFX provider) : base(provider) { }
 
         public IntegraLowFrequencies LowFreq
         {

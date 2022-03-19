@@ -40,25 +40,50 @@ namespace IntegraXL.Core
         public Parts Previous { get; }
     }
 
+    /// <summary>
+    /// Event arguments for tone changed events, providing the new tone's <see cref="IBankSelect"/> interface and the associated part.
+    /// </summary>
     public class IntegraToneChangedEventArgs : IntegraEventArgs
     {
+        /// <summary>
+        /// Creates and initializes a new <see cref="IntegraToneChangedEventArgs"/> instance.
+        /// </summary>
+        /// <param name="tone">The <see cref="IBankSelect"/> interface of the new tone.</param>
+        /// <param name="part">The tone's associated part.</param>
         public IntegraToneChangedEventArgs(IBankSelect tone, Parts part)
         {
             Tone = tone;
             Part = part;
         }
 
+        /// <summary>
+        /// Gets the <see cref="IBankSelect"/> interface of the new tone.
+        /// </summary>
         public IBankSelect Tone { get; }
+
+        /// <summary>
+        /// Gets the new tone's associated part.
+        /// </summary>
         public Parts Part { get; }
     }
 
-    public class IntegraTypeChangedEventArgs : IntegraEventArgs
+    /// <summary>
+    /// Event arguments for <see cref="IParameterProvider{TIndexer}.ParametersChanged"/> event, providing the new <see cref="IntegraParameterProvider{TIndexer}"/> type.
+    /// </summary>
+    public class IntegraParametersChangedEventArgs : IntegraEventArgs
     {
-        public IntegraTypeChangedEventArgs(Type type)
+        /// <summary>
+        /// Creates and initializes a new <see cref="IntegraParametersChangedEventArgs"/> instance.
+        /// </summary>
+        /// <param name="type">The type of <see cref="IntegraParameterProvider{TIndexer}"/>.</param>
+        public IntegraParametersChangedEventArgs(Type type)
         {
             Type = type;
         }
 
+        /// <summary>
+        /// Gets the new type of <see cref="IntegraParameterProvider{TIndexer}"/>.
+        /// </summary>
         public Type Type { get; }
     }
 

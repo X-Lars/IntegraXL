@@ -76,7 +76,7 @@ namespace IntegraXL.Extensions
             if (!integraFields.Any())
                 return false;
 
-            Debug.Print($"[{nameof(IntegraModelExtensions)}] {nameof(Cache)}<{instance.GetType().Name}>() New Cache Entry {typeof(T).Name}");
+            Debug.Print($"[{nameof(IntegraModelExtensions)}.{nameof(Cache)}<{instance.GetType().Name}>()");
 
             Dictionary<int, FieldInfo> cachedFields = new();
 

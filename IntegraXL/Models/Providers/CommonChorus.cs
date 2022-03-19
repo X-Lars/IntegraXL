@@ -1,7 +1,7 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Extensions;
 
-namespace IntegraXL.Models.Parameters
+namespace IntegraXL.Models.Providers
 {
     /// <remarks>
     /// 01: Filter Type <br/>
@@ -14,7 +14,7 @@ namespace IntegraXL.Models.Parameters
     /// 08: Phase <br/>
     /// 09: Feedback <br/>
     /// </remarks>
-    public sealed class CommonChorus : IntegraMFXMapper
+    public sealed class CommonChorus : IntegraMFXProvider
     {
         public CommonChorus(StudioSetCommonChorus provider) : base(provider) { }
 

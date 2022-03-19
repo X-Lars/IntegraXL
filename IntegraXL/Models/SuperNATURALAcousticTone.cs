@@ -1,8 +1,5 @@
 ﻿using IntegraXL.Core;
-using IntegraXL.File;
 
-
-// TODO: Parameter context based on tone category (See Roland parameter reference)
 namespace IntegraXL.Models
 {
     /// <summary>

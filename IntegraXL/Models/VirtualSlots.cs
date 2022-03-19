@@ -91,10 +91,10 @@ namespace IntegraXL.Models
             StartupExpansions = device.CreateModel<StartupExpansions>();
         }
 
-        private async void InitializeStartupExpansions()
-        {
-            await Device.InitializeModel(StartupExpansions);
-        }
+        //private async void InitializeStartupExpansions()
+        //{
+        //    await Device.InitializeModel(StartupExpansions);
+        //}
 
         #endregion
 
@@ -375,7 +375,8 @@ namespace IntegraXL.Models
             // Updates model's request with the actual slots
             Requests[0] = new IntegraRequest((byte)SlotA, (byte)SlotB, (byte)SlotC, (byte)SlotD);
 
-            await Device.LoadExpansions(this);
+            //await Device.LoadExpansions(this);
+            Device.TransmitSystemExclusive(new IntegraSystemExclusive(0x0F003000, Requests[0]));
 
             // After loading expansions set the initial expansion values to the actual ones
             _InitialExpansions[0] = SlotA;
@@ -399,7 +400,7 @@ namespace IntegraXL.Models
             // Updates the model's request with all slots turned off
             Requests[0] = new IntegraRequest();
 
-            await Device.LoadExpansions(this);
+            Device.TransmitSystemExclusive(new IntegraSystemExclusive(0x0F003000, Requests[0]));
 
             _InitialExpansions[0] = _SlotA = IntegraExpansions.Off;
             _InitialExpansions[1] = _SlotB = IntegraExpansions.Off;
@@ -538,12 +539,13 @@ namespace IntegraXL.Models
 
         #region Overrides: Model
 
-        internal async override Task<bool> InitializeAsync()
+        internal override void Initialize()
         {
-            if (!StartupExpansions.IsInitialized)
-                await StartupExpansions.InitializeAsync();
-
-            return await base.InitializeAsync();
+            foreach (var request in Requests)
+            {
+                IntegraSystemExclusive systemExclusive = new(Address, request);
+                Device.TransmitSystemExclusive(systemExclusive);
+            }
         }
 
         /// <summary>

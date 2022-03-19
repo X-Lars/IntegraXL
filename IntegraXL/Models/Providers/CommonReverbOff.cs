@@ -1,8 +1,8 @@
 ﻿using IntegraXL.Core;
 
-namespace IntegraXL.Models.Parameters
+namespace IntegraXL.Models.Providers
 {
-    public class CommonReverbOff : IntegraMFXMapper
+    public class CommonReverbOff : IntegraMFXProvider
     {
         public CommonReverbOff(StudioSetCommonReverb provider) : base(provider) { }
     }

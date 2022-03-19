@@ -564,6 +564,15 @@ namespace IntegraXL.Core
 
         #region Overrides: Model
 
+        internal override void Initialize()
+        {
+            foreach(var request in Requests)
+            {
+                IntegraSystemExclusive systemExclusive = new(Address, request);
+                Device.TransmitSystemExclusive(systemExclusive);
+            }
+        }
+
         protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
         {
             if (!IsCached)
@@ -768,7 +777,7 @@ namespace IntegraXL.Core
             // Only transmit properties if the model is initialized
             if (IsInitialized)
             {
-                IsDirty = true;
+                //IsDirty = true;
                 if (index != null)
                 {
                     //TODO: Transmit indexed property for MFX parameters
@@ -788,14 +797,19 @@ namespace IntegraXL.Core
     /// <summary>
     /// Base class for all MIDI enabled INTEGRA-7 models.
     /// </summary>
-    public abstract class IntegraModel : INotifyPropertyChanged
+    public abstract class IntegraModel : INotifyPropertyChanged, IDisposable
     {
         #region Fields
 
         /// <summary>
-        /// Tracks if the model is initialized.
+        /// Tracks whether the model is initialized.
         /// </summary>
         private bool _IsInitialized = false;
+
+        /// <summary>
+        /// Tracks whether the model is disposed.
+        /// </summary>
+        private bool _IsDisposed;
 
         #endregion
 
@@ -893,7 +907,7 @@ namespace IntegraXL.Core
         /// <summary>
         /// Gets wheter the model has unsaved changes.
         /// </summary>
-        public virtual bool IsDirty { get; protected set; }
+        public virtual bool IsDirty { get { throw new NotImplementedException(); } protected set { throw new NotImplementedException(); } }
 
         /// <summary>
         /// Gets wheter the model is initialized.
@@ -907,7 +921,7 @@ namespace IntegraXL.Core
             {
                 if (_IsInitialized != value)
                 {
-                    Debug.Print($"[{GetType().Name}] {nameof(IsInitialized)} = {value}");
+                    //Debug.Print($"[{GetType().Name}] {nameof(IsInitialized)} = {value}");
 
                     _IsInitialized = value;
 
@@ -919,41 +933,6 @@ namespace IntegraXL.Core
         #endregion
 
         #region Methods
-        
-        /// <summary>
-        /// Requests the device to initialize the model.
-        /// </summary>
-        /// <returns>An awaitable task that returns true if the model is initialized.</returns>
-        /// <exception cref="IntegraException"/>
-        internal virtual async Task<bool> InitializeAsync()
-        {
-            if (Device == null)
-                throw new IntegraException($"[{nameof(IntegraModel)}]\n" +
-                                           $"{GetType().Name}: Device is null.");
-
-            if (!IsConnected)
-                Connect();
-
-            try
-            {
-                return await Device.InitializeModel(this);
-            }
-            catch (TaskCanceledException)
-            {
-                Debug.Print($"[{nameof(IntegraModel)}<{GetType().Name}>.{nameof(InitializeAsync)}()] Cancelled");
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Requests the device to reinitialize the model.
-        /// </summary>
-        internal async void ReinitializeAsync()
-        {
-            IsInitialized = false;
-
-            await InitializeAsync();
-        }
 
         /// <summary>
         /// Connects the model to the device to (re)enable receiving system exclusive messages.
@@ -987,6 +966,8 @@ namespace IntegraXL.Core
             Device.SystemExclusiveReceived -= SystemExclusiveReceived;
             IsConnected = false;
         }
+
+        internal abstract void Initialize();
 
         /// <summary>
         /// Method to serialize the model data to an <see cref="byte"/> array.
@@ -1049,6 +1030,45 @@ namespace IntegraXL.Core
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        #endregion
+
+        #region Interfaces: IDisposable
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_IsDisposed)
+            {
+                if (disposing)
+                {
+                    // REMOVE DEVICE EVENT HANDLER
+                    if (Device != null)
+                    {
+                        Device.SystemExclusiveReceived -= SystemExclusiveReceived;
+                    }
+                    // TODO: dispose managed state (managed objects)
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                _IsDisposed = true;
+            }
+        }
+
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~IntegraModel()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+
 
         #endregion
     }

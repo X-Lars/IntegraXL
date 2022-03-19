@@ -2,13 +2,13 @@
 using IntegraXL.Core;
 using IntegraXL.Extensions;
 
-namespace IntegraXL.Models.Parameters
+namespace IntegraXL.Models.Providers
 {
     /// <remarks>
     /// 00: Character <br/>
     /// 03: Time <br/>
     /// </remarks>
-    public sealed class CommonReverbGM2 : IntegraMFXMapper
+    public sealed class CommonReverbGM2 : IntegraMFXProvider
     {
         public CommonReverbGM2(StudioSetCommonReverb provider) : base(provider) { }
 

@@ -310,7 +310,7 @@
         /// <returns>A string representation of the current address.</returns>
         public override string ToString()
         {
-            return $"0x {(int)this:X4}";
+            return $"0x{(int)this:X4}";
         }
 
         #endregion

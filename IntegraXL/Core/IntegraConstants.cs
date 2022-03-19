@@ -11,8 +11,11 @@
         public const int PCM_NOTE_COUNT = 88;
         public const int EXP_COUNT = 4;
 
-        public const int STORING_DATA = 0x0F001001;
-        public const int STORING_COMPLETE = 0x0F001001;
+        public const int STORING_DATA     = 0x0F001001;
+        public const int STORING_COMPLETE = 0x0F001002;
+
+        public const int VIRTUAL_SLOTS_LOADING  = 0x0F003001;
+        public const int VIRTUAL_SLOTS_COMPLETE = 0x0F003002;
 
         public const int WAVE_COUNT_INT    = 1083;
         public const int WAVE_COUNT_SNS = 450;

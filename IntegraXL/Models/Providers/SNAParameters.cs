@@ -1,7 +1,7 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Extensions;
 
-namespace IntegraXL.Models.Parameters
+namespace IntegraXL.Models.Providers
 {
     #region Bass
 
@@ -12,7 +12,7 @@ namespace IntegraXL.Models.Parameters
     /// <b>Parameter Index</b><br/>
     /// - [0] <see cref="NoiseLevel"/><br/>
     /// </remarks>
-    public abstract class SNABassCommon : IntegraSNAMapper
+    public abstract class SNABassCommon : IntegraSNAProvider
     {
         public SNABassCommon(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -145,7 +145,7 @@ namespace IntegraXL.Models.Parameters
     /// - [0] <see cref="Hardness"/><br/>
     /// - [1] <see cref="RollSpeed"/><br/>
     /// </remarks>
-    public abstract class SNABellMalletCommon : IntegraSNAMapper
+    public abstract class SNABellMalletCommon : IntegraSNAProvider
     {
         public SNABellMalletCommon(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -260,7 +260,7 @@ namespace IntegraXL.Models.Parameters
     /// ExSN1: 001 Santoor<br/>
     /// ExSN1: 002 Yang Chin<br/>
     /// </remarks>
-    public sealed class SNABellMallet3 : IntegraSNAMapper
+    public sealed class SNABellMallet3 : IntegraSNAProvider
     {
         public SNABellMallet3(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -320,7 +320,7 @@ namespace IntegraXL.Models.Parameters
     /// - [0] <see cref="NoiseLevel"/><br/>
     /// - [2] <see cref="GrowlSens"/><br/>
     /// </remarks>
-    public abstract class SNABrassCommon : IntegraSNAMapper
+    public abstract class SNABrassCommon : IntegraSNAProvider
     {
         public SNABrassCommon(SuperNATURALAcousticToneCommon provider) : base(provider) { }
         
@@ -454,7 +454,7 @@ namespace IntegraXL.Models.Parameters
     /// <b>Instruments</b><br/>
     /// ExSN5: 004 Mariachi Tp<br/>
     /// </remarks>
-    public sealed class SNABrass3 : IntegraSNAMapper
+    public sealed class SNABrass3 : IntegraSNAProvider
     {
         public SNABrass3(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -540,7 +540,7 @@ namespace IntegraXL.Models.Parameters
     /// - [1] <see cref="StrumSpeed"/><br/>
     /// - [3] <see cref="StrumMode"/> (Off, On)<br/>
     /// </remarks>
-    public abstract class SNAGuitarCommon : IntegraSNAMapper
+    public abstract class SNAGuitarCommon : IntegraSNAProvider
     {
         public SNAGuitarCommon(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -595,7 +595,7 @@ namespace IntegraXL.Models.Parameters
     /// <b>Instruments</b><br/>
     /// ExSN4: 001 Ukulele<br/>
     /// </remarks>
-    public sealed class SNAUkelele : IntegraSNAMapper
+    public sealed class SNAUkelele : IntegraSNAProvider
     {
         public SNAUkelele(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -639,7 +639,7 @@ namespace IntegraXL.Models.Parameters
     /// <b>Instruments</b><br/>
     /// ExSN4: 004 Mandolin<br/>
     /// </remarks>
-    public sealed class SNAMandolin : IntegraSNAMapper
+    public sealed class SNAMandolin : IntegraSNAProvider
     {
         public SNAMandolin(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -933,7 +933,7 @@ namespace IntegraXL.Models.Parameters
     /// <b>Instruments</b><br/>
     /// INT: 032 Harmonica
     /// </remarks>
-    public sealed class SNAHarmonica : IntegraSNAMapper
+    public sealed class SNAHarmonica : IntegraSNAProvider
     {
         public SNAHarmonica(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -981,7 +981,7 @@ namespace IntegraXL.Models.Parameters
     /// <b>Instruments</b><br/>
     /// INT: 051 Harp
     /// </remarks>
-    public sealed class SNAHarp : IntegraSNAMapper
+    public sealed class SNAHarp : IntegraSNAProvider
     {
         public SNAHarp(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -1074,7 +1074,7 @@ namespace IntegraXL.Models.Parameters
     /// INT: 031 Italian Accordion<br/>
     /// INT: 033 Bandoneon<br/>
     /// </i></remarks>
-    public sealed class SNAKeys : IntegraSNAMapper
+    public sealed class SNAKeys : IntegraSNAProvider
     {
         public SNAKeys(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -1128,7 +1128,7 @@ namespace IntegraXL.Models.Parameters
     /// <i>
     /// INT: 029 TW Organ
     /// </i></remarks>
-    public sealed class SNAOrgan : IntegraSNAMapper
+    public sealed class SNAOrgan : IntegraSNAProvider
     {
         public SNAOrgan(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -1338,7 +1338,7 @@ namespace IntegraXL.Models.Parameters
     /// <b>Instruments</b><br/>
     /// INT: 052 Timpani
     /// </remarks>
-    public sealed class SNATimpani : IntegraSNAMapper
+    public sealed class SNATimpani : IntegraSNAProvider
     {
         public SNATimpani(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -1385,7 +1385,7 @@ namespace IntegraXL.Models.Parameters
     /// <b>Instruments</b><br/>
     /// INT: 077 Steel Drums
     /// </remarks>
-    public sealed class SNASteelDrums : IntegraSNAMapper
+    public sealed class SNASteelDrums : IntegraSNAProvider
     {
         public SNASteelDrums(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -1459,7 +1459,7 @@ namespace IntegraXL.Models.Parameters
     /// INT 007: Upright Piano<br/>
     /// INT 009: Honky-tonk<br/>
     /// </remarks>
-    public class SNAPiano : IntegraSNAMapper
+    public class SNAPiano : IntegraSNAProvider
     {
         public SNAPiano(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -1556,7 +1556,7 @@ namespace IntegraXL.Models.Parameters
     /// <b>Instruments</b><br/>
     /// INT 008: Concert Mono<br/>
     /// </remarks>
-    public sealed class SNAPianoMono : IntegraSNAMapper
+    public sealed class SNAPianoMono : IntegraSNAProvider
     {
         public SNAPianoMono(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -1643,7 +1643,7 @@ namespace IntegraXL.Models.Parameters
     /// INT: 073 Sitar
     /// ExSN1: 010 Sarangi
     /// </remarks>
-    public sealed class SNASitar : IntegraSNAMapper
+    public sealed class SNASitar : IntegraSNAProvider
     {
         public SNASitar(SuperNATURALAcousticToneCommon provider) : base(provider) { }
         
@@ -1701,7 +1701,7 @@ namespace IntegraXL.Models.Parameters
     /// ExSN1: 005 Tsugaru<br/>
     /// ExSN1: 007 Sansin<br/>
     /// </i></remarks>
-    public sealed class SNAShamisen : IntegraSNAMapper
+    public sealed class SNAShamisen : IntegraSNAProvider
     {
         public SNAShamisen(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -1779,7 +1779,7 @@ namespace IntegraXL.Models.Parameters
     /// <b>Instruments</b><br/>
     /// ExSN1: 007 Koto
     /// </remarks>
-    public sealed class SNAKoto1 : IntegraSNAMapper
+    public sealed class SNAKoto1 : IntegraSNAProvider
     {
         public SNAKoto1(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -1879,7 +1879,7 @@ namespace IntegraXL.Models.Parameters
     /// <b>Instruments</b><br/>
     /// ExSN1: 008 Taishou Koto
     /// </remarks>  
-    public sealed class SNAKoto2 : IntegraSNAMapper
+    public sealed class SNAKoto2 : IntegraSNAProvider
     {
         public SNAKoto2(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -1921,7 +1921,7 @@ namespace IntegraXL.Models.Parameters
     /// <b>Instruments</b><br/>
     /// ExSN1: 009 Kalimba
     /// </remarks>  
-    public sealed class SNAKalimba : IntegraSNAMapper
+    public sealed class SNAKalimba : IntegraSNAProvider
     {
         public SNAKalimba(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -1967,7 +1967,7 @@ namespace IntegraXL.Models.Parameters
     /// <b>Parameter Index</b><br/>
     /// - [0] <see cref="NoiseLevel"/><br/>
     /// </remarks>
-    public abstract class SNAStringCommon : IntegraSNAMapper
+    public abstract class SNAStringCommon : IntegraSNAProvider
     {
         public SNAStringCommon(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -2069,7 +2069,7 @@ namespace IntegraXL.Models.Parameters
     /// INT: 053 Strings<br/>
     /// INT: 054 Marcato Strings<br/>
     /// </i></remarks>
-    public sealed class SNAStrings3 : IntegraSNAMapper
+    public sealed class SNAStrings3 : IntegraSNAProvider
     {
         public SNAStrings3(SuperNATURALAcousticToneCommon provider) : base(provider) { }
         
@@ -2116,7 +2116,7 @@ namespace IntegraXL.Models.Parameters
     /// - [2] <see cref="GrowlSens"/><br/>
     /// <br/>
     /// </remarks>  
-    public abstract class SNAWindCommon : IntegraSNAMapper
+    public abstract class SNAWindCommon : IntegraSNAProvider
     {
         public SNAWindCommon(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -2292,7 +2292,7 @@ namespace IntegraXL.Models.Parameters
     /// INT: 074 Uilleann Pipes<br/>
     /// INT: 075 Bag Pipes<br/>
     /// </remarks>
-    public sealed class SNAPipes : IntegraSNAMapper
+    public sealed class SNAPipes : IntegraSNAProvider
     {
         public SNAPipes(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 
@@ -2519,7 +2519,7 @@ namespace IntegraXL.Models.Parameters
     /// INT: 055 London Choir<br/>
     /// INT: 056 Boys Choir
     /// </remarks>
-    public sealed class SNAChoir : IntegraSNAMapper
+    public sealed class SNAChoir : IntegraSNAProvider
     {
         public SNAChoir(SuperNATURALAcousticToneCommon provider) : base(provider) { }
 

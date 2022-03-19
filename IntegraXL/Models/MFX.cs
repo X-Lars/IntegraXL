@@ -1,7 +1,7 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Extensions;
 using IntegraXL.Interfaces;
-using IntegraXL.Models.Parameters;
+using IntegraXL.Models.Providers;
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -52,10 +52,10 @@ namespace IntegraXL.Models
             {
                 IsInitialized = true;
                 Type = IntegraMFXTypes.Thru;
-                InitializeMFX();
+                //InitializeMFX();
             }
 
-            PropertyChanged += MFXPropertyChanged;
+            //PropertyChanged += MFXPropertyChanged;
         }
 
         #endregion
@@ -95,7 +95,7 @@ namespace IntegraXL.Models
                     _Type = value;
 
                     NotifyPropertyChanged();
-                    ReinitializeAsync();
+                    //ReinitializeAsync();
                 }
             }
         }
@@ -320,13 +320,13 @@ namespace IntegraXL.Models
         /// <summary>
         /// Event raised when the MFX type is changed.
         /// </summary>
-        public event EventHandler<IntegraTypeChangedEventArgs>? TypeChanged;
+        public event EventHandler<IntegraParametersChangedEventArgs>? ParametersChanged;
 
         /// <summary>
         /// Gets the MFX parameters.
         /// </summary>
         [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
-        public IntegraParameterMapper<int>? Parameters { get; internal set; }
+        public IntegraParameterProvider<int>? Parameters { get; internal set; }
 
         /// <summary>
         /// Initializes the MFX parameter provider and controllable parameters list based on the <see cref="Type"/>.
@@ -342,10 +342,10 @@ namespace IntegraXL.Models
 
             switch(Type)
             {
-                case IntegraMFXTypes.Equalizer: Parameters = new Equalizer(this); break;
+                case IntegraMFXTypes.Equalizer: Parameters = new MFXEqualizer(this); break;
                     // TODO: Remove default? No validation?
                 default: 
-                    Parameters = new Thru(this);
+                    Parameters = new MFXThru(this);
                     break;
             }
 
@@ -367,26 +367,26 @@ namespace IntegraXL.Models
 
         protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
         {
-            base.SystemExclusiveReceived(sender, e);
+            //base.SystemExclusiveReceived(sender, e);
 
-            //if (e.SystemExclusive.Address == Address)
-            //{
-            //    if (e.SystemExclusive.Data.Length == Size)
-            //    {
-            //        //Debug.Print("*** MFX: Full ***");
-            //        Initialize(e.SystemExclusive.Data);
-            //    }
-            //    else
-            //    {
-            //        IntegraAddress offset = new IntegraAddress(0x00000111);
-            //        if (e.SystemExclusive.Address.InRange(Address, (int)(Address + offset)))
-            //        {
-            //            //Debug.Print("*** MFX: Parameters ***");
-            //            // Parameter data received
-            //            ReceivedProperty(e.SystemExclusive);
-            //        }
-            //    }
-            //}
+            if (e.SystemExclusive.Address == Address)
+            {
+                if (e.SystemExclusive.Data.Length == Size)
+                {
+                    Debug.Print("*** MFX: Full ***");
+                    Initialize(e.SystemExclusive.Data);
+                }
+                else
+                {
+                    IntegraAddress offset = new IntegraAddress(0x00000111);
+                    if (e.SystemExclusive.Address.InRange(Address, (int)(Address + offset)))
+                    {
+                        Debug.Print("*** MFX: Parameters ***");
+                        // Parameter data received
+                        ReceivedProperty(e.SystemExclusive);
+                    }
+                }
+            }
         }
 
         /// <summary>

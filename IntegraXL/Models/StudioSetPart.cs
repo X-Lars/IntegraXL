@@ -29,15 +29,8 @@ namespace IntegraXL.Models
     /// Defines the INTEGRA-7 studio set part model.
     /// </summary>
     [Integra(0x18002000, 0x0000004D)]
-    public sealed class StudioSetPart : IntegraPartial<StudioSetPart>
+    public sealed class StudioSetPart : IntegraPartial<StudioSetPart>, IBankSelect
     {
-        #region Fields
-
-        /// <summary>
-        /// Stores a reference to the associated tone.
-        /// </summary>
-        private readonly IntegraTone _Tone;
-
         #region Fields: INTEGRA-7
 
         [Offset(0x0000)] private IntegraChannels _ReceiveChannel;
@@ -130,8 +123,6 @@ namespace IntegraXL.Models
 
         #endregion
 
-        #endregion
-
         #region Constructor
 
         /// <summary>
@@ -141,11 +132,21 @@ namespace IntegraXL.Models
         /// <param name="part">The model's associated part.</param>
         private StudioSetPart(Integra device, Parts part) : base(device, part) 
         {
-            _Tone = device.CreateModel<IntegraTone>(Part);
+            //_Tone = device.CreateChildModel<Tone>(part);
+
+            PropertyChanged += StudioSetPartPropertyChanged;
+        }
+
+        private void StudioSetPartPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(BankSelect))
+            {
+                Device.NotifyToneChanged(this, Part);
+            }
         }
 
         #endregion
-        
+
         #region Properties: INTEGRA-7
 
         [Offset(0x0000)]
@@ -177,57 +178,58 @@ namespace IntegraXL.Models
         }
 
         [Offset(0x0006)]
-        public IBankSelect Tone
+        public IBankSelect BankSelect
         {
-            get { return _Tone; }
+            get => this;
             set
             {
-                if (((IBankSelect)_Tone).Equals(value))
-                    return;
+                if (!Equals(value))
+                {
+                    _BankSelect[0] = value.MSB.Clamp();
+                    _BankSelect[1] = value.LSB.Clamp();
+                    _BankSelect[2] = value.PC.Clamp();
 
-                _Tone.BankSelect = value;
-                _BankSelect[0] = value.MSB.Clamp();
-                _BankSelect[1] = value.LSB.Clamp();
-                _BankSelect[2] = value.PC.Clamp();
+                    NotifyPropertyChanged();
 
-                NotifyPropertyChanged();
+                    //_Tone.Update(value);
+                }
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <remarks><i>The bank select properties are combined in the <see cref="Tone"/> property.</i></remarks>
+        /// <remarks><i>The bank select properties are combined in the <see cref="BankSelect"/> property.</i></remarks>
         //[Offset(0x0006)]
         [Bindable(BindableSupport.No)]
-        public byte ToneBankSelectMSB
+        public byte MSB
         {
-            get => Tone.MSB;
-            set => throw new NotImplementedException($"[{nameof(StudioSetPart)}({Part}).{nameof(ToneBankSelectMSB)}]\nUse the {nameof(Tone)}.{nameof(Tone.MSB)} property instead.");
+            get => _BankSelect[0];
+            set => throw new NotImplementedException($"[{nameof(StudioSetPart)}({Part}).{nameof(MSB)}]\nUse the {nameof(BankSelect)}.{nameof(BankSelect.MSB)} property instead.");
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <remarks><i>The bank select properties are combined in the <see cref="Tone"/> property.</i></remarks>
+        /// <remarks><i>The bank select properties are combined in the <see cref="BankSelect"/> property.</i></remarks>
         //[Offset(0x0007)]
         [Bindable(BindableSupport.No)]
-        public byte ToneBankSelectLSB
+        public byte LSB
         {
-            get => Tone.LSB;
-            set => throw new NotImplementedException($"[{nameof(StudioSetPart)}({Part}).{nameof(ToneBankSelectLSB)}]\nUse the {nameof(Tone)}.{nameof(Tone.LSB)} property instead.");
+            get => _BankSelect[1];
+            set => throw new NotImplementedException($"[{nameof(StudioSetPart)}({Part}).{nameof(LSB)}]\nUse the {nameof(BankSelect)}.{nameof(BankSelect.LSB)} property instead.");
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <remarks><i>The bank select properties are combined in the <see cref="Tone"/> property.</i></remarks>
+        /// <remarks><i>The bank select properties are combined in the <see cref="BankSelect"/> property.</i></remarks>
         //[Offset(0x0008)]
         [Bindable(BindableSupport.No)]
-        public byte ToneProgramNumber
+        public byte PC
         {
-            get => Tone.PC;
-            set => throw new NotImplementedException($"[{nameof(StudioSetPart)}({Part}).{nameof(ToneProgramNumber)}]\nUse the {nameof(Tone)}.{nameof(Tone.PC)} property instead.");
+            get => _BankSelect[2];
+            set => throw new NotImplementedException($"[{nameof(StudioSetPart)}({Part}).{nameof(PC)}]\nUse the {nameof(BankSelect)}.{nameof(BankSelect.PC)} property instead.");
         }
 
         [Offset(0x0009)]
@@ -1077,24 +1079,15 @@ namespace IntegraXL.Models
 
         #region Overrides: Model
 
-        /// <summary>
-        /// Initializes the studio set part.
-        /// </summary>
-        /// <returns>An awaitable task that returns true if the studio set part is initialized.</returns>
-        internal async override Task<bool> InitializeAsync()
+        public override bool IsInitialized
         {
-            Debug.Print($"[{nameof(IntegraModel)}<{GetType().Name}>.{nameof(InitializeAsync)}()]");
-
-            try
+            get => base.IsInitialized;
+            protected internal set
             {
-                if (!_Tone.IsInitialized)
-                    await Device.InitializeModel(_Tone);
-
-                return await base.InitializeAsync();
-            }
-            catch (TaskCanceledException)
-            {
-                return false;
+                if (base.IsInitialized = value)
+                {
+                    Device.NotifyToneChanged(this, Part);
+                }
             }
         }
 

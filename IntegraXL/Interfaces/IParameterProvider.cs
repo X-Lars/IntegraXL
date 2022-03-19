@@ -20,11 +20,11 @@ namespace IntegraXL.Interfaces
         /// Gets the parameter provider that names and validates the model's parameter indexer property.
         /// </summary>
         /// <remarks><i>The property name is for convenience to follows the Roland MIDI implementation naming as close as possible.</i></remarks>
-        IntegraParameterMapper<TIndexer>? Parameters { get; }
+        IntegraParameterProvider<TIndexer>? Parameters { get; }
 
         /// <summary>
         /// Event to raise when the provider type is changed.
         /// </summary>
-        event EventHandler<IntegraTypeChangedEventArgs>? TypeChanged;
+        event EventHandler<IntegraParametersChangedEventArgs>? ParametersChanged;
     }
 }

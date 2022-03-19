@@ -1,7 +1,7 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Extensions;
 
-namespace IntegraXL.Models.Parameters
+namespace IntegraXL.Models.Providers
 {
     /// <remarks>
     /// 01: Pre Delay <br/>
@@ -13,7 +13,7 @@ namespace IntegraXL.Models.Parameters
     /// 07: Spread <br/>
     /// 08: Tone <br/>
     /// </remarks>
-    public sealed class CommonReverb : IntegraMFXMapper
+    public sealed class CommonReverb : IntegraMFXProvider
     {
         public CommonReverb(StudioSetCommonReverb provider) : base(provider) { }
 

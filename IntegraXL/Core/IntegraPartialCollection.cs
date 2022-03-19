@@ -31,10 +31,10 @@ namespace IntegraXL.Core
 
             for (int i = 0; i < IntegraConstants.PART_COUNT; i++)
             {
-                var item = device.CreateModel<TPartial>((Parts)i);
+                var item = device.CreateChildModel<TPartial>((Parts)i);
 
                 Debug.Assert(item != null);
-
+                
                 Add(item);
             }
 
@@ -45,6 +45,15 @@ namespace IntegraXL.Core
         #endregion
 
         #region Overrides: Model
+
+        internal override void Initialize()
+        {
+            foreach (var request in Requests)
+            {
+                IntegraSystemExclusive systemExclusive = new(Address, request);
+                Device.TransmitSystemExclusive(systemExclusive);
+            }
+        }
 
         /// <summary>
         /// Gets whether the collection is initialized.

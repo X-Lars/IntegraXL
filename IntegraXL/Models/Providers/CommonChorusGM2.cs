@@ -1,7 +1,7 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Extensions;
 
-namespace IntegraXL.Models.Parameters
+namespace IntegraXL.Models.Providers
 {
     /// <remarks>
     /// 00: Pre LPF <br/>
@@ -12,7 +12,7 @@ namespace IntegraXL.Models.Parameters
     /// 05: Depth <br/>
     /// 06: Reverb Send Level<br/>
     /// </remarks>
-    public sealed class CommonChorusGM2 : IntegraMFXMapper
+    public sealed class CommonChorusGM2 : IntegraMFXProvider
     {
         public CommonChorusGM2(StudioSetCommonChorus provider) : base(provider) { }
 

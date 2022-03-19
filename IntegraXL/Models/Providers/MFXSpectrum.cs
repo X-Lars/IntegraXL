@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IntegraXL.Models.Parameters
+namespace IntegraXL.Models.Providers
 {
-    internal class Spectrum
+    internal class MFXSpectrum
     {
     }
 }

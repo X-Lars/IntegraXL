@@ -219,6 +219,7 @@ namespace IntegraXL.Core
         [Description("SuperNATURAL Acoustic Tone")] SuperNATURALAcousticTone    = 0x00020000,
         [Description("SuperNATURAL Drum Kit")]      SuperNATURALDrumkit         = 0x00030000,
         [Description("PCM Drum Kit")]               PCMDrumkit                  = 0x00100000,
+        [Description("Unavailable")]                Unavailable                 = 0xFFFFFFFF
     }
 
     [TypeConverter(typeof(DescriptionConverter))]
@@ -847,6 +848,7 @@ namespace IntegraXL.Core
         [Description("ExPCM Expansion Tone")]                       ExPCMTone       = 0x6100,
         [Description("GM2 Drum Kit")]                               GM2Drum         = 0x7800,
         [Description("GM2 Tone")]                                   GM2Tone         = 0x7900,
+        [Description("Unavailable")]                                Unavailable     = 0xFFFF
     }
 
     [TypeConverter(typeof(DescriptionConverter))]

@@ -19,14 +19,14 @@ namespace IntegraXL.Models
         [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "The class is created by reflection.")]
         private StudioSet(Integra device) : base(device, false)
         {
-            Common                 = device.CreateModel<StudioSetCommon>();
-            CommonChorus           = device.CreateModel<StudioSetCommonChorus>();
-            CommonReverb           = device.CreateModel<StudioSetCommonReverb>();
-            CommonMotionalSurround = device.CreateModel<StudioSetCommonMotionalSurround>();
-            MasterEQ               = device.CreateModel<StudioSetMasterEQ>();
-            Midis                  = device.CreateModel<StudioSetMidis>();
-            Parts                  = device.CreateModel<StudioSetParts>();
-            PartEQs                = device.CreateModel<StudioSetPartEQs>();
+            Common                 = device.CreateChildModel<StudioSetCommon>();
+            CommonChorus           = device.CreateChildModel<StudioSetCommonChorus>();
+            CommonReverb           = device.CreateChildModel<StudioSetCommonReverb>();
+            CommonMotionalSurround = device.CreateChildModel<StudioSetCommonMotionalSurround>();
+            MasterEQ               = device.CreateChildModel<StudioSetMasterEQ>();
+            Midis                  = device.CreateChildModel<StudioSetMidis>();
+            Parts                  = device.CreateChildModel<StudioSetParts>();
+            PartEQs                = device.CreateChildModel<StudioSetPartEQs>();
 
             // TODO: Determin last models address value to filter system exclusives for IsInitialized?
 

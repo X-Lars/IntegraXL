@@ -1,7 +1,7 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Extensions;
 
-namespace IntegraXL.Models.Parameters
+namespace IntegraXL.Models.Providers
 {
     /// <remarks>
     /// 00: Left Switch (ms / Note) <br/>
@@ -19,7 +19,7 @@ namespace IntegraXL.Models.Parameters
     /// 12: Right Level <br/>
     /// 13: Center Level <br/>
     /// </remarks>
-    public sealed class CommonDelay : IntegraMFXMapper
+    public sealed class CommonDelay : IntegraMFXProvider
     {
         public CommonDelay(StudioSetCommonChorus provider) : base(provider) { }
 

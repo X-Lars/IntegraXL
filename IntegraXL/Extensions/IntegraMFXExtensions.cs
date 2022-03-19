@@ -1,6 +1,6 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Models;
-using IntegraXL.Models.Parameters;
+using IntegraXL.Models.Providers;
 
 namespace IntegraXL.Extensions
 {
@@ -524,10 +524,10 @@ namespace IntegraXL.Extensions
         {
             switch(instance.Type)
             {
-                case IntegraMFXTypes.Equalizer: instance.Parameters = new Equalizer(instance); break;
+                case IntegraMFXTypes.Equalizer: instance.Parameters = new MFXEqualizer(instance); break;
 
                 default:
-                    instance.Parameters = new Thru(instance);
+                    instance.Parameters = new MFXThru(instance);
                     break;
             }
         }

@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IntegraXL.Models.Parameters
+namespace IntegraXL.Models.Providers
 {
-    public sealed class Thru : IntegraMFXMapper
+    public sealed class MFXThru : IntegraMFXProvider
     {
-        public Thru(MFX provider) : base(provider) { }
+        public MFXThru(MFX provider) : base(provider) { }
     }
 }

@@ -372,13 +372,13 @@ namespace IntegraXL.Models
         /// <summary>
         /// Event raised when the instrument type is changed.
         /// </summary>
-        public event EventHandler<IntegraTypeChangedEventArgs>? TypeChanged;
+        public event EventHandler<IntegraParametersChangedEventArgs>? ParametersChanged;
 
         /// <summary>
         /// Gets the tone parameters.
         /// </summary>
         [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
-        public IntegraParameterMapper<byte>? Parameters { get; private set; }
+        public IntegraParameterProvider<byte>? Parameters { get; private set; }
 
         #endregion
 
@@ -389,12 +389,12 @@ namespace IntegraXL.Models
         /// </summary>
         private void InitializeParameters()
         {
-            IntegraParameterMapper<byte> parameters = this.NewGetParameterType();
+            IntegraParameterProvider<byte> parameters = this.NewGetParameterType();
 
             if (Parameters != parameters)
             {
                 Parameters = this.NewGetParameterType();
-                TypeChanged?.Invoke(this, new IntegraTypeChangedEventArgs(Parameters.GetType()));
+                ParametersChanged?.Invoke(this, new IntegraParametersChangedEventArgs(Parameters.GetType()));
                 NotifyPropertyChanged(string.Empty);
             }
         }
