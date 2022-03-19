@@ -539,7 +539,7 @@ namespace IntegraXL.Models
 
         #region Overrides: Model
 
-        internal override void Initialize()
+        internal override void RequestInitialization()
         {
             foreach (var request in Requests)
             {

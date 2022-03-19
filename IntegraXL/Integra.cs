@@ -199,24 +199,24 @@ namespace IntegraXL
 
         internal void NotifyToneChanged(IBankSelect bankselect, Parts part)
         {
-            ToneChanged?.Invoke(this, new IntegraToneChangedEventArgs(bankselect, part));
-
-            if(part == Part)
+            if (part == Part)
             {
                 Tone.Update(bankselect);
                 NotifyPropertyChanged(nameof(Tone));
             }
+
+            ToneChanged?.Invoke(this, new IntegraToneChangedEventArgs(bankselect, part));
         }
 
         internal void NotifyPartChanged(Parts part, Parts previous)
         {
-            PartChanged?.Invoke(this, new IntegraPartChangedEventArgs(part, previous));
-
             if (StudioSet != null)
             {
                 Tone.Update(StudioSet.Part);
                 NotifyPropertyChanged(nameof(Tone));
             }
+
+            PartChanged?.Invoke(this, new IntegraPartChangedEventArgs(part, previous));
         }
 
 
@@ -1178,7 +1178,7 @@ namespace IntegraXL
 
                     NotifyPropertyChanged(nameof(CurrentModel));
 
-                    _CurrentModel.Initialize();
+                    _CurrentModel.RequestInitialization();
 
                     while (_CurrentModel.IsInitialized == false && _IsCancelled == false)
                     {

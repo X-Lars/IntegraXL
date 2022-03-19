@@ -1,51 +1,64 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Extensions;
 using IntegraXL.Interfaces;
-using System.ComponentModel;
+using IntegraXL.Templates;
 using System.Text;
 
 namespace IntegraXL.Models
 {
-    public sealed class Tone : IBankSelect, INotifyPropertyChanged
+    [Integra(0x0F000402, 0x00000015)]
+    public sealed class Tone : IntegraModel<Tone>, IBankSelect
     {
-        #region Fields
-
-        private readonly Integra _Device;
-
-        #endregion
-
-        #region Events
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        #endregion
-
         #region Constructor
 
-        internal Tone(Integra device)
-        {
-            _Device = device;
-            _Device.SystemExclusiveReceived += SystemExclusiveReceived;
-        }
+        /// <summary>
+        /// Creates a new <see cref="Tone"/> instance.
+        /// </summary>
+        /// <param name="device"></param>
+        internal Tone(Integra device) : base(device) { }
 
+        /// <summary>
+        /// Creates and initializes a new <see cref="Tone"/> instance providing tone information for the given <see cref="StudioSetPart"/>.
+        /// </summary>
+        /// <param name="studiosetpart">The <see cref="StudioSetPart"/> providing the tone's bank select.</param>
         public Tone(StudioSetPart studiosetpart) : this(studiosetpart.Device, studiosetpart) { }
+
+        /// <summary>
+        /// Creates and initializes a new <see cref="Tone"/> instance providing tone information for the given <see cref="TemporaryTone"/>.
+        /// </summary>
+        /// <param name="temporarytone">The <see cref="TemporaryTone"/> providing the tone's bank select.</param>
         public Tone(TemporaryTone temporarytone) : this(temporarytone.Device, temporarytone) { }
 
-        private Tone(Integra device, IBankSelect bankselect)
+        /// <summary>
+        /// Creates and initializes a new <see cref="Tone"/> instance from the given <see cref="IBankSelect"/> interface.
+        /// </summary>
+        /// <param name="device">The <see cref="Integra"/> to connect the model.</param>
+        /// <param name="bankselect">The <see cref="IBankSelect"/> interface to initialize the model.</param>
+        private Tone(Integra device, IBankSelect bankselect) : base(device)
         {
-            _Device = device;
-            _Device.SystemExclusiveReceived += SystemExclusiveReceived;
-
             Initialize(bankselect);
         }
 
         #endregion;
-        
+
         #region Properties: IBankSelect
 
+        /// <summary>
+        /// Gets the (M)ost (S)ignificant (B)yte of the <see cref="Tone"/>, represents the MIDI control change bank select MSB.
+        /// </summary>
+        /// <remarks><i>MIDI Controller 0.</i></remarks>
         public byte MSB { get; private set; }
+
+        /// <summary>
+        /// Gets the (L)east (S)ignificant (B)yte of the <see cref="Tone"/>, represents the MIDI control change bank select LSB.
+        /// </summary>
+        /// <remarks><i>MIDI Controller 32.</i></remarks>
         public byte LSB { get; private set; }
-        public byte PC  { get; private set; }
+
+        /// <summary>
+        /// Gets the (P)rogram (C)hange of the <see cref="Tone"/>, represents the MIDI program change program number.
+        /// </summary>
+        public byte PC { get; private set; }
 
         #endregion
 
@@ -58,9 +71,9 @@ namespace IntegraXL.Models
         public int ID { get; private set; } = 0;
 
         /// <summary>
-        /// Gets the tone name.
+        /// Gets the tone name or drum kit name.
         /// </summary>
-        public string Name { get; private set; } = "Uninitialized";
+        public new string Name { get; private set; } = "Uninitialized";
 
         /// <summary>
         /// Gets the tone category.
@@ -86,17 +99,25 @@ namespace IntegraXL.Models
         /// Gets the tone variation.
         /// </summary>
         /// <remarks><i>Only for GM2 tone bank and drum kit.</i></remarks>
-        public int? Variation { get; private set; } = 0;
+        public int? Variation { get; private set; } = null;
 
         #endregion
 
         #region Methods
 
+        /// <summary>
+        /// Updates the <see cref="Tone"/> with the specified <see cref="IBankSelect"/> interface.
+        /// </summary>
+        /// <param name="bankselect">The <see cref="IBankSelect"/> interface to update the tone.</param>
         public void Update(IBankSelect bankselect)
         {
             Initialize(bankselect);
         }
 
+        /// <summary>
+        /// Initializes the <see cref="Tone"/> with the specified <see cref="IBankSelect"/> interface and enqueues a <see cref="ToneTemplate"/> request.
+        /// </summary>
+        /// <param name="bankselect">The <see cref="IBankSelect"/> interface to initialize the tone.</param>
         private void Initialize(IBankSelect bankselect)
         {
             MSB = bankselect.MSB;
@@ -107,49 +128,72 @@ namespace IntegraXL.Models
             ToneBank   = this.ToneBank();
             Type       = this.ToneType();
 
-            _Device.TransmitSystemExclusive(new IntegraSystemExclusive(0x0F000402, new IntegraRequest(MSB, LSB, PC, 0x01)));
+            IsInitialized = false;
+            Device.Enqueue(this);
         }
 
         #endregion
 
-        #region Event Handlers
+        #region Overrides: Model
 
-        private void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
+        /// <summary>
+        /// Sends the system exclusive request to initialize the <see cref="Tone"/>.
+        /// </summary>
+        internal override void RequestInitialization()
         {
-            if (e.SystemExclusive.Address == 0x0F000402)
+            Device.TransmitSystemExclusive(new IntegraSystemExclusive(Address, new IntegraRequest(MSB, LSB, PC, 0x01)));
+        }
+
+        /// <summary>
+        /// Handles the <see cref="Integra.SystemExclusiveReceived"/> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="Integra"/> that raised the event.</param>
+        /// <param name="e">The event's associated data.</param>
+        protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
+        {
+            if (e.SystemExclusive.Address == Address)
             {
-                // Tone template request
-                if (e.SystemExclusive.Data.Length == 0x00000015)
+                if (e.SystemExclusive.Data.Length == Size)
                 {
                     if (e.SystemExclusive.Data[0] == MSB && e.SystemExclusive.Data[1] == LSB && e.SystemExclusive.Data[2] == PC)
                     {
-                        int id = PC + 1;
-
-                        switch (ToneBank)
-                        {
-                            case IntegraToneBanks.GM2Tone:
-                                Variation = LSB;
-                                break;
-
-                            case IntegraToneBanks.GM2Drum:
-                                id = 1;
-                                //Variation = PC;
-                                break;
-
-                            default:
-                                id += ((LSB - (int)ToneBank & 0x00FF) % 64 * 128);
-                                Variation = null;
-                                break;
-                        }
-
-                        ID = id;
-                        Category = (IntegraToneCategories)e.SystemExclusive.Data[3];
-                        Name = Encoding.ASCII.GetString(e.SystemExclusive.Data, 5, 12);
-
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
+                        Initialize(e.SystemExclusive.Data);
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Initializes the <see cref="Tone"/> with data.
+        /// </summary>
+        /// <param name="data">The data used to initialize the <see cref="Tone"/>.</param>
+        /// <returns>Always true.</returns>
+        internal override bool Initialize(byte[] data)
+        {
+            int id = PC + 1;
+
+            switch (ToneBank)
+            {
+                case IntegraToneBanks.GM2Tone:
+                    Variation = LSB;
+                    break;
+
+                case IntegraToneBanks.GM2Drum:
+                    id = 1;
+                    Variation = PC;
+                    break;
+
+                default:
+                    id += ((LSB - (int)ToneBank & 0x00FF) % 64 * 128);
+                    Variation = null;
+                    break;
+            }
+
+            ID = id;
+            Category = (IntegraToneCategories)data[3];
+            Name = Encoding.ASCII.GetString(data, 5, 12);
+
+            return IsInitialized = true;
         }
 
         #endregion

@@ -564,12 +564,14 @@ namespace IntegraXL.Core
 
         #region Overrides: Model
 
-        internal override void Initialize()
+        /// <summary>
+        /// Sends the system exclusive request to initialize of the model.
+        /// </summary>
+        internal override void RequestInitialization()
         {
             foreach(var request in Requests)
             {
-                IntegraSystemExclusive systemExclusive = new(Address, request);
-                Device.TransmitSystemExclusive(systemExclusive);
+                Device.TransmitSystemExclusive(new IntegraSystemExclusive(Address, request));
             }
         }
 
@@ -616,7 +618,6 @@ namespace IntegraXL.Core
             // TODO: Combine received property into the initialize method
             //if (!IsInitialized)
             //{
-            int fieldCount = this.CachedFields().Count;
             double progress = 0;
 
             foreach (var field in this.CachedFields())
@@ -967,7 +968,14 @@ namespace IntegraXL.Core
             IsConnected = false;
         }
 
-        internal abstract void Initialize();
+        /// <summary>
+        /// Method to send the system exclusive request(s) to initialize the model. 
+        /// </summary>
+        /// <remarks><i>
+        /// - The method is invoked by the <see cref="Integra"/> task queue.<br/>
+        /// - The method <b>requires</b> to transmit the system exclusive(s) nescessary to fully initialize the model.<br/>
+        /// </i></remarks>
+        internal abstract void RequestInitialization();
 
         /// <summary>
         /// Method to serialize the model data to an <see cref="byte"/> array.
