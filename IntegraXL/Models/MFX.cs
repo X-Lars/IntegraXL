@@ -52,7 +52,7 @@ namespace IntegraXL.Models
             {
                 IsInitialized = true;
                 Type = IntegraMFXTypes.Thru;
-                //InitializeMFX();
+                InitializeMFX();
             }
 
             //PropertyChanged += MFXPropertyChanged;
@@ -367,26 +367,26 @@ namespace IntegraXL.Models
 
         protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
         {
-            //base.SystemExclusiveReceived(sender, e);
+            base.SystemExclusiveReceived(sender, e);
 
-            if (e.SystemExclusive.Address == Address)
-            {
-                if (e.SystemExclusive.Data.Length == Size)
-                {
-                    Debug.Print("*** MFX: Full ***");
-                    Initialize(e.SystemExclusive.Data);
-                }
-                else
-                {
-                    IntegraAddress offset = new IntegraAddress(0x00000111);
-                    if (e.SystemExclusive.Address.InRange(Address, (int)(Address + offset)))
-                    {
-                        Debug.Print("*** MFX: Parameters ***");
-                        // Parameter data received
-                        ReceivedProperty(e.SystemExclusive);
-                    }
-                }
-            }
+            //if (e.SystemExclusive.Address == Address)
+            //{
+            //    if (e.SystemExclusive.Data.Length == Size)
+            //    {
+            //        Debug.Print("*** MFX: Full ***");
+            //        Initialize(e.SystemExclusive.Data);
+            //    }
+            //    else
+            //    {
+            //        IntegraAddress offset = new IntegraAddress(0x00000111);
+            //        if (e.SystemExclusive.Address.InRange(Address, (int)(Address + offset)))
+            //        {
+            //            Debug.Print("*** MFX: Parameters ***");
+            //            // Parameter data received
+            //            ReceivedProperty(e.SystemExclusive);
+            //        }
+            //    }
+            //}
         }
 
         /// <summary>

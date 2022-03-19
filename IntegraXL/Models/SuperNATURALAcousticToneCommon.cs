@@ -2,17 +2,21 @@
 using IntegraXL.Extensions;
 using IntegraXL.Interfaces;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Text;
 
 namespace IntegraXL.Models
 {
+    /// <summary>
+    /// Defines the INTEGRA-7 SuperNATURAL acoustic tone common model.
+    /// </summary>
     [Integra(0x00000000, 0x00000046)]
     public sealed class SuperNATURALAcousticToneCommon : IntegraModel<SuperNATURALAcousticToneCommon>, IParameterProvider<byte>
     {
         #region Fields: INTEGRA-7
 
         [Offset(0x0000)] private byte[] _ToneName = new byte[12];
-        [Offset(0x000C)] private byte[] RESERVED01 = new byte[4];
+        [Offset(0x000C)] private byte[] _RESERVED01 = new byte[4];
         [Offset(0x0010)] private byte _ToneLevel;
         [Offset(0x0011)] private IntegraMonyPolySwitch _MonoPoly;
         [Offset(0x0012)] private byte _PortamentoTimeOffset;
@@ -31,17 +35,24 @@ namespace IntegraXL.Models
         [Offset(0x0020)] private byte _InstVariation;
         [Offset(0x0021)] private byte _InstNumber;
         [Offset(0x0022)] private byte[] _ModifyParameter = new byte[32];
-        [Offset(0x0042)] private byte[] RESERVED02 = new byte[4];
+        [Offset(0x0042)] private byte[] _RESERVED02 = new byte[4];
 
         #endregion
 
         #region Constructor
 
+        /// <summary>
+        /// Creates a new <see cref="SuperNATURALAcousticToneCommon"/> instance.
+        /// </summary>
+        /// <param name="tone">The parent model.</param>
         internal SuperNATURALAcousticToneCommon(SuperNATURALAcousticTone tone) : base(tone.Device) 
         {
             Address = tone.Address;
+
+            PropertyChanged += ModelPropertyChanged;
         }
 
+       
         #endregion
 
         #region Properties
@@ -80,6 +91,8 @@ namespace IntegraXL.Models
                 {
                     this.SetInstrument(value);
                     NotifyPropertyChanged();
+
+                    Debug.Print($"[{nameof(SuperNATURALSynthToneCommon)}.{nameof(Instrument)}] {Instrument}");
                 }
             }
         }
@@ -328,8 +341,6 @@ namespace IntegraXL.Models
                 {
                     _InstVariation = value;
                     NotifyPropertyChanged();
-
-                    InitializeParameters();
                 }
             }
         }
@@ -344,8 +355,6 @@ namespace IntegraXL.Models
                 {
                     _InstNumber = value;
                     NotifyPropertyChanged();
-
-                    InitializeParameters();
                 }
             }
         }
@@ -370,14 +379,13 @@ namespace IntegraXL.Models
         #region Interfaces: IParameterProvider
 
         /// <summary>
-        /// Event raised when the instrument type is changed.
+        /// Event raised when the <see cref="Parameters"/> property is changed.
         /// </summary>
         public event EventHandler<IntegraParametersChangedEventArgs>? ParametersChanged;
 
         /// <summary>
-        /// Gets the tone parameters.
+        /// Gets the tone specific parameters.
         /// </summary>
-        [Bindable(BindableSupport.Yes, BindingDirection.OneWay)]
         public IntegraParameterProvider<byte>? Parameters { get; private set; }
 
         #endregion
@@ -393,16 +401,16 @@ namespace IntegraXL.Models
 
             if (Parameters != parameters)
             {
-                Parameters = this.NewGetParameterType();
+                Parameters = parameters;
                 ParametersChanged?.Invoke(this, new IntegraParametersChangedEventArgs(Parameters.GetType()));
                 NotifyPropertyChanged(string.Empty);
             }
         }
 
-        // TODO: No loop / remove completely
+        // TODO: No loop / remove completely / move to base class
         private void ReceivedParameter(IntegraSystemExclusive e)
         {
-            
+
             int index = (e.Address - Address - 0x00000022);
 
             for (int i = 0; i < e.Data.Length; i++)
@@ -413,12 +421,11 @@ namespace IntegraXL.Models
             NotifyPropertyChanged(string.Empty);
         }
 
-       
-
         #endregion
 
         #region Overrides: Model
 
+        // TODO: Handle in indexed properties in base class
         protected override void SystemExclusiveReceived(object? sender, IntegraSystemExclusiveEventArgs e)
         {
             //base.SystemExclusiveReceived(sender, e);
@@ -433,10 +440,12 @@ namespace IntegraXL.Models
             {
                 if (e.SystemExclusive.Address - Address >= 0x00000022)
                 {
+                    Debug.Print($"[{nameof(SuperNATURALAcousticToneCommon)}.{nameof(InitializeParameters)}] Received Parameter");
                     ReceivedParameter(e.SystemExclusive);
                 }
                 else
                 {
+                    Debug.Print($"[{nameof(SuperNATURALAcousticToneCommon)}.{nameof(InitializeParameters)}] Received Property");
                     ReceivedProperty(e.SystemExclusive);
                 }
             }
@@ -449,14 +458,30 @@ namespace IntegraXL.Models
         public override bool IsInitialized
         {
             get => base.IsInitialized;
+
             protected internal set
             {
-                base.IsInitialized = value;
-
-                if(value == true)
+                if(base.IsInitialized = value)
                 {
                     InitializeParameters();
                 }
+            }
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Handles the <see cref="IntegraModel.PropertyChanged"/> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="IntegraModel"/> that raised the event.</param>
+        /// <param name="e">The event's associated data.</param>
+        private void ModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(InstNumber) || e.PropertyName == nameof(InstVariation))
+            {
+                InitializeParameters();
             }
         }
 

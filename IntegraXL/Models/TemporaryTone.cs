@@ -51,10 +51,10 @@ namespace IntegraXL.Models
         /// <remarks><i>
         /// - The temporary tone 
         /// </i></remarks>
-        internal TemporaryTone(Integra integra, Parts part) : base(integra, part, false) 
+        internal TemporaryTone(Integra integra, Parts part) : base(integra, part, false)
         {
             Address = Attribute.Address;
-            
+
             // 0x19, 0x19, 0x19, 0x19, 0x20, ...
             Address[0] += (byte)((int)part >> 2); // >> 2 equals division by 4
 
@@ -66,8 +66,6 @@ namespace IntegraXL.Models
             Device.ToneChanged += ToneChanged;
         }
 
-        
-
         #endregion
 
         #region Properties
@@ -78,10 +76,19 @@ namespace IntegraXL.Models
         public IntegraToneTypes Type { get; private set; }
 
         /// <summary>
-        /// Gets wheter the temporary tone can be modified by the user.
+        /// Gets wheter the temporary tone can be edited by the user.
         /// </summary>
+        /// <remarks><i>
+        /// The tone is not editable if it is a GM2 or ExPCM expansion tone or drum kit.
+        /// </i></remarks>
         public bool IsEditable { get; private set; }
 
+        /// <summary>
+        /// Gets the name of the temporary tone or drum kit.
+        /// </summary>
+        /// <remarks><i>
+        /// For display purpose, can be edited via the associated tone's Common.ToneName or Common.DrumKit property.
+        /// </i></remarks>
         public string? TemporaryToneName
         {
             get
@@ -109,16 +116,16 @@ namespace IntegraXL.Models
         /// </summary>
         /// <remarks>
         /// <b>IMPORTANT</b><br/>
-        /// <i>Can return <see langword="null"/>, check the <see cref="Type"/> property first.</i>
+        /// <i>Returns <see langword="null"/> if the <see cref="Type"/> property not equals <see cref="IntegraToneTypes.SuperNATURALAcousticTone"/>.</i>
         /// </remarks>
         public SuperNATURALAcousticTone? SuperNATURALAcousticTone { get; private set; }
 
         /// <summary>
-        /// Gets the SuperNATURAL Synth tone model.
+        /// Gets the SuperNATURAL synth tone model.
         /// </summary>
         /// <remarks>
         /// <b>IMPORTANT</b><br/>
-        /// <i>Can return <see langword="null"/>, check the <see cref="Type"/> property first.</i>
+        /// <i>Returns <see langword="null"/> if the <see cref="Type"/> property not equals <see cref="IntegraToneTypes.SuperNATURALSynthTone"/>.</i>
         /// </remarks>
         public SuperNATURALSynthTone? SuperNATURALSynthTone { get; private set; }
 
@@ -127,7 +134,7 @@ namespace IntegraXL.Models
         /// </summary>
         /// <remarks>
         /// <b>IMPORTANT</b><br/>
-        /// <i>Can return <see langword="null"/>, check the <see cref="Type"/> property first.</i>
+        /// <i>Returns <see langword="null"/> if the <see cref="Type"/> property not equals <see cref="IntegraToneTypes.SuperNATURALDrumkit"/>.</i>
         /// </remarks>
         public SuperNATURALDrumKit? SuperNATURALDrumKit { get; private set; }
 
@@ -136,7 +143,7 @@ namespace IntegraXL.Models
         /// </summary>
         /// <remarks>
         /// <b>IMPORTANT</b><br/>
-        /// <i>Can return <see langword="null"/>, check the <see cref="Type"/> property first.</i>
+        /// <i>Return <see langword="null"/> if the <see cref="Type"/> property not equals <see cref="IntegraToneTypes.PCMSynthTone"/>.</i>
         /// </remarks>
         public PCMSynthTone? PCMSynthTone { get; private set; }
 
@@ -145,7 +152,7 @@ namespace IntegraXL.Models
         /// </summary>
         /// <remarks>
         /// <b>IMPORTANT</b><br/>
-        /// <i>Can return <see langword="null"/>, check the <see cref="Type"/> property first.</i>
+        /// <i>Returns <see langword="null"/> if the <see cref="Type"/> property not equals <see cref="IntegraToneTypes.PCMDrumkit"/>.</i>
         /// </remarks>
         public PCMDrumKit? PCMDrumKit { get; private set; }
 
@@ -158,19 +165,40 @@ namespace IntegraXL.Models
 
         #region Properties: IBankSelect
 
-        public byte MSB => Device.StudioSet != null ? Device.StudioSet.Parts[(int)Part].MSB : (byte)0x00;
-        public byte LSB => Device.StudioSet != null ? Device.StudioSet.Parts[(int)Part].LSB : (byte)0x00;
-        public byte PC  => Device.StudioSet != null ? Device.StudioSet.Parts[(int)Part].PC  : (byte)0x00;
+        /// <summary>
+        /// Gets the (M)ost (S)ignificant (B)yte of the <see cref="TemporaryTone"/>'s base tone, represents the MIDI control change bank select MSB.
+        /// </summary>
+        /// <remarks><i>MIDI Controller 0.</i></remarks>
+        public byte MSB { get; private set; }
+
+        /// <summary>
+        /// Gets the (L)east (S)ignificant (B)yte of the <see cref="TemporaryTone"/>'s base tone, represents the MIDI control change bank select LSB.
+        /// </summary>
+        /// <remarks><i>MIDI Controller 32.</i></remarks>
+        public byte LSB { get; private set; }
+
+        /// <summary>
+        /// Gets the (P)rogram (C)hange of the <see cref="TemporaryTone"/>'s base tone, represents the MIDI program change program number.
+        /// </summary>
+        public byte PC  { get; private set; }
 
         #endregion
 
         #region Methods
 
-        private void InitializeTemporaryTone(IBankSelect bankSelect)
+        /// <summary>
+        /// Initializes the <see cref="TemporaryTone"/> with the given <see cref="IBankSelect"/> interface.
+        /// </summary>
+        /// <param name="bankselect"></param>
+        /// <exception cref="IntegraException">When the type is <see cref="IntegraToneTypes.Unavailable"/>.</exception>
+        /// <remarks><i>
+        /// <b>Important</b><br/>
+        /// The <see cref="StudioSetPart"/> has to be initialized before the <see cref="TemporaryTone"/>.<br/>
+        /// The method is invoked when a <see cref="Integra.ToneChanged"/> event is received which is generated by the <see cref="StudioSetPart"/>.<br/>
+        /// </i></remarks>
+        private void InitializeTemporaryTone(IBankSelect bankselect)
         {
-            Debug.Print("Initialize temporary tone");
-
-            // IMPORTANT! Quick changes of tones can corrupt the model if it is not completely initialized
+            // IMPORTANT! Quick tone changes can corrupt the model initialization queue, dequeue the temporary tone as prevention
             Device.Dequeue(this);
 
             SuperNATURALAcousticTone?.Dispose();
@@ -178,12 +206,13 @@ namespace IntegraXL.Models
             SuperNATURALDrumKit?.Dispose();
             PCMSynthTone?.Dispose();
             PCMDrumKit?.Dispose();
-
-            // IMPORTANT! Event listenerers have to be detached for garbage collection
             MFX.Dispose();
 
-            Type       = bankSelect.ToneType();
-            IsEditable = bankSelect.IsEditable();
+            MSB        = bankselect.MSB;
+            LSB        = bankselect.LSB;
+            PC         = bankselect.PC;
+            Type       = bankselect.ToneType();
+            IsEditable = bankselect.IsEditable();
 
             MFX = new MFX(this);
 
@@ -220,8 +249,6 @@ namespace IntegraXL.Models
             }
 
             Device.Enqueue(this);
-
-            NotifyPropertyChanged(string.Empty);
         }
 
         #endregion
@@ -238,6 +265,9 @@ namespace IntegraXL.Models
         /// <summary>
         /// Gets wheter the <see cref="TemporaryTone"/> is initialized.
         /// </summary>
+        /// <remarks><i>
+        /// The property is polled by the model initialization queue and raises the property changed event for all properties on completion.
+        /// </i></remarks>
         public override bool IsInitialized
         {
             get
@@ -267,6 +297,8 @@ namespace IntegraXL.Models
                         break;
                 }
 
+                initialized = initialized && MFX.IsInitialized;
+
                 if(initialized)
                 {
                     NotifyPropertyChanged(string.Empty);
@@ -276,7 +308,58 @@ namespace IntegraXL.Models
             }
         }
 
-        internal override bool Initialize(byte[] data)
+        /// <summary>
+        /// Gets wheter the <see cref="TemporaryTone"/> as unsaved changes.
+        /// </summary>
+        public override bool IsDirty 
+        { 
+            get 
+            {
+                bool dirty = false;
+
+                switch(Type)
+                {
+                    case IntegraToneTypes.SuperNATURALAcousticTone:
+                        dirty = SuperNATURALSynthTone?.IsDirty ?? false;
+                        break;
+
+                    case IntegraToneTypes.SuperNATURALSynthTone:
+                        dirty = SuperNATURALSynthTone?.IsDirty ?? false;
+                        break;
+
+                    case IntegraToneTypes.SuperNATURALDrumkit:
+                        dirty = SuperNATURALDrumKit?.IsDirty ?? false;
+                        break;
+
+                    case IntegraToneTypes.PCMSynthTone:
+                        dirty = PCMSynthTone?.IsDirty ?? false;
+                        break;
+
+                    case IntegraToneTypes.PCMDrumkit:
+                        dirty = PCMDrumKit?.IsDirty ?? false;
+                        break;
+                }
+
+                dirty = dirty || MFX.IsDirty;
+
+                if (dirty)
+                {
+                    NotifyPropertyChanged(nameof(IsDirty));
+                }
+
+                return dirty;
+            }
+
+            protected set => base.IsDirty = value; 
+        }
+
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="data">Ignored.</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException">When invoked.</exception>
+        internal override bool Initialize(byte[] ignored)
         {
             throw new NotImplementedException();
         }
@@ -300,15 +383,17 @@ namespace IntegraXL.Models
         
         #endregion
 
-        public void Load(TemporaryToneFile file, IBankSelect location = null)
+        internal void Load(TemporaryToneFile file, IBankSelect location = null)
         {
-            SuperNATURALAcousticTone = null;
-            SuperNATURALSynthTone = null;
-            SuperNATURALDrumKit = null;
-            PCMSynthTone = null;
-            PCMDrumKit = null;
+            SuperNATURALAcousticTone?.Dispose();
+            SuperNATURALSynthTone?.Dispose();
+            SuperNATURALDrumKit?.Dispose();
+            PCMSynthTone?.Dispose();
+            PCMDrumKit?.Dispose();
+            MFX.Dispose();
 
-            // TODO: Select user tone first
+
+            // TODO: Select user tone first in case of different type
 
             Type = (IntegraToneTypes)file.ToneType;
 
@@ -392,29 +477,31 @@ namespace IntegraXL.Models
             }
 
             MFX.Load(file.MFX);
-            //Store();
+
+
+            // TODO: Remove, testing purpose
+            Store();
         }
 
         /// <summary>
         /// Creates a new <see cref="TemporaryToneFile"/> initialized with the <see cref="TemporaryTone"/>'s data. 
         /// </summary>
         /// <returns>A <see cref="TemporaryToneFile"/> containing the <see cref="TemporaryTone"/>'s data.</returns>
-        /// <exception cref="IntegraException"/>
+        /// <exception cref="IntegraException">When any of the required models is null, missing or not editable.</exception>
         internal TemporaryToneFile Save()
         {
             if(!Device.IsInitialized)
-                throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(Integra)}] is uninitialized.");
+                throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n" +
+                                           $"The {nameof(Integra)}] is uninitialized.");
 
-            if (Device.StudioSet == null)
-                throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(StudioSet)}] is uninitialized.");
-
-            if(!Device.StudioSet.Parts[(int)Part].IsInitialized)
-                throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(StudioSetPart)}] is uninitialized.");
+            if(!IsEditable)
+                throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n" +
+                                           $"The {nameof(TemporaryTone)}] is not editable.");
 
             TemporaryToneFile file = new()
             {
-                Header = FileManager.TEMPORARY_TONE_FILE_HEADER,
-                ToneType = (uint)Type,
+                Header    = FileManager.TEMPORARY_TONE_FILE_HEADER,
+                ToneType  = (uint)Type,
                 Expansion = (byte)this.GetExpansion()
             };
 
@@ -423,16 +510,25 @@ namespace IntegraXL.Models
                 case IntegraToneTypes.SuperNATURALAcousticTone:
 
                     if (SuperNATURALAcousticTone == null || SuperNATURALAcousticTone.IsInitialized == false)
-                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(SuperNATURALAcousticTone)} is uninitialized.");
+                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n" +
+                                                   $"The {nameof(SuperNATURALAcousticTone)} is uninitialized.");
 
-                    file.SuperNATURALAcousticToneCommon = SuperNATURALAcousticTone.Common.Serialize();
+                    try
+                    {
+                        file.SuperNATURALAcousticToneCommon = SuperNATURALAcousticTone.Common.Serialize();
+                    }
+                    catch(Exception ex)
+                    {
+                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]", ex);
+                    }
 
                     break;
 
                 case IntegraToneTypes.SuperNATURALSynthTone:
 
                     if (SuperNATURALSynthTone == null || SuperNATURALSynthTone.IsInitialized == false)
-                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(SuperNATURALSynthTone)} is uninitialized.");
+                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n" +
+                                                   $"The {nameof(SuperNATURALSynthTone)} is uninitialized.");
 
                     file.SuperNATURALSynthToneCommon = SuperNATURALSynthTone.Common.Serialize();
 
@@ -448,14 +544,22 @@ namespace IntegraXL.Models
                 case IntegraToneTypes.SuperNATURALDrumkit:
 
                     if (SuperNATURALDrumKit == null || SuperNATURALDrumKit.IsInitialized == false)
-                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(SuperNATURALDrumKit)} is uninitialized.");
+                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n" +
+                                                   $"The {nameof(SuperNATURALDrumKit)} is uninitialized.");
 
-                    file.SuperNATURALDrumKitCommon = SuperNATURALDrumKit.Common.Serialize();
-                    file.SuperNATURALDrumKitCommonCompEQ = SuperNATURALDrumKit.CompEQ.Serialize();
-
-                    for (int i = 0; i < IntegraConstants.SND_NOTE_COUNT; i++)
+                    try
                     {
-                        file.SuperNATURALDrumKitNotes[i] = SuperNATURALDrumKit.Notes[i].Serialize();
+                        file.SuperNATURALDrumKitCommon = SuperNATURALDrumKit.Common.Serialize();
+                        file.SuperNATURALDrumKitCommonCompEQ = SuperNATURALDrumKit.CompEQ.Serialize();
+
+                        for (int i = 0; i < IntegraConstants.SND_NOTE_COUNT; i++)
+                        {
+                            file.SuperNATURALDrumKitNotes[i] = SuperNATURALDrumKit.Notes[i].Serialize();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]", ex);
                     }
 
                     break;
@@ -463,48 +567,66 @@ namespace IntegraXL.Models
                 case IntegraToneTypes.PCMSynthTone:
 
                     if (PCMSynthTone == null || PCMSynthTone.IsInitialized == false)
-                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(PCMSynthTone)} is uninitialized.");
+                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n" +
+                                                   $"The {nameof(PCMSynthTone)} is uninitialized.");
 
-                    if (PCMSynthTone.IsEditable == false)
-                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(PCMSynthTone)} is not editable.");
-
-                    file.PCMSynthToneCommon = PCMSynthTone.Common.Serialize();
-                    file.PMT = PCMSynthTone.PMT.Serialize();
-
-                    for (int i = 0; i < IntegraConstants.PCM_PARTIAL_COUNT; i++)
+                    try
                     {
-                        file.PCMSynthTonePartials[i] = PCMSynthTone.Partials[i].Serialize();
-                    }
+                        file.PCMSynthToneCommon = PCMSynthTone.Common.Serialize();
+                        file.PMT = PCMSynthTone.PMT.Serialize();
 
-                    file.PCMSynthToneCommon2 = PCMSynthTone.Common02.Serialize();
+                        for (int i = 0; i < IntegraConstants.PCM_PARTIAL_COUNT; i++)
+                        {
+                            file.PCMSynthTonePartials[i] = PCMSynthTone.Partials[i].Serialize();
+                        }
+
+                        file.PCMSynthToneCommon2 = PCMSynthTone.Common02.Serialize();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]", ex);
+                    }
 
                     break;
 
                 case IntegraToneTypes.PCMDrumkit:
 
                     if (PCMDrumKit == null || PCMDrumKit.IsInitialized == false)
-                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(PCMDrumKit)} is uninitialized.");
+                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n" + 
+                                                   $"The {nameof(PCMDrumKit)} is uninitialized.");
 
-                    if (PCMDrumKit.IsEditable == false)
-                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(PCMDrumKit)} is not editable.");
-
-                    file.PCMDrumKitCommon = PCMDrumKit.Common.Serialize();
-                    file.PCMDrumKitCommonCompEQ = PCMDrumKit.CompEQ.Serialize();
-
-                    for (int i = 0; i < IntegraConstants.PCM_NOTE_COUNT; i++)
+                    try
                     {
-                        file.PCMDrumKitNotes[i] = PCMDrumKit.Partials[i].Serialize();
-                    }
+                        file.PCMDrumKitCommon = PCMDrumKit.Common.Serialize();
+                        file.PCMDrumKitCommonCompEQ = PCMDrumKit.CompEQ.Serialize();
 
-                    file.PCMDrumKitCommon2 = PCMDrumKit.Common02.Serialize();
+                        for (int i = 0; i < IntegraConstants.PCM_NOTE_COUNT; i++)
+                        {
+                            file.PCMDrumKitNotes[i] = PCMDrumKit.Partials[i].Serialize();
+                        }
+
+                        file.PCMDrumKitCommon2 = PCMDrumKit.Common02.Serialize();
+                    }
+                    catch(Exception ex)
+                    {
+                        throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]", ex);
+                    }
 
                     break;
             }
 
             if (MFX == null || MFX.IsInitialized == false)
-                throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n{nameof(MFX)} is uninitialized.");
+                throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]\n" +
+                                           $"The {nameof(TemporaryTone)}'s {nameof(MFX)} is uninitialized.");
 
-            file.MFX = MFX.Serialize();
+            try
+            {
+                file.MFX = MFX.Serialize();
+            }
+            catch(Exception ex)
+            {
+                throw new IntegraException($"[{nameof(TemporaryTone)}.{nameof(Save)}()]", ex);
+            }
 
             return file;
         }

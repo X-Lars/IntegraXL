@@ -1,15 +1,10 @@
-﻿using IntegraXL.Common;
-using IntegraXL.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using IntegraXL.Core;
+using IntegraXL.Extensions;
 
 namespace IntegraXL.Models
 {
     /// <summary>
-    /// Defines the data structure of the INTEGRA-7 studio set master EQ.
+    /// Defines the INTEGRA-7 studio set master EQ model.
     /// </summary>
     [Integra(0x18000900, 0x00000007)]
     public class StudioSetMasterEQ : IntegraModel<StudioSetMasterEQ>
@@ -28,6 +23,10 @@ namespace IntegraXL.Models
 
         #region Constructor
 
+        /// <summary>
+        /// Creates a new <see cref="StudioSetMasterEQ"/> instance.
+        /// </summary>
+        /// <param name="device">The <see cref="Integra"/> to connect the model.</param>
         private StudioSetMasterEQ(Integra device) : base(device) { }
 
         #endregion
@@ -37,100 +36,101 @@ namespace IntegraXL.Models
         [Offset(0x0000)]
         public IntegraLowFrequencies EQLowFreq
         {
-            get { return _EQLowFreq; }
+            get => _EQLowFreq;
             set
             {
-                _EQLowFreq = value;
-                NotifyPropertyChanged();
+                if (_EQLowFreq != value)
+                {
+                    _EQLowFreq = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0001)]
         public int EQLowGain
         {
-            get { return _EQLowGain - 15; }
+            get => _EQLowGain.Deserialize(64);
             set
             {
-                _EQLowGain = (byte)(value + 15);
-                NotifyPropertyChanged();
+                if (EQLowGain != value)
+                {
+                    _EQLowGain = value.Clamp(-15, 15).Serialize(64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0002)]
         public IntegraMidFrequencies EQMidFreq
         {
-            get { return _EQMidFreq; }
+            get => _EQMidFreq;
             set
             {
-                _EQMidFreq = value;
-                NotifyPropertyChanged();
+                if (_EQMidFreq != value)
+                {
+                    _EQMidFreq = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0003)]
         public int EQMidGain
         {
-            get { return _EQMidGain -15; }
+            get => _EQMidGain.Deserialize(64);
             set
             {
-                _EQMidGain = (byte)(value + 15);
-                NotifyPropertyChanged();
+                if (EQMidGain != value)
+                {
+                    _EQMidGain = value.Clamp(-15, 15).Serialize(64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0004)]
         public IntegraMidQs EQMidQ
         {
-            get { return _EQMidQ; }
+            get => _EQMidQ;
             set
             {
-                _EQMidQ = value;
-                NotifyPropertyChanged();
+                if (_EQMidQ != value)
+                {
+                    _EQMidQ = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0005)]
         public IntegraHighFrequencies EQHighFreq
         {
-            get { return _EQHighFreq; }
+            get => _EQHighFreq;
             set
             {
-                _EQHighFreq = value;
-                NotifyPropertyChanged();
+                if (_EQHighFreq != value)
+                {
+                    _EQHighFreq = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0006)]
         public int EQHighGain
         {
-            get { return _EQHighGain - 15; }
+            get => _EQHighGain.Deserialize(64);
             set
             {
-                _EQHighGain = (byte)(value + 15);
-                NotifyPropertyChanged();
+                if (EQHighGain != value)
+                {
+                    _EQHighGain = value.Clamp(-15, 15).Serialize(64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         #endregion
-
-        public virtual IEnumerable<IntegraLowFrequencies> LowFrequencyValues
-        {
-            get { return Enum.GetValues(typeof(IntegraLowFrequencies)).Cast<IntegraLowFrequencies>(); }
-        }
-
-        public virtual IEnumerable<IntegraMidFrequencies> MidFrequencyValues
-        {
-            get { return Enum.GetValues(typeof(IntegraMidFrequencies)).Cast<IntegraMidFrequencies>(); }
-        }
-
-        public virtual IEnumerable<IntegraMidQs> MidQValues
-        {
-            get { return Enum.GetValues(typeof(IntegraMidQs)).Cast<IntegraMidQs>(); }
-        }
-
-        public virtual IEnumerable<IntegraHighFrequencies> HighFrequencyValues
-        {
-            get { return Enum.GetValues(typeof(IntegraHighFrequencies)).Cast<IntegraHighFrequencies>(); }
-        }
     }
 }

@@ -37,6 +37,8 @@ namespace IntegraXL.Core
                 IsCached = this.Cache();
         }
 
+        internal IntegraModel(IntegraModel<TModel> instance) : base(instance) { }
+
         #endregion
 
         #region Properties
@@ -62,17 +64,17 @@ namespace IntegraXL.Core
         /// Serializes the model's data to an <see cref="byte"/> array.
         /// </summary>
         /// <returns>An ordered byte array containing the model's data.</returns>
-        /// <exception cref="NotImplementedException"/>
+        /// <exception cref="IntegraException"></exception>
         /// <remarks><i>The array is ordered by field offset and can be used as system exclusive data part.</i></remarks>
         public override byte[] Serialize()
         {
             if (!IsInitialized)
-                throw new IntegraException($"[{nameof(IntegraModel)}.{nameof(Serialize)}()]\n" +
-                                           $"{GetType().Name}: Serialization of uninitialized model.");
+                throw new IntegraException($"[{nameof(IntegraModel)}<{typeof(TModel).Name}>.{nameof(Serialize)}()]\n" +
+                                           $"Serialization of uninitialized model.");
 
             var fields = this.CachedFields().OrderBy(x => x.Key).ToArray() ??
-                throw new IntegraException($"[{nameof(Integra)}.{nameof(Serialize)}]\n" +
-                                           $"{GetType().Name}: The model is not cached and cannot be serialized.");
+                throw new IntegraException($"[{nameof(IntegraModel)}<{typeof(TModel)}>.{nameof(Serialize)}()]\n" +
+                                           $"Uncached models cannot be serialized.");
 
             List<byte> values = new();
 
@@ -805,7 +807,12 @@ namespace IntegraXL.Core
         /// <summary>
         /// Tracks whether the model is initialized.
         /// </summary>
-        private bool _IsInitialized = false;
+        private bool _IsInitialized;
+
+        /// <summary>
+        /// Tracks wheter the model has unsaved changes.
+        /// </summary>
+        private bool _IsDirty;
 
         /// <summary>
         /// Tracks whether the model is disposed.
@@ -854,6 +861,11 @@ namespace IntegraXL.Core
             }
 
             Requests.Add(new IntegraRequest(Attribute.Request));
+        }
+
+        internal IntegraModel(IntegraModel instance)
+        {
+            instance.Initialize(Serialize());
         }
 
         #endregion
@@ -908,7 +920,18 @@ namespace IntegraXL.Core
         /// <summary>
         /// Gets wheter the model has unsaved changes.
         /// </summary>
-        public virtual bool IsDirty { get { throw new NotImplementedException(); } protected set { throw new NotImplementedException(); } }
+        public virtual bool IsDirty 
+        {
+            get => _IsDirty;
+            protected set 
+            {
+                if (_IsDirty != value)
+                {
+                    _IsDirty = value;
+                    NotifyPropertyChanged();
+                }
+            } 
+        }
 
         /// <summary>
         /// Gets wheter the model is initialized.

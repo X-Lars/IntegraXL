@@ -15,6 +15,8 @@ namespace IntegraXL.Core
             Part = part;
         }
 
+        internal IntegraPartial(IntegraPartial<TModel> instance) : base(instance) { }
+
         public Parts Part { get; }
 
         internal protected override int GetUID()

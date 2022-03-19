@@ -93,7 +93,6 @@ namespace IntegraXL
         #region Constructor
 
         /// <summary>
-        /// 
         /// </summary>
         /// <remarks><i>
         /// - Creates required models (Uninitialized)<br/>
@@ -113,7 +112,6 @@ namespace IntegraXL
         /// - Sets the connection<br/>
         /// - Sets the device ID<br/>
         /// - Binds the connection event handlers<br/>
-        /// - Initializes the task manager<br/>
         /// </i></remarks>
         public Integra(IntegraConnection connection) : this()
         {
@@ -129,7 +127,6 @@ namespace IntegraXL
         /// - Sets the connection<br/>
         /// - Sets the device ID<br/>
         /// - Binds the connection event handlers<br/>
-        /// - Initializes the task manager<br/>
         /// </i></remarks>
         public void SetConnection(IntegraConnection connection)
         {
@@ -191,6 +188,14 @@ namespace IntegraXL
                 return IsInitialized = false;
 
             StartQueue();
+
+            await Task.Factory.StartNew(() =>
+            {
+                while(!IsInitialized)
+                {
+                    Task.Delay(100);
+                }
+            });
 
             return IsInitialized = true;
         }
@@ -529,12 +534,12 @@ namespace IntegraXL
             //}, _CTS.Token);
 
             //_TaskManager.Enqueue(task, _CTS.Token);
-            lock (_ModelQueue)
-            {
+            //lock (_ModelQueue)
+            //{
                 systemExclusive.DeviceID = _DeviceID;
 
                 _Connection.SendSystemExclusiveMessage(systemExclusive);
-            }
+            //}
         }
 
 
@@ -637,8 +642,10 @@ namespace IntegraXL
             Debug.Print($"[{nameof(Integra)}.{nameof(CreateModel)}<{typeof(TModel).Name}>({part})] " +
                         $"New cache entry: 0x{instance.GetUID():X4}");
 
-            if(initialize)
+            if (initialize)
+            {
                 Enqueue(instance);
+            }
 
             return (TModel)instance;
         }
@@ -660,6 +667,14 @@ namespace IntegraXL
 
             TModel model = CreateModel<TModel>(part);
 
+            if (!model.IsInitialized)
+                await Task.Factory.StartNew(() =>
+                {
+                    while (!model.IsInitialized)
+                    {
+                        Task.Delay(100);
+                    }
+                });
             //try
             //{
             //    if (!model.IsInitialized)
@@ -680,6 +695,11 @@ namespace IntegraXL
         /// <returns>An awaitable <see cref="Task"/> that returns an initialized INTEGRA-7 tone bank.</returns>
         public async Task<IntegraToneBank> GetToneBank(IntegraToneBanks tonebank)
         {
+            if (tonebank == IntegraToneBanks.Unavailable)
+                throw new IntegraException($"[{nameof(GetToneBank)}({tonebank})]\n" +
+                                           $"Cannon create tone bank of type: {tonebank}");
+
+            // TODO: Check if expansion is loaded
             Debug.Print($"[{nameof(Integra)}.{nameof(GetToneBank)}({tonebank})");
 
             Type? type = tonebank.ToneBankType();
@@ -688,6 +708,14 @@ namespace IntegraXL
 
             IntegraToneBank bank = CreateToneBank(type);
 
+            if (!bank.IsInitialized)
+                await Task.Factory.StartNew(() =>
+                {
+                    while(!bank.IsInitialized)
+                    {
+                        Task.Delay(100);
+                    }
+                });
             //if(!bank.IsInitialized)
             //    await bank.InitializeAsync();
 
@@ -703,10 +731,17 @@ namespace IntegraXL
                                            $"The type requires to be derived from {nameof(IntegraToneBank)}.\n" +
                                            $"Use the static class {nameof(ToneBanks)} to get a valid type.");
 
+            // TODO: Check if expansion is loaded
             IntegraToneBank bank = CreateToneBank(type);
 
-            //if (!bank.IsInitialized)
-            //    await bank.InitializeAsync();
+            if (!bank.IsInitialized)
+                await Task.Factory.StartNew(() =>
+                {
+                    while (!bank.IsInitialized)
+                    {
+                        Task.Delay(100);
+                    }
+                });
 
             return bank;
         }
@@ -719,10 +754,17 @@ namespace IntegraXL
                 throw new IntegraException($"[{nameof(Integra)}.{nameof(GetToneBank)}<{typeof(TToneBank).Name}>]\n" +
                                            $"The type requires to be derived from {nameof(IntegraToneBank)}.");
 
+            // TODO: Check if expansion is loaded
             IntegraToneBank bank = CreateToneBank(typeof(TToneBank));
 
-            //if (!bank.IsInitialized)
-            //    await bank.InitializeAsync();
+            if (!bank.IsInitialized)
+                await Task.Factory.StartNew(() =>
+                {
+                    while (!bank.IsInitialized)
+                    {
+                        Task.Delay(100);
+                    }
+                });
 
             return bank;
         }
@@ -750,17 +792,20 @@ namespace IntegraXL
 
             if (_Models.TryGetValue(instance.GetUID(), out IntegraModel? model))
             {
-                Debug.Print($"[{nameof(Integra)}.{nameof(CreateToneBank)}({type})] Existing cache entry");
+                Debug.Print($"[{nameof(Integra)}.{nameof(CreateToneBank)}({type})] " +
+                            $"Existing cache entry");
 
                 return (IntegraToneBank)model;
             }
 
             if (!_Models.TryAdd(instance.GetUID(), instance))
             {
-                Debug.Print($"[{nameof(Integra)}.{nameof(CreateToneBank)}({type})] Unable to create cache entry: 0x{instance.GetUID():X4}");
+                Debug.Print($"[{nameof(Integra)}.{nameof(CreateToneBank)}({type})] " +
+                            $"Unable to create cache entry: 0x{instance.GetUID():X4}");
             }
 
-            Debug.Print($"[{nameof(Integra)}.{nameof(CreateToneBank)}({type})] New cache entry: 0x{instance.GetUID():X4}");
+            Debug.Print($"[{nameof(Integra)}.{nameof(CreateToneBank)}({type})] " +
+                        $"New cache entry: 0x{instance.GetUID():X4}");
 
             Enqueue(instance);
             return instance;
@@ -793,17 +838,35 @@ namespace IntegraXL
         }
 
         /// <summary>
-        /// Creates an in memory binary formatted <see cref="TemporaryToneFile"/> containing the <see cref="TemporaryTone"/>'s data.
+        /// Creates a binary formatted <see cref="TemporaryToneFile"/> containing the <see cref="TemporaryTone"/>'s of the <see cref="Part"/>.
         /// </summary>
-        /// <returns>The <see cref="TemporaryToneFile"/> as memory stream.</returns>
-        /// <exception cref="IntegraException"/>
-        public MemoryStream SaveTemporaryTone()
+        /// <returns>The binary formatted <see cref="TemporaryToneFile"/> as memory stream.</returns>
+        /// <exception cref="IntegraException">When the <see cref="Integra"/> or any of the required models are null or uninitialized.</exception>
+        public MemoryStream SaveTemporaryTone() 
         {
-            if(TemporaryTone == null || TemporaryTone.IsInitialized == false)
-                throw new IntegraException($"[{nameof(Integra)}.{nameof(SaveTemporaryTone)}()]\n" +
-                                           $"{nameof(TemporaryTone)} is not initialized.");
+            return SaveTemporaryTone(Part);
+        }
 
-            return FileManager.WriteTemporaryToneFile(TemporaryTone.Save());
+        /// <summary>
+        /// Creates a binary formatted <see cref="TemporaryToneFile"/> containing the <see cref="TemporaryTone"/>'s data of the given part.
+        /// </summary>
+        /// <returns>The binary formatted <see cref="TemporaryToneFile"/> as memory stream.</returns>
+        /// <exception cref="IntegraException">When the <see cref="Integra"/> or any of the required models are null or uninitialized.</exception>
+        public MemoryStream SaveTemporaryTone(Parts part)
+        {
+            if (!IsInitialized)
+                throw new IntegraException($"[{nameof(Integra)}.{nameof(SaveTemporaryTone)}({part})]\n" +
+                                           $"The {nameof(Integra)} is not initialized.");
+
+            if(TemporaryTones == null)
+                throw new IntegraException($"[{nameof(Integra)}.{nameof(SaveTemporaryTone)}({part})]\n" +
+                                           $"The {nameof(TemporaryTones)} collection is null.");
+
+            if(!TemporaryTones[(int)part].IsInitialized)
+                throw new IntegraException($"[{nameof(Integra)}.{nameof(SaveTemporaryTone)}({part})]\n" +
+                                           $"The {nameof(TemporaryTone)} is not initialized.");
+
+            return FileManager.WriteTemporaryToneFile(TemporaryTones[(int)part].Save());
         }
 
         /// <summary>
@@ -1157,6 +1220,7 @@ namespace IntegraXL
                     {
                         _IsRunning = false;
                         _CurrentModel = null;
+                        IsInitialized = true;
 
                         NotifyPropertyChanged(string.Empty);
                         break;
@@ -1195,7 +1259,6 @@ namespace IntegraXL
                     {
                         Debug.Print($"[{nameof(Integra)}.{nameof(ExecuteQueue)}({_CurrentModel.GetType().Name}[{_CurrentModel.Address}])] Complete");
                     }
-
                 }
                 catch
                 {
@@ -1214,7 +1277,6 @@ namespace IntegraXL
                 NotifyPropertyChanged(nameof(Count));
                 Debug.Print($"[{nameof(IntegraTaskManager)}] Task Count = {Count}");
             }
-
         }
         #endregion
     }

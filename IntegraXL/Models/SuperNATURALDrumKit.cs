@@ -48,10 +48,9 @@ namespace IntegraXL.Models
 
         #region Overrides: Model
 
-        public override bool IsInitialized
-        {
-            get => Common.IsInitialized && CompEQ.IsInitialized && Notes.IsInitialized;
-        }
+        public override bool IsInitialized => Common.IsInitialized && CompEQ.IsInitialized && Notes.IsInitialized;
+
+        public override bool IsDirty => Common.IsDirty || CompEQ.IsDirty || Notes.IsDirty;
 
         #endregion
     }
