@@ -1,6 +1,7 @@
 ﻿using IntegraXL.Core;
 using IntegraXL.Extensions;
 using IntegraXL.Interfaces;
+using IntegraXL.Templates;
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -36,15 +37,15 @@ namespace IntegraXL.Models
         [Offset(0x0000)] private IntegraChannels _ReceiveChannel;
         [Offset(0x0001)] private IntegraSwitch _ReceiveSwitch;
 
-        [Offset(0x0002)] private byte[] _Reserved1 = new byte[4];
+        [Offset(0x0002)] private byte[] _RESERVED1 = new byte[4];
+
         // Combines the MSB, LSB & PC into one field
         [Offset(0x0006)] private byte[] _BankSelect = new byte[3];
-
         //[Offset(0x0006)] private byte _ToneBankSelectMSB;
         //[Offset(0x0007)] private byte _ToneBankSelectLSB;
         //[Offset(0x0008)] private byte _ToneProgramNumber;
 
-        [Offset(0x0009)] private byte _PartLevel;
+        [Offset(0x0009)] private byte _Level;
         [Offset(0x000A)] private byte _Pan;
         [Offset(0x000B)] private byte _CoarseTune;
         [Offset(0x000C)] private byte _FineTune;
@@ -64,23 +65,23 @@ namespace IntegraXL.Models
         [Offset(0x001A)] private byte _VibratoDelay;
         [Offset(0x001B)] private byte _OctaveShift;
         [Offset(0x001C)] private byte _VelocitySensOffset;
-        [Offset(0x001D)] private byte _KeyboardRangeLower;
-        [Offset(0x001E)] private byte _KeyboardRangeUpper;
-        [Offset(0x001F)] private byte _KeyboardFadeWidthLower;
-        [Offset(0x0020)] private byte _KeyboardFadeWidthUpper;
+        [Offset(0x001D)] private IntegraKeyRange _KeyRangeLower;
+        [Offset(0x001E)] private IntegraKeyRange _KeyRangeUpper;
+        [Offset(0x001F)] private byte _KeyFadeLower;
+        [Offset(0x0020)] private byte _KeyFadeUpper;
         [Offset(0x0021)] private byte _VelocityRangeLower;
         [Offset(0x0022)] private byte _VelocityRangeUpper;
-        [Offset(0x0023)] private byte _VelocityFadeWidthLower;
-        [Offset(0x0024)] private byte _VelocityFadeWidthUpper;
+        [Offset(0x0023)] private byte _VelocityFadeLower;
+        [Offset(0x0024)] private byte _VelocityFadeUpper;
         [Offset(0x0025)] private IntegraMuteSwitch _MuteSwitch;
 
-        [Offset(0x0026)] private byte _Reserved2;
+        [Offset(0x0026)] private byte _RESERVED2;
 
         [Offset(0x0027)] private byte _ChorusSendLevel;
         [Offset(0x0028)] private byte _ReverbSendLevel;
         [Offset(0x0029)] private IntegraOutputAssigns _OutputAssign;
 
-        [Offset(0x002A)] private byte _Reserved3;
+        [Offset(0x002A)] private byte _RESERVED3;
 
         [Offset(0x002B)] private IntegraScaleTuneTypes _ScaleTuneType;
         [Offset(0x002C)] private IntegraScaleTuneKeys _ScaleTuneKey;
@@ -100,7 +101,7 @@ namespace IntegraXL.Models
         [Offset(0x0039)] private IntegraSwitch _ReceiveProgramChange;
         [Offset(0x003A)] private IntegraSwitch _ReceiveBankSelect;
         [Offset(0x003B)] private IntegraSwitch _ReceivePitchBend;
-        [Offset(0x003C)] private IntegraSwitch _ReceivePolyPhonicKeyPressure;
+        [Offset(0x003C)] private IntegraSwitch _ReceiveKeyPressure;
         [Offset(0x003D)] private IntegraSwitch _ReceiveChannelPressure;
         [Offset(0x003E)] private IntegraSwitch _ReceiveModulation;
         [Offset(0x003F)] private IntegraSwitch _ReceiveVolume;
@@ -112,14 +113,14 @@ namespace IntegraXL.Models
 
         [Offset(0x0044)] private byte _MotionalSurroundLR;
 
-        [Offset(0x0045)] private byte _Reserved4;
+        [Offset(0x0045)] private byte _RESERVED4;
 
         [Offset(0x0046)] private byte _MotionalSurroundFB;
-        [Offset(0x0047)] private byte _Reserved5;
+        [Offset(0x0047)] private byte _RESERVED5;
         [Offset(0x0048)] private byte _MotionalSurroundWidth;
         [Offset(0x0049)] private byte _MotionalSurroundAmbienceSendLevel;
 
-        [Offset(0x004A)] private byte[] _Reserved6 = new byte[3];
+        [Offset(0x004A)] private byte[] _RESERVED6 = new byte[3];
 
         #endregion
 
@@ -132,19 +133,10 @@ namespace IntegraXL.Models
         /// <param name="part">The model's associated part.</param>
         private StudioSetPart(Integra device, Parts part) : base(device, part) 
         {
-            //_Tone = device.CreateChildModel<Tone>(part);
-
-            PropertyChanged += StudioSetPartPropertyChanged;
+            PropertyChanged += ModelPropertyChanged;
         }
 
-        private void StudioSetPartPropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(BankSelect))
-            {
-                Device.NotifyToneChanged(this, Part);
-            }
-        }
-
+        
         #endregion
 
         #region Properties: INTEGRA-7
@@ -152,7 +144,7 @@ namespace IntegraXL.Models
         [Offset(0x0000)]
         public IntegraChannels ReceiveChannel
         {
-            get { return _ReceiveChannel; }
+            get => _ReceiveChannel;
             set
             {
                 if (_ReceiveChannel != value)
@@ -166,7 +158,7 @@ namespace IntegraXL.Models
         [Offset(0x0001)]
         public IntegraSwitch ReceiveSwitch
         {
-            get { return _ReceiveSwitch; }
+            get => _ReceiveSwitch;
             set
             {
                 if (_ReceiveSwitch != value)
@@ -190,8 +182,6 @@ namespace IntegraXL.Models
                     _BankSelect[2] = value.PC.Clamp();
 
                     NotifyPropertyChanged();
-
-                    //_Tone.Update(value);
                 }
             }
         }
@@ -233,14 +223,14 @@ namespace IntegraXL.Models
         }
 
         [Offset(0x0009)]
-        public byte PartLevel
+        public byte Level
         {
-            get { return _PartLevel; }
+            get => _Level;
             set
             {
-                if (_PartLevel != value)
+                if (_Level != value)
                 {
-                    _PartLevel = value.Clamp();
+                    _Level = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -249,7 +239,7 @@ namespace IntegraXL.Models
         [Offset(0x000A)]
         public byte Pan
         {
-            get { return _Pan; }
+            get => _Pan;
             set
             {
                 if (_Pan != value)
@@ -263,12 +253,12 @@ namespace IntegraXL.Models
         [Offset(0x000B)]
         public int CoarseTune
         {
-            get { return _CoarseTune.Deserialize(64); }
+            get => _CoarseTune.Deserialize(64);
             set
             {
                 if (CoarseTune != value)
                 {
-                    _CoarseTune = value.Serialize(64);
+                    _CoarseTune = value.Clamp(-48, 48).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -277,12 +267,12 @@ namespace IntegraXL.Models
         [Offset(0x000C)]
         public int FineTune
         {
-            get { return _FineTune.Deserialize(64); }
+            get => _FineTune.Deserialize(64);
             set
             {
                 if (FineTune != value)
                 {
-                    _FineTune = value.Serialize(64);
+                    _FineTune = value.Clamp(-50, 50).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -291,7 +281,7 @@ namespace IntegraXL.Models
         [Offset(0x000D)]
         public IntegraMonyPolySwitch MonoPolySwitch
         {
-            get { return _MonoPolySwitch; }
+            get => _MonoPolySwitch;
             set
             {
                 if (_MonoPolySwitch != value)
@@ -305,7 +295,7 @@ namespace IntegraXL.Models
         [Offset(0x000E)]
         public IntegraToneSwitch LegatoSwitch
         {
-            get { return _LegatoSwitch; }
+            get => _LegatoSwitch;
             set
             {
                 if (_LegatoSwitch != value)
@@ -319,7 +309,7 @@ namespace IntegraXL.Models
         [Offset(0x000F)]
         public byte PitchBendRange
         {
-            get { return _PitchBendRange; }
+            get => _PitchBendRange;
             set
             {
                 if (_PitchBendRange != value)
@@ -333,7 +323,7 @@ namespace IntegraXL.Models
         [Offset(0x0010)]
         public IntegraToneSwitch PortamentoSwitch
         {
-            get { return _PortamentoSwitch; }
+            get => _PortamentoSwitch;
             set
             {
                 if (_PortamentoSwitch != value)
@@ -347,15 +337,12 @@ namespace IntegraXL.Models
         [Offset(0x0011)]
         public short PortamentoTime
         {
-            get
-            {
-                return _PortamentoTime.Deserialize();
-            }
+            get => _PortamentoTime.Deserialize();
             set
             {
                 if (PortamentoTime != value)
                 {
-                    _PortamentoTime = value.Serialize();
+                    _PortamentoTime = value.Serialize(0, 128);
                     NotifyPropertyChanged();
                 }
             }
@@ -364,12 +351,12 @@ namespace IntegraXL.Models
         [Offset(0x0013)]
         public int CutoffOffset
         {
-            get { return _CutoffOffset.Deserialize(64); }
+            get => _CutoffOffset.Deserialize(64);
             set
             {
                 if (CutoffOffset != value)
                 {
-                    _CutoffOffset = value.Serialize(64);
+                    _CutoffOffset = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -378,12 +365,12 @@ namespace IntegraXL.Models
         [Offset(0x0014)]
         public int ResonanceOffset
         {
-            get { return _ResonanceOffset.Deserialize(64); }
+            get => _ResonanceOffset.Deserialize(64);
             set
             {
                 if (ResonanceOffset != value)
                 {
-                    _ResonanceOffset = value.Serialize(64);
+                    _ResonanceOffset = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -392,12 +379,12 @@ namespace IntegraXL.Models
         [Offset(0x0015)]
         public int AttackTimeOffset
         {
-            get { return _AttackTimeOffset.Deserialize(64); }
+            get => _AttackTimeOffset.Deserialize(64);
             set
             {
                 if (AttackTimeOffset != value)
                 {
-                    _AttackTimeOffset = value.Serialize(64);
+                    _AttackTimeOffset = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -406,12 +393,12 @@ namespace IntegraXL.Models
         [Offset(0x0016)]
         public int DecayTimeOffset
         {
-            get { return _DecayTimeOffset.Deserialize(64); }
+            get => _DecayTimeOffset.Deserialize(64);
             set
             {
                 if (DecayTimeOffset != value)
                 {
-                    _DecayTimeOffset = value.Serialize(64);
+                    _DecayTimeOffset = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -420,12 +407,12 @@ namespace IntegraXL.Models
         [Offset(0x0017)]
         public int ReleaseTimeOffset
         {
-            get { return _ReleaseTimeOffset.Deserialize(64); }
+            get => _ReleaseTimeOffset.Deserialize(64);
             set
             {
                 if (ReleaseTimeOffset != value)
                 {
-                    _ReleaseTimeOffset = value.Serialize(64);
+                    _ReleaseTimeOffset = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -434,12 +421,12 @@ namespace IntegraXL.Models
         [Offset(0x0018)]
         public int VibratoRate
         {
-            get { return _VibratoRate.Deserialize(64); }
+            get => _VibratoRate.Deserialize(64);
             set
             {
                 if (VibratoRate != value)
                 {
-                    _VibratoRate = value.Serialize(64);
+                    _VibratoRate = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -448,12 +435,12 @@ namespace IntegraXL.Models
         [Offset(0x0019)]
         public int VibratoDepth
         {
-            get { return _VibratoDepth.Deserialize(64); }
+            get => _VibratoDepth.Deserialize(64);
             set
             {
                 if (VibratoDepth != value)
                 {
-                    _VibratoDepth = value.Serialize(64);
+                    _VibratoDepth = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -462,12 +449,12 @@ namespace IntegraXL.Models
         [Offset(0x001A)]
         public int VibratoDelay
         {
-            get { return _VibratoDelay.Deserialize(64); }
+            get => _VibratoDelay.Deserialize(64);
             set
             {
                 if (VibratoDelay != value)
                 {
-                    _VibratoDelay = value.Serialize(64);
+                    _VibratoDelay = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -476,12 +463,12 @@ namespace IntegraXL.Models
         [Offset(0x001B)]
         public int OctaveShift
         {
-            get { return _OctaveShift.Deserialize(64); }
+            get => _OctaveShift.Deserialize(64);
             set
             {
                 if (OctaveShift != value)
                 {
-                    _OctaveShift = value.Serialize(64);
+                    _OctaveShift = value.Clamp(-3, 3).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -490,68 +477,68 @@ namespace IntegraXL.Models
         [Offset(0x001C)]
         public int VelocitySensOffset
         {
-            get { return _VelocitySensOffset.Deserialize(63); }
+            get => _VelocitySensOffset.Deserialize(64);
             set
             {
                 if (VelocitySensOffset != value)
                 {
-                    _VelocitySensOffset = value.Serialize(63);
+                    _VelocitySensOffset = value.Clamp(-63, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x001D)]
-        public byte KeyboardRangeLower
+        public IntegraKeyRange KeyRangeLower
         {
-            get { return _KeyboardRangeLower; }
+            get => _KeyRangeLower;
             set
             {
-                if (_KeyboardRangeLower != value)
+                if (_KeyRangeLower != value)
                 {
-                    _KeyboardRangeLower = value.Clamp();
+                    _KeyRangeLower = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x001E)]
-        public byte KeyboardRangeUpper
+        public IntegraKeyRange KeyRangeUpper
         {
-            get { return _KeyboardRangeUpper; }
+            get => _KeyRangeUpper;
             set
             {
-                if (_KeyboardRangeUpper != value)
+                if (_KeyRangeUpper != value)
                 {
-                    _KeyboardRangeUpper = value.Clamp();
+                    _KeyRangeUpper = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x001F)]
-        public byte KeyboardFadeWidthLower
+        public byte KeyFadeLower
         {
-            get { return _KeyboardFadeWidthLower; }
+            get => _KeyFadeLower;
             set
             {
-                if (_KeyboardFadeWidthLower != value)
+                if (_KeyFadeLower != value)
                 {
-                    _KeyboardFadeWidthLower = value.Clamp();
+                    _KeyFadeLower = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0020)]
-        public byte KeyboardFadeWidthUpper
+        public byte KeyFadeUpper
         {
-            get { return _KeyboardFadeWidthUpper; }
+            get => _KeyFadeUpper;
             set
             {
-                if (_KeyboardFadeWidthUpper != value)
+                if (_KeyFadeUpper != value)
                 {
-                    _KeyboardFadeWidthUpper = value.Clamp();
+                    _KeyFadeUpper = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -560,12 +547,12 @@ namespace IntegraXL.Models
         [Offset(0x0021)]
         public byte VelocityRangeLower
         {
-            get { return _VelocityRangeLower; }
+            get => _VelocityRangeLower;
             set
             {
                 if (_VelocityRangeLower != value)
                 {
-                    _VelocityRangeLower = value.Clamp();
+                    _VelocityRangeLower = value.Clamp(1, 127);
                     NotifyPropertyChanged();
                 }
             }
@@ -574,40 +561,40 @@ namespace IntegraXL.Models
         [Offset(0x0022)]
         public byte VelocityRangeUpper
         {
-            get { return _VelocityRangeUpper; }
+            get => _VelocityRangeUpper;
             set
             {
                 if (_VelocityRangeUpper != value)
                 {
-                    _VelocityRangeUpper = value.Clamp();
+                    _VelocityRangeUpper = value.Clamp(1, 127);
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0023)]
-        public byte VelocityFadeWidthLower
+        public byte VelocityFadeLower
         {
-            get { return _VelocityFadeWidthLower; }
+            get => _VelocityFadeLower;
             set
             {
-                if (_VelocityFadeWidthLower != value)
+                if (_VelocityFadeLower != value)
                 {
-                    _VelocityFadeWidthLower = value.Clamp();
+                    _VelocityFadeLower = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
         }
 
         [Offset(0x0024)]
-        public byte VelocityFadeWidthUpper
+        public byte VelocityFadeUpper
         {
-            get { return _VelocityFadeWidthUpper; }
+            get => _VelocityFadeUpper;
             set
             {
-                if (_VelocityFadeWidthUpper != value)
+                if (_VelocityFadeUpper != value)
                 {
-                    _VelocityFadeWidthUpper = value.Clamp();
+                    _VelocityFadeUpper = value.Clamp();
                     NotifyPropertyChanged();
                 }
             }
@@ -616,7 +603,7 @@ namespace IntegraXL.Models
         [Offset(0x0025)]
         public IntegraMuteSwitch MuteSwitch
         {
-            get { return _MuteSwitch; }
+            get => _MuteSwitch;
             set
             {
                 if (_MuteSwitch != value)
@@ -630,7 +617,7 @@ namespace IntegraXL.Models
         [Offset(0x0027)]
         public byte ChorusSendLevel
         {
-            get { return _ChorusSendLevel; }
+            get => _ChorusSendLevel;
             set
             {
                 if (_ChorusSendLevel != value)
@@ -644,7 +631,7 @@ namespace IntegraXL.Models
         [Offset(0x0028)]
         public byte ReverbSendLevel
         {
-            get { return _ReverbSendLevel; }
+            get => _ReverbSendLevel;
             set
             {
                 if (_ReverbSendLevel != value)
@@ -658,7 +645,7 @@ namespace IntegraXL.Models
         [Offset(0x0029)]
         public IntegraOutputAssigns OutputAssign
         {
-            get { return _OutputAssign; }
+            get => _OutputAssign;
             set
             {
                 if (_OutputAssign != value)
@@ -672,7 +659,7 @@ namespace IntegraXL.Models
         [Offset(0x002B)]
         public IntegraScaleTuneTypes ScaleTuneType
         {
-            get { return _ScaleTuneType; }
+            get => _ScaleTuneType;
             set
             {
                 if (_ScaleTuneType != value)
@@ -686,7 +673,7 @@ namespace IntegraXL.Models
         [Offset(0x002C)]
         public IntegraScaleTuneKeys ScaleTuneKey
         {
-            get { return _ScaleTuneKey; }
+            get => _ScaleTuneKey;
             set
             {
                 if (_ScaleTuneKey != value)
@@ -700,12 +687,14 @@ namespace IntegraXL.Models
         [Offset(0x002D)]
         public int ScaleTuneC
         {
-            get { return _ScaleTuneC.Deserialize(64); }
+            get => _ScaleTuneC.Deserialize(64);
             set
             {
                 if (ScaleTuneC != value)
                 {
-                    _ScaleTuneC = value.Serialize(64);
+                    SetCustomScaleTuneTemplate();
+
+                    _ScaleTuneC = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
              }
@@ -714,12 +703,14 @@ namespace IntegraXL.Models
         [Offset(0x002E)]
         public int ScaleTuneCSharp
         {
-            get { return _ScaleTuneCSharp.Deserialize(64); }
+            get => _ScaleTuneCSharp.Deserialize(64);
             set
             {
                 if (ScaleTuneCSharp != value)
                 {
-                    _ScaleTuneCSharp = value.Serialize(64);
+                    SetCustomScaleTuneTemplate();
+
+                    _ScaleTuneCSharp = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -728,12 +719,14 @@ namespace IntegraXL.Models
         [Offset(0x002F)]
         public int ScaleTuneD
         {
-            get { return _ScaleTuneD.Deserialize(64); }
+            get => _ScaleTuneD.Deserialize(64);
             set
             {
                 if (ScaleTuneD != value)
                 {
-                    _ScaleTuneD = value.Serialize(64);
+                    SetCustomScaleTuneTemplate();
+
+                    _ScaleTuneD = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -742,12 +735,14 @@ namespace IntegraXL.Models
         [Offset(0x0030)]
         public int ScaleTuneDSharp
         {
-            get { return _ScaleTuneDSharp.Deserialize(64); }
+            get => _ScaleTuneDSharp.Deserialize(64);
             set
             {
                 if (ScaleTuneDSharp != value)
                 {
-                    _ScaleTuneDSharp = value.Serialize(64);
+                    SetCustomScaleTuneTemplate();
+
+                    _ScaleTuneDSharp = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -756,12 +751,14 @@ namespace IntegraXL.Models
         [Offset(0x0031)]
         public int ScaleTuneE
         {
-            get { return _ScaleTuneE.Deserialize(64); }
+            get => _ScaleTuneE.Deserialize(64);
             set
             {
                 if (ScaleTuneE != value)
                 {
-                    _ScaleTuneE = value.Serialize(64);
+                    SetCustomScaleTuneTemplate();
+
+                    _ScaleTuneE = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -770,12 +767,14 @@ namespace IntegraXL.Models
         [Offset(0x0032)]
         public int ScaleTuneF
         {
-            get { return _ScaleTuneF.Deserialize(64); }
+            get => _ScaleTuneF.Deserialize(64);
             set
             {
                 if (ScaleTuneF != value)
                 {
-                    _ScaleTuneF = value.Serialize(64);
+                    SetCustomScaleTuneTemplate();
+
+                    _ScaleTuneF = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -784,12 +783,14 @@ namespace IntegraXL.Models
         [Offset(0x0033)]
         public int ScaleTuneFSharp
         {
-            get { return _ScaleTuneFSharp.Deserialize(64); }
+            get => _ScaleTuneFSharp.Deserialize(64);
             set
             {
                 if (ScaleTuneFSharp != value)
                 {
-                    _ScaleTuneFSharp = value.Serialize(64);
+                    SetCustomScaleTuneTemplate();
+
+                    _ScaleTuneFSharp = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -798,12 +799,14 @@ namespace IntegraXL.Models
         [Offset(0x0034)]
         public int ScaleTuneG
         {
-            get { return _ScaleTuneG.Deserialize(64); }
+            get => _ScaleTuneG.Deserialize(64);
             set
             {
-                if(ScaleTuneG != value)
+                if (ScaleTuneG != value)
                 {
-                    _ScaleTuneG = value.Serialize(64);
+                    SetCustomScaleTuneTemplate();
+
+                    _ScaleTuneG = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -812,12 +815,14 @@ namespace IntegraXL.Models
         [Offset(0x0035)]
         public int ScaleTuneGSharp
         {
-            get { return _ScaleTuneGSharp.Deserialize(64); }
+            get => _ScaleTuneGSharp.Deserialize(64);
             set
             {
                 if (ScaleTuneGSharp != value)
                 {
-                    _ScaleTuneGSharp = value.Serialize(64);
+                    SetCustomScaleTuneTemplate();
+
+                    _ScaleTuneGSharp = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -826,12 +831,14 @@ namespace IntegraXL.Models
         [Offset(0x0036)]
         public int ScaleTuneA
         {
-            get { return _ScaleTuneA.Deserialize(64); }
+            get => _ScaleTuneA.Deserialize(64);
             set
             {
                 if (ScaleTuneA != value)
                 {
-                    _ScaleTuneA = value.Serialize(64);
+                    SetCustomScaleTuneTemplate();
+
+                    _ScaleTuneA = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -840,12 +847,14 @@ namespace IntegraXL.Models
         [Offset(0x0037)]
         public int ScaleTuneASharp
         {
-            get { return _ScaleTuneASharp.Deserialize(64); }
+            get => _ScaleTuneASharp.Deserialize(64);
             set
             {
                 if (ScaleTuneASharp != value)
                 {
-                    _ScaleTuneASharp = value.Serialize(64);
+                    SetCustomScaleTuneTemplate();
+
+                    _ScaleTuneASharp = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -854,12 +863,14 @@ namespace IntegraXL.Models
         [Offset(0x0038)]
         public int ScaleTuneB
         {
-            get { return _ScaleTuneB.Deserialize(64); }
+            get => _ScaleTuneB.Deserialize(64);
             set
             {
                 if (ScaleTuneB != value)
                 {
-                    _ScaleTuneB = value.Serialize(64);
+                    SetCustomScaleTuneTemplate();
+
+                    _ScaleTuneB = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -868,7 +879,7 @@ namespace IntegraXL.Models
         [Offset(0x0039)]
         public IntegraSwitch ReceiveProgramChange
         {
-            get { return _ReceiveProgramChange; }
+            get => _ReceiveProgramChange;
             set
             {
                 if (_ReceiveProgramChange != value)
@@ -882,7 +893,7 @@ namespace IntegraXL.Models
         [Offset(0x003A)]
         public IntegraSwitch ReceiveBankSelect
         {
-            get { return _ReceiveBankSelect; }
+            get => _ReceiveBankSelect;
             set
             {
                 if (_ReceiveBankSelect != value)
@@ -896,7 +907,7 @@ namespace IntegraXL.Models
         [Offset(0x003B)]
         public IntegraSwitch ReceivePitchBend
         {
-            get { return _ReceivePitchBend; }
+            get => _ReceivePitchBend;
             set
             {
                 if (_ReceivePitchBend != value)
@@ -908,14 +919,14 @@ namespace IntegraXL.Models
         }
 
         [Offset(0x003C)]
-        public IntegraSwitch ReceivePolyPhonicKeyPressure
+        public IntegraSwitch ReceiveKeyPressure
         {
-            get { return _ReceivePolyPhonicKeyPressure; }
+            get => _ReceiveKeyPressure;
             set
             {
-                if (_ReceivePolyPhonicKeyPressure != value)
+                if (_ReceiveKeyPressure != value)
                 {
-                    _ReceivePolyPhonicKeyPressure = value;
+                    _ReceiveKeyPressure = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -924,7 +935,7 @@ namespace IntegraXL.Models
         [Offset(0x003D)]
         public IntegraSwitch ReceiveChannelPressure
         {
-            get { return _ReceiveChannelPressure; }
+            get => _ReceiveChannelPressure;
             set
             {
                 if (_ReceiveChannelPressure != value)
@@ -938,7 +949,7 @@ namespace IntegraXL.Models
         [Offset(0x003E)]
         public IntegraSwitch ReceiveModulation
         {
-            get { return _ReceiveModulation; }
+            get => _ReceiveModulation;
             set
             {
                 if (_ReceiveModulation != value)
@@ -952,7 +963,7 @@ namespace IntegraXL.Models
         [Offset(0x003F)]
         public IntegraSwitch ReceiveVolume
         {
-            get { return _ReceiveVolume; }
+            get => _ReceiveVolume;
             set
             {
                 if (_ReceiveVolume != value)
@@ -966,7 +977,7 @@ namespace IntegraXL.Models
         [Offset(0x0040)]
         public IntegraSwitch ReceivePan
         {
-            get { return _ReceivePan; }
+            get => _ReceivePan;
             set
             {
                 if (_ReceivePan != value)
@@ -980,7 +991,7 @@ namespace IntegraXL.Models
         [Offset(0x0041)]
         public IntegraSwitch ReceiveExpression
         {
-            get { return _ReceiveExpression; }
+            get => _ReceiveExpression;
             set
             {
                 if (_ReceiveExpression != value)
@@ -994,7 +1005,7 @@ namespace IntegraXL.Models
         [Offset(0x0042)]
         public IntegraSwitch ReceiveHold
         {
-            get { return _ReceiveHold; }
+            get => _ReceiveHold;
             set
             {
                 if (_ReceiveHold != value)
@@ -1008,9 +1019,10 @@ namespace IntegraXL.Models
         [Offset(0x0043)]
         public IntegraVelocityCurveTypes VelocityCurveType
         {
-            get { return _VelocityCurveType; }
+            get => _VelocityCurveType;
             set
-            {if (_VelocityCurveType != value)
+            {
+                if (_VelocityCurveType != value)
                 {
                     _VelocityCurveType = value;
                     NotifyPropertyChanged();
@@ -1077,8 +1089,35 @@ namespace IntegraXL.Models
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Sets the scale tune template to custom.
+        /// </summary>
+        /// <remarks><i>
+        /// Invoked by the individual scale tune properties.
+        /// </i></remarks>
+        private void SetCustomScaleTuneTemplate()
+        {
+            if(ScaleTuneType != IntegraScaleTuneTypes.Custom)
+            {
+                _ScaleTuneType   = IntegraScaleTuneTypes.Custom;
+                _ScaleTuneKey    = IntegraScaleTuneKeys.C;
+
+                NotifyPropertyChanged(string.Empty);
+            }
+        }
+
+        #endregion
+
         #region Overrides: Model
 
+        /// <summary>
+        /// Gets wheter the model is initialized.
+        /// </summary>
+        /// <remarks><i>
+        /// Raises the <see cref="Integra.ToneChanged"/> on initialization.
+        /// </i></remarks>
         public override bool IsInitialized
         {
             get => base.IsInitialized;
@@ -1090,6 +1129,62 @@ namespace IntegraXL.Models
                 }
             }
         }
+
+        #endregion
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Handles the <see cref="IntegraModel.PropertyChanged"/> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="IntegraModel"/> that raised the event.</param>
+        /// <param name="e">The event's associated data.</param>
+        /// <remarks><i>
+        /// - Raises the <see cref="Integra.ToneChanged"/> event for the <see cref="BankSelect"/> property.<br/>
+        /// - Sets the scale tune template for the <see cref="ScaleTuneType"/> and <see cref="ScaleTuneKey"/> properties.<br/>
+        /// </i></remarks>
+        private void ModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(BankSelect))
+            {
+                Device.NotifyToneChanged(this, Part);
+            }
+            else if(e.PropertyName == nameof(ScaleTuneType) || e.PropertyName == nameof(ScaleTuneKey))
+            {
+                if (ScaleTuneType == IntegraScaleTuneTypes.Custom)
+                    return;
+
+                ScaleTuneTemplate template = this.GetTemplate();
+
+                _ScaleTuneC      = template.Values[0];
+                _ScaleTuneCSharp = template.Values[1];
+                _ScaleTuneD      = template.Values[2];
+                _ScaleTuneDSharp = template.Values[3];
+                _ScaleTuneE      = template.Values[4];
+                _ScaleTuneF      = template.Values[5];
+                _ScaleTuneFSharp = template.Values[6];
+                _ScaleTuneG      = template.Values[7];
+                _ScaleTuneGSharp = template.Values[8];
+                _ScaleTuneA      = template.Values[9];
+                _ScaleTuneASharp = template.Values[10];
+                _ScaleTuneB      = template.Values[11];
+
+                NotifyPropertyChanged(string.Empty);
+            }
+        }
+
+        #endregion
+
+        #region Enumerations
+
+        public List<string> PanValues
+        {
+            get { return IntegraPan.Values; }
+        }
+
+
+        public List<string> PitchBendRanges => IntegraPitchBendRanges.Values;
+        public List<string> PortamentoTimes => IntegraPortamentoTime.Values;
 
         #endregion
     }

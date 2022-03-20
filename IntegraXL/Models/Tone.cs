@@ -129,6 +129,10 @@ namespace IntegraXL.Models
             Type       = this.ToneType();
 
             IsInitialized = false;
+
+            // IMPORTANT! Quick tone changes can corrupt the model initialization queue, dequeue the temporary tone as prevention
+            Device.Dequeue(this);
+
             Device.Enqueue(this);
         }
 

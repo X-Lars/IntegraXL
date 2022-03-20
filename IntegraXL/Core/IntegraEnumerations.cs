@@ -138,6 +138,27 @@ namespace IntegraXL.Core
         }
     }
 
+    public class IntegraPitchBendRanges : Enumeration
+    {
+        public new static List<string> Values
+        {
+            get
+            {
+                List<string> values = new();
+
+                // 0.. 24
+                for (int i = 0; i < 25; i++)
+                {
+                    values.Add($"{i}");
+                }
+
+                values.Add($"Tone");
+
+                return values;
+            }
+        }
+    }
+
     public class IntegraPan : Enumeration
     {
         public new static List<string> Values
@@ -157,6 +178,26 @@ namespace IntegraXL.Core
                 {
                     values.Add($"{i} R");
                 }
+
+                return values;
+            }
+        }
+    }
+
+    public class IntegraPortamentoTime : Enumeration
+    {
+        public new static List<string> Values
+        {
+            get
+            {
+                List<string> values = new();
+
+                for (int i = 0; i < 128; i++)
+                {
+                    values.Add($"{i}");
+                }
+
+                values.Add($"Tone");
 
                 return values;
             }
@@ -544,7 +585,7 @@ namespace IntegraXL.Core
 
     public enum IntegraMuteSwitch : byte
     {
-        Off = 0x00,
+        Off  = 0x00,
         Mute = 0x01
     }
 

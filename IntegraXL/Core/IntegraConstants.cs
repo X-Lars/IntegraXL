@@ -21,6 +21,6 @@
         public const int WAVE_COUNT_SNS = 450;
         public const int MFX_CTRL_DEST_COUNT = 17;
 
-
+        public const char CSV_DELIMITER = '|';
     }
 }

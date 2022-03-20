@@ -7,10 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\ScaleTunePresets.csv" />
     <None Remove="Resources\WaveForms.csv" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\ScaleTunePresets.csv" />
     <EmbeddedResource Include="Resources\WaveForms.csv" />
   </ItemGroup>
 
