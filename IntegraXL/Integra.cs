@@ -88,6 +88,11 @@ namespace IntegraXL
         /// </summary>
         public event EventHandler<IntegraToneChangedEventArgs>? ToneChanged;
 
+        /// <summary>
+        /// Event raised on virtual slots load start and load complet.
+        /// </summary>
+        public event EventHandler<IntegraVirtualSlotsEventArgs>? VirtualSlotsChanged;
+
         #endregion
 
         #region Constructor
@@ -224,6 +229,10 @@ namespace IntegraXL
             PartChanged?.Invoke(this, new IntegraPartChangedEventArgs(part, previous));
         }
 
+        internal void NotifyVirtualSlotsChanged(VirtualSlotsState state, IntegraExpansions[] expansions)
+        {
+            VirtualSlotsChanged?.Invoke(this, new IntegraVirtualSlotsEventArgs(state, expansions));
+        }
 
         #endregion
 
@@ -487,10 +496,11 @@ namespace IntegraXL
             Setup          = CreateModel<Setup>();
             VirtualSlots   = CreateModel<VirtualSlots>();
             StudioSets     = CreateModel<StudioSets>();
-            //Tones          = CreateChildModel<Tones>();
-            StudioSet = CreateModel<StudioSet>();
+            StudioSet      = CreateModel<StudioSet>();
             TemporaryTones = CreateModel<TemporaryTones>();
 
+
+            // TODO: Move tone property to StudioSetPart
             Tone = new Tone(this);
         }
 
@@ -1208,7 +1218,7 @@ namespace IntegraXL
             }
         }
 
-        private async void ExecuteQueue(object ignored)
+        private async void ExecuteQueue(object? ignored)
         {
             while (true)
             {

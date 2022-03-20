@@ -367,3 +367,4 @@ FodyWeavers.xsd
 /IntegraXL/File/FileStructure.cs
 /IntegraXL/File/FileTools.cs
 /IntegraXL/File
+/IntegraXL/Core/IntegraCommandManager.cs

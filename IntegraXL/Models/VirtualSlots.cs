@@ -102,21 +102,21 @@ namespace IntegraXL.Models
 
         #region Commands: Properties
 
-        /// <summary>
-        /// Provides a bindable command to load the current selection of expansions.
-        /// </summary>
-        public ICommand LoadCommand
-        {
-            get { return new UICommandAsync(Load, CanExecuteLoad, this); }
-        }
+        ///// <summary>
+        ///// Provides a bindable command to load the current selection of expansions.
+        ///// </summary>
+        //public ICommand LoadCommand
+        //{
+        //    get { return new UICommandAsync(Load, CanExecuteLoad, this); }
+        //}
 
-        /// <summary>
-        /// Provides a bindable command to unload all expansions.
-        /// </summary>
-        public ICommand UnloadCommand
-        {
-            get { return new UICommandAsync(Unload, CanExecuteUnload, this); }
-        }
+        ///// <summary>
+        ///// Provides a bindable command to unload all expansions.
+        ///// </summary>
+        //public ICommand UnloadCommand
+        //{
+        //    get { return new UICommandAsync(Unload, CanExecuteUnload, this); }
+        //}
 
         /// <summary>
         /// Provides a bindable command to set the current selection as default on startup.
@@ -131,25 +131,19 @@ namespace IntegraXL.Models
         #region Commands: Validation
 
         /// <summary>
-        /// Validates execution of the <see cref="LoadCommand"/>.
+        /// Gets wheter the <see cref="LoadCommand"/> can be executed.
         /// </summary>
         /// <returns>True if the command can be executed, false otherwise.</returns>
-        public bool CanExecuteLoad()
-        {
-            return SlotAIsDirty || SlotBIsDirty || SlotCIsDirty || SlotDIsDirty;
-        }
+        public bool CanExecuteLoad => IsDirty;
 
         /// <summary>
-        /// Validates execution of the <see cref="UnloadCommand"/>.
+        /// Gets wheter the <see cref="UnloadCommand"/> can be executed.
         /// </summary>
         /// <returns>True if the command can be executed, false otherwise.</returns>
-        public bool CanExecuteUnload()
-        {
-            return _InitialExpansions[0] != IntegraExpansions.Off ||
-                   _InitialExpansions[1] != IntegraExpansions.Off ||
-                   _InitialExpansions[2] != IntegraExpansions.Off ||
-                   _InitialExpansions[3] != IntegraExpansions.Off;
-        }
+        public bool CanExecuteUnload => _InitialExpansions[0] != IntegraExpansions.Off ||
+                                        _InitialExpansions[1] != IntegraExpansions.Off ||
+                                        _InitialExpansions[2] != IntegraExpansions.Off ||
+                                        _InitialExpansions[3] != IntegraExpansions.Off;
        
         #endregion
 
@@ -163,21 +157,18 @@ namespace IntegraXL.Models
         public StartupExpansions StartupExpansions { get; }
 
         /// <summary>
-        /// Gets whether the specified expansion is loaded.
+        /// Gets whether the given expansion is loaded.
         /// </summary>
         /// <param name="expansion">The expansion to check.</param>
         /// <returns>True if the expansion is loaded.</returns>
-        public bool this[IntegraExpansions expansion]
-        {
-            get { return IsLoaded(expansion); }
-        }
+        public bool this[IntegraExpansions expansion] => IsLoaded(expansion);
 
         /// <summary>
-        /// Gets or sets the virtual slot with the specified index.
+        /// Gets or sets the virtual slot with the given index.
         /// </summary>
         /// <param name="index">The index of the virtual slot.</param>
         /// <returns>The expansion of the slot with the specified index.</returns>
-        /// <exception cref="IntegraException"/>
+        /// <exception cref="IntegraException">When the given index is out of range.</exception>
         public IntegraExpansions this[int index]
         {
             get
@@ -190,7 +181,8 @@ namespace IntegraXL.Models
                     case 3: return SlotD;
 
                     default:
-                        throw new IntegraException($"[{nameof(VirtualSlots)}]\nIndex out of range.");
+                        throw new IntegraException($"[{nameof(VirtualSlots)}]",
+                              new ArgumentOutOfRangeException("index", "Index out of range 0..3"));
                 }
             }
 
@@ -204,17 +196,18 @@ namespace IntegraXL.Models
                     case 3: SlotD = value; return;
 
                     default:
-                        throw new IntegraException($"[{nameof(VirtualSlots)}]\nIndex out of range.");
+                        throw new IntegraException($"[{nameof(VirtualSlots)}]",
+                              new ArgumentOutOfRangeException("index", "Index out of range 0..3"));
                 }
             }
         }
 
         /// <summary>
-        /// Get or sets the expansion used in slot A.
+        /// Get or sets the expansion in slot A.
         /// </summary>
         public IntegraExpansions SlotA
         {
-            get { return _SlotA; }
+            get => _SlotA;
             set
             {
                 if (_SlotA != value)
@@ -229,111 +222,92 @@ namespace IntegraXL.Models
         }
 
         /// <summary>
-        /// Get or sets the expansion used in slot B.
+        /// Get or sets the expansion in slot B.
         /// </summary>
         public IntegraExpansions SlotB
         {
-            get { return _SlotB; }
+            get => _SlotB;
             set
             {
-                if (_SlotB == value)
-                    return;
+                if (_SlotB != value)
+                {
+                    InvalidateExpansion(value);
 
-                InvalidateExpansion(value);
+                    _SlotB = value;
 
-                _SlotB = value;
-
-                NotifyPropertyChanged(string.Empty);
+                    NotifyPropertyChanged(string.Empty);
+                }
             }
         }
 
         /// <summary>
-        /// Get or sets the expansion used in slot C.
+        /// Get or sets the expansion in slot C.
         /// </summary>
         public IntegraExpansions SlotC
         {
-            get { return _SlotC; }
+            get => _SlotC;
             set
             {
-                if (_SlotC == value)
-                    return;
+                if (_SlotC != value)
+                {
+                    InvalidateExpansion(value);
 
-                InvalidateExpansion(value);
+                    _SlotC = value;
 
-                _SlotC = value;
-
-                NotifyPropertyChanged(string.Empty);
+                    NotifyPropertyChanged(string.Empty);
+                }
             }
         }
 
         /// <summary>
-        /// Get or sets the expansion used in slot D.
+        /// Get or sets the expansion in slot D.
         /// </summary>
         public IntegraExpansions SlotD
         {
-            get { return _SlotD; }
+            get => _SlotD;
             set
             {
-                if (_SlotD == value)
-                    return;
+                if (_SlotD != value)
+                {
+                    InvalidateExpansion(value);
 
-                InvalidateExpansion(value);
+                    _SlotD = value;
 
-                _SlotD = value;
-
-                NotifyPropertyChanged(string.Empty);
+                    NotifyPropertyChanged(string.Empty);
+                }
             }
         }
 
         /// <summary>
         /// Gets wheter any of the virtual slots has unsaved changes;
         /// </summary>
-        public override bool IsDirty
-        {
-            get => SlotAIsDirty || SlotBIsDirty || SlotCIsDirty || SlotDIsDirty;
-        }
+        public override bool IsDirty => SlotAIsDirty || SlotBIsDirty || SlotCIsDirty || SlotDIsDirty;
 
         /// <summary>
         /// Gets whether slot A has unsaved changes.
         /// </summary>
-        /// <remarks><i>Can be used to mark slots in the UI.</i></remarks>
-        public bool SlotAIsDirty
-        {
-            get { return _SlotA != _InitialExpansions[0]; }
-        }
+        public bool SlotAIsDirty => _SlotA != _InitialExpansions[0];
 
         /// <summary>
         /// Gets whether slot B has unsaved changes.
         /// </summary>
-        /// <remarks><i>Can be used to mark slots in the UI.</i></remarks>
-        public bool SlotBIsDirty
-        {
-            get { return _SlotB != _InitialExpansions[1]; }
-        }
+        public bool SlotBIsDirty => _SlotB != _InitialExpansions[1];
 
         /// <summary>
         /// Gets whether slot C has unsaved changes.
         /// </summary>
-        /// <remarks><i>Can be used to mark slots in the UI.</i></remarks>
-        public bool SlotCIsDirty
-        {
-            get { return _SlotC != _InitialExpansions[2]; }
-        }
+        public bool SlotCIsDirty => _SlotC != _InitialExpansions[2];
 
         /// <summary>
         /// Gets whether slot D has unsaved changes.
         /// </summary>
-        /// <remarks><i>Can be used to mark slots in the UI.</i></remarks>
-        public bool SlotDIsDirty
-        {
-            get { return _SlotD != _InitialExpansions[3]; }
-        }
+        public bool SlotDIsDirty => _SlotD != _InitialExpansions[3];
 
         /// <summary>
-        /// Gets whether the specified expansion is loaded.
+        /// Gets whether the give expansion is loaded.
         /// </summary>
         /// <param name="expansion">The expansion to check.</param>
-        /// <returns>True if the specified expansion is loaded, false otherwise.</returns>
+        /// <returns>True if the given expansion is loaded.</returns>
         public bool IsLoaded(IntegraExpansions expansion)
         {
             if (SlotA == expansion && !SlotAIsDirty) return true;
@@ -345,12 +319,11 @@ namespace IntegraXL.Models
         }
 
         /// <summary>
-        /// Gets wheter the expansions are loading.
+        /// Gets wheter the virtual slots are loading.
         /// </summary>
         public bool IsLoading
         {
-            get { return _IsLoading; }
-
+            get => _IsLoading;
             private set
             {
                 _IsLoading = value;
@@ -394,7 +367,7 @@ namespace IntegraXL.Models
         /// </summary>
         public async Task<bool> Unload() 
         {
-            if (SlotA == IntegraExpansions.Off && SlotB == IntegraExpansions.Off && SlotC == IntegraExpansions.Off && SlotD == IntegraExpansions.Off)
+            if (!CanExecuteUnload)
                 return true;
 
             // Updates the model's request with all slots turned off
@@ -539,6 +512,9 @@ namespace IntegraXL.Models
 
         #region Overrides: Model
 
+        /// <summary>
+        /// Sends the system exclusive request to initialize the model.
+        /// </summary>
         internal override void RequestInitialization()
         {
             foreach (var request in Requests)
@@ -563,27 +539,29 @@ namespace IntegraXL.Models
             {
                 IsLoading = true;
 
-                if (SynchronizationContext.Current != null)
-                {
-                    SynchronizationContext.Current.Post(x => VirtualSlotsLoading?.Invoke(this, new IntegraVirtualSlotsEventArgs(VirtualSlotsState.LoadStart)), null);
-                }
-                else
-                {
-                    VirtualSlotsLoading?.Invoke(this, new IntegraVirtualSlotsEventArgs(VirtualSlotsState.LoadStart));
-                }
+                Device.NotifyVirtualSlotsChanged(VirtualSlotsState.LoadStart, new IntegraExpansions[4] { SlotA, SlotB, SlotC, SlotD });
+                //if (SynchronizationContext.Current != null)
+                //{
+                //    SynchronizationContext.Current.Post(x => VirtualSlotsLoading?.Invoke(this, new IntegraVirtualSlotsEventArgs(VirtualSlotsState.LoadStart)), null);
+                //}
+                //else
+                //{
+                //    VirtualSlotsLoading?.Invoke(this, new IntegraVirtualSlotsEventArgs(VirtualSlotsState.LoadStart));
+                //}
             }
             else if(e.SystemExclusive.Address == VIRTUALSLOTS_COMPLETE)
             {
                 IsLoading = false;
 
-                if (SynchronizationContext.Current != null)
-                {
-                    SynchronizationContext.Current.Post(x => VirtualSlotsLoading?.Invoke(this, new IntegraVirtualSlotsEventArgs(VirtualSlotsState.LoadComplete)), null);
-                }
-                else
-                {
-                    VirtualSlotsLoading?.Invoke(this, new IntegraVirtualSlotsEventArgs(VirtualSlotsState.LoadStart));
-                }
+                Device.NotifyVirtualSlotsChanged(VirtualSlotsState.LoadComplete, new IntegraExpansions[4] { SlotA, SlotB, SlotC, SlotD });
+                //if (SynchronizationContext.Current != null)
+                //{
+                //    SynchronizationContext.Current.Post(x => VirtualSlotsLoading?.Invoke(this, new IntegraVirtualSlotsEventArgs(VirtualSlotsState.LoadComplete)), null);
+                //}
+                //else
+                //{
+                //    VirtualSlotsLoading?.Invoke(this, new IntegraVirtualSlotsEventArgs(VirtualSlotsState.LoadStart));
+                //}
             }
         }
         

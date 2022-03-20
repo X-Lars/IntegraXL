@@ -344,7 +344,7 @@ namespace IntegraXL.Core
 
     #region Virtual Slots
 
-    public enum VirtualSlotsState : uint
+    public enum VirtualSlotsState : int
     {
         LoadStart    = 0x0F003001,
         LoadComplete = 0x0F003002

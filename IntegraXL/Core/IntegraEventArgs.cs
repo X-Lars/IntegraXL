@@ -102,12 +102,22 @@ namespace IntegraXL.Core
 
     public class IntegraVirtualSlotsEventArgs : IntegraEventArgs
     {
-        public IntegraVirtualSlotsEventArgs(VirtualSlotsState state)
+        public IntegraVirtualSlotsEventArgs(VirtualSlotsState state, IntegraExpansions[] expansions)
         {
             State = state;
+
+            ExpansionA = expansions[0];
+            ExpansionB = expansions[1];
+            ExpansionC = expansions[2];
+            ExpansionD = expansions[3];
         }
 
         public VirtualSlotsState State { get; }
+
+        public IntegraExpansions ExpansionA { get; }
+        public IntegraExpansions ExpansionB { get; }
+        public IntegraExpansions ExpansionC { get; }
+        public IntegraExpansions ExpansionD { get; }
     }
 
     public class IntegraConnectionStatusEventArgs : IntegraEventArgs

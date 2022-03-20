@@ -1,7 +1,11 @@
 ﻿using IntegraXL.Core;
+using IntegraXL.Extensions;
 
 namespace IntegraXL.Models
 {
+    /// <summary>
+    /// Defines the INTEGRA-7 studio set common motional surround model.
+    /// </summary>
     [Integra(0x18000800, 0x00000010)]
     public class StudioSetCommonMotionalSurround : IntegraModel<StudioSetCommonMotionalSurround>
     {
@@ -20,15 +24,13 @@ namespace IntegraXL.Models
         [Offset(0x000A)] private byte _ExtPartAmbienceSendLevel;
         [Offset(0x000B)] private IntegraControlChannels _ExtPartControlChannel;
         [Offset(0x000C)] private byte _MotionalSurroundDepth;
-        [Offset(0x000D)] private byte[] _Reserved = new byte[3];
+        [Offset(0x000D)] private byte[] _RESERVED = new byte[3];
 
         #endregion
 
         #region Constructor
 
-#pragma warning disable IDE0051 // Remove unused private members
         private StudioSetCommonMotionalSurround(Integra device) : base(device) { }
-#pragma warning restore IDE0051 // Remove unused private members
 
         #endregion
 
@@ -51,152 +53,169 @@ namespace IntegraXL.Models
         [Offset(0x0001)]
         public IntegraRoomTypes RoomType
         {
-            get { return _RoomType; }
+            get => _RoomType;
             set
             {
-                _RoomType = value;
-                NotifyPropertyChanged();
+                if (_RoomType != value)
+                {
+                    _RoomType = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0002)]
         public byte AmbienceLevel
         {
-            get { return _AmbienceLevel; }
+            get => _AmbienceLevel;
             set
             {
-                _AmbienceLevel = value;
-                NotifyPropertyChanged();
+                if (_AmbienceLevel != value)
+                {
+                    _AmbienceLevel = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0003)]
         public IntegraRoomSizes RoomSize
         {
-            get { return _RoomSize; }
+            get => _RoomSize;
             set
             {
-                _RoomSize = value;
-                NotifyPropertyChanged();
+                if (_RoomSize != value)
+                {
+                    _RoomSize = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0004)]
         public byte AmbienceTime
         {
-            get { return _AmbienceTime; }
+            get => _AmbienceTime;
             set
             {
-                _AmbienceTime = value;
-                NotifyPropertyChanged();
+                if (_AmbienceTime != value)
+                {
+                    _AmbienceTime = value.Clamp(0, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0005)]
         public byte AmbienceDensity
         {
-            get { return _AmbienceDensity; }
+            get => _AmbienceDensity;
             set
             {
-                _AmbienceDensity = (byte)value;
-                NotifyPropertyChanged();
+                if (_AmbienceDensity != value)
+                {
+                    _AmbienceDensity = value.Clamp(0, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0006)]
         public byte AmbienceHFDamp
         {
-            get { return _AmbienceHFDamp; }
+            get => _AmbienceHFDamp;
             set
             {
-                _AmbienceHFDamp = value;
-                NotifyPropertyChanged();
+                if (_AmbienceHFDamp != value)
+                {
+                    _AmbienceHFDamp = value.Clamp(0, 100);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0007)]
-        public byte ExtPartLR
+        public int ExtPartLR
         {
-            get { return (byte)(_ExtPartLR - 64); }
+            get => _ExtPartLR.Deserialize(64);
             set
             {
-                _ExtPartLR = (byte)(value + 64);
-                NotifyPropertyChanged();
+                if (ExtPartLR != value)
+                {
+                    _ExtPartLR = value.Clamp(-64, 63).Serialize(64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0008)]
-        public byte ExtPartFB
+        public int ExtPartFB
         {
-            get { return (byte)(_ExtPartFB - 64); }
+            get => _ExtPartFB.Deserialize(64);
             set
             {
-                _ExtPartFB = (byte)(value + 64);
-                NotifyPropertyChanged();
+                if (ExtPartFB != value)
+                {
+                    _ExtPartFB = value.Clamp(-64, 63).Serialize(64);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x0009)]
         public byte ExtPartWidth
         {
-            get { return _ExtPartWidth; }
+            get => _ExtPartWidth;
             set
             {
-                _ExtPartWidth = value;
-                NotifyPropertyChanged();
+                if (_ExtPartWidth != value)
+                {
+                    _ExtPartWidth = value.Clamp(0, 32);
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x000A)]
         public byte ExtPartAmbienceSendLevel
         {
-            get { return _ExtPartAmbienceSendLevel; }
+            get => _ExtPartAmbienceSendLevel;
             set
             {
-                _ExtPartAmbienceSendLevel = value;
-                NotifyPropertyChanged();
+                if (_ExtPartAmbienceSendLevel != value)
+                {
+                    _ExtPartAmbienceSendLevel = value.Clamp();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x000B)]
         public IntegraControlChannels ExtPartControlChannel
         {
-            get { return _ExtPartControlChannel; }
+            get => _ExtPartControlChannel;
             set
             {
-                _ExtPartControlChannel = value;
-                NotifyPropertyChanged();
+                if (_ExtPartControlChannel != value)
+                {
+                    _ExtPartControlChannel = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
         [Offset(0x000C)]
         public byte MotionalSurroundDepth
         {
-            get { return _MotionalSurroundDepth; }
+            get => _MotionalSurroundDepth;
             set
             {
-                _MotionalSurroundDepth = value;
-                NotifyPropertyChanged();
+                if (_MotionalSurroundDepth != value)
+                {
+                    _MotionalSurroundDepth = value.Clamp(0, 100);
+                    NotifyPropertyChanged();
+                }
             }
-        }
-
-        #endregion
-
-        #region Enumerations
-
-        public IEnumerable<IntegraRoomTypes> RoomTypes
-        {
-            get { return Enum.GetValues(typeof(IntegraRoomTypes)).Cast<IntegraRoomTypes>(); }
-        }
-
-        public IEnumerable<IntegraRoomSizes> RoomSizes
-        {
-            get { return Enum.GetValues(typeof(IntegraRoomSizes)).Cast<IntegraRoomSizes>(); }
-        }
-
-        public IEnumerable<IntegraControlChannels> ControlChannels
-        {
-            get { return Enum.GetValues(typeof(IntegraControlChannels)).Cast<IntegraControlChannels>(); }
         }
 
         #endregion

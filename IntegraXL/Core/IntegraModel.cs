@@ -345,7 +345,6 @@ namespace IntegraXL.Core
                     Device.TransmitSystemExclusive(new IntegraSystemExclusive(Address, offset, data));
                 }
             }
-
         }
 
         internal void ReceivedProperty(IntegraSystemExclusive systemExclusive)
@@ -928,7 +927,6 @@ namespace IntegraXL.Core
                 if (_IsDirty != value)
                 {
                     _IsDirty = value;
-                    NotifyPropertyChanged();
                 }
             } 
         }
@@ -1059,6 +1057,15 @@ namespace IntegraXL.Core
         /// <param name="index">Unimplemented optional parameter for indexed properties.</param>
         protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = "", int? index = null)
         {
+            if (!string.IsNullOrEmpty(propertyName))
+            {
+                if (!IsDirty)
+                {
+                    IsDirty = true;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsDirty)));
+                }
+            }
+
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 

@@ -1030,16 +1030,15 @@ namespace IntegraXL.Models
             }
         }
 
-
         [Offset(0x0044)]
         public int MotionalSurroundLR
         {
-            get { return _MotionalSurroundLR.Deserialize(64); }
+            get => _MotionalSurroundLR.Deserialize(64);
             set
             {
                 if (MotionalSurroundLR != value)
                 {
-                    _MotionalSurroundLR = value.Serialize(64);
+                    _MotionalSurroundLR = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -1048,12 +1047,12 @@ namespace IntegraXL.Models
         [Offset(0x0046)]
         public int MotionalSurroundFB
         {
-            get { return _MotionalSurroundFB.Deserialize(64); }
+            get => _MotionalSurroundFB.Deserialize(64);
             set
             {
                 if (MotionalSurroundFB != value)
                 {
-                    _MotionalSurroundFB = value.Serialize(64);
+                    _MotionalSurroundFB = value.Clamp(-64, 63).Serialize(64);
                     NotifyPropertyChanged();
                 }
             }
@@ -1062,12 +1061,12 @@ namespace IntegraXL.Models
         [Offset(0x0048)]
         public byte MotionalSurroundWidth
         {
-            get { return _MotionalSurroundWidth; }
+            get => _MotionalSurroundWidth;
             set
             {
                 if (_MotionalSurroundWidth != value)
                 {
-                    _MotionalSurroundWidth = value.Clamp();
+                    _MotionalSurroundWidth = value.Clamp(0, 32);
                     NotifyPropertyChanged();
                 }
             }
@@ -1076,7 +1075,7 @@ namespace IntegraXL.Models
         [Offset(0x0049)]
         public byte MotionalSurroundAmbienceSendLevel
         {
-            get { return _MotionalSurroundAmbienceSendLevel; }
+            get => _MotionalSurroundAmbienceSendLevel;
             set
             {
                 if (_MotionalSurroundAmbienceSendLevel != value)
